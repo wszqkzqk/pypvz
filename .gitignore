@@ -1,0 +1,8 @@
+# ignore release
+build/
+dist/
+main.spec
+# ignore debug
+.vscode/
+__pycache__/
+*/__pycache__/
