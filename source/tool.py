@@ -1,5 +1,3 @@
-__author__ = 'marble_xu'
-
 import os
 import json
 from abc import abstractmethod
@@ -100,7 +98,7 @@ def load_image_frames(directory, image_name, colorkey, accept):
     tmp = {}
     # image_name is "Peashooter", pic name is 'Peashooter_1', get the index 1
     index_start = len(image_name) + 1 
-    frame_num = 0;
+    frame_num = 0
     for pic in os.listdir(directory):
         name, ext = os.path.splitext(pic)
         if ext.lower() in accept:
@@ -154,14 +152,14 @@ def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.
     return graphics
 
 def loadZombieImageRect():
-    file_path = os.path.join('source', 'data', 'entity', 'zombie.json')
+    file_path = os.path.join('resources', 'data', 'entity', 'zombie.json')
     f = open(file_path)
     data = json.load(f)
     f.close()
     return data[c.ZOMBIE_IMAGE_RECT]
 
 def loadPlantImageRect():
-    file_path = os.path.join('source', 'data', 'entity', 'plant.json')
+    file_path = os.path.join('resources', 'data', 'entity', 'plant.json')
     f = open(file_path)
     data = json.load(f)
     f.close()

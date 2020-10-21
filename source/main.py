@@ -1,9 +1,10 @@
-__author__ = 'marble_xu'
+__author__ = 'wcb'
 
 from . import tool
 from . import constants as c
 from .state import mainmenu, screen, level
 
+# create a standard game
 def main():
     game = tool.Control()
     state_dict = {c.MAIN_MENU: mainmenu.Menu(),
