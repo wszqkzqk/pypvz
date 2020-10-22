@@ -1,5 +1,3 @@
-__author__ = 'marble_xu'
-
 import os
 import json
 import pygame as pg

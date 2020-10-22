@@ -74,6 +74,7 @@ class Control():
                 self.mouse_click[0], _, self.mouse_click[1] = pg.mouse.get_pressed()
                 print('pos:', self.mouse_pos, ' mouse:', self.mouse_click)
 
+
     def main(self):
         while not self.done:
             self.event_loop()
