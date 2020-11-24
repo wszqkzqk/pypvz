@@ -4,11 +4,12 @@ from abc import abstractmethod
 import pygame as pg
 from . import constants as c
 
+# an abstract class, one state of automata
 class State():
     def __init__(self):
         self.start_time = 0.0
         self.current_time = 0.0
-        self.done = False
+        self.done = False   # is it finished
         self.next = None
         self.persist = {}
     
@@ -24,6 +25,7 @@ class State():
     def update(self, surface, keys, current_time):
         '''abstract method'''
 
+# control this game. do event loops
 class Control():
     def __init__(self):
         self.screen = pg.display.get_surface()
@@ -73,6 +75,8 @@ class Control():
                 self.mouse_pos = pg.mouse.get_pos()
                 self.mouse_click[0], _, self.mouse_click[1] = pg.mouse.get_pressed()
                 print('pos:', self.mouse_pos, ' mouse:', self.mouse_click)
+            else:
+                print(pg.event.event_name(event.type))
 
 
     def main(self):
