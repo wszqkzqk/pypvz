@@ -2,6 +2,7 @@ import os
 import json
 from abc import abstractmethod
 import pygame as pg
+from pygame.locals import *
 from . import constants as c
 
 # an abstract class, one state of automata
@@ -9,18 +10,19 @@ class State():
     def __init__(self):
         self.start_time = 0.0
         self.current_time = 0.0
-        self.done = False   # is it finished
-        self.next = None
-        self.persist = {}
+        self.done = False   # false 代表未做完
+        self.next = None    # 表示这个状态退出后要转到的下一个状态
+        self.persist = {}   # 在状态间转换时需要传递的数据
     
+    # 当从其他状态进入这个状态时，需要进行的初始化操作
     @abstractmethod
     def startup(self, current_time, persist):
         '''abstract method'''
-
+    # 当从这个状态退出时，需要进行的清除操作
     def cleanup(self):
         self.done = False
         return self.persist
-    
+    # 在这个状态运行时进行的更新操作
     @abstractmethod
     def update(self, surface, keys, current_time):
         '''abstract method'''
@@ -30,7 +32,7 @@ class Control():
     def __init__(self):
         self.screen = pg.display.get_surface()
         self.done = False
-        self.clock = pg.time.Clock()
+        self.clock = pg.time.Clock()    # 创建一个对象来帮助跟踪时间
         self.fps = 60
         self.keys = pg.key.get_pressed()
         self.mouse_pos = None
@@ -49,14 +51,18 @@ class Control():
         self.state.startup(self.current_time, self.game_info)
 
     def update(self):
+        # 返回自 pygame_init() 调用以来的毫秒数
         self.current_time = pg.time.get_ticks()
+
         if self.state.done:
             self.flip_state()
+            
         self.state.update(self.screen, self.current_time, self.mouse_pos, self.mouse_click)
         self.mouse_pos = None
         self.mouse_click[0] = False
         self.mouse_click[1] = False
 
+    # 状态转移
     def flip_state(self):
         previous, self.state_name = self.state_name, self.state.next
         persist = self.state.cleanup()
@@ -75,11 +81,11 @@ class Control():
                 self.mouse_pos = pg.mouse.get_pos()
                 self.mouse_click[0], _, self.mouse_click[1] = pg.mouse.get_pressed()
                 print('pos:', self.mouse_pos, ' mouse:', self.mouse_click)
-            else:
-                print(pg.event.event_name(event.type))
+            #else:
+            #    print(pg.event.event_name(event.type))
 
 
-    def main(self):
+    def run(self):
         while not self.done:
             self.event_loop()
             self.update()
@@ -98,6 +104,18 @@ def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
                                     int(rect.height*scale)))
         return image
 
+def get_image_menu(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
+        # 一定要保留阿尔法通道，修复主菜单bug，游戏中car显示又有bug
+        image = pg.Surface([width, height], SRCALPHA)
+        rect = image.get_rect()
+
+        image.blit(sheet, (0, 0), (x, y, width, height))
+        image.set_colorkey(colorkey)
+        image = pg.transform.scale(image,
+                                   (int(rect.width*scale),
+                                    int(rect.height*scale)))
+        return image  
+        
 def load_image_frames(directory, image_name, colorkey, accept):
     frame_list = []
     tmp = {}
@@ -121,6 +139,7 @@ def load_image_frames(directory, image_name, colorkey, accept):
         frame_list.append(tmp[i])
     return frame_list
 
+# colorkeys 是设置图像中的某个颜色值为透明,这里用来消除白边
 def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.gif')):
     graphics = {}
     for name1 in os.listdir(directory):
@@ -156,6 +175,7 @@ def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.
                         graphics[name] = img
     return graphics
 
+# 从文件加载矩形碰撞范围
 def loadZombieImageRect():
     file_path = os.path.join('resources', 'data', 'entity', 'zombie.json')
     f = open(file_path)
@@ -171,8 +191,8 @@ def loadPlantImageRect():
     return data[c.PLANT_IMAGE_RECT]
 
 pg.init()
-pg.display.set_caption(c.ORIGINAL_CAPTION)
-SCREEN = pg.display.set_mode(c.SCREEN_SIZE)
+pg.display.set_caption(c.ORIGINAL_CAPTION)  # 设置标题
+SCREEN = pg.display.set_mode(c.SCREEN_SIZE) # 设置初始屏幕
 
 GFX = load_all_gfx(os.path.join("resources","graphics"))
 ZOMBIE_RECT = loadZombieImageRect()

@@ -66,7 +66,8 @@ class Level(tool.State):
         for i in range(self.map_y_len):
             _, y = self.map.getMapGridPos(0, i)
             self.cars.append(plant.Car(-25, y+20, i))
-
+    
+    # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time
         if self.state == c.CHOOSE:
@@ -83,6 +84,7 @@ class Level(tool.State):
                 self.map.setMapGridType(x, y, c.MAP_EXIST)
 
     def initState(self):
+        # 小游戏才有CHOOSEBAR_TYPE
         if c.CHOOSEBAR_TYPE in self.map_data:
             self.bar_type = self.map_data[c.CHOOSEBAR_TYPE]
         else:

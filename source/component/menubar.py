@@ -216,6 +216,7 @@ class MenuBar():
         for card in self.card_list:
             card.draw(surface)
 
+# 关卡模式选植物的界面
 class Panel():
     def __init__(self, card_list, sun_value):
         self.loadImages(sun_value)

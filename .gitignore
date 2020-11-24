@@ -6,3 +6,5 @@ main.spec
 .vscode/
 __pycache__/
 */__pycache__/
+# ignore test
+test.py
