@@ -28,6 +28,15 @@ SIZE_MULTIPLIER = 1.3
 EXIT = 'exit'
 # 当想要一个特殊值时用
 NULL = 'null'
+# 游戏界面可选的菜单
+LITTLE_MENU = 'littleMenu'
+BIG_MENU = 'bigMenu'
+RETURN_BUTTON = 'returnButton'
+RESTART_BUTTON = 'restartButton'
+MAINMENU_BUTTON = 'mainMenuButton'
+# 小铲子
+SHOVEL = 'shovel'
+SHOVEL_BOX = 'shovelBox'
 
 
 #GAME INFO DICTIONARY KEYS
