@@ -1,8 +1,10 @@
 import pygame as pg
 from .. import tool
 from .. import constants as c
+from . import level
 
 class Menu(tool.State):
+    
     def __init__(self):
         tool.State.__init__(self)
     
@@ -10,7 +12,6 @@ class Menu(tool.State):
         self.next = c.LEVEL
         self.persist = persist
         self.game_info = persist
-        
         self.setupBackground()
         self.setupOption()
 
@@ -38,6 +39,13 @@ class Menu(tool.State):
         self.option_rect.x = 435
         self.option_rect.y = 75
         
+        # 退出按钮
+        frame_rect = [0, 0, 500, 500]
+        self.option_exit = tool.get_image_menu(tool.GFX[c.EXIT], *frame_rect, c.BLACK, 1.1)
+        self.exit_rect = self.option_exit.get_rect()
+        self.exit_rect.x = 690
+        self.exit_rect.y = 400
+
         self.option_start = 0
         self.option_timer = 0
         self.option_clicked = False
@@ -49,7 +57,15 @@ class Menu(tool.State):
             self.option_clicked = True
             self.option_timer = self.option_start = self.current_time
         return False
-        
+    
+    # 点击到按钮，修改转态的done属性
+    def checkExitClick(self, mouse_pos):
+        x, y = mouse_pos
+        if(x >= self.exit_rect.x and x <= self.exit_rect.right and
+           y >= self.exit_rect.y and y <= self.exit_rect.bottom):
+            self.done = True
+            self.next = c.EXIT
+
     def update(self, surface, current_time, mouse_pos, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time
         
@@ -57,6 +73,7 @@ class Menu(tool.State):
         if not self.option_clicked:
             if mouse_pos:
                 self.checkOptionClick(mouse_pos)
+                self.checkExitClick(mouse_pos)
         else:
             # 点到后播放动画
             if(self.current_time - self.option_timer) > 200:
@@ -67,6 +84,8 @@ class Menu(tool.State):
                 self.option_image = self.option_frames[self.option_frame_index]
             if(self.current_time - self.option_start) > 1300:
                 self.done = True
+                
 
         surface.blit(self.bg_image, self.bg_rect)
         surface.blit(self.option_image, self.option_rect)
+        surface.blit(self.option_exit, self.exit_rect)

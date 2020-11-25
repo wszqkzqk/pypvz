@@ -24,6 +24,12 @@ GREEN        = (  0, 255,   0)
 
 SIZE_MULTIPLIER = 1.3
 
+# 退出游戏按钮
+EXIT = 'exit'
+# 当想要一个特殊值时用
+NULL = 'null'
+
+
 #GAME INFO DICTIONARY KEYS
 CURRENT_TIME = 'current time'
 LEVEL_NUM = 'level num'
