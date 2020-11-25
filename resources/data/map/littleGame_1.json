@@ -1,6 +1,7 @@
 {
     "background_type":0,
     "choosebar_type":1,
+    "shovel":1,
     "card_pool":[
         {"name":"Peashooter"},
         {"name":"SnowPea"},

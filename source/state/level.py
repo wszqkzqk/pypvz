@@ -24,7 +24,10 @@ class Level(tool.State):
         self.initState()
 
     def loadMap(self):
-        map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
+        if c.LITTLEGAME_BUTTON in self.game_info:
+            map_file = 'littleGame_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
+        else:
+            map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
         file_path = os.path.join('resources', 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
@@ -36,6 +39,11 @@ class Level(tool.State):
             self.done = True
             self.next = c.MAIN_MENU
             return
+        if self.map_data[c.SHOVEL] == 0:
+            self.hasShovel = False
+        else:
+            self.hasShovel = True
+
     
     def setupBackground(self):
         img_index = self.map_data[c.BACKGROUND_TYPE]
@@ -128,7 +136,7 @@ class Level(tool.State):
         
         # 是否拖住植物或者铲子
         self.drag_plant = False
-        self.drag_plant = False
+        self.drag_shovel = False
 
         self.hint_image = None
         self.hint_plant = False
@@ -143,17 +151,18 @@ class Level(tool.State):
         self.setupZombies()
         self.setupCars()
 
-        # 小游戏才有CHOOSEBAR_TYPE，小游戏没有铲子
-        if c.CHOOSEBAR_TYPE not in self.map_data:
+        # 地图有铲子才添加铲子
+        if self.hasShovel:
             #  导入小铲子
             frame_rect = [0, 0, 71, 67]
             self.shovel = tool.get_image_menu(tool.GFX[c.SHOVEL], *frame_rect, c.BLACK, 1.1)
             self.shovel_rect = self.shovel.get_rect()
             frame_rect = [0, 0, 77, 75]
+            self.shovel_positon = (550, 2)
             self.shovel_box = tool.get_image_menu(tool.GFX[c.SHOVEL_BOX], *frame_rect, c.BLACK, 1.1)
             self.shovel_box_rect = self.shovel_box.get_rect()
-            self.shovel_rect.x = self.shovel_box_rect.x = 550
-            self.shovel_rect.y = self.shovel_box_rect.y = 2 
+            self.shovel_rect.x = self.shovel_box_rect.x = self.shovel_positon[0]
+            self.shovel_rect.y = self.shovel_box_rect.y = self.shovel_positon[1] 
 
         self.setupLittleMenu()
 
@@ -222,11 +231,22 @@ class Level(tool.State):
             return True
         return False
 
-    # 检查小铲子有没有被点击
+    # 用小铲子移除植物
+    def shovelRemovePlant(self, mouse_pos):
+        x, y = mouse_pos
+        map_x, map_y = self.map.getMapIndex(x, y)
+        for i in self.plant_groups[map_y]:
+            if(x >= i.rect.x and x <= i.rect.right and
+               y >= i.rect.y and y <= i.rect.bottom):
+               i.kill()
+               return 
+
+    # 检查小铲子的位置有没有被点击
+    # 方便放回去
     def checkShovelClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.mainMenu_button_rect.x and x <= self.mainMenu_button_rect.right and
-           y >= self.mainMenu_button_rect.y and y <= self.mainMenu_button_rect.bottom):
+        if(x >= self.shovel_box_rect.x and x <= self.shovel_box_rect.right and
+           y >= self.shovel_box_rect.y and y <= self.shovel_box_rect.bottom):
             return True
         return False
 
@@ -272,8 +292,17 @@ class Level(tool.State):
                 # 暂停 显示菜单
                 self.showLittleMenu = True
             elif self.checkShovelClick(mouse_pos):
-                self.drag_shovel = True
-
+                self.drag_shovel = not self.drag_shovel
+                if self.drag_shovel:
+                    # 小铲子要隐藏鼠标
+                    pg.mouse.set_visible(False)
+                else:
+                    self.removeMouseImagePlus()
+            elif self.drag_shovel:
+                # 移出这地方的植物
+                self.shovelRemovePlant(mouse_pos)
+        
+        # 拖动植物或者铲子
         if not self.drag_plant and mouse_pos and mouse_click[0]:
             result = self.menubar.checkCardClick(mouse_pos)
             if result:
@@ -288,6 +317,9 @@ class Level(tool.State):
                     self.addPlant()
             elif mouse_pos is None:
                 self.setupHintImage()
+        elif self.drag_shovel:
+            if mouse_click[1]:
+                self.removeMouseImagePlus()
         
 
         if self.produce_sun:
@@ -296,7 +328,9 @@ class Level(tool.State):
                 map_x, map_y = self.map.getRandomMapIndex()
                 x, y = self.map.getMapGridPos(map_x, map_y)
                 self.sun_group.add(plant.Sun(x, 0, x, y))
-        if not self.drag_plant and mouse_pos and mouse_click[0]:
+        
+        # 检查有没有捡到阳光
+        if not self.drag_plant and not self.drag_shovel and mouse_pos and mouse_click[0]:
             for sun in self.sun_group:
                 if sun.checkCollision(mouse_pos[0], mouse_pos[1]):
                     self.menubar.increaseSunValue(sun.sun_value)
@@ -331,6 +365,7 @@ class Level(tool.State):
         x, y = pg.mouse.get_pos()
         return self.map.showPlant(x, y)
         
+    # 种植物
     def addPlant(self):
         pos = self.canSeedPlant()
         if pos is None:
@@ -443,6 +478,13 @@ class Level(tool.State):
         self.mouse_image = None
         self.hint_image = None
         self.hint_plant = False
+
+    # 移除小铲子
+    def removeMouseImagePlus(self):
+        pg.mouse.set_visible(True)
+        self.drag_shovel = False
+        self.shovel_rect.x = self.shovel_positon[0]
+        self.shovel_rect.y = self.shovel_positon[1]
 
     def checkBulletCollisions(self):
         collided_func = pg.sprite.collide_circle_ratio(0.7)
@@ -650,6 +692,12 @@ class Level(tool.State):
         self.mouse_rect.centerx = x
         self.mouse_rect.centery = y
         surface.blit(self.mouse_image, self.mouse_rect)
+    
+    def drawMouseShowPlus(self, surface):
+        x, y = pg.mouse.get_pos()
+        self.shovel_rect.centerx = x
+        self.shovel_rect.centery = y
+        surface.blit(self.shovel, self.shovel_rect)
 
     def drawZombieFreezeTrap(self, i, surface):
         for zombie in self.zombie_groups[i]:
@@ -661,9 +709,10 @@ class Level(tool.State):
         if self.state == c.CHOOSE:
             self.panel.draw(surface)
         elif self.state == c.PLAY:
-            # 画铲子
-            surface.blit(self.shovel_box, self.shovel_box_rect)
-            surface.blit(self.shovel, self.shovel_rect)
+            if self.hasShovel:
+                # 画铲子
+                surface.blit(self.shovel_box, self.shovel_box_rect)
+                surface.blit(self.shovel, self.shovel_rect)
             # 画小菜单
             surface.blit(self.little_menu, self.little_menu_rect)
 
@@ -682,7 +731,7 @@ class Level(tool.State):
             if self.drag_plant:
                 self.drawMouseShow(surface)
             
-            if self.drag_shovel:
+            if self.hasShovel and self.drag_shovel:
                 self.drawMouseShowPlus(surface)
 
             if self.showLittleMenu:

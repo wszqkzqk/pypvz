@@ -380,7 +380,7 @@ class MoveBar():
     def __init__(self, card_pool):
         self.loadFrame(c.MOVEBAR_BACKGROUND)
         self.rect = self.image.get_rect()
-        self.rect.x = 90
+        self.rect.x = 20
         self.rect.y = 0
         
         self.card_start_x = self.rect.x + 8

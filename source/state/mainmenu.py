@@ -46,6 +46,13 @@ class Menu(tool.State):
         self.exit_rect.x = 690
         self.exit_rect.y = 400
 
+        # 小游戏
+        frame_rect = [0, 0, 317, 139]
+        self.option_littleGame = tool.get_image_menu(tool.GFX[c.LITTLEGAME_BUTTON], *frame_rect, c.BLACK, 0.9)
+        self.option_littleGame_rect = self.option_littleGame.get_rect()
+        self.option_littleGame_rect.x = 425
+        self.option_littleGame_rect.y = 200
+
         self.option_start = 0
         self.option_timer = 0
         self.option_clicked = False
@@ -66,6 +73,15 @@ class Menu(tool.State):
             self.done = True
             self.next = c.EXIT
 
+    # 检查有没有按到小游戏
+    def checkLittleGameClick(self, mouse_pos):
+        x, y = mouse_pos
+        if(x >= self.option_littleGame_rect.x and x <= self.option_littleGame_rect.right and
+           y >= self.option_littleGame_rect.y and y <= self.option_littleGame_rect.bottom):
+            self.done = True
+            # 确实小游戏还是用的level
+            self.persist[c.LITTLEGAME_BUTTON] = True
+
     def update(self, surface, current_time, mouse_pos, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time
         
@@ -74,6 +90,7 @@ class Menu(tool.State):
             if mouse_pos:
                 self.checkOptionClick(mouse_pos)
                 self.checkExitClick(mouse_pos)
+                self.checkLittleGameClick(mouse_pos)
         else:
             # 点到后播放动画
             if(self.current_time - self.option_timer) > 200:
@@ -89,3 +106,4 @@ class Menu(tool.State):
         surface.blit(self.bg_image, self.bg_rect)
         surface.blit(self.option_image, self.option_rect)
         surface.blit(self.option_exit, self.exit_rect)
+        surface.blit(self.option_littleGame, self.option_littleGame_rect)
