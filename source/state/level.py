@@ -223,7 +223,7 @@ class Level(tool.State):
             return True
         return False
     
-    # 检查小菜单的重新开始有没有被点击
+    # 检查小菜单的主菜单有没有被点击
     def checkMainMenuClick(self, mouse_pos):
         x, y = mouse_pos
         if(x >= self.mainMenu_button_rect.x and x <= self.mainMenu_button_rect.right and
@@ -263,6 +263,7 @@ class Level(tool.State):
                 elif self.checkMainMenuClick(mouse_pos):
                     self.done = True
                     self.next = c.MAIN_MENU
+                    self.persist = {c.CURRENT_TIME:0.0, c.LEVEL_NUM:c.START_LEVEL_NUM}
             return
 
         if self.zombie_start_time == 0:
