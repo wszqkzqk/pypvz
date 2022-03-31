@@ -25,8 +25,20 @@ python main.py
   * 3: 夜晚模式
   * 4: 传送带模式
   * 5: 坚果保龄球模式
-**注意：目前单文件发布版本不支持自定义调整关卡**
+* **注意：目前单文件发布版本不支持自定义调整关卡**
 
+# 单文件封装
+先在仓库所在文件夹执行
+``` shell
+nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=F:\tmp\pypvz.ico C:\Users\17265\Documents\GitHub\pypvz\main.py
+```
+再及时在单文件编译前于同一文件夹中执行
+``` shell
+mkdir out/main.dist/pygame
+ln out/freesansbold.ttf out/main.dist/freesansbold.ttf
+ln -s resources out/main.dist/resources
+ln -s source out/main.dist/source
+```
 # 截屏
 ![截屏1](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo1.jpg)
 ![截屏2](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo2.jpg)
