@@ -1,29 +1,31 @@
-# PythonPlantsVsZombies
-  A simple PlantsVsZombies game. <br>
-  `It's only for personal learning and noncommercial use. If this game infringes the copyright, please let me know.`
-* implement plants: sunflower, peashooter, wallnut, snowpeashooter, cherrybomb, threepeashooter, chomper, puffshroom, potatomine, spikeweed, scaredyshroom, squash, scaredyshroom, jalapeno, sunShroom, iceShroom, hypnoShroom.
-* implement zombies: zombie, flagzombie, coneheadzombie, bucketheadzombie, newspaperzombie.
-* use json file to store level data (e.g.position and time of zombies, background info)
-* support to select plant cards at the beginning of the level
-* support day level, night level, moving card select level and wallnut bowling level
+# Python版植物大战僵尸
+  一个简单的植物大战僵尸游戏。
+  
+  `仅供个人学习和非商业用途。如果这个游戏侵犯了版权，请告诉我。`
+  
+* 已有的植物： 向日葵, 豌豆射手, 坚果墙, 寒冰豌豆射手, 樱桃炸弹, 三向豌豆射手, 食人花, 喷射蘑菇, 土豆地雷, 杂草地刺, 胆小菇, 南瓜, 愤怒辣椒, 阳光菇, 冰冻蘑菇, 诱惑蘑菇。
+* 已有的僵尸: 普通僵尸, 带队僵尸, 路锥僵尸, 水桶僵尸, 看报僵尸。
+* 使用 JSON 格式的文件存储进度数据 (例如僵尸出现的位置和时间, 背景信息)。
+* 支持选择植物卡片在每一关的开始。
+* 支持白昼模式,夜晚模式,传送带模式和坚果保龄球模式。
 
-# Requirement
+# 系统要求
 * Python 3.7 
-* Notice: python version 3.7 is advisable, but not required. For LINUX: if your Linux system has a preinstalled python 3+, it's ok to run this game. Updating to python 3.7 directly may break LINUX Mint.
+* 注意: Python3.7是最佳运行环境，但是不是强制性要求。 对于Linux: 如果你的 Linux 有预装的 Python3+ 就可以运行了。 LINUX Mint 操作系统直接升级到 Python 3.7 有可能导致系统自带的 python 版本无法执行。
 * Python-Pygame 1.9
 
-# How To Start Game
+# 怎样开始游戏
 $ python main.py
 
-# How to Play
-* use mouse to collect sun, select the plant cards and seed the plant 
-* you can set the start level by changing START_LEVEL_NUM value in source/constants.py
-  * level 1 and 2：day level
-  * level 3: night level
-  * level 4: moving card select level
-  * level 5: wallnut bowling level
+# 怎样玩
+* 使用鼠标收集阳光,收集植物卡片和植物的种子。
+* 你可以通过更改 source/constants.py 中的 START＿LEVEL＿NUM 的数值来更改起始关卡：
+  * 1 和 2：白昼模式
+  * 3: 夜晚模式
+  * 4: 传送带模式
+  * 5: 坚果保龄球模式
 
-# Demo
-![demo1](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo1.jpg)
-![demo2](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo2.jpg)
-
+# 截屏
+![截屏1](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo1.jpg)
+![截屏2](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo2.jpg)
+![截屏3](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo3.jpg)
