@@ -1,4 +1,4 @@
-# Python版植物大战僵尸
+## Python版植物大战僵尸
 
 植物大战僵尸游戏的Python实现
   
@@ -10,20 +10,20 @@
 * 支持选择植物卡片
 * 支持白昼模式，夜晚模式，传送带模式和坚果保龄球模式
 
-# 环境要求
+## 环境要求
 
 * Python >= 3.7 
 * Python-Pygame >= 1.9
 
-# 开始游戏
+## 开始游戏
 
-## 使用仓库源代码
+### 使用仓库源代码
 
 ```shell
 python main.py
 ```
 
-# 方法
+## 方法
 
 * 使用鼠标收集阳光,种植植物。
 * 你可以通过更改 source/constants.py 中的 START＿LEVEL＿NUM 的数值来更改起始关卡：
@@ -33,7 +33,7 @@ python main.py
   * 5：坚果保龄球模式
 * **注意：目前单文件发布版本不支持自定义调整关卡**
 
-# Windows单文件封装
+## Windows单文件封装
 
 先在仓库所在文件夹执行
 
@@ -51,7 +51,7 @@ New-Item -Path out\main.dist\resources -ItemType Junction -Value resources
 New-Item -Path out\main.dist\source\data -ItemType Junction -Value source\data
 ```
 
-# 截屏
+## 截屏
 
 ![截屏1](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo1.jpg)
 ![截屏2](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo2.jpg)
