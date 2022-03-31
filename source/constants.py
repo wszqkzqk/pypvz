@@ -2,7 +2,7 @@ __author__ = 'wszqkzqk'
 
 START_LEVEL_NUM = 1
 
-ORIGINAL_CAPTION = 'Plant VS Zombies Game'
+ORIGINAL_CAPTION = 'pypvz'
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
