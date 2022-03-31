@@ -33,7 +33,7 @@ python main.py
   * 5：坚果保龄球模式
 * **注意：目前单文件发布版本不支持自定义调整关卡**
 
-# 单文件封装
+# Windows单文件封装
 
 先在仓库所在文件夹执行
 
@@ -43,11 +43,12 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 
 再及时在单文件编译前于同一文件夹中执行
 
-``` shell
-mkdir out/main.dist/pygame
-ln out/freesansbold.ttf out/main.dist/freesansbold.ttf
-ln -s resources out/main.dist/resources
-ln -s source out/main.dist/source
+``` powershell
+mkdir out\main.dist\pygame
+mkdir out\main.dist\source
+ln out\freesansbold.ttf out\main.dist\pygame\freesansbold.ttf
+New-Item -Path out\main.dist\resources -ItemType Junction -Value resources
+New-Item -Path out\main.dist\source\data -ItemType Junction -Value source\data
 ```
 
 # 截屏
