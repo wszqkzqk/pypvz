@@ -1,2 +1,4 @@
 # Cache after running the app
 __pycache__/ 
+out/
+build/
