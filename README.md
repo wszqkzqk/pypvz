@@ -30,7 +30,7 @@ python main.py
 # 单文件封装
 先在仓库所在文件夹执行
 ``` shell
-nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=F:\tmp\pypvz.ico C:\Users\17265\Documents\GitHub\pypvz\main.py
+nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=out/pypvz.ico main.py
 ```
 再及时在单文件编译前于同一文件夹中执行
 ``` shell
