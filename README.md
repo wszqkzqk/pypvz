@@ -35,13 +35,13 @@ python main.py
 
 ## Windows单文件封装
 
-先在仓库所在文件夹执行
+先在仓库所在文件夹执行：
 
 ``` shell
 nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=out/pypvz.ico main.py
 ```
 
-再及时在单文件编译前于同一文件夹中执行
+再及时在单文件编译前于同一文件夹中执行（注意执行时间也不要早于Nuitka解析文件结构开始时间）：
 
 ``` powershell
 mkdir out\main.dist\pygame
