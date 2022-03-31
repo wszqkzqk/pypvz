@@ -53,6 +53,6 @@ New-Item -Path out\main.dist\source\data -ItemType Junction -Value source\data
 
 ## 截屏
 
-![截屏1](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo1.jpg)
-![截屏2](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo2.jpg)
-![截屏3](https://raw.githubusercontent.com/marblexu/PythonPlantsVsZombies/master/demo/demo3.jpg)
+![截屏1](/demo/demo1.webp)
+![截屏2](/demo/demo2.webp)
+![截屏3](/demo/demo3.webp)
