@@ -2,6 +2,7 @@ __author__ = 'marble_xu'
 
 import os
 import json
+import sys
 import pygame as pg
 from .. import tool
 from .. import constants as c
@@ -24,7 +25,7 @@ class Level(tool.State):
 
     def loadMap(self):
         map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
-        file_path = os.path.join('source', 'data', 'map', map_file)
+        file_path = os.path.join(sys.path[0], 'source', 'data', 'map', map_file)
         f = open(file_path)
         self.map_data = json.load(f)
         f.close()
