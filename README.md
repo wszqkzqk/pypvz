@@ -37,7 +37,7 @@ python main.py
 
 先在仓库所在文件夹执行：
 
-``` shell
+``` powershell
 nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=out/pypvz.ico main.py
 ```
 
