@@ -52,6 +52,8 @@ python main.py
 nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-disable-console --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-dir=source/data=source/data --include-data-file=*.ttf=pygame/freesansbold.ttf main.py
 ```
 
+可执行文件将生成到`./out/main.exe`
+
 ## 截屏
 
 ![截屏1](/demo/demo1.webp)
