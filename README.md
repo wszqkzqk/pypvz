@@ -35,20 +35,18 @@ python main.py
 
 ## Windows单文件封装
 
-先在仓库所在文件夹执行：
+编译依赖：
+- Python >= 3.7
+- Python-Pygame >= 1.9
+- Nuitka
+- MinGW-w64或其他C编译器
+- ccache
+- python-zstandard（可选）
+
+在仓库所在文件夹执行：
 
 ``` powershell
-nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=out/pypvz.ico main.py
-```
-
-再及时在单文件编译前于同一文件夹中执行（注意执行时间也不要早于Nuitka解析文件结构开始时间）：
-
-``` powershell
-mkdir out\main.dist\pygame
-mkdir out\main.dist\source
-ln out\freesansbold.ttf out\main.dist\pygame\freesansbold.ttf
-New-Item -Path out\main.dist\resources -ItemType Junction -Value resources
-New-Item -Path out\main.dist\source\data -ItemType Junction -Value source\data
+nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-disable-console --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-dir=source/data=source/data --include-data-file=*.ttf=pygame/freesansbold.ttf main.py
 ```
 
 ## 截屏
