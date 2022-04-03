@@ -45,7 +45,7 @@ python main.py
 
 在仓库所在文件夹执行：
 
-``` powershell
+``` shell
 nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-disable-console --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-dir=source/data=source/data --include-data-file=*.ttf=pygame/freesansbold.ttf main.py
 ```
 
