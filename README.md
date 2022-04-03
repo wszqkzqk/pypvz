@@ -41,7 +41,10 @@ python main.py
 - Nuitka
 - MinGW-w64或其他C编译器
 - ccache
+- depends
 - python-zstandard（可选）
+
+**在环境不完全时，Nuitka可以自动安装MinGW-w64、ccache和depends**
 
 在仓库所在文件夹执行：
 
