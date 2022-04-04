@@ -450,7 +450,6 @@ class Chomper(Plant):
     def attacking(self):
         if self.frame_index == (self.frame_num - 3):
             self.zombie_group.remove(self.attack_zombie)
-        if (self.frame_index + 1) == self.frame_num:
             self.setDigest()
 
     def digest(self):
@@ -504,7 +503,7 @@ class PotatoMine(Plant):
         self.init_timer = 0
         self.bomb_timer = 0
         self.explode_y_range = 0
-        self.explode_x_range = c.GRID_X_SIZE - 10
+        self.explode_x_range = c.GRID_X_SIZE
 
     def loadImages(self, name, scale):
         self.init_frames = []
