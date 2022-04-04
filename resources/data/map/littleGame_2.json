@@ -1,6 +1,7 @@
 {
     "background_type":4,
     "choosebar_type":2,
+    "shovel":0,
     "card_pool":[
         {"name":"WallNutBowling"},
         {"name":"RedWallNutBowling"}

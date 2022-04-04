@@ -1,5 +1,4 @@
 __author__ = 'wszqkzqk'
-
 import random
 import pygame as pg
 from .. import tool
@@ -213,7 +212,7 @@ class Plant(pg.sprite.Sprite):
         self.changeFrames(self.sleep_frames)
 
     def setDamage(self, damage, zombie):
-        if not zombie.losHead:
+        if not zombie.lostHead:
             self.health -= damage
         self.hit_timer = self.current_time
         if self.health == 0:

@@ -1,4 +1,9 @@
-# Cache after running the app
-__pycache__/ 
+<<<<<<< HEAD
+# ignore debug
 out/
 build/
+.vscode/
+__pycache__/
+*/__pycache__/
+# ignore test
+test.py

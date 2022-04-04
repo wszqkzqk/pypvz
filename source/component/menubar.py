@@ -1,5 +1,5 @@
 __author__ = 'wszqkzqk'
-
+import os
 import random
 import pygame as pg
 from .. import tool
@@ -28,7 +28,9 @@ plant_frozen_time_list = [7500, 7500, 7500, 30000, 50000, 7500, 7500, 7500, 7500
 all_card_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
 def getSunValueImage(sun_value):
-    font = pg.font.SysFont(None, 22)
+    # for pack, must use other ttf
+    fontPath = os.path.join('resources', 'huawen.TTF')
+    font = pg.font.Font(fontPath, 14)
     width = 32
     msg_image = font.render(str(sun_value), True, c.NAVYBLUE, c.LIGHTYELLOW)
     msg_rect = msg_image.get_rect()
@@ -216,6 +218,7 @@ class MenuBar():
         for card in self.card_list:
             card.draw(surface)
 
+# 关卡模式选植物的界面
 class Panel():
     def __init__(self, card_list, sun_value):
         self.loadImages(sun_value)
@@ -379,7 +382,7 @@ class MoveBar():
     def __init__(self, card_pool):
         self.loadFrame(c.MOVEBAR_BACKGROUND)
         self.rect = self.image.get_rect()
-        self.rect.x = 90
+        self.rect.x = 20
         self.rect.y = 0
         
         self.card_start_x = self.rect.x + 8

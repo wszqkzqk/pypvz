@@ -1,5 +1,4 @@
 __author__ = 'wszqkzqk'
-
 import pygame as pg
 from .. import tool
 from .. import constants as c
@@ -23,7 +22,7 @@ class Zombie(pg.sprite.Sprite):
         self.health = health
         self.damage = damage
         self.dead = False
-        self.losHead = False
+        self.lostHead = False
         self.helmet = False
         self.head_group = head_group
 
@@ -67,9 +66,9 @@ class Zombie(pg.sprite.Sprite):
             self.freezing()
 
     def walking(self):
-        if (self.losHead and (self.current_time - self.losthead_timer) > self.dead_timer):
+        if (self.lostHead and (self.current_time - self.losthead_timer) > self.dead_timer):
             self.setDie()
-        elif self.health <= c.LOSTHEAD_HEALTH and not self.losHead:
+        elif self.health <= c.LOSTHEAD_HEALTH and not self.lostHead:
             self.changeFrames(self.losthead_walk_frames)
             self.setLostHead()
         elif self.health <= c.NORMAL_HEALTH and self.helmet:
@@ -86,9 +85,9 @@ class Zombie(pg.sprite.Sprite):
                 self.rect.x -= self.speed
 
     def attacking(self):
-        if (self.losHead and (self.current_time - self.losthead_timer) > self.dead_timer):
+        if (self.lostHead and (self.current_time - self.losthead_timer) > self.dead_timer):
             self.setDie()
-        elif self.health <= c.LOSTHEAD_HEALTH and not self.losHead:
+        elif self.health <= c.LOSTHEAD_HEALTH and not self.lostHead:
             self.changeFrames(self.losthead_attack_frames)
             self.setLostHead()
         elif self.health <= c.NORMAL_HEALTH and self.helmet:
@@ -110,9 +109,9 @@ class Zombie(pg.sprite.Sprite):
         pass
 
     def freezing(self):
-        if (self.losHead and (self.current_time - self.losthead_timer) > self.dead_timer):
+        if (self.lostHead and (self.current_time - self.losthead_timer) > self.dead_timer):
             self.setDie()
-        elif self.health <= c.LOSTHEAD_HEALTH and not self.losHead:
+        elif self.health <= c.LOSTHEAD_HEALTH and not self.lostHead:
             if self.old_state == c.WALK:
                 self.changeFrames(self.losthead_walk_frames)
             else:
@@ -123,7 +122,7 @@ class Zombie(pg.sprite.Sprite):
 
     def setLostHead(self):
         self.losthead_timer = self.current_time
-        self.losHead = True
+        self.lostHead = True
         if self.head_group is not None:
             self.head_group.add(ZombieHead(self.rect.centerx, self.rect.bottom))
 
@@ -187,7 +186,7 @@ class Zombie(pg.sprite.Sprite):
 
         if self.helmet:
             self.changeFrames(self.helmet_walk_frames)
-        elif self.losHead:
+        elif self.lostHead:
             self.changeFrames(self.losthead_walk_frames)
         else:
             self.changeFrames(self.walk_frames)
@@ -201,7 +200,7 @@ class Zombie(pg.sprite.Sprite):
 
         if self.helmet:
             self.changeFrames(self.helmet_attack_frames)
-        elif self.losHead:
+        elif self.lostHead:
             self.changeFrames(self.losthead_attack_frames)
         else:
             self.changeFrames(self.attack_frames)
@@ -278,7 +277,7 @@ class NormalZombie(Zombie):
 
         self.frames = self.walk_frames
 
-
+# 路障僵尸
 class ConeHeadZombie(Zombie):
     def __init__(self, x, y, head_group):
         Zombie.__init__(self, x, y, c.CONEHEAD_ZOMBIE, c.CONEHEAD_HEALTH, head_group)

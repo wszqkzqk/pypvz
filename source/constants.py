@@ -1,5 +1,4 @@
 __author__ = 'wszqkzqk'
-
 START_LEVEL_NUM = 1
 
 ORIGINAL_CAPTION = 'pypvz'
@@ -25,6 +24,22 @@ GOLD         = (255, 215,   0)
 GREEN        = (  0, 255,   0)
 
 SIZE_MULTIPLIER = 1.3
+
+# 退出游戏按钮
+EXIT = 'exit'
+# 当想要一个特殊值时用
+NULL = 'null'
+# 游戏界面可选的菜单
+LITTLE_MENU = 'littleMenu'
+BIG_MENU = 'bigMenu'
+RETURN_BUTTON = 'returnButton'
+RESTART_BUTTON = 'restartButton'
+MAINMENU_BUTTON = 'mainMenuButton'
+LITTLEGAME_BUTTON = 'littleGameButton'
+# 小铲子
+SHOVEL = 'shovel'
+SHOVEL_BOX = 'shovelBox'
+
 
 #GAME INFO DICTIONARY KEYS
 CURRENT_TIME = 'current time'
