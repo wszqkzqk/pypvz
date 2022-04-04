@@ -33,7 +33,7 @@ python main.py
 ## 方法
 
 * 使用鼠标收集阳光,种植植物
-* 你可以通过更改 source/constants.py 中的 START＿LEVEL＿NUM 的数值来更改起始关卡：
+* 你可以通过更改`source/constants.py`中的`START＿LEVEL＿NUM`的数值来更改起始关卡：
   * 冒险模式：
     * 1 和 2：白昼模式
     * 3：夜晚模式
@@ -45,13 +45,13 @@ python main.py
 ## Windows单文件封装
 
 编译依赖：
-- Python >= 3.7
-- Python-Pygame >= 1.9
-- Nuitka
-- MinGW-w64或其他C编译器
-- ccache
-- depends
-- python-zstandard（可选）
+- `Python` >= 3.7
+- `Python-Pygame` >= 1.9
+- `Nuitka`
+- `MinGW-w64`（或其他C编译器）
+- `ccache`
+- `depends`
+- `python-zstandard`（可选）
 
 **在编译环境安装不全时，Nuitka可以自动安装MinGW-w64、ccache和depends**
 
