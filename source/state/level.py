@@ -46,7 +46,7 @@ class Level(tool.State):
             self.done = True
             self.next = c.MAIN_MENU
             pg.mixer.music.stop()
-            pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.ogg"))
+            pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
             pg.mixer.music.play(-1, 0)
             return
         if self.map_data[c.SHOVEL] == 0:
@@ -58,14 +58,14 @@ class Level(tool.State):
         global bgm
         if mode == modeList[1]: # 冒险模式
             if self.game_info[c.LEVEL_NUM] in {0, 1, 2}:    # 白天关卡
-                bgm = 'dayLevel.ogg'
+                bgm = 'dayLevel.opus'
             elif self.game_info[c.LEVEL_NUM] in {3}:    # 夜晚关卡
-                bgm = 'nightLevel.ogg'
+                bgm = 'nightLevel.opus'
         elif mode == modeList[0]:   # 小游戏模式
             if self.game_info[c.LEVEL_NUM] in {1}:   # 传送带大战
-                bgm = 'battle.ogg'
+                bgm = 'battle.opus'
             elif self.game_info[c.LEVEL_NUM] in {2}:    # 坚果保龄球
-                bgm = 'bowling.ogg'
+                bgm = 'bowling.opus'
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", bgm))
         pg.mixer.music.play(-1, 0)
@@ -295,7 +295,7 @@ class Level(tool.State):
                     self.next = c.MAIN_MENU
                     self.persist = {c.CURRENT_TIME:0.0, c.LEVEL_NUM:c.START_LEVEL_NUM}
                     pg.mixer.music.stop()
-                    pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.ogg"))
+                    pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
                     pg.mixer.music.play(-1, 0)
             return
 

@@ -64,10 +64,10 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-di
 加了背景音乐播放功能之后需要执行：
 
 ``` powershell
-nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-disable-console --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll main.py
+nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --windows-disable-console main.py
 ```
 
-其中，`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll`应当替换为`libvorbisfile-3.dll`实际所在路径
+其中，`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\*.dll`应当替换为`*.dll`实际所在路径
 
 可执行文件生成路径为`./out/main.exe`
 
