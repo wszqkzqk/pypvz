@@ -62,9 +62,17 @@ python main.py
 
 在仓库所在文件夹执行：
 
-``` shell
+``` powershell
 nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-disable-console --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources main.py
 ```
+
+加了背景音乐播放功能之后需要执行：
+
+``` powershell
+nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-disable-console --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll main.py
+```
+
+其中，`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll`应当替换为`libvorbisfile-3.dll`实际所在路径
 
 可执行文件生成路径为`./out/main.exe`
 
