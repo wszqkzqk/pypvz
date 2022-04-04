@@ -49,7 +49,7 @@ python main.py
 在仓库所在文件夹执行：
 
 ``` shell
-nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-disable-console --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-dir=source/data=source/data --include-data-file=*.ttf=pygame/freesansbold.ttf main.py
+nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-disable-console --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources main.py
 ```
 
 可执行文件生成路径为`./out/main.exe`
