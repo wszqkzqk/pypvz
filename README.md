@@ -41,11 +41,6 @@ python main.py
     * 1：传送带模式
     * 2：坚果保龄球模式
 * **注意：目前单文件发布版本不支持自定义调整关卡**
-* 未来计划（可能）：
-  * 增加保存数据文件以存储用户进度的功能
-  * 更改僵尸生成方式
-    * 将僵尸生成更随机化
-  * 增加更多植物、僵尸类型与游戏功能、模式，尽量符合原版基本设计
 
 ## Windows单文件封装
 
@@ -75,6 +70,12 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-di
 其中，`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll`应当替换为`libvorbisfile-3.dll`实际所在路径
 
 可执行文件生成路径为`./out/main.exe`
+
+## 计划（可能无法实施）：
+* 增加保存数据文件以存储用户进度的功能
+* 更改僵尸生成方式
+  * 将僵尸生成更随机化
+* 增加更多植物、僵尸类型与游戏功能、模式，尽量符合原版基本设计
 
 ## 截屏
 
