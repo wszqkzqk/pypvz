@@ -28,8 +28,8 @@ plant_frozen_time_list = [7500, 7500, 7500, 30000, 50000, 7500, 7500, 7500, 7500
 all_card_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
 def getSunValueImage(sun_value):
-    # for pack, must use other ttf
-    fontPath = os.path.join('resources', 'freesansbold.ttf')
+    # for pack, must include ttf
+    fontPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources', 'freesansbold.ttf')
     font = pg.font.Font(fontPath, 14)
     width = 32
     msg_image = font.render(str(sun_value), True, c.NAVYBLUE, c.LIGHTYELLOW)
