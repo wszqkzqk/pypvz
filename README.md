@@ -67,15 +67,22 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-di
 nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --windows-disable-console main.py
 ```
 
-其中，`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\*.dll`应当替换为`*.dll`实际所在路径，当然，由于仅复制了opus编码的解码器，
+其中，`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\*.dll`应当替换为`*.dll`实际所在路径，当然，由于仅复制了opus编码的解码器，所以要求所有背景音乐都应当以opus编码
 
 可执行文件生成路径为`./out/main.exe`
 
-## 计划（可能无法实施）：
+## 计划（不保证实施）：
+
+### 长期
+
 * 增加保存数据文件以存储用户进度的功能
 * 更改僵尸生成方式
   * 将僵尸生成更随机化
 * 增加更多植物、僵尸类型与游戏功能、模式，尽量符合原版基本设计
+
+### 短期
+
+* 给胜利和失败界面添加音乐
 
 ## 截屏
 
