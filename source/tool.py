@@ -80,14 +80,16 @@ class Control():
                 self.done = True
             elif event.type == pg.KEYDOWN:
                 self.keys = pg.key.get_pressed()
+                if event.key == pg.K_f:
+                    SCREEN = pg.display.set_mode(c.SCREEN_SIZE, pg.FULLSCREEN)
+                elif event.key == pg.K_u:
+                    SCREEN = pg.display.set_mode(c.SCREEN_SIZE)
             elif event.type == pg.KEYUP:
                 self.keys = pg.key.get_pressed()
             elif event.type == pg.MOUSEBUTTONDOWN:
                 self.mouse_pos = pg.mouse.get_pos()
                 self.mouse_click[0], _, self.mouse_click[1] = pg.mouse.get_pressed()
                 print('pos:', self.mouse_pos, ' mouse:', self.mouse_click)
-            #else:
-            #    print(pg.event.event_name(event.type))
 
 
     def run(self):
