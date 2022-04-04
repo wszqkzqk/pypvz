@@ -26,9 +26,13 @@
 python main.py
 ```
 
+### 使用Windows可执行文件
+
+在本仓库的`Release`页面中下载`pypvz.exe`文件，双击运行即可
+
 ## 方法
 
-* 使用鼠标收集阳光,种植植物。
+* 使用鼠标收集阳光,种植植物
 * 你可以通过更改 source/constants.py 中的 START＿LEVEL＿NUM 的数值来更改起始关卡：
   * 冒险模式：
     * 1 和 2：白昼模式
