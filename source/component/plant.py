@@ -450,6 +450,7 @@ class Chomper(Plant):
     def attacking(self):
         if self.frame_index == (self.frame_num - 3):
             self.zombie_group.remove(self.attack_zombie)
+        if (self.frame_index + 1) == self.frame_num:
             self.setDigest()
 
     def digest(self):
