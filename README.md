@@ -44,7 +44,7 @@ python main.py
 - depends
 - python-zstandard（可选）
 
-**在环境不完全时，Nuitka可以自动安装MinGW-w64、ccache和depends**
+**在编译环境安装不全时，Nuitka可以自动安装MinGW-w64、ccache和depends**
 
 在仓库所在文件夹执行：
 
