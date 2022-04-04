@@ -205,3 +205,8 @@ SCREEN = pg.display.set_mode(c.SCREEN_SIZE) # 设置初始屏幕
 GFX = load_all_gfx(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,os.path.join("resources","graphics")))
 ZOMBIE_RECT = loadZombieImageRect()
 PLANT_RECT = loadPlantImageRect()
+
+# 播放音乐
+pg.mixer.init()
+pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,"resources", "music", "intro.ogg"))
+pg.mixer.music.play(-1, 0)

@@ -26,10 +26,13 @@ class Level(tool.State):
         self.initState()
 
     def loadMap(self):
+        modeList = ['adventure', 'littleGame']
         if c.LITTLEGAME_BUTTON in self.game_info:
             map_file = 'littleGame_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
+            mode = 'adventure'
         else:
             map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
+            mode = 'littleGame'
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
@@ -42,11 +45,30 @@ class Level(tool.State):
             self.map_data = json.load(f)
             self.done = True
             self.next = c.MAIN_MENU
+            pg.mixer.music.stop()
+            pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.ogg"))
+            pg.mixer.music.play(-1, 0)
             return
         if self.map_data[c.SHOVEL] == 0:
             self.hasShovel = False
         else:
             self.hasShovel = True
+
+        # 同时播放音乐
+        global bgm
+        if mode == modeList[1]: # 冒险模式
+            if self.game_info[c.LEVEL_NUM] in {0, 1, 2}:    # 白天关卡
+                bgm = 'dayLevel.ogg'
+            elif self.game_info[c.LEVEL_NUM] in {3}:    # 夜晚关卡
+                bgm = 'nightLevel.ogg'
+        elif mode == modeList[0]:   # 小游戏模式
+            if self.game_info[c.LEVEL_NUM] in {1}:   # 传送带大战
+                bgm = 'battle.ogg'
+            elif self.game_info[c.LEVEL_NUM] in {2}:    # 坚果保龄球
+                bgm = 'bowling.ogg'
+        pg.mixer.music.stop()
+        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", bgm))
+        pg.mixer.music.play(-1, 0)
 
     def setupBackground(self):
         img_index = self.map_data[c.BACKGROUND_TYPE]
@@ -256,17 +278,25 @@ class Level(tool.State):
     def play(self, mouse_pos, mouse_click):
         # 如果暂停
         if self.showLittleMenu:
+            pg.mixer.music.pause()  # 暂停播放音乐
             if mouse_click[0]:
                 if self.checkReturnClick(mouse_pos):
                     # 暂停 显示菜单
                     self.showLittleMenu = False
+                    pg.mixer.music.unpause()
                 elif self.checkRestartClick(mouse_pos):
                     self.done = True
                     self.next = c.LEVEL
+                    pg.mixer.music.stop()
+                    pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", bgm))
+                    pg.mixer.music.play(-1, 0)
                 elif self.checkMainMenuClick(mouse_pos):
                     self.done = True
                     self.next = c.MAIN_MENU
                     self.persist = {c.CURRENT_TIME:0.0, c.LEVEL_NUM:c.START_LEVEL_NUM}
+                    pg.mixer.music.stop()
+                    pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.ogg"))
+                    pg.mixer.music.play(-1, 0)
             return
 
         if self.zombie_start_time == 0:
