@@ -35,7 +35,7 @@ class Control():
         self.screen = pg.display.get_surface()
         self.done = False
         self.clock = pg.time.Clock()    # 创建一个对象来帮助跟踪时间
-        self.fps = 60
+        self.fps = 30
         self.keys = pg.key.get_pressed()
         self.mouse_pos = None
         self.mouse_click = [False, False]  # value:[left mouse click, right mouse click]
