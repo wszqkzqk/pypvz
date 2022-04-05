@@ -83,6 +83,7 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 ### 短期
 
 * 给胜利和失败界面添加音乐
+* 修复已经死亡的僵尸会触发大嘴花、土豆雷甚至小推车的问题
 
 ## 截屏
 
