@@ -259,10 +259,13 @@ class Level(tool.State):
         x, y = mouse_pos
         map_x, map_y = self.map.getMapIndex(x, y)
         for i in self.plant_groups[map_y]:
-            if(x >= i.rect.x and x <= i.rect.right and
-               y >= i.rect.y and y <= i.rect.bottom):
-               self.killPlant(i)
-               return 
+            if (x >= i.rect.x and x <= i.rect.right and
+                y >= i.rect.y and y <= i.rect.bottom):
+                self.killPlant(i)
+                # 使用后默认铲子复原
+                self.drag_shovel = not self.drag_shovel
+                self.removeMouseImagePlus()
+                return 
 
     # 检查小铲子的位置有没有被点击
     # 方便放回去
