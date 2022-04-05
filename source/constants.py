@@ -1,5 +1,6 @@
 __author__ = 'wszqkzqk'
 START_LEVEL_NUM = 1
+START_LITTLE_GAME_NUM = 1
 
 ORIGINAL_CAPTION = 'pypvz'
 

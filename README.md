@@ -86,9 +86,13 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 * 修复已经死亡的僵尸会触发大嘴花、土豆雷甚至小推车的问题
 * 用蓝色滤镜标识冷冻的僵尸
 * 修复暂停游戏时仍在计时的bug
+* 修复魅惑菇的bug
 
 ## 截屏
 
 ![截屏1](/demo/demo1.webp)
 ![截屏2](/demo/demo2.webp)
 ![截屏3](/demo/demo3.webp)
+![截屏4](/demo/demo4.webp)
+![截屏5](/demo/demo5.webp)
+![截屏6](/demo/demo6.webp)
