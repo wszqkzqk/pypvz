@@ -2,7 +2,7 @@
 
 植物大战僵尸游戏的Python实现
   
-`仅供个人学习和非商业用途。如果这个游戏侵犯了版权，请告诉我`
+`仅供个人学习和非商业用途。如果这个游戏侵犯了版权，请联系我删除`
   
 * 已有的植物：向日葵，豌豆射手，坚果墙，寒冰射手，樱桃炸弹，三线射手，大嘴花，小喷菇，土豆雷，地刺，胆小菇，倭瓜，火爆辣椒，阳光菇，寒冰菇，魅惑菇
 * 已有的僵尸：普通僵尸，旗帜僵尸，路障僵尸，铁桶僵尸，读报僵尸
@@ -96,3 +96,7 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 ![截屏4](/demo/demo4.webp)
 ![截屏5](/demo/demo5.webp)
 ![截屏6](/demo/demo6.webp)
+
+## 开源协议
+
+本软件代码采用[GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)协议开源
