@@ -56,19 +56,16 @@ python main.py
 
 **在编译环境安装不全时，Nuitka可以自动安装MinGW-w64、ccache和depends**
 
-在仓库所在文件夹执行：
+- 由于目前Nuitka打包尚存bug，无法自动封装`pygame`中用来解码音频的相关`.dll`文件，因此需要在编译命令中手动添加
+- 编译需执行以下命令：
 
 ``` powershell
-nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-disable-console --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources main.py
-```
-
-加了背景音乐播放功能之后需要执行：
-
-``` powershell
+git clone https://github.com/wszqkzqk/pypvz.git
+cd pypvz
 nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --windows-disable-console main.py
 ```
 
-* 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\*.dll`应当替换为`*.dll`实际所在路径，当然
+* 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径
 * 由于仅复制了opus的解码器，故要求所有背景音乐都要以opus编码
 
 可执行文件生成路径为`./out/main.exe`
