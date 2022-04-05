@@ -429,7 +429,7 @@ class Chomper(Plant):
     def canAttack(self, zombie):
         if (self.state == c.IDLE and zombie.state != c.DIGEST and
                 self.rect.x <= zombie.rect.right and
-                (self.rect.right + c.GRID_X_SIZE // 3 >= zombie.rect.x)):
+                (self.rect.right + c.GRID_X_SIZE >= zombie.rect.x)):
             return True
         return False
 
