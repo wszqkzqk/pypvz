@@ -88,7 +88,8 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 * 修复已经死亡的僵尸会触发大嘴花、土豆雷甚至小推车的问题
 * 用蓝色滤镜标识冷冻的僵尸
 * 修复暂停游戏时仍在计时的bug
-* 将倭瓜的攻击改为范围伤害
+* 实现范围伤害功能
+  * 倭瓜与地刺将采用范围伤害
 
 ## 截屏
 
