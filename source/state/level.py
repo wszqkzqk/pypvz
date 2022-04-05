@@ -41,8 +41,6 @@ class Level(tool.State):
             f.close()
         except Exception as e:
             print("游戏结束")
-            f = open(file_path)
-            self.map_data = json.load(f)
             self.done = True
             self.next = c.MAIN_MENU
             pg.mixer.music.stop()

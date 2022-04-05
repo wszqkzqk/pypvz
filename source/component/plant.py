@@ -936,7 +936,7 @@ class RedWallNutBowling(Plant):
         self.orig_y = y
         self.explode_timer = 0
         self.explode_y_range = 1
-        self.explode_x_range = c.GRID_X_SIZE
+        self.explode_x_range = c.GRID_X_SIZE * 1.5
         self.init_rect = self.rect.copy()
         self.rotate_degree = 0
         self.animate_interval = 200
