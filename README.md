@@ -77,7 +77,7 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 
 * 增加保存数据文件以存储用户进度的功能
 * 更改僵尸生成方式
-  * 将僵尸生成更随机化
+  * 使僵尸生成更随机化，由JSON记录改为随机数生成
 * 增加更多植物、僵尸类型与游戏功能、模式，尽量符合原版基本设计
 
 ### 短期
