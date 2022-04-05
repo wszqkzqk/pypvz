@@ -5,7 +5,7 @@ from .. import constants as c
 
 
 class Zombie(pg.sprite.Sprite):
-    def __init__(self, x, y, name, health, head_group=None, damage=1):
+    def __init__(self, x, y, name, head_group=None, helmetHealth=0, bodyHealth=c.NORMAL_HEALTH + c.LOSTHEAD_HEALTH, damage=30):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -19,7 +19,9 @@ class Zombie(pg.sprite.Sprite):
         self.rect.centerx = x
         self.rect.bottom = y
 
-        self.health = health
+        self.bodyHealth = bodyHealth
+        self.helmetHealth = helmetHealth
+        self.health = bodyHealth + helmetHealth
         self.damage = damage
         self.dead = False
         self.lostHead = False
@@ -250,7 +252,7 @@ class ZombieHead(Zombie):
 
 class NormalZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.NORMAL_ZOMBIE, c.NORMAL_HEALTH, head_group)
+        Zombie.__init__(self, x, y, c.NORMAL_ZOMBIE, head_group)
 
     def loadImages(self):
         self.walk_frames = []
@@ -280,7 +282,7 @@ class NormalZombie(Zombie):
 # 路障僵尸
 class ConeHeadZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.CONEHEAD_ZOMBIE, c.CONEHEAD_HEALTH, head_group)
+        Zombie.__init__(self, x, y, c.CONEHEAD_ZOMBIE, head_group, c.CONEHEAD_HEALTH)
         self.helmet = True
 
     def loadImages(self):
@@ -317,7 +319,7 @@ class ConeHeadZombie(Zombie):
 
 class BucketHeadZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.BUCKETHEAD_ZOMBIE, c.BUCKETHEAD_HEALTH, head_group)
+        Zombie.__init__(self, x, y, c.BUCKETHEAD_ZOMBIE, head_group, c.BUCKETHEAD_HEALTH)
         self.helmet = True
 
     def loadImages(self):
@@ -354,7 +356,7 @@ class BucketHeadZombie(Zombie):
 
 class FlagZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.FLAG_ZOMBIE, c.FLAG_HEALTH, head_group)
+        Zombie.__init__(self, x, y, c.FLAG_ZOMBIE, head_group, c.FLAG_HEALTH)
 
     def loadImages(self):
         self.walk_frames = []
@@ -384,7 +386,7 @@ class FlagZombie(Zombie):
 
 class NewspaperZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, c.NEWSPAPER_HEALTH, head_group)
+        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, c.NEWSPAPER_HEALTH)
         self.helmet = True
 
     def loadImages(self):
