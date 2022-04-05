@@ -67,7 +67,8 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --windows-di
 nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --windows-disable-console main.py
 ```
 
-其中，`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\*.dll`应当替换为`*.dll`实际所在路径，当然，由于仅复制了opus的解码器，故要求所有背景音乐都要以opus编码
+* 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\*.dll`应当替换为`*.dll`实际所在路径，当然
+* 由于仅复制了opus的解码器，故要求所有背景音乐都要以opus编码
 
 可执行文件生成路径为`./out/main.exe`
 
