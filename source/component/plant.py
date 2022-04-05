@@ -215,7 +215,7 @@ class Plant(pg.sprite.Sprite):
         if not zombie.lostHead:
             self.health -= damage
         self.hit_timer = self.current_time
-        if (self.health == 0) or (self.name == c.HYPNOSHROOM and self.state != c.SLEEP):
+        if (self.health == 0) or (self.name == c.HYPNOSHROOM and self.state != c.SLEEP):    # 魅惑菇触发同样会消失
             self.kill_zombie = zombie
 
     def getPosition(self):
