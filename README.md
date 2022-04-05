@@ -56,17 +56,20 @@ python main.py
 
 **在编译环境安装不全时，Nuitka可以自动安装MinGW-w64、ccache和depends**
 
-- 由于目前Nuitka打包尚存bug，无法自动封装`pygame`中用来解码音频的相关`.dll`文件，因此需要在编译命令中手动添加
-- 编译需执行以下命令：
+- 由于目前Nuitka打包尚存bug，无法自动封装`pygame`中用来解码音频的相关`.dll`文件，因此需要手动在编译命令中添加
+  - 对于`mp3`编码，需要添加`libmpg123-0.dll`
+  - 对于`vorbis`编码，需要添加`libogg-0.dll`，`libvorbis-0.dll`和`libvorbisfile-3.dll`
+  - 对于`opus`编码，需要添加`libogg-0.dll`，`libopus-0.dll`和`libopusfile-0.dll`
+- 以添加`opus`编码的背景音乐支持为例，编译需执行以下命令：
 
-``` powershell
+``` cmd
 git clone https://github.com/wszqkzqk/pypvz.git
 cd pypvz
 nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --windows-disable-console main.py
 ```
 
 * 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径
-* 由于仅复制了opus的解码器，故要求所有背景音乐都要以opus编码
+* 由于仅复制了`opus`的解码器，故要求所有背景音乐都要以opus编码
 
 可执行文件生成路径为`./out/main.exe`
 
