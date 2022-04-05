@@ -229,7 +229,7 @@ class Sun(Plant):
             self.sun_value = c.SUN_VALUE
         else:
             scale = 0.6
-            self.sun_value = 12
+            self.sun_value = 15
         Plant.__init__(self, x, y, c.SUN, 0, None, scale)
         self.move_speed = 1
         self.dest_x = dest_x
@@ -756,7 +756,7 @@ class SunShroom(Plant):
         if not self.is_big:
             if self.change_timer == 0:
                 self.change_timer = self.current_time
-            elif (self.current_time - self.change_timer) > 25000:
+            elif (self.current_time - self.change_timer) > 100000:
                 self.changeFrames(self.big_frames)
                 self.is_big = True
 
