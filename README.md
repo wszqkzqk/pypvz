@@ -101,4 +101,4 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 
 ## 开源协议
 
-![GPL v3](/demo/gplv3.webp)
+[![GPL v3](/demo/gplv3.webp)](https://www.gnu.org/licenses/gpl-3.0.html)
