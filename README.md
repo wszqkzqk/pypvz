@@ -85,7 +85,6 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 * 给胜利和失败界面添加音乐
 * 修复已经死亡的僵尸会触发大嘴花、土豆雷甚至小推车的问题
 * 用蓝色滤镜标识冷冻的僵尸
-* 修复铲子铲出来的空位上无法种植物的bug
 
 ## 截屏
 

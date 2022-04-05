@@ -261,7 +261,7 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if(x >= i.rect.x and x <= i.rect.right and
                y >= i.rect.y and y <= i.rect.bottom):
-               i.kill()
+               self.killPlant(i)
                return 
 
     # 检查小铲子的位置有没有被点击
