@@ -15,8 +15,8 @@
 
 ## 环境要求
 
-* Python >= 3.7 
-* Python-Pygame >= 1.9
+* `Python` >= 3.7 
+* `Python-Pygame` >= 1.9
 
 ## 开始游戏
 
