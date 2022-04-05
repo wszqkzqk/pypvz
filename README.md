@@ -1,6 +1,6 @@
 ## Python版植物大战僵尸
 
-植物大战僵尸游戏的Python实现
+植物大战僵尸游戏的Python实现，基于[marblexu的项目进行创作](https://github.com/marblexu/PythonPlantsVsZombies)
   
 `本项目为个人python语言学习所用的练习项目，仅供个人学习和研究使用，不得用于其他用途。如果这个游戏侵犯了版权，请联系我删除`
   
