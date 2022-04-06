@@ -588,12 +588,6 @@ class Squash(Plant):
 
     def attacking(self):
         if self.squashing:
-            '''
-
-            for zombie in self.zombie_group:
-                if self.canAttack(zombie):
-                    zombie.setDamage(1800, False)
-            '''
             if (self.frame_index + 1) == self.frame_num:
                 self.attack_zombie.kill()
                 for zombie in self.zombie_group:
