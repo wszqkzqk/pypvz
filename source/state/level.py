@@ -555,7 +555,7 @@ class Level(tool.State):
                         zombie.setAttack(plant)
 
             for hypno_zombie in self.hypno_zombie_groups[i]:
-                if hypno_zombie.health < 70:
+                if hypno_zombie.health <= 0:
                     continue
                 zombie_list = pg.sprite.spritecollide(hypno_zombie,
                                self.zombie_groups[i], False,collided_func)
