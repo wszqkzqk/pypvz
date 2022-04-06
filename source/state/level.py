@@ -572,7 +572,7 @@ class Level(tool.State):
         for car in self.cars:
             zombies = pg.sprite.spritecollide(car, self.zombie_groups[car.map_y], False, collided_func)
             for zombie in zombies:
-                if zombie and zombie.state != c.DIE:
+                if zombie and zombie.state != c.DIE and (not zombie.lostHead):
                     car.setWalk()
                     zombie.setDie()
             if car.dead:
@@ -707,7 +707,7 @@ class Level(tool.State):
     def checkLose(self):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.rect.right < 0:
+                if zombie.rect.right < 0 and (not zombie.lostHead):
                     return True
         return False
 

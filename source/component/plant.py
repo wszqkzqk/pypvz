@@ -195,7 +195,7 @@ class Plant(pg.sprite.Sprite):
             self.image.set_alpha(192)
 
     def canAttack(self, zombie):
-        if (self.state != c.SLEEP and zombie.state != c.DIE and
+        if (self.state != c.SLEEP and zombie.state != c.DIE and (not zombie.lostHead) and
                 self.rect.x <= zombie.rect.right):
             return True
         return False
@@ -428,7 +428,7 @@ class Chomper(Plant):
 
     def canAttack(self, zombie):
         if (self.state == c.IDLE and zombie.state != c.DIGEST and
-                self.rect.x <= zombie.rect.right and
+                self.rect.x <= zombie.rect.right and (not zombie.lostHead) and
                 (self.rect.right + c.GRID_X_SIZE >= zombie.rect.x)):
             return True
         return False
@@ -491,7 +491,7 @@ class PuffShroom(Plant):
 
     def canAttack(self, zombie):
         if (self.rect.x <= zombie.rect.right and
-                (self.rect.right + c.GRID_X_SIZE * 4 >= zombie.rect.x)):
+                (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x)):
             return True
         return False
 
@@ -532,7 +532,7 @@ class PotatoMine(Plant):
                 self.is_init = False
 
     def canAttack(self, zombie):
-        if (not self.is_init and zombie.rect.right >= self.rect.x and
+        if (not self.is_init and zombie.rect.right >= self.rect.x and (not zombie.lostHead) and
                 (zombie.rect.x - self.rect.x) <= self.explode_x_range):
             return True
         return False
