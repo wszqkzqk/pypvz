@@ -75,6 +75,7 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 
 ## 已知bug
 
+以下问题囿于个人目前的能力与精力，没有修复：
 * 经死亡的僵尸会触发大嘴花、土豆雷甚至小推车
 * 冷冻的僵尸未用蓝色滤镜标识
 * 魅惑的僵尸未用红色滤镜标识
