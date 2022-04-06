@@ -121,6 +121,7 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
     * 寒冰菇
     * 坚果保龄球
     * 巨型坚果保龄球
+    * 三叶草
 
 ### 短期
 
