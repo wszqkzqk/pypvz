@@ -97,6 +97,9 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
       * 玉米粒
       * 黄油（2倍伤害，定格）
       * 卷心菜（2倍伤害）
+    * 烟雾
+      * 大喷菇
+      * 忧郁蘑菇
     * 碾压
         * 倭瓜
   * 爆炸
