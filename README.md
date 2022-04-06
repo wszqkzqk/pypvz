@@ -23,7 +23,11 @@
 
 ### 使用仓库源代码
 
+先克隆仓库内容，再运行`main.py`：
+
 ```shell
+git clone https://github.com/wszqkzqk/pypvz.git
+cd pypvz
 python main.py
 ```
 
