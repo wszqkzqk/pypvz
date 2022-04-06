@@ -1,8 +1,8 @@
 ## Python版植物大战僵尸
 
-植物大战僵尸游戏的Python实现，基于[marblexu的项目进行创作](https://github.com/marblexu/PythonPlantsVsZombies)
+植物大战僵尸游戏的Python实现，基于[marblexu的项目进行创作](https://github.com/marblexu/PythonPlantsVsZombies)，部分代码也整合自[callmebg的项目](https://github.com/callmebg/PythonPlantsVsZombies)
   
-`本项目为个人python语言学习所用的练习项目，仅供个人学习和研究使用，不得用于其他用途。如果这个游戏侵犯了版权，请联系我删除`
+**本项目为个人python语言学习的练习项目，仅供个人学习和研究使用，不得用于其他用途。如果这个游戏侵犯了版权，请联系我删除**
   
 * 已有的植物：向日葵，豌豆射手，坚果墙，寒冰射手，樱桃炸弹，三线射手，大嘴花，小喷菇，土豆雷，地刺，胆小菇，倭瓜，火爆辣椒，阳光菇，寒冰菇，魅惑菇
 * 已有的僵尸：普通僵尸，旗帜僵尸，路障僵尸，铁桶僵尸，读报僵尸
