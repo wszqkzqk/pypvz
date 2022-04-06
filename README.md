@@ -146,7 +146,3 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 ![截屏4](/demo/demo4.webp)
 ![截屏5](/demo/demo5.webp)
 ![截屏6](/demo/demo6.webp)
-
-## 开源协议
-
-[![GPL v3](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.html)
