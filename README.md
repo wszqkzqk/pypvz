@@ -73,6 +73,16 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 
 可执行文件生成路径为`./out/main.exe`
 
+## 已知bug
+
+* 经死亡的僵尸会触发大嘴花、土豆雷甚至小推车
+* 冷冻的僵尸未用蓝色滤镜标识
+* 魅惑的僵尸未用红色滤镜标识
+* 暂停游戏时僵尸与阳光的生成仍在计时
+* 倭瓜、地刺无范围伤害
+
+**欢迎提供[Pull requests](https://github.com/wszqkzqk/pypvz/pulls)或修复方法建议**
+
 ## ~~画大饼~~计划（不保证实施）
 
 * 增加保存数据文件以存储用户进度的功能
@@ -124,14 +134,6 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
   * 对防具的破损状态予以展示
 * 增加部分音效
   * 如爆炸、打击等
-
-## 已知bug
-
-* 经死亡的僵尸会触发大嘴花、土豆雷甚至小推车
-* 冷冻的僵尸未用蓝色滤镜标识
-* 魅惑的僵尸未用红色滤镜标识
-* 暂停游戏时僵尸与阳光的生成仍在计时
-* 倭瓜、地刺无范围伤害
 
 ## 截屏
 
