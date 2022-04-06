@@ -84,7 +84,6 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 * 冷冻的僵尸未用蓝色滤镜标识
 * 魅惑的僵尸未用红色滤镜标识
 * 暂停游戏时僵尸与阳光的生成仍在计时
-* 倭瓜、地刺无范围伤害
 
 **欢迎提供[Pull requests](https://github.com/wszqkzqk/pypvz/pulls)或修复方法建议**
 

@@ -281,7 +281,7 @@ class PeaShooter(Plant):
         self.shoot_timer = 0
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 2000:
+        if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
             self.shoot_timer = self.current_time
@@ -293,7 +293,7 @@ class RepeaterPea(Plant):
         self.shoot_timer = 0
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 2000:
+        if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
             self.bullet_group.add(Bullet(self.rect.right + 40, self.rect.y, self.rect.y,
@@ -309,7 +309,7 @@ class ThreePeaShooter(Plant):
         self.bullet_groups = bullet_groups
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 2000:
+        if (self.current_time - self.shoot_timer) > 1400:
             offset_y = 9  # modify bullet in the same y position with bullets of other plants
             for i in range(3):
                 tmp_y = self.map_y + (i - 1)
@@ -327,7 +327,7 @@ class SnowPeaShooter(Plant):
         self.shoot_timer = 0
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 2000:
+        if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y, self.rect.y,
                                          c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, True))
             self.shoot_timer = self.current_time
@@ -484,7 +484,7 @@ class PuffShroom(Plant):
         self.frames = self.idle_frames
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 3000:
+        if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 10, self.rect.y + 10,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, True))
             self.shoot_timer = self.current_time
@@ -570,8 +570,12 @@ class Squash(Plant):
         self.frames = self.idle_frames
 
     def canAttack(self, zombie):
+        # 普通状态
         if (self.state == c.IDLE and self.rect.x <= zombie.rect.right and
                 (self.rect.right + c.GRID_X_SIZE >= zombie.rect.x)):
+            return True
+        # 攻击状态
+        elif (self.state == c.ATTACK) and (self.rect.left <= zombie.rect.right or self.rect.right >= zombie.rect.left):
             return True
         return False
 
@@ -579,13 +583,22 @@ class Squash(Plant):
         self.attack_zombie = zombie
         self.zombie_group = zombie_group
         self.state = c.ATTACK
+        # 攻击状态下生命值无敌
+        self.health = float('inf')
 
     def attacking(self):
         if self.squashing:
-            if self.frame_index == 2:
-                self.zombie_group.remove(self.attack_zombie)
+            '''
+
+            for zombie in self.zombie_group:
+                if self.canAttack(zombie):
+                    zombie.setDamage(1800, False)
+            '''
             if (self.frame_index + 1) == self.frame_num:
                 self.attack_zombie.kill()
+                for zombie in self.zombie_group:
+                    if self.canAttack(zombie):
+                        zombie.setDamage(1800, False)
                 self.health = 0
         elif self.aim_timer == 0:
             self.aim_timer = self.current_time
@@ -626,11 +639,11 @@ class Spikeweed(Plant):
         self.state = c.ATTACK
 
     def attacking(self):
-        if (self.current_time - self.attack_timer) > 2000:
+        if (self.current_time - self.attack_timer) > 700:
             self.attack_timer = self.current_time
             for zombie in self.zombie_group:
                 if self.canAttack(zombie):
-                    zombie.setDamage(1, False)
+                    zombie.setDamage(10, False)
 
 
 class Jalapeno(Plant):
@@ -719,7 +732,7 @@ class ScaredyShroom(Plant):
         self.changeFrames(self.idle_frames)
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 2000:
+        if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 40, self.rect.y + 40,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, True))
             self.shoot_timer = self.current_time

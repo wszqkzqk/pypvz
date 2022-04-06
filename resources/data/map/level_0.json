@@ -1,8 +1,13 @@
 {
     "background_type":0,
-    "init_sun_value":500,
+    "init_sun_value":5000,
     "shovel":1,
     "zombie_list":[
+        {"time":1000, "map_y":2, "name":"BucketheadZombie"},
+        {"time":1000, "map_y":2, "name":"BucketheadZombie"},
+        {"time":1000, "map_y":2, "name":"Zombie"},
+        {"time":1000, "map_y":2, "name":"Zombie"},
+        {"time":1000, "map_y":2, "name":"Zombie"},
         {"time":1000, "map_y":2, "name":"Zombie"}
     ]
 }
