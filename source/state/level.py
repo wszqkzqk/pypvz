@@ -18,6 +18,10 @@ class Level(tool.State):
         self.map_y_len = c.GRID_Y_LEN
         self.map = map.Map(c.GRID_X_LEN, self.map_y_len)
 
+        # 暂停状态
+        self.pause = False
+        self.pauseTime = 0
+
         # 默认显然不用显示菜单
         self.showLittleMenu = False
         
@@ -112,13 +116,21 @@ class Level(tool.State):
     
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
-        self.current_time = self.game_info[c.CURRENT_TIME] = current_time
+        self.current_time = self.game_info[c.CURRENT_TIME] = self.pvzTime(current_time)
         if self.state == c.CHOOSE:
             self.choose(mouse_pos, mouse_click)
         elif self.state == c.PLAY:
             self.play(mouse_pos, mouse_click)
 
         self.draw(surface)
+
+    def pvzTime(self, current_time):
+        # 扣除暂停时间
+        if not self.pause:
+            self.beforePauseTime = current_time - self.pauseTime
+        else:
+            self.pauseTime = current_time - self.beforePauseTime
+        return self.beforePauseTime
 
     def initBowlingMap(self):
         print('initBowlingMap')
@@ -280,11 +292,14 @@ class Level(tool.State):
     def play(self, mouse_pos, mouse_click):
         # 如果暂停
         if self.showLittleMenu:
+            # 设置暂停状态
+            self.pause = True
             # 暂停播放音乐
             pg.mixer.music.pause()
             if mouse_click[0]:
                 if self.checkReturnClick(mouse_pos):
                     # 终止暂停，停止显示菜单
+                    self.pause = False
                     self.showLittleMenu = False
                     # 继续播放音乐
                     pg.mixer.music.unpause()
