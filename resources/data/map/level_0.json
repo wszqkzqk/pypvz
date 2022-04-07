@@ -8,6 +8,16 @@
         {"time":1000, "map_y":2, "name":"Zombie"},
         {"time":1000, "map_y":2, "name":"Zombie"},
         {"time":1000, "map_y":2, "name":"Zombie"},
-        {"time":1000, "map_y":2, "name":"Zombie"}
+        {"time":1000, "map_y":2, "name":"Zombie"},
+        {"time":2000, "map_y":2, "name":"BucketheadZombie"},
+        {"time":3000, "map_y":2, "name":"BucketheadZombie"},
+        {"time":4000, "map_y":2, "name":"Zombie"},
+        {"time":5000, "map_y":2, "name":"Zombie"},
+        {"time":6000, "map_y":2, "name":"Zombie"},
+        {"time":7000, "map_y":2, "name":"BucketheadZombie"},
+        {"time":8000, "map_y":2, "name":"BucketheadZombie"},
+        {"time":9000, "map_y":2, "name":"Zombie"},
+        {"time":10000, "map_y":2, "name":"Zombie"},
+        {"time":11000, "map_y":2, "name":"Zombie"}
     ]
 }

@@ -575,8 +575,16 @@ class Squash(Plant):
                 (self.rect.right + c.GRID_X_SIZE >= zombie.rect.x)):
             return True
         # 攻击状态
-        elif (self.state == c.ATTACK) and (self.rect.left <= zombie.rect.right or self.rect.right >= zombie.rect.left):
-            return True
+        elif (self.state == c.ATTACK):
+            # 僵尸在倭瓜右侧
+            if zombie.rect.x >= self.rect.x:
+                # 重叠20个像素或15%判断为可以攻击
+                if (self.rect.right - zombie.rect.left >= 20) or (self.rect.right - zombie.rect.left >= 0.15*zombie.rect.width):
+                    return True
+            # 僵尸在倭瓜右侧
+            else:
+                if (zombie.rect.right - self.rect.left >= 20) or (zombie.rect.right - self.rect.left >= 0.15*zombie.rect.width):
+                    return True
         return False
 
     def setAttack(self, zombie, zombie_group):
@@ -589,11 +597,11 @@ class Squash(Plant):
     def attacking(self):
         if self.squashing:
             if (self.frame_index + 1) == self.frame_num:
-                self.attack_zombie.kill()
                 for zombie in self.zombie_group:
                     if self.canAttack(zombie):
                         zombie.setDamage(1800, False)
-                self.health = 0
+                self.health = 0 # 避免僵尸在原位啃食
+                self.kill()
         elif self.aim_timer == 0:
             self.aim_timer = self.current_time
             self.changeFrames(self.aim_frames)
@@ -622,8 +630,8 @@ class Spikeweed(Plant):
         self.state = c.IDLE
 
     def canAttack(self, zombie):
-        if (self.rect.x <= zombie.rect.right and
-                (self.rect.right >= zombie.rect.x)):
+        # 地刺能不能扎的判据：僵尸中心与地刺中心的距离或僵尸包括了地刺中心和右端（平衡得到合理的攻击范围,"僵尸包括了地刺中心和右端"是为以后巨人做准备）
+        if ((-60 <= zombie.rect.x - self.rect.x <= 40) or (zombie.rect.left <= self.rect.x <= zombie.rect.right and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
             return True
         return False
 
