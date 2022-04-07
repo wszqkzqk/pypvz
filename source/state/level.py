@@ -612,6 +612,8 @@ class Level(tool.State):
             _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
             self.zombie_groups[map_y].remove(zombie)
             self.hypno_zombie_groups[map_y].add(zombie)
+        # 避免僵尸在用铲子移除植物后还在原位啃食
+        plant.health = 0
         plant.kill()
 
     def checkPlant(self, plant, i):
