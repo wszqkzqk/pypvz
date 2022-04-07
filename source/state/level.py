@@ -98,6 +98,7 @@ class Level(tool.State):
             return element[0]
 
         self.zombie_list = []
+        # 目前设置为从JSON文件中读取僵尸出现的时间、种类、位置信息，以后可以将时间设置为模仿原版的机制，位置设置为随机数
         for data in self.map_data[c.ZOMBIE_LIST]:
             self.zombie_list.append((data['time'], data['name'], data['map_y']))
         self.zombie_start_time = 0
@@ -279,11 +280,13 @@ class Level(tool.State):
     def play(self, mouse_pos, mouse_click):
         # 如果暂停
         if self.showLittleMenu:
-            pg.mixer.music.pause()  # 暂停播放音乐
+            # 暂停播放音乐
+            pg.mixer.music.pause()
             if mouse_click[0]:
                 if self.checkReturnClick(mouse_pos):
-                    # 暂停 显示菜单
+                    # 终止暂停，停止显示菜单
                     self.showLittleMenu = False
+                    # 继续播放音乐
                     pg.mixer.music.unpause()
                 elif self.checkRestartClick(mouse_pos):
                     self.done = True
@@ -303,7 +306,7 @@ class Level(tool.State):
         if self.zombie_start_time == 0:
             self.zombie_start_time = self.current_time
         elif len(self.zombie_list) > 0:
-            data = self.zombie_list[0]
+            data = self.zombie_list[0]  # 因此要求僵尸列表按照时间顺序排列
             if  data[0] <= (self.current_time - self.zombie_start_time):
                 self.createZombie(data[1], data[2])
                 self.zombie_list.remove(data)
@@ -313,6 +316,7 @@ class Level(tool.State):
             self.plant_groups[i].update(self.game_info)
             self.zombie_groups[i].update(self.game_info)
             self.hypno_zombie_groups[i].update(self.game_info)
+            # 清除走出去的魅惑僵尸
             for zombie in self.hypno_zombie_groups[i]:
                 if zombie.rect.x > c.SCREEN_WIDTH:
                     zombie.kill()
@@ -385,6 +389,7 @@ class Level(tool.State):
 
     def createZombie(self, name, map_y):
         x, y = self.map.getMapGridPos(0, map_y)
+        # 新增的僵尸也需要在这里声明
         if name == c.NORMAL_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X, y, self.head_group))
         elif name == c.CONEHEAD_ZOMBIE:
@@ -410,6 +415,8 @@ class Level(tool.State):
             self.setupHintImage()
         x, y = self.hint_rect.centerx, self.hint_rect.bottom
         map_x, map_y = self.map.getMapIndex(x, y)
+
+        # 新植物也需要在这里声明
         if self.plant_name == c.SUNFLOWER:
             new_plant = plant.SunFlower(x, y, self.sun_group)
         elif self.plant_name == c.PEASHOOTER:
