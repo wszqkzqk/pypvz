@@ -584,7 +584,9 @@ class Level(tool.State):
                 continue
             for zombie in self.zombie_groups[i]:
                 if abs(zombie.rect.centerx - x) <= x_range:
-                    zombie.setBoomDie()
+                    zombie.health -= 1800
+                    if zombie.health <= 0:
+                        zombie.setBoomDie()
 
     def freezeZombies(self, plant):
         for i in range(self.map_y_len):
