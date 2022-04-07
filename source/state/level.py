@@ -33,10 +33,10 @@ class Level(tool.State):
         modeList = ['adventure', 'littleGame']
         if c.LITTLEGAME_BUTTON in self.game_info:
             map_file = 'littleGame_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
-            mode = 'adventure'
+            mode = 'littleGame'
         else:
             map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
-            mode = 'littleGame'
+            mode = 'adventure'
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
@@ -58,12 +58,12 @@ class Level(tool.State):
 
         # 同时播放音乐
         global bgm
-        if mode == modeList[1]: # 冒险模式
+        if mode == modeList[0]: # 冒险模式
             if self.game_info[c.LEVEL_NUM] in {0, 1, 2}:    # 白天关卡
                 bgm = 'dayLevel.opus'
             elif self.game_info[c.LEVEL_NUM] in {3}:    # 夜晚关卡
                 bgm = 'nightLevel.opus'
-        elif mode == modeList[0]:   # 小游戏模式
+        elif mode == modeList[1]:   # 小游戏模式
             if self.game_info[c.LEVEL_NUM] in {1}:   # 传送带大战
                 bgm = 'battle.opus'
             elif self.game_info[c.LEVEL_NUM] in {2}:    # 坚果保龄球
