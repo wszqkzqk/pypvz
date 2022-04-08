@@ -282,7 +282,7 @@ class PeaShooter(Plant):
 
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
-            self.bullet_group.add(Bullet(self.rect.right, self.rect.y, self.rect.y,
+            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
             self.shoot_timer = self.current_time
 
@@ -292,13 +292,19 @@ class RepeaterPea(Plant):
         Plant.__init__(self, x, y, c.REPEATERPEA, c.PLANT_HEALTH, bullet_group)
         self.shoot_timer = 0
 
+        # 是否发射第一颗
+        self.firstShot = False
+
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 1400:
-            self.bullet_group.add(Bullet(self.rect.right, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
-            self.bullet_group.add(Bullet(self.rect.right + 40, self.rect.y, self.rect.y,
+        if (self.current_time - self.shoot_timer > 1400):
+            self.firstShot = True
+            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
             self.shoot_timer = self.current_time
+        elif self.firstShot and (self.current_time - self.shoot_timer) > 200:
+            self.firstShot = False
+            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
 
 
 class ThreePeaShooter(Plant):
@@ -316,7 +322,7 @@ class ThreePeaShooter(Plant):
                 if tmp_y < 0 or tmp_y >= c.GRID_Y_LEN:
                     continue
                 dest_y = self.rect.y + (i - 1) * c.GRID_Y_SIZE + offset_y
-                self.bullet_groups[tmp_y].add(Bullet(self.rect.right, self.rect.y, dest_y,
+                self.bullet_groups[tmp_y].add(Bullet(self.rect.right  - 15, self.rect.y, dest_y,
                                                      c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
             self.shoot_timer = self.current_time
 
@@ -328,7 +334,7 @@ class SnowPeaShooter(Plant):
 
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
-            self.bullet_group.add(Bullet(self.rect.right, self.rect.y, self.rect.y,
+            self.bullet_group.add(Bullet(self.rect.right  - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, True))
             self.shoot_timer = self.current_time
 
@@ -736,7 +742,7 @@ class ScaredyShroom(Plant):
 
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
-            self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 40, self.rect.y + 40,
+            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y + 40, self.rect.y + 40,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, True))
             self.shoot_timer = self.current_time
 
