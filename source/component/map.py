@@ -17,6 +17,8 @@ class Map():
         return True
     
     def isMovable(self, map_x, map_y):
+        # 目前没有南瓜头，所以用是否为空判断
+        # 可将南瓜头新定义一个状态（如：2），基于此进一步判断
         return (self.map[map_y][map_x] == c.MAP_EMPTY)
     
     def getMapIndex(self, x, y):

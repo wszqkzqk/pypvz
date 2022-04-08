@@ -442,6 +442,12 @@ class Level(tool.State):
         elif name == c.NEWSPAPER_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X, y, self.head_group))
 
+    # 能否种植物的判断：
+    # 调用self.map.showPlant(x, y)
+    # 先判断位置是否合法 isValid(map_x, map_y)
+    # 再判断位置是否可用 isMovable(map_x, map_y)
+    # 因为现在还没有做南瓜头，所以目前判断的是map[map_y][map_x]是否为空（c.MAP_EMPTY，即0）
+    # 写了南瓜头需要改这个验证
     def canSeedPlant(self):
         x, y = pg.mouse.get_pos()
         return self.map.showPlant(x, y)
