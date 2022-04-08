@@ -70,7 +70,7 @@ MAP_EXIST = 1
 MAP_PUMPKIN_ONLY = 2
 # 有南瓜头和其他植物
 MAP_PUMPKIN_WITH = 3
-# 可能还需要给咖啡豆定义一个状态
+# 可能还需要给咖啡豆定义一个状态，但是这个最好是在种植的时候判断那里是否有睡眠的蘑菇
 
 BACKGROUND_OFFSET_X = 220
 MAP_OFFSET_X = 35
