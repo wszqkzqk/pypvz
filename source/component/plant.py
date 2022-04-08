@@ -662,7 +662,7 @@ class Jalapeno(Plant):
         self.state = c.ATTACK
         self.start_explode = False
         self.explode_y_range = 0
-        self.explode_x_range = 377
+        self.explode_x_range = 500
 
     def loadImages(self, name, scale):
         self.explode_frames = []
