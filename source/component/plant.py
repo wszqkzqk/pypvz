@@ -127,7 +127,7 @@ class Plant(pg.sprite.Sprite):
         self.bullet_group = bullet_group
         self.can_sleep = False
         self.animate_timer = 0
-        self.animate_interval = 100
+        self.animate_interval = 70  # 帧播放间隔
         self.hit_timer = 0
 
     def loadFrames(self, frames, name, scale, color=c.BLACK):
@@ -401,7 +401,7 @@ class CherryBomb(Plant):
 class Chomper(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.CHOMPER, c.PLANT_HEALTH, None)
-        self.animate_interval = 250
+        self.animate_interval = 140
         self.digest_timer = 0
         self.digest_interval = 15000
         self.attack_zombie = None
@@ -411,6 +411,7 @@ class Chomper(Plant):
         self.idle_frames = []
         self.attack_frames = []
         self.digest_frames = []
+        self.animate_interval = 100 # 本身动画播放较慢
 
         idle_name = name
         attack_name = name + 'Attack'
