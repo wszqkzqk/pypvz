@@ -66,6 +66,11 @@ ZOMBIE_LIST = 'zombie_list'
 
 MAP_EMPTY = 0
 MAP_EXIST = 1
+# 只有南瓜头
+MAP_PUMPKIN_ONLY = 2
+# 有南瓜头和其他植物
+MAP_PUMPKIN_WITH = 3
+# 可能还需要给咖啡豆定义一个状态
 
 BACKGROUND_OFFSET_X = 220
 MAP_OFFSET_X = 35
