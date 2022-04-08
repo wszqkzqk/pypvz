@@ -32,7 +32,7 @@ class Zombie(pg.sprite.Sprite):
         self.animate_timer = 0
         self.attack_timer = 0
         self.state = c.WALK
-        self.animate_interval = 150
+        self.animate_interval = 200
         self.ice_slow_ratio = 1
         self.ice_slow_timer = 0
         self.hit_timer = 0
@@ -125,6 +125,7 @@ class Zombie(pg.sprite.Sprite):
     def setLostHead(self):
         self.losthead_timer = self.current_time
         self.lostHead = True
+        self.animate_interval = 90
         if self.head_group is not None:
             self.head_group.add(ZombieHead(self.rect.centerx, self.rect.bottom))
 
@@ -209,12 +210,13 @@ class Zombie(pg.sprite.Sprite):
 
     def setDie(self):
         self.state = c.DIE
-        self.animate_interval = 200
+        self.animate_interval = 100
         self.changeFrames(self.die_frames)
 
     def setBoomDie(self):
+        self.health = 0
         self.state = c.DIE
-        self.animate_interval = 200
+        self.animate_interval = 100
         self.changeFrames(self.boomdie_frames)
 
     def setFreeze(self, ice_trap_image):
