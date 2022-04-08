@@ -3,6 +3,7 @@ import os
 import json
 import sys
 import pygame as pg
+from random import randint
 from .. import tool
 from .. import constants as c
 from ..component import map, plant, zombie, menubar
@@ -104,7 +105,10 @@ class Level(tool.State):
         self.zombie_list = []
         # 目前设置为从JSON文件中读取僵尸出现的时间、种类、位置信息，以后可以将时间设置为模仿原版的机制，位置设置为随机数
         for data in self.map_data[c.ZOMBIE_LIST]:
-            self.zombie_list.append((data['time'], data['name'], data['map_y']))
+            if 'map_y' in data.keys():
+                self.zombie_list.append((data['time'], data['name'], data['map_y']))
+            else:
+                self.zombie_list.append((data['time'], data['name']))
         self.zombie_start_time = 0
         self.zombie_list.sort(key=takeTime)
 
@@ -322,9 +326,14 @@ class Level(tool.State):
             self.zombie_start_time = self.current_time
         elif len(self.zombie_list) > 0:
             data = self.zombie_list[0]  # 因此要求僵尸列表按照时间顺序排列
+            # data内容排列：[0]:时间 [1]:名称 [2]:坐标
             if  data[0] <= (self.current_time - self.zombie_start_time):
-                self.createZombie(data[1], data[2])
-                self.zombie_list.remove(data)
+                if len(data) == 3:
+                    self.createZombie(data[1], data[2])
+                    self.zombie_list.remove(data)
+                else:   # len(data) == 2 没有指定map_y
+                    self.createZombie(data[1])
+                    self.zombie_list.remove(data)
 
         for i in range(self.map_y_len):
             self.bullet_groups[i].update(self.game_info)
@@ -402,7 +411,14 @@ class Level(tool.State):
         self.checkCarCollisions()
         self.checkGameState()
 
-    def createZombie(self, name, map_y):
+    def createZombie(self, name, map_y=None):
+        # 有指定时按照指定生成，无指定时随机位置生成
+        # 0:白天 1:夜晚 2:泳池 3:浓雾 4:屋顶 5:月夜
+        if map_y == None:
+            if self.map_data[c.BACKGROUND_TYPE] in {0, 1, 4, 5}:
+                map_y = randint(0, 4)
+            elif self.map_data[c.BACKGROUND_TYPE] in {2, 3}:
+                map_y = randint(0, 5)
         x, y = self.map.getMapGridPos(0, map_y)
         # 新增的僵尸也需要在这里声明
         if name == c.NORMAL_ZOMBIE:
