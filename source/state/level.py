@@ -294,6 +294,10 @@ class Level(tool.State):
         return False
 
     def play(self, mouse_pos, mouse_click):
+        # 原版阳光掉落机制需要
+        # 已掉落的阳光
+        self.fallenSun = 0
+
         # 如果暂停
         if self.showLittleMenu:
             # 设置暂停状态
@@ -384,13 +388,14 @@ class Level(tool.State):
             if mouse_click[1]:
                 self.removeMouseImagePlus()
         
-
         if self.produce_sun:
-            if(self.current_time - self.sun_timer) > c.PRODUCE_SUN_INTERVAL:
+            # 原版阳光掉落机制：(已掉落阳光数*100 ms + 4250 ms) 与 9500 ms的最小值，再加 0 ~ 2750 ms 之间的一个数
+            if (self.current_time - self.sun_timer) > min(c.PRODUCE_SUN_INTERVAL + 100*self.fallenSun, 9500) + randint(0, 2750):
                 self.sun_timer = self.current_time
                 map_x, map_y = self.map.getRandomMapIndex()
                 x, y = self.map.getMapGridPos(map_x, map_y)
                 self.sun_group.add(plant.Sun(x, 0, x, y))
+                self.fallenSun += 1
         
         # 检查有没有捡到阳光
         if not self.drag_plant and not self.drag_shovel and mouse_pos and mouse_click[0]:
