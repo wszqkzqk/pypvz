@@ -417,8 +417,18 @@ class Level(tool.State):
         if map_y == None:
             if self.map_data[c.BACKGROUND_TYPE] in {0, 1, 4, 5}:
                 map_y = randint(0, 4)
+            # 情况复杂：分水路和陆路，不能简单实现，需要另外加判断
+            # 0, 1, 4, 5路为陆路，2, 3路为水路
             elif self.map_data[c.BACKGROUND_TYPE] in {2, 3}:
-                map_y = randint(0, 5)
+                if name in {}:  # 这里还没填，以后加了泳池模式填：水生僵尸集合
+                    map_y = randint(2, 3)
+                elif name == '这里应该换成气球僵尸的名字（调用的变量名，最好不要直接写，保持风格统一）':
+                    map_y = randint(0, 5)
+                else:   # 陆生僵尸
+                    map_y = randint(0, 3)
+                    if map_y >= 2:   # 后两路的map_y应当+2
+                        map_y += 2
+
         x, y = self.map.getMapGridPos(0, map_y)
         # 新增的僵尸也需要在这里声明
         if name == c.NORMAL_ZOMBIE:
