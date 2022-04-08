@@ -88,6 +88,7 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 
 ## ~~画大饼~~计划（不保证实施）
 
+* 增加“关卡进程”进度条
 * 增加保存数据文件以存储用户进度的功能
 * 增加解锁与选关功能
 * 更改僵尸生成方式
