@@ -82,6 +82,7 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 以下问题囿于个人目前的能力与精力，没有修复：
 * 冷冻的僵尸未用蓝色滤镜标识
 * 魅惑的僵尸未用红色滤镜标识
+* 所有关卡完成后无法再玩
 
 **欢迎提供[Pull requests](https://github.com/wszqkzqk/pypvz/pulls)或修复方法建议，也欢迎在这里反馈新的bug()**
 
