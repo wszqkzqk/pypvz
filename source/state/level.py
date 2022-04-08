@@ -422,7 +422,7 @@ class Level(tool.State):
             elif self.map_data[c.BACKGROUND_TYPE] in {2, 3}:
                 if name in {}:  # 这里还没填，以后加了泳池模式填：水生僵尸集合
                     map_y = randint(2, 3)
-                elif name == '这里应该换成气球僵尸的名字（调用的变量名，最好不要直接写，保持风格统一）':
+                elif name == '这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）':
                     map_y = randint(0, 5)
                 else:   # 陆生僵尸
                     map_y = randint(0, 3)
