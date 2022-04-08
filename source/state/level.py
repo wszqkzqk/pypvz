@@ -180,7 +180,8 @@ class Level(tool.State):
 
         self.hint_image = None
         self.hint_plant = False
-        if self.background_type == c.BACKGROUND_DAY and self.bar_type == c.CHOOSEBAR_STATIC:
+        # 0:白天 1:夜晚 2:泳池 3:浓雾 4:屋顶 5:月夜
+        if self.background_type in {0, 2, 4} and self.bar_type == c.CHOOSEBAR_STATIC:
             self.produce_sun = True
         else:
             self.produce_sun = False
