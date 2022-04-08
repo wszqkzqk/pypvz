@@ -435,8 +435,8 @@ class Level(tool.State):
                     if map_y >= 2:   # 后两路的map_y应当+2
                         map_y += 2
 
-        x, y = self.map.getMapGridPos(0, map_y)
         # 新增的僵尸也需要在这里声明
+        x, y = self.map.getMapGridPos(0, map_y)
         if name == c.NORMAL_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X, y, self.head_group))
         elif name == c.CONEHEAD_ZOMBIE:

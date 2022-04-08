@@ -91,6 +91,7 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 
 * 增加“关卡进程”进度条
 * 增加保存数据文件以存储用户进度的功能
+* 关卡开始前增加预览界面
 * 增加解锁与选关功能
 * 更改僵尸生成方式
   * 使僵尸生成更随机化，由JSON记录改为随机数生成
