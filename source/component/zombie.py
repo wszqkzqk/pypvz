@@ -38,7 +38,6 @@ class Zombie(pg.sprite.Sprite):
         self.hit_timer = 0
         self.speed = 1
         self.freeze_timer = 0
-        self.dead_timer = 2800
         self.losthead_timer = 0
         self.is_hypno = False  # the zombie is hypo and attack other zombies when it ate a HypnoShroom
 
