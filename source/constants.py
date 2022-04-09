@@ -13,6 +13,8 @@ GRID_Y_LEN = 5
 GRID_X_SIZE = 80
 GRID_Y_SIZE = 100
 
+# 游戏速度倍率（调试用）
+GAME_RATE = 1
 
 WHITE        = (255, 255, 255)
 NAVYBLUE     = ( 60,  60, 100)

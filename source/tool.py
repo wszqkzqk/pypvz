@@ -54,7 +54,7 @@ class Control():
 
     def update(self):
         # 返回自 pygame_init() 调用以来的毫秒数
-        self.current_time = pg.time.get_ticks()
+        self.current_time = pg.time.get_ticks() * c.GAME_RATE
 
         if self.state.done:
             self.flip_state()

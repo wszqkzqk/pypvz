@@ -628,13 +628,13 @@ class Level(tool.State):
                         hypno_zombie.setAttack(zombie, False)
 
     def checkCarCollisions(self):
-        collided_func = pg.sprite.collide_circle_ratio(0.6)
         for car in self.cars:
-            zombies = pg.sprite.spritecollide(car, self.zombie_groups[car.map_y], False, collided_func)
-            for zombie in zombies:
-                if zombie and zombie.state != c.DIE and (not zombie.lostHead):
+            for zombie in self.zombie_groups[car.map_y]:
+                if zombie and zombie.state != c.DIE and (not zombie.lostHead) and zombie.rect.x <= 0:
                     car.setWalk()
-                    zombie.setDie()
+                if zombie.rect.x <= car.rect.x:
+                    zombie.health = 0
+                    zombie.kill()
             if car.dead:
                 self.cars.remove(car)
 
