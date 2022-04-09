@@ -817,14 +817,14 @@ class Level(tool.State):
             surface.blit(self.little_menu, self.little_menu_rect)
 
             self.menubar.draw(surface)
+            for car in self.cars:
+                car.draw(surface)
             for i in range(self.map_y_len):
                 self.plant_groups[i].draw(surface)
                 self.zombie_groups[i].draw(surface)
                 self.hypno_zombie_groups[i].draw(surface)
                 self.bullet_groups[i].draw(surface)
                 self.drawZombieFreezeTrap(i, surface)
-            for car in self.cars:
-                car.draw(surface)
             self.head_group.draw(surface)
             self.sun_group.draw(surface)
 
