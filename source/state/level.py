@@ -353,9 +353,48 @@ class Level(tool.State):
         self.head_group.update(self.game_info)
         self.sun_group.update(self.game_info)
         
+        if self.produce_sun:
+            # 原版阳光掉落机制：(已掉落阳光数*100 ms + 4250 ms) 与 9500 ms的最小值，再加 0 ~ 2750 ms 之间的一个数
+            if (self.current_time - self.sun_timer) > min(c.PRODUCE_SUN_INTERVAL + 100*self.fallenSun, 9500) + randint(0, 2750):
+                self.sun_timer = self.current_time
+                map_x, map_y = self.map.getRandomMapIndex()
+                x, y = self.map.getMapGridPos(map_x, map_y)
+                self.sun_group.add(plant.Sun(x, 0, x, y))
+                self.fallenSun += 1
+        
         # wcb 添加
+        # 检查有没有捡到阳光
+        clickedSun = False
+        clickedCardsOrMap = False
+        if not self.drag_plant and not self.drag_shovel and mouse_pos and mouse_click[0]:
+            for sun in self.sun_group:
+                if sun.checkCollision(mouse_pos[0], mouse_pos[1]):
+                    self.menubar.increaseSunValue(sun.sun_value)
+                    clickedSun = True
+
+        # 拖动植物或者铲子
+        if not self.drag_plant and mouse_pos and mouse_click[0] and not clickedSun:
+            result = self.menubar.checkCardClick(mouse_pos)
+            if result:
+                self.setupMouseImage(result[0], result[1])
+                clickedCardsOrMap = True
+        elif self.drag_plant:
+            if mouse_click[1]:
+                self.removeMouseImage()
+                clickedCardsOrMap = True
+            elif mouse_click[0]:
+                if self.menubar.checkMenuBarClick(mouse_pos):
+                    self.removeMouseImage()
+                else:
+                    self.addPlant()
+            elif mouse_pos is None:
+                self.setupHintImage()
+        elif self.drag_shovel:
+            if mouse_click[1]:
+                self.removeMouseImagePlus()
+
         # 检查是否点击菜单
-        if mouse_click[0]:
+        if mouse_click[0] and (not clickedSun) and (not clickedCardsOrMap):
             if self.checkLittleMenuClick(mouse_pos):
                 # 暂停 显示菜单
                 self.showLittleMenu = True
@@ -369,40 +408,6 @@ class Level(tool.State):
             elif self.drag_shovel:
                 # 移出这地方的植物
                 self.shovelRemovePlant(mouse_pos)
-        
-        # 拖动植物或者铲子
-        if not self.drag_plant and mouse_pos and mouse_click[0]:
-            result = self.menubar.checkCardClick(mouse_pos)
-            if result:
-                self.setupMouseImage(result[0], result[1])
-        elif self.drag_plant:
-            if mouse_click[1]:
-                self.removeMouseImage()
-            elif mouse_click[0]:
-                if self.menubar.checkMenuBarClick(mouse_pos):
-                    self.removeMouseImage()
-                else:
-                    self.addPlant()
-            elif mouse_pos is None:
-                self.setupHintImage()
-        elif self.drag_shovel:
-            if mouse_click[1]:
-                self.removeMouseImagePlus()
-        
-        if self.produce_sun:
-            # 原版阳光掉落机制：(已掉落阳光数*100 ms + 4250 ms) 与 9500 ms的最小值，再加 0 ~ 2750 ms 之间的一个数
-            if (self.current_time - self.sun_timer) > min(c.PRODUCE_SUN_INTERVAL + 100*self.fallenSun, 9500) + randint(0, 2750):
-                self.sun_timer = self.current_time
-                map_x, map_y = self.map.getRandomMapIndex()
-                x, y = self.map.getMapGridPos(map_x, map_y)
-                self.sun_group.add(plant.Sun(x, 0, x, y))
-                self.fallenSun += 1
-        
-        # 检查有没有捡到阳光
-        if not self.drag_plant and not self.drag_shovel and mouse_pos and mouse_click[0]:
-            for sun in self.sun_group:
-                if sun.checkCollision(mouse_pos[0], mouse_pos[1]):
-                    self.menubar.increaseSunValue(sun.sun_value)
 
         for car in self.cars:
             car.update(self.game_info)

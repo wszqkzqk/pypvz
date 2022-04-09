@@ -58,7 +58,7 @@ class Menu(tool.State):
         self.option_timer = 0
         self.option_clicked = False
     
-    def checkOptionClick(self, mouse_pos):
+    def checkAdventureClick(self, mouse_pos):
         x, y = mouse_pos
         if(x >= self.option_rect.x and x <= self.option_rect.right and
            y >= self.option_rect.y and y <= self.option_rect.bottom):
@@ -89,7 +89,7 @@ class Menu(tool.State):
         # 没有选到选项时，检查有没有点到选项
         if not self.option_clicked:
             if mouse_pos:
-                self.checkOptionClick(mouse_pos)
+                self.checkAdventureClick(mouse_pos)
                 self.checkExitClick(mouse_pos)
                 self.checkLittleGameClick(mouse_pos)
         else:

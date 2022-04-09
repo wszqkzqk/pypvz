@@ -53,7 +53,7 @@ class Control():
         self.state.startup(self.current_time, self.game_info)
 
     def update(self):
-        # 返回自 pygame_init() 调用以来的毫秒数
+        # 返回自 pygame_init() 调用以来的毫秒数 * 游戏速度倍率
         self.current_time = pg.time.get_ticks() * c.GAME_RATE
 
         if self.state.done:
