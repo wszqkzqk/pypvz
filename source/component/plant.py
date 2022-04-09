@@ -625,7 +625,7 @@ class Squash(Plant):
 class Spikeweed(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.SPIKEWEED, c.PLANT_HEALTH, None)
-        self.animate_interval = 200
+        self.animate_interval = 70
         self.attack_timer = 0
 
     def loadImages(self, name, scale):
@@ -633,18 +633,18 @@ class Spikeweed(Plant):
 
     def setIdle(self):
         print('spikeweed idle')
-        self.animate_interval = 200
+        self.animate_interval = 70
         self.state = c.IDLE
 
     def canAttack(self, zombie):
         # 地刺能不能扎的判据：僵尸中心与地刺中心的距离或僵尸包括了地刺中心和右端（平衡得到合理的攻击范围,"僵尸包括了地刺中心和右端"是为以后巨人做准备）
-        if ((-60 <= zombie.rect.x - self.rect.x <= 40) or (zombie.rect.left <= self.rect.x <= zombie.rect.right and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
+        if ((-45 <= zombie.rect.x - self.rect.x <= 30) or (zombie.rect.left <= self.rect.x <= zombie.rect.right and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
             return True
         return False
 
     def setAttack(self, zombie_group):
         self.zombie_group = zombie_group
-        self.animate_interval = 50
+        self.animate_interval = 35
         self.state = c.ATTACK
 
     def attacking(self):
@@ -652,7 +652,7 @@ class Spikeweed(Plant):
             self.attack_timer = self.current_time
             for zombie in self.zombie_group:
                 if self.canAttack(zombie):
-                    zombie.setDamage(10, False)
+                    zombie.setDamage(20, False)
 
 
 class Jalapeno(Plant):
