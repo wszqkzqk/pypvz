@@ -628,7 +628,7 @@ class Level(tool.State):
                         hypno_zombie.setAttack(zombie, False)
 
     def checkCarCollisions(self):
-        collided_func = pg.sprite.collide_circle_ratio(0.8)
+        collided_func = pg.sprite.collide_circle_ratio(0.6)
         for car in self.cars:
             zombies = pg.sprite.spritecollide(car, self.zombie_groups[car.map_y], False, collided_func)
             for zombie in zombies:
@@ -643,7 +643,8 @@ class Level(tool.State):
             if abs(i - map_y) > y_range:
                 continue
             for zombie in self.zombie_groups[i]:
-                if abs(zombie.rect.centerx - x) <= x_range:
+                if ((abs(zombie.rect.centerx - x) <= x_range) or
+                ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.15, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.15)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
                     zombie.health -= 1800
                     if zombie.health <= 0:
                         zombie.setBoomDie()
@@ -771,7 +772,7 @@ class Level(tool.State):
     def checkLose(self):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.rect.right < 0 and (not zombie.lostHead):
+                if zombie.rect.right < -10 and (not zombie.lostHead):
                     return True
         return False
 

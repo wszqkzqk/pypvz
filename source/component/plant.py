@@ -540,7 +540,7 @@ class PotatoMine(Plant):
 
     def canAttack(self, zombie):
         if (not self.is_init and zombie.rect.right >= self.rect.x and (not zombie.lostHead) and
-                (zombie.rect.x - self.rect.x) <= self.explode_x_range):
+                (abs(zombie.rect.x - self.rect.x) <= self.explode_x_range * 0.7)):
             return True
         return False
 
