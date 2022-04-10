@@ -50,7 +50,7 @@ class Bullet(pg.sprite.Sprite):
         self.rect.y = start_y
         self.dest_y = dest_y
         self.y_vel = 4 if (dest_y > start_y) else -4
-        self.x_vel = 4
+        self.x_vel = 10
         self.damage = damage
         self.ice = ice
         self.state = c.FLY
