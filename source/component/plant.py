@@ -95,7 +95,7 @@ class Bullet(pg.sprite.Sprite):
             if self.rect.x > c.SCREEN_WIDTH:
                 self.kill()
         elif self.state == c.EXPLODE:
-            if (self.current_time - self.explode_timer) > 500:
+            if (self.current_time - self.explode_timer) > 250:
                 self.kill()
 
     def setExplode(self):
@@ -301,7 +301,7 @@ class RepeaterPea(Plant):
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
             self.shoot_timer = self.current_time
-        elif self.firstShot and (self.current_time - self.shoot_timer) > 200:
+        elif self.firstShot and (self.current_time - self.shoot_timer) > 100:
             self.firstShot = False
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
