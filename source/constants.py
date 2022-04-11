@@ -67,13 +67,14 @@ INIT_SUN_NAME = 'init_sun_value'
 ZOMBIE_LIST = 'zombie_list'
 
 MAP_EMPTY = 0
-MAP_EXIST = 1
+MAP_COMMON_PLANT = 1
 # 只有南瓜头
 MAP_PUMPKIN_ONLY = 2
 # 有南瓜头和其他植物
 MAP_PUMPKIN_WITH = 3
 # 可能还需要给咖啡豆定义一个状态，但是这个最好是在种植的时候判断那里是否有睡眠的蘑菇
 # 睡莲与花盆更为特殊，可能需要更复杂的定义
+# 可能可以用元组或者字符串
 
 BACKGROUND_OFFSET_X = 220
 MAP_OFFSET_X = 35

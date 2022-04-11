@@ -140,7 +140,7 @@ class Level(tool.State):
         print('initBowlingMap')
         for x in range(3, self.map.width):
             for y in range(self.map.height):
-                self.map.setMapGridType(x, y, c.MAP_EXIST)
+                self.map.setMapGridType(x, y, c.MAP_COMMON_PLANT)
 
     def initState(self):
         # 小游戏才有CHOOSEBAR_TYPE
@@ -524,7 +524,7 @@ class Level(tool.State):
             self.menubar.deleateCard(self.select_plant)
 
         if self.bar_type != c.CHOSSEBAR_BOWLING:
-            self.map.setMapGridType(map_x, map_y, c.MAP_EXIST)
+            self.map.setMapGridType(map_x, map_y, c.MAP_COMMON_PLANT)
         self.removeMouseImage()
         #print('addPlant map[%d,%d], grid pos[%d, %d] pos[%d, %d]' % (map_x, map_y, x, y, pos[0], pos[1]))
 
