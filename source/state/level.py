@@ -279,7 +279,7 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
-                self.killPlant(i)
+                self.killPlant(i, shovel=True)
                 # 使用后默认铲子复原
                 self.drag_shovel = not self.drag_shovel
                 self.removeMouseImagePlus()
@@ -660,24 +660,28 @@ class Level(tool.State):
                 if zombie.rect.centerx < c.SCREEN_WIDTH:
                     zombie.setFreeze(plant.trap_frames[0])
 
-    def killPlant(self, plant):
+    def killPlant(self, plant, shovel=False):
         x, y = plant.getPosition()
         map_x, map_y = self.map.getMapIndex(x, y)
         if self.bar_type != c.CHOSSEBAR_BOWLING:
+            # 更改地图类型、添加南瓜头、睡莲、花盆后可能也需要改这里
             self.map.setMapGridType(map_x, map_y, c.MAP_EMPTY)
-        if (plant.name == c.CHERRYBOMB or plant.name == c.JALAPENO or
-            (plant.name == c.POTATOMINE and not plant.is_init) or
-            plant.name == c.REDWALLNUTBOWLING):
-            self.boomZombies(plant.rect.centerx, map_y, plant.explode_y_range,
-                            plant.explode_x_range)
-        elif plant.name == c.ICESHROOM and plant.state != c.SLEEP:
-            self.freezeZombies(plant)
-        elif plant.name == c.HYPNOSHROOM and plant.state != c.SLEEP:
-            zombie = plant.kill_zombie
-            zombie.setHypno()
-            _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
-            self.zombie_groups[map_y].remove(zombie)
-            self.hypno_zombie_groups[map_y].add(zombie)
+        # 用铲子铲不用触发植物功能
+        if not shovel:
+            if (plant.name == c.CHERRYBOMB or plant.name == c.JALAPENO or
+                plant.name == c.REDWALLNUTBOWLING):
+                self.boomZombies(plant.rect.centerx, map_y, plant.explode_y_range,
+                                plant.explode_x_range)
+            elif plant.name == c.ICESHROOM and plant.state != c.SLEEP:
+                self.freezeZombies(plant)
+            elif plant.name == c.HYPNOSHROOM and plant.state != c.SLEEP:
+                zombie = plant.kill_zombie
+                zombie.setHypno()
+                _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
+                self.zombie_groups[map_y].remove(zombie)
+                self.hypno_zombie_groups[map_y].add(zombie)
+            elif (plant.name == c.POTATOMINE and not plant.is_init):
+                zombie.setDamage(1800)
         # 避免僵尸在用铲子移除植物后还在原位啃食
         plant.health = 0
         plant.kill()
