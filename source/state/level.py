@@ -651,8 +651,9 @@ class Level(tool.State):
     def freezeZombies(self, plant):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.rect.centerx < c.SCREEN_WIDTH:
+                if zombie.rect.left <= c.SCREEN_WIDTH:
                     zombie.setFreeze(plant.trap_frames[0])
+                    zombie.setDamage(20)    # 寒冰菇还有全场20的伤害
 
     def killPlant(self, plant, shovel=False):
         x, y = plant.getPosition()
