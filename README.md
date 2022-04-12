@@ -80,7 +80,6 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 ## 已知bug
 
 以下问题囿于个人目前的能力与精力，没有修复：
-* 冒险模式与小游戏关卡序号共用
 * 所有关卡完成后无法再玩
 * 植物刚刚种植会立刻攻击，而非像原版一样有间歇时间
 * 冷冻的僵尸未用蓝色滤镜标识
