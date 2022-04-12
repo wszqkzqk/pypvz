@@ -1,4 +1,3 @@
-__author__ = 'wszqkzqk'
 import os
 import json
 import sys
@@ -44,7 +43,8 @@ class Control():
         self.state_name = None
         self.state = None
         self.game_info = {c.CURRENT_TIME:0.0,
-                          c.LEVEL_NUM:c.START_LEVEL_NUM}
+                          c.LEVEL_NUM:c.START_LEVEL_NUM,
+                          c.LITTLEGAME_NUM:c.START_LITTLE_GAME_NUM}
  
     def setup_states(self, state_dict, start_state):
         self.state_dict = state_dict

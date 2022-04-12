@@ -1,4 +1,3 @@
-__author__ = 'wszqkzqk'
 START_LEVEL_NUM = 1
 START_LITTLE_GAME_NUM = 1
 
@@ -47,6 +46,7 @@ SHOVEL_BOX = 'shovelBox'
 #GAME INFO DICTIONARY KEYS
 CURRENT_TIME = 'current time'
 LEVEL_NUM = 'level num'
+LITTLEGAME_NUM = 'littleGame num'
 
 #STATES FOR ENTIRE GAME
 MAIN_MENU = 'main menu'

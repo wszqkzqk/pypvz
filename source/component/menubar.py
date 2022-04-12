@@ -1,4 +1,3 @@
-__author__ = 'wszqkzqk'
 import os
 import random
 import pygame as pg

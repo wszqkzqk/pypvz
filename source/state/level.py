@@ -1,4 +1,3 @@
-__author__ = 'wszqkzqk'
 import os
 import json
 import sys
@@ -321,7 +320,8 @@ class Level(tool.State):
                 elif self.checkMainMenuClick(mouse_pos):
                     self.done = True
                     self.next = c.MAIN_MENU
-                    self.persist = {c.CURRENT_TIME:0.0, c.LEVEL_NUM:c.START_LEVEL_NUM}
+                    #self.persist = {c.CURRENT_TIME:0.0, c.LEVEL_NUM:c.START_LEVEL_NUM} # 应该不能用c.LEVEL_NUM:c.START_LEVEL_NUM
+                    self.persist = {c.CURRENT_TIME:0.0, c.LEVEL_NUM:self.persist[c.LEVEL_NUM], c.LITTLEGAME_NUM:self.persist[c.LITTLEGAME_NUM]}
                     pg.mixer.music.stop()
                     pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
                     pg.mixer.music.play(-1, 0)
@@ -675,7 +675,7 @@ class Level(tool.State):
                 _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
                 self.zombie_groups[map_y].remove(zombie)
                 self.hypno_zombie_groups[map_y].add(zombie)
-            elif (plant.name == c.POTATOMINE and not plant.is_init):
+            elif (plant.name == c.POTATOMINE and not plant.is_init):    # 土豆雷不是灰烬植物，不能用Boom
                 zombie.setDamage(1800)
         # 避免僵尸在用铲子移除植物后还在原位啃食
         plant.health = 0
@@ -782,7 +782,10 @@ class Level(tool.State):
 
     def checkGameState(self):
         if self.checkVictory():
-            self.game_info[c.LEVEL_NUM] += 1
+            if c.LITTLEGAME_BUTTON in self.game_info:
+                self.game_info[c.LITTLEGAME_NUM] += 1
+            else:
+                self.game_info[c.LEVEL_NUM] += 1
             self.next = c.GAME_VICTORY
             self.done = True
         elif self.checkLose():
