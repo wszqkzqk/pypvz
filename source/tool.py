@@ -9,8 +9,8 @@ from . import constants as c
 # an abstract class, one state of automata
 class State():
     def __init__(self):
-        self.start_time = 0.0
-        self.current_time = 0.0
+        self.start_time = 0
+        self.current_time = 0
         self.done = False   # false 代表未做完
         self.next = None    # 表示这个状态退出后要转到的下一个状态
         self.persist = {}   # 在状态间转换时需要传递的数据
@@ -42,7 +42,7 @@ class Control():
         self.state_dict = {}
         self.state_name = None
         self.state = None
-        self.game_info = {c.CURRENT_TIME:0.0,
+        self.game_info = {c.CURRENT_TIME:0,
                           c.LEVEL_NUM:c.START_LEVEL_NUM,
                           c.LITTLEGAME_NUM:c.START_LITTLE_GAME_NUM}
  

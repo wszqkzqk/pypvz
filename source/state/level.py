@@ -32,7 +32,7 @@ class Level(tool.State):
     def loadMap(self):
         modeList = ['adventure', 'littleGame']
         if c.LITTLEGAME_BUTTON in self.game_info:
-            map_file = 'littleGame_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
+            map_file = 'littleGame_' + str(self.game_info[c.LITTLEGAME_NUM]) + '.json'
             mode = 'littleGame'
         else:
             map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
@@ -64,9 +64,9 @@ class Level(tool.State):
             elif self.game_info[c.LEVEL_NUM] in {3}:    # 夜晚关卡
                 bgm = 'nightLevel.opus'
         elif mode == modeList[1]:   # 小游戏模式
-            if self.game_info[c.LEVEL_NUM] in {1}:   # 传送带大战
+            if self.game_info[c.LITTLEGAME_NUM] in {1}:   # 传送带大战
                 bgm = 'battle.opus'
-            elif self.game_info[c.LEVEL_NUM] in {2}:    # 坚果保龄球
+            elif self.game_info[c.LITTLEGAME_NUM] in {2}:    # 坚果保龄球
                 bgm = 'bowling.opus'
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", bgm))
@@ -320,8 +320,8 @@ class Level(tool.State):
                 elif self.checkMainMenuClick(mouse_pos):
                     self.done = True
                     self.next = c.MAIN_MENU
-                    #self.persist = {c.CURRENT_TIME:0.0, c.LEVEL_NUM:c.START_LEVEL_NUM} # 应该不能用c.LEVEL_NUM:c.START_LEVEL_NUM
-                    self.persist = {c.CURRENT_TIME:0.0, c.LEVEL_NUM:self.persist[c.LEVEL_NUM], c.LITTLEGAME_NUM:self.persist[c.LITTLEGAME_NUM]}
+                    #self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:c.START_LEVEL_NUM} # 应该不能用c.LEVEL_NUM:c.START_LEVEL_NUM
+                    self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:self.persist[c.LEVEL_NUM], c.LITTLEGAME_NUM:self.persist[c.LITTLEGAME_NUM]}
                     pg.mixer.music.stop()
                     pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
                     pg.mixer.music.play(-1, 0)
