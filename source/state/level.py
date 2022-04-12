@@ -400,10 +400,6 @@ class Level(tool.State):
                 self.showLittleMenu = True
             elif self.checkShovelClick(mouse_pos):
                 self.drag_shovel = not self.drag_shovel
-                #if self.drag_shovel:
-                    # 小铲子要隐藏鼠标
-                    #pg.mouse.set_visible(False)    # 按照原版设定，不隐藏鼠标
-                #else:
                 if not self.drag_shovel:
                     self.removeMouseImagePlus()
             elif self.drag_shovel:
@@ -568,13 +564,11 @@ class Level(tool.State):
             color = c.BLACK
         self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, color, 1)
         self.mouse_rect = self.mouse_image.get_rect()
-        #pg.mouse.set_visible(False)    # 按照原版设定，不隐藏鼠标
         self.drag_plant = True
         self.plant_name = plant_name
         self.select_plant = select_plant
 
     def removeMouseImage(self):
-        #pg.mouse.set_visible(True) # 按照原版设定，不隐藏鼠标
         self.drag_plant = False
         self.mouse_image = None
         self.hint_image = None
@@ -582,7 +576,6 @@ class Level(tool.State):
 
     # 移除小铲子
     def removeMouseImagePlus(self):
-        #pg.mouse.set_visible(True) # 按照原版设定，不隐藏鼠标
         self.drag_shovel = False
         self.shovel_rect.x = self.shovel_positon[0]
         self.shovel_rect.y = self.shovel_positon[1]
