@@ -218,7 +218,7 @@ class Zombie(pg.sprite.Sprite):
                     self.helmet = False
                     self.health += self.helmetHealth
                     self.helmetHealth = 0   # 注意合并后清零
-            else:   # 没有防具
+            else:   # 没有一类防具
                 self.health -= damage
         elif damageType == c.ZOMBIE_RANGE_DAMAGE:
             # 从第二类防具开始逐级传递
