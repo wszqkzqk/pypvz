@@ -191,7 +191,7 @@ class Zombie(pg.sprite.Sprite):
             # 从第二类防具开始逐级传递
             if self.helmetType2:
                 self.helmetType2Health -= damage
-                if helmetType2Health <= 0:
+                if self.helmetType2Health <= 0:
                     self.helmetType2 = False
                     if self.helmet:
                         self.helmetHealth += self.helmetType2Health # 注意self.helmetType2Health已经带有正负
@@ -224,7 +224,7 @@ class Zombie(pg.sprite.Sprite):
             # 从第二类防具开始逐级传递
             if self.helmetType2:
                 self.helmetType2Health -= damage
-                if helmetType2Health <= 0:
+                if self.helmetType2Health <= 0:
                     self.helmetType2 = False
                     if self.helmet:
                         self.helmetHealth -= damage # 注意范围伤害中这里还有一个攻击
