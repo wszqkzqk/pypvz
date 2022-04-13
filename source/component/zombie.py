@@ -244,6 +244,8 @@ class Zombie(pg.sprite.Sprite):
                     self.helmet = False
                     self.health += self.helmetHealth
                     self.helmetHealth = 0   # 注意合并后清零
+            else:   # 没有防具
+                self.health -= damage
         elif damageType == c.ZOMBIE_ASH_DAMAGE:
             self.health -= damage   # 无视任何防具
         else:
