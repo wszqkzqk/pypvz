@@ -677,7 +677,15 @@ class Level(tool.State):
                 self.zombie_groups[map_y].remove(zombie)
                 self.hypno_zombie_groups[map_y].add(zombie)
             elif (plant.name == c.POTATOMINE and not plant.is_init):    # 土豆雷不是灰烬植物，不能用Boom
-                zombie.setDamage(1800)
+                for i in range(self.map_y_len):
+                    if abs(i - map_y) > plant.explode_y_range:
+                        continue
+                    for zombie in self.zombie_groups[i]:
+                        if ((abs(zombie.rect.centerx - x) <= plant.explode_y_range) or
+                        ((zombie.rect.right - (x-plant.explode_x_range) > 20) or (zombie.rect.right - (x-plant.explode_x_range))/zombie.rect.width > 0.15, ((x+plant.explode_x_range) - zombie.rect.left > 20) or ((x+plant.explode_x_range) - zombie.rect.left)/zombie.rect.width > 0.15)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
+                            # 如果以后要区分防具和本体，这里要跟着改动，因为土豆雷不是灰烬植物
+                            zombie.health -= 1800
+
         # 避免僵尸在用铲子移除植物后还在原位啃食
         plant.health = 0
         plant.kill()
