@@ -38,7 +38,7 @@ python main.py
 ## 方法
 
 * 使用鼠标收集阳光,种植植物
-* 你可以通过更改`source/constants.py`中的`START＿LEVEL＿NUM`的数值来更改起始关卡：
+* 你可以通过更改`source/constants.py`中的`START＿LEVEL＿NUM`的数值来更改冒险模式的起始关卡，更改`START_LITTLE_GAME_NUM`的数值来更改小游戏的起始关卡：
   * 冒险模式：
     * 1 和 2：白昼模式
     * 3：夜晚模式
