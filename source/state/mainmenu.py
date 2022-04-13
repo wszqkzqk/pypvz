@@ -29,29 +29,29 @@ class Menu(tool.State):
     def setupOption(self):
         self.option_frames = []
         frame_names = [c.OPTION_ADVENTURE + '_0', c.OPTION_ADVENTURE + '_1']
-        frame_rect = [0, 0, 165, 77]
+        frame_rect = [0, 0, 330, 140]
         
         for name in frame_names:
-            self.option_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1.7))
+            self.option_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1))
         self.option_frame_index = 0
         self.option_image = self.option_frames[self.option_frame_index]
         self.option_rect = self.option_image.get_rect()
-        self.option_rect.x = 435
-        self.option_rect.y = 75
+        self.option_rect.x = 400
+        self.option_rect.y = 60
         
         # 退出按钮
-        frame_rect = [0, 0, 500, 500]
+        frame_rect = [0, 0, 47, 27]
         self.option_exit = tool.get_image_menu(tool.GFX[c.EXIT], *frame_rect, c.BLACK, 1.1)
         self.exit_rect = self.option_exit.get_rect()
-        self.exit_rect.x = 690
-        self.exit_rect.y = 400
+        self.exit_rect.x = 730
+        self.exit_rect.y = 507
 
         # 小游戏
-        frame_rect = [0, 0, 317, 139]
-        self.option_littleGame = tool.get_image_menu(tool.GFX[c.LITTLEGAME_BUTTON], *frame_rect, c.BLACK, 0.9)
+        frame_rect = [0, 7, 317, 135]
+        self.option_littleGame = tool.get_image_menu(tool.GFX[c.LITTLEGAME_BUTTON], *frame_rect, c.BLACK, 1)
         self.option_littleGame_rect = self.option_littleGame.get_rect()
-        self.option_littleGame_rect.x = 425
-        self.option_littleGame_rect.y = 200
+        self.option_littleGame_rect.x = 397
+        self.option_littleGame_rect.y = 175
 
         self.option_start = 0
         self.option_timer = 0
@@ -68,8 +68,9 @@ class Menu(tool.State):
     # 点击到按钮，修改转态的done属性
     def checkExitClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.exit_rect.x and x <= self.exit_rect.right and
-           y >= self.exit_rect.y and y <= self.exit_rect.bottom):
+        # 这里检查范围应当拟合花瓶下部整个区域
+        if(x >= self.exit_rect.x - 20 and x <= self.exit_rect.right + 20 and
+           y >= self.exit_rect.y - 5 and y <= self.exit_rect.bottom + 10):
             self.done = True
             self.next = c.EXIT
 

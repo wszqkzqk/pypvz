@@ -132,7 +132,7 @@ class MenuBar():
     def __init__(self, card_list, sun_value):
         self.loadFrame(c.MENUBAR_BACKGROUND)
         self.rect = self.image.get_rect()
-        self.rect.x = 10
+        self.rect.x = 0
         self.rect.y = 0
         
         self.sun_value = sun_value

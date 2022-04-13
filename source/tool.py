@@ -81,7 +81,7 @@ class Control():
             elif event.type == pg.KEYDOWN:
                 self.keys = pg.key.get_pressed()
                 if event.key == pg.K_f:
-                    SCREEN = pg.display.set_mode(c.SCREEN_SIZE, pg.FULLSCREEN)
+                    SCREEN = pg.display.set_mode(c.SCREEN_SIZE, pg.HWSURFACE|pg.FULLSCREEN)
                 elif event.key == pg.K_u:
                     SCREEN = pg.display.set_mode(c.SCREEN_SIZE)
             elif event.type == pg.KEYUP:
@@ -143,12 +143,12 @@ def load_image_frames(directory, image_name, colorkey, accept):
             tmp[index]= img
             frame_num += 1
 
-    for i in range(frame_num):
+    for i in range(frame_num):  # 这里注意编号必须连续，否则会出错
         frame_list.append(tmp[i])
     return frame_list
 
 # colorkeys 是设置图像中的某个颜色值为透明,这里用来消除白边
-def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.gif')):
+def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.gif', 'webp')):
     graphics = {}
     for name1 in os.listdir(directory):
         # subfolders under the folder resources\graphics

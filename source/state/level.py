@@ -199,7 +199,7 @@ class Level(tool.State):
             self.shovel = tool.get_image_menu(tool.GFX[c.SHOVEL], *frame_rect, c.BLACK, 1.1)
             self.shovel_rect = self.shovel.get_rect()
             frame_rect = [0, 0, 77, 75]
-            self.shovel_positon = (550, 2)
+            self.shovel_positon = (608, 1)
             self.shovel_box = tool.get_image_menu(tool.GFX[c.SHOVEL_BOX], *frame_rect, c.BLACK, 1.1)
             self.shovel_box_rect = self.shovel_box.get_rect()
             self.shovel_rect.x = self.shovel_box_rect.x = self.shovel_positon[0]
@@ -213,7 +213,7 @@ class Level(tool.State):
         frame_rect = [0, 0, 108, 31]
         self.little_menu = tool.get_image_menu(tool.GFX[c.LITTLE_MENU], *frame_rect, c.BLACK, 1.1)
         self.little_menu_rect = self.little_menu.get_rect()
-        self.little_menu_rect.x = 650
+        self.little_menu_rect.x = 690
         self.little_menu_rect.y = 0 
 
         frame_rect = [0, 0, 500, 500]
