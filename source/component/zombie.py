@@ -4,7 +4,7 @@ from .. import constants as c
 
 
 class Zombie(pg.sprite.Sprite):
-    def __init__(self, x, y, name, head_group=None, helmetHealth=0, bodyHealth=c.NORMAL_HEALTH + c.LOSTHEAD_HEALTH, damage=30):
+    def __init__(self, x, y, name, head_group=None, helmetHealth=0, helmetType2Health=0, bodyHealth=c.NORMAL_HEALTH + c.LOSTHEAD_HEALTH, damage=30):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -18,13 +18,14 @@ class Zombie(pg.sprite.Sprite):
         self.rect.centerx = x
         self.rect.bottom = y
 
-        self.bodyHealth = bodyHealth
         self.helmetHealth = helmetHealth
-        self.health = bodyHealth + helmetHealth
+        self.helmetType2Health = helmetType2Health
+        self.health = bodyHealth
         self.damage = damage
         self.dead = False
         self.lostHead = False
-        self.helmet = False
+        self.helmet = (self.helmetHealth > 0)
+        self.helmetType2 = (self.helmetType2Health > 0)
         self.head_group = head_group
 
         self.walk_timer = 0
@@ -80,9 +81,12 @@ class Zombie(pg.sprite.Sprite):
     def walking(self):
         self.checkToDie(self.losthead_walk_frames)
 
-        if self.health <= c.NORMAL_HEALTH and self.helmet:
+        if self.helmetHealth <= 0 and self.helmet:
             self.changeFrames(self.walk_frames)
             self.helmet = False
+        if self.helmetType2Health <= 0 and self.helmetType2:
+            self.changeFrames(self.walk_frames)
+            self.helmetType2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
                 self.speed = 2
 
@@ -96,9 +100,12 @@ class Zombie(pg.sprite.Sprite):
     def attacking(self):
         self.checkToDie(self.losthead_attack_frames)
         
-        if self.health <= c.NORMAL_HEALTH and self.helmet:
+        if self.helmetHealth <= 0 and self.helmet:
             self.changeFrames(self.attack_frames)
             self.helmet = False
+        if self.helmetType2Health <= 0 and self.helmetType2:
+            self.changeFrames(self.attack_frames)
+            self.helmetType2 = False
         if (self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getTimeRatio()):
             if self.prey.health > 0:
                 if self.prey_is_plant:
@@ -179,9 +186,33 @@ class Zombie(pg.sprite.Sprite):
             if (self.current_time - self.ice_slow_timer) > c.ICE_SLOW_TIME:
                 self.ice_slow_ratio = 1
 
-    def setDamage(self, damage, ice=False):
-        self.health -= damage
-        self.hit_timer = self.current_time
+    def setDamage(self, damage, ice=False, damageType=c.ZOMBIE_COMMON_DAMAGE):
+        if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 不穿透二类防具的攻击
+            # 从第二类防具开始逐级传递
+            if self.helmetType2:
+                self.helmetType2Health -= damage
+                if helmetType2Health <= 0:
+                    self.helmetType2 = False
+                    if self.helmet:
+                        self.helmetHealth += self.helmetType2Health # 注意self.helmetType2Health已经带有正负
+                        self.helmetType2Health = 0  # 注意合并后清零
+                        if self.helmetHealth <= 0:
+                            self.helmet = False
+                            self.health += self.helmetHealth
+                            self.helmetHealth = 0   # 注意合并后清零
+                    else:
+                        self.health += self.helmetType2Health
+                        self.helmetType2Health = 0
+            elif self.helmet:   # 不存在二类防具，但是存在一类防具
+                self.helmetHealth -= damage
+                if self.helmetHealth <= 0:
+                    self.helmet = False
+                    self.health += self.helmetHealth
+                    self.helmetHealth = 0   # 注意合并后清零
+            else:   # 没有防具
+                self.health -= damage
+            # 记录攻击时间              
+            self.hit_timer = self.current_time
         if ice:
             self.setIceSlow()
 
@@ -189,7 +220,7 @@ class Zombie(pg.sprite.Sprite):
         self.state = c.WALK
         self.animate_interval = 180
 
-        if self.helmet:
+        if self.helmet or self.helmetType2: # 这里暂时没有考虑同时有两种防具的僵尸
             self.changeFrames(self.helmet_walk_frames)
         elif self.lostHead:
             self.changeFrames(self.losthead_walk_frames)
@@ -203,7 +234,7 @@ class Zombie(pg.sprite.Sprite):
         self.attack_timer = self.current_time
         self.animate_interval = 100
 
-        if self.helmet:
+        if self.helmet or self.helmetType2: # 这里暂时没有考虑同时有两种防具的僵尸
             self.changeFrames(self.helmet_attack_frames)
         elif self.lostHead:
             self.changeFrames(self.losthead_attack_frames)
@@ -286,8 +317,7 @@ class NormalZombie(Zombie):
 # 路障僵尸
 class ConeHeadZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.CONEHEAD_ZOMBIE, head_group, c.CONEHEAD_HEALTH)
-        self.helmet = True
+        Zombie.__init__(self, x, y, c.CONEHEAD_ZOMBIE, head_group, helmetHealth=c.CONEHEAD_HEALTH)
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -323,8 +353,7 @@ class ConeHeadZombie(Zombie):
 
 class BucketHeadZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.BUCKETHEAD_ZOMBIE, head_group, c.BUCKETHEAD_HEALTH)
-        self.helmet = True
+        Zombie.__init__(self, x, y, c.BUCKETHEAD_ZOMBIE, head_group, helmetHealth=c.BUCKETHEAD_HEALTH)
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -360,7 +389,7 @@ class BucketHeadZombie(Zombie):
 
 class FlagZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.FLAG_ZOMBIE, head_group, c.FLAG_HEALTH)
+        Zombie.__init__(self, x, y, c.FLAG_ZOMBIE, head_group, bodyHealth=c.FLAG_HEALTH + c.NORMAL_HEALTH)
 
     def loadImages(self):
         self.walk_frames = []
@@ -390,8 +419,7 @@ class FlagZombie(Zombie):
 
 class NewspaperZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, c.NEWSPAPER_HEALTH)
-        self.helmet = True
+        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmetType2Health=c.NEWSPAPER_HEALTH)
 
     def loadImages(self):
         self.helmet_walk_frames = []

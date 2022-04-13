@@ -605,7 +605,7 @@ class Squash(Plant):
             if (self.frame_index + 1) == self.frame_num:
                 for zombie in self.zombie_group:
                     if self.canAttack(zombie):
-                        zombie.setDamage(1800, False)
+                        zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
                 self.health = 0 # 避免僵尸在原位啃食
                 self.kill()
         elif self.aim_timer == 0:
@@ -651,7 +651,7 @@ class Spikeweed(Plant):
             self.attack_timer = self.current_time
             for zombie in self.zombie_group:
                 if self.canAttack(zombie):
-                    zombie.setDamage(20, False)
+                    zombie.setDamage(20, damageType=c.ZOMBIE_COMMON_DAMAGE)
 
 
 class Jalapeno(Plant):

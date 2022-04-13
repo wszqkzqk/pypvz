@@ -171,6 +171,13 @@ FLAG_ZOMBIE = 'FlagZombie'
 NEWSPAPER_ZOMBIE = 'NewspaperZombie'
 BOOMDIE = 'BoomDie'
 
+# 对僵尸的攻击类型设置
+ZOMBIE_DEAFULT_DAMAGE = 'helmet2First'
+ZOMBIE_HELMET_2_FIRST = 'helmet2First'  # 优先攻击二类防具
+ZOMBIE_COMMON_DAMAGE = 'commonDamage'   # 优先攻击僵尸与一类防具的整体
+ZOMBIE_RANGE_DAMAGE = 'rangeDAMAGE' # 范围攻击，同时伤害二类防具与(僵尸与一类防具的整体)
+ZOMBIE_ASH_DAMAGE = 'ashDAMAGE' # 灰烬植物攻击，直接伤害本体
+
 # 僵尸生命值设置
 LOSTHEAD_HEALTH = 70
 NORMAL_HEALTH = 200 # 普通僵尸生命值

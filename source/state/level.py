@@ -606,7 +606,7 @@ class Level(tool.State):
                 if plant:
                     if plant.name == c.WALLNUTBOWLING:
                         if plant.canHit(i):
-                            zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE)
+                            zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
                             plant.changeDirection(i)
                     elif plant.name == c.REDWALLNUTBOWLING:
                         if plant.state == c.IDLE:
@@ -645,7 +645,7 @@ class Level(tool.State):
             for zombie in self.zombie_groups[i]:
                 if ((abs(zombie.rect.centerx - x) <= x_range) or
                 ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.15, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.15)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
-                    zombie.health -= 1800
+                    zombie.setDamage(1800, damageType=c.ZOMBIE_ASH_DAMAGE)
                     if zombie.health <= 0:
                         zombie.setBoomDie()
 
@@ -654,7 +654,7 @@ class Level(tool.State):
             for zombie in self.zombie_groups[i]:
                 if zombie.rect.left <= c.SCREEN_WIDTH:
                     zombie.setFreeze(plant.trap_frames[0])
-                    zombie.setDamage(20)    # 寒冰菇还有全场20的伤害
+                    zombie.setDamage(20, damageType=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
 
     def killPlant(self, plant, shovel=False):
         x, y = plant.getPosition()
@@ -683,8 +683,7 @@ class Level(tool.State):
                     for zombie in self.zombie_groups[i]:
                         if ((abs(zombie.rect.centerx - x) <= plant.explode_y_range) or
                         ((zombie.rect.right - (x-plant.explode_x_range) > 20) or (zombie.rect.right - (x-plant.explode_x_range))/zombie.rect.width > 0.15, ((x+plant.explode_x_range) - zombie.rect.left > 20) or ((x+plant.explode_x_range) - zombie.rect.left)/zombie.rect.width > 0.15)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
-                            # 如果以后要区分防具和本体，这里要跟着改动，因为土豆雷不是灰烬植物
-                            zombie.health -= 1800
+                            zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
 
         # 避免僵尸在用铲子移除植物后还在原位啃食
         plant.health = 0
