@@ -289,8 +289,9 @@ class Level(tool.State):
     # 方便放回去
     def checkShovelClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.shovel_box_rect.x and x <= self.shovel_box_rect.right and
-           y >= self.shovel_box_rect.y and y <= self.shovel_box_rect.bottom):
+        if( self.hasShovel and
+            x >= self.shovel_box_rect.x and x <= self.shovel_box_rect.right and
+            y >= self.shovel_box_rect.y and y <= self.shovel_box_rect.bottom):
             return True
         return False
 
@@ -422,13 +423,11 @@ class Level(tool.State):
 
     def createZombie(self, name, map_y=None):
         # 有指定时按照指定生成，无指定时随机位置生成
-        # 0:白天 1:夜晚 2:泳池 3:浓雾 4:屋顶 5:月夜
+        # 0:白天 1:夜晚 2:泳池 3:浓雾 4:屋顶 5:月夜 6:坚果保龄球
         if map_y == None:
-            if self.map_data[c.BACKGROUND_TYPE] in {0, 1, 4, 5}:
-                map_y = randint(0, 4)
             # 情况复杂：分水路和陆路，不能简单实现，需要另外加判断
             # 0, 1, 4, 5路为陆路，2, 3路为水路
-            elif self.map_data[c.BACKGROUND_TYPE] in {2, 3}:
+            if self.map_data[c.BACKGROUND_TYPE] in {2, 3}:
                 if name in {}:  # 这里还没填，以后加了泳池模式填：水生僵尸集合
                     map_y = randint(2, 3)
                 elif name == '这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）':
@@ -437,6 +436,8 @@ class Level(tool.State):
                     map_y = randint(0, 3)
                     if map_y >= 2:   # 后两路的map_y应当+2
                         map_y += 2
+            else:
+                map_y = randint(0, 4)
 
         # 新增的僵尸也需要在这里声明
         x, y = self.map.getMapGridPos(0, map_y)
@@ -588,7 +589,7 @@ class Level(tool.State):
                 if bullet.state == c.FLY:
                     zombie = pg.sprite.spritecollideany(bullet, self.zombie_groups[i], collided_func)
                     if zombie and zombie.state != c.DIE:
-                        zombie.setDamage(bullet.damage, bullet.ice, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+                        zombie.setDamage(bullet.damage, ice=bullet.ice, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
                         bullet.setExplode()
     
     def checkZombieCollisions(self):

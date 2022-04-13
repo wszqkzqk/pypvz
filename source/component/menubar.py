@@ -136,7 +136,7 @@ class MenuBar():
         self.rect.y = 0
         
         self.sun_value = sun_value
-        self.card_offset_x = 32
+        self.card_offset_x = 23
         self.setupCards(card_list)
 
     def loadFrame(self, name):

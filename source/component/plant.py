@@ -494,7 +494,7 @@ class PuffShroom(Plant):
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 10, self.rect.y + 10,
-                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, True))
+                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, False))
             self.shoot_timer = self.current_time
 
     def canAttack(self, zombie):
@@ -744,7 +744,7 @@ class ScaredyShroom(Plant):
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y + 40, self.rect.y + 40,
-                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, True))
+                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, False))
             self.shoot_timer = self.current_time
 
 

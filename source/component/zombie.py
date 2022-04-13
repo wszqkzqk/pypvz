@@ -89,7 +89,6 @@ class Zombie(pg.sprite.Sprite):
             self.helmetType2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
                 self.speed = 2.5
-                self.animate_interval = 300 # 因为加速了时间间隔要除以倍率，所以减小动画帧率
 
         if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
             self.walk_timer = self.current_time
@@ -107,6 +106,8 @@ class Zombie(pg.sprite.Sprite):
         if self.helmetType2Health <= 0 and self.helmetType2:
             self.changeFrames(self.attack_frames)
             self.helmetType2 = False
+            if self.name == c.NEWSPAPER_ZOMBIE:
+                self.speed = 2.5
         if (self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()):
             if self.prey.health > 0:
                 if self.prey_is_plant:
@@ -134,8 +135,8 @@ class Zombie(pg.sprite.Sprite):
     def setLostHead(self):
         self.losthead_timer = self.current_time
         self.lostHead = True
-        self.animate_interval = 180
         self.speed = 0.5
+        self.animate_interval = 180
         if self.head_group is not None:
             self.head_group.add(ZombieHead(self.rect.centerx, self.rect.bottom))
 
@@ -204,12 +205,10 @@ class Zombie(pg.sprite.Sprite):
             if self.helmetType2:
                 self.helmetType2Health -= damage
                 if self.helmetType2Health <= 0:
-                    self.helmetType2 = False
                     if self.helmet:
                         self.helmetHealth += self.helmetType2Health # 注意self.helmetType2Health已经带有正负
                         self.helmetType2Health = 0  # 注意合并后清零
                         if self.helmetHealth <= 0:
-                            self.helmet = False
                             self.health += self.helmetHealth
                             self.helmetHealth = 0   # 注意合并后清零
                     else:
@@ -218,7 +217,6 @@ class Zombie(pg.sprite.Sprite):
             elif self.helmet:   # 不存在二类防具，但是存在一类防具
                 self.helmetHealth -= damage
                 if self.helmetHealth <= 0:
-                    self.helmet = False
                     self.health += self.helmetHealth
                     self.helmetHealth = 0   # 注意合并后清零
             else:   # 没有防具
@@ -227,7 +225,6 @@ class Zombie(pg.sprite.Sprite):
             if self.helmet:   # 存在一类防具
                 self.helmetHealth -= damage
                 if self.helmetHealth <= 0:
-                    self.helmet = False
                     self.health += self.helmetHealth
                     self.helmetHealth = 0   # 注意合并后清零
             else:   # 没有一类防具
@@ -237,13 +234,11 @@ class Zombie(pg.sprite.Sprite):
             if self.helmetType2:
                 self.helmetType2Health -= damage
                 if self.helmetType2Health <= 0:
-                    self.helmetType2 = False
                     if self.helmet:
                         self.helmetHealth -= damage # 注意范围伤害中这里还有一个攻击
                         self.helmetHealth += self.helmetType2Health # 注意self.helmetType2Health已经带有正负
                         self.helmetType2Health = 0  # 注意合并后清零
                         if self.helmetHealth <= 0:
-                            self.helmet = False
                             self.health += self.helmetHealth
                             self.helmetHealth = 0   # 注意合并后清零
                     else:
@@ -253,7 +248,6 @@ class Zombie(pg.sprite.Sprite):
             elif self.helmet:   # 不存在二类防具，但是存在一类防具
                 self.helmetHealth -= damage
                 if self.helmetHealth <= 0:
-                    self.helmet = False
                     self.health += self.helmetHealth
                     self.helmetHealth = 0   # 注意合并后清零
             else:   # 没有防具
@@ -265,12 +259,8 @@ class Zombie(pg.sprite.Sprite):
             # 以后增设铁门后可能需要设置侧面冲撞特殊性
             if self.helmetType2:
                 self.helmetType2Health -= damage
-                if self.helmetType2Health <= 0:
-                    self.helmetType2 = False
             elif self.helmet:   # 不存在二类防具，但是存在一类防具
                 self.helmetHealth -= damage
-                if self.helmetHealth <= 0:
-                    self.helmet = False
             else:   # 没有防具
                 self.health -= damage
         else:
@@ -307,7 +297,7 @@ class Zombie(pg.sprite.Sprite):
 
     def setDie(self):
         self.state = c.DIE
-        self.animate_interval = 100
+        self.animate_interval = 80
         self.changeFrames(self.die_frames)
 
     def setBoomDie(self):
