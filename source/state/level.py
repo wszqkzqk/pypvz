@@ -180,7 +180,7 @@ class Level(tool.State):
         self.hint_image = None
         self.hint_plant = False
         # 0:白天 1:夜晚 2:泳池 3:浓雾 4:屋顶 5:月夜 6:坚果保龄球
-        # 还准备加入    -1:单行草皮 -2:三行草皮 但是目前没有找到图（
+        # 还准备加入    7:单行草皮 8:三行草皮 但是目前没有找到图（
         if self.background_type in {0, 2, 4, -1, -2} and self.bar_type == c.CHOOSEBAR_STATIC:
             self.produce_sun = True
         else:
