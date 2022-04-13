@@ -246,6 +246,9 @@ class Zombie(pg.sprite.Sprite):
                     self.helmetHealth = 0   # 注意合并后清零
         elif damageType == c.ZOMBIE_ASH_DAMAGE:
             self.health -= damage   # 无视任何防具
+        else:
+            print('警告：植物攻击类型错误，现在默认进行类豌豆射手型攻击')
+            setDamage(damage, ice=ice, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
         
         # 记录攻击时间              
         self.hit_timer = self.current_time
