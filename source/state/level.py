@@ -809,10 +809,17 @@ class Level(tool.State):
         self.mouse_rect.centery = y
         surface.blit(self.mouse_image, self.mouse_rect)
     
-    def drawMouseShowPlus(self, surface):
+    def drawMouseShowPlus(self, surface):   # 拖动铲子时的显示
         x, y = pg.mouse.get_pos()
         self.shovel_rect.centerx = x
         self.shovel_rect.centery = y
+        map_x, map_y = self.map.getMapIndex(x, y)
+        for i in self.plant_groups[map_y]:
+            if (x >= i.rect.x and x <= i.rect.right and
+                y >= i.rect.y and y <= i.rect.bottom):
+                i.highlightTime = self.current_time
+            else:
+                i.highlight = False
         surface.blit(self.shovel, self.shovel_rect)
 
     def drawZombieFreezeTrap(self, i, surface):

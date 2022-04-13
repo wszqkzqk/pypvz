@@ -128,6 +128,8 @@ class Plant(pg.sprite.Sprite):
         self.animate_timer = 0
         self.animate_interval = 70  # 帧播放间隔
         self.hit_timer = 0
+        # 被铲子指向时间
+        self.highlightTime = 0
 
     def loadFrames(self, frames, name, scale, color=c.BLACK):
         frame_list = tool.GFX[name]
@@ -188,10 +190,10 @@ class Plant(pg.sprite.Sprite):
             self.animate_timer = self.current_time
 
         self.image = self.frames[self.frame_index]
-        if (self.current_time - self.hit_timer) >= 200:
-            self.image.set_alpha(255)
+        if ((self.current_time - self.hit_timer) < 200) or (self.current_time - self.highlightTime < 200):
+            self.image.set_alpha(180)
         else:
-            self.image.set_alpha(192)
+            self.image.set_alpha(255)
 
     def canAttack(self, zombie):
         if (self.state != c.SLEEP and zombie.state != c.DIE and (not zombie.lostHead) and
