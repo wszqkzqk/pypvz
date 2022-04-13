@@ -211,8 +211,45 @@ class Zombie(pg.sprite.Sprite):
                     self.helmetHealth = 0   # 注意合并后清零
             else:   # 没有防具
                 self.health -= damage
-            # 记录攻击时间              
-            self.hit_timer = self.current_time
+        elif damageType == c.ZOMBIE_COMMON_DAMAGE:  # 无视二类防具，将攻击一类防具与本体视为整体的攻击
+            if self.helmet:   # 存在一类防具
+                self.helmetHealth -= damage
+                if self.helmetHealth <= 0:
+                    self.helmet = False
+                    self.health += self.helmetHealth
+                    self.helmetHealth = 0   # 注意合并后清零
+            else:   # 没有防具
+                self.health -= damage
+        elif damageType == c.ZOMBIE_RANGE_DAMAGE:
+            # 从第二类防具开始逐级传递
+            if self.helmetType2:
+                self.helmetType2Health -= damage
+                if helmetType2Health <= 0:
+                    self.helmetType2 = False
+                    if self.helmet:
+                        self.helmetHealth -= damage # 注意范围伤害中这里还有一个攻击
+                        self.helmetHealth += self.helmetType2Health # 注意self.helmetType2Health已经带有正负
+                        self.helmetType2Health = 0  # 注意合并后清零
+                        if self.helmetHealth <= 0:
+                            self.helmet = False
+                            self.health += self.helmetHealth
+                            self.helmetHealth = 0   # 注意合并后清零
+                    else:
+                        self.health -= damage   # 注意范围伤害中这里还有一个攻击
+                        self.health += self.helmetType2Health
+                        self.helmetType2Health = 0
+            elif self.helmet:   # 不存在二类防具，但是存在一类防具
+                self.helmetHealth -= damage
+                if self.helmetHealth <= 0:
+                    self.helmet = False
+                    self.health += self.helmetHealth
+                    self.helmetHealth = 0   # 注意合并后清零
+        elif damageType == c.ZOMBIE_ASH_DAMAGE:
+            self.health -= damage   # 无视任何防具
+        
+        # 记录攻击时间              
+        self.hit_timer = self.current_time
+        # 冰冻减速效果
         if ice:
             self.setIceSlow()
 
