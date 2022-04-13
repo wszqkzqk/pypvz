@@ -175,17 +175,17 @@ BOOMDIE = 'BoomDie'
 ZOMBIE_DEAFULT_DAMAGE = 'helmet2First'
 ZOMBIE_HELMET_2_FIRST = 'helmet2First'  # 优先攻击二类防具
 ZOMBIE_COMMON_DAMAGE = 'commonDamage'   # 优先攻击僵尸与一类防具的整体
-ZOMBIE_RANGE_DAMAGE = 'rangeDAMAGE' # 范围攻击，同时伤害二类防具与(僵尸与一类防具的整体)
-ZOMBIE_ASH_DAMAGE = 'ashDAMAGE' # 灰烬植物攻击，直接伤害本体
+ZOMBIE_RANGE_DAMAGE = 'rangeDamage' # 范围攻击，同时伤害二类防具与(僵尸与一类防具的整体)
+ZOMBIE_ASH_DAMAGE = 'ashDamage' # 灰烬植物攻击，直接伤害本体
+ZOMBIE_WALLNUT_BOWLING_DANMAGE = 'wallnutBowlingDamage' # 坚果保龄球冲撞伤害
 
 # 僵尸生命值设置
 LOSTHEAD_HEALTH = 70
 NORMAL_HEALTH = 200 # 普通僵尸生命值
 
-FLAG_HEALTH = 50
 CONEHEAD_HEALTH = 370
 BUCKETHEAD_HEALTH = 1100
-NEWSPAPER_HEALTH = 200
+NEWSPAPER_HEALTH = 150
 
 ATTACK_INTERVAL = 500
 ZOMBIE_WALK_INTERVAL = 60  # 僵尸步行间隔
@@ -213,6 +213,6 @@ PLAY = 'play'
 BACKGROUND_DAY = 0
 BACKGROUND_NIGHT = 1
 BACKGROUND_POOL = 2
-BACKGROUND_FOOGY = 3
+BACKGROUND_FOG = 3
 BACKGROUND_ROOF = 4
 BACKGROUND_ROOFNIGHT = 5

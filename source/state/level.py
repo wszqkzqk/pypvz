@@ -606,7 +606,8 @@ class Level(tool.State):
                 if plant:
                     if plant.name == c.WALLNUTBOWLING:
                         if plant.canHit(i):
-                            zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+                            zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
+                            # 注意：以上语句为通用处理，以后加入了铁门僵尸需要单独设置直接冲撞就直接杀死
                             plant.changeDirection(i)
                     elif plant.name == c.REDWALLNUTBOWLING:
                         if plant.state == c.IDLE:

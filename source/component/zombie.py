@@ -88,14 +88,15 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.walk_frames)
             self.helmetType2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
-                self.speed = 2
+                self.speed = 2.5
+                self.animate_interval = 300 # 因为加速了时间间隔要除以倍率，所以减小动画帧率
 
         if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
             self.walk_timer = self.current_time
             if self.is_hypno:
-                self.rect.x += self.speed
+                self.rect.x += 1
             else:
-                self.rect.x -= self.speed
+                self.rect.x -= 1
 
     def attacking(self):
         self.checkToDie(self.losthead_attack_frames)
@@ -106,7 +107,7 @@ class Zombie(pg.sprite.Sprite):
         if self.helmetType2Health <= 0 and self.helmetType2:
             self.changeFrames(self.attack_frames)
             self.helmetType2 = False
-        if (self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getTimeRatio()):
+        if (self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()):
             if self.prey.health > 0:
                 if self.prey_is_plant:
                     self.prey.setDamage(self.damage, self)
@@ -174,10 +175,13 @@ class Zombie(pg.sprite.Sprite):
             self.image.set_alpha(192)
 
     def getTimeRatio(self):
-        return self.ice_slow_ratio
+        return (self.ice_slow_ratio / self.speed)   # 目前的机制为：冰冻减速状态与自身速度共同决定行走的时间间隔
+
+    def getAttackTimeRatio(self):
+        return self.ice_slow_ratio  # 攻击速度只取决于冰冻状态
 
     def setIceSlow(self):
-        '''when get a ice bullet damage, slow the attack or walk speed of the zombie'''
+        # when get a ice bullet damage, slow the attack or walk speed of the zombie
         self.ice_slow_timer = self.current_time
         self.ice_slow_ratio = 2
 
@@ -187,6 +191,14 @@ class Zombie(pg.sprite.Sprite):
                 self.ice_slow_ratio = 1
 
     def setDamage(self, damage, ice=False, damageType=c.ZOMBIE_COMMON_DAMAGE):
+        # 冰冻减速效果
+        if ice:
+            if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
+                if not self.helmetType2:
+                    self.setIceSlow()
+            else:
+                self.setIceSlow()
+
         if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 不穿透二类防具的攻击
             # 从第二类防具开始逐级传递
             if self.helmetType2:
@@ -248,15 +260,25 @@ class Zombie(pg.sprite.Sprite):
                 self.health -= damage
         elif damageType == c.ZOMBIE_ASH_DAMAGE:
             self.health -= damage   # 无视任何防具
+        elif damageType == c.ZOMBIE_WALLNUT_BOWLING_DANMAGE:
+            # 逻辑：对防具的多余伤害不传递
+            # 以后增设铁门后可能需要设置侧面冲撞特殊性
+            if self.helmetType2:
+                self.helmetType2Health -= damage
+                if self.helmetType2Health <= 0:
+                    self.helmetType2 = False
+            elif self.helmet:   # 不存在二类防具，但是存在一类防具
+                self.helmetHealth -= damage
+                if self.helmetHealth <= 0:
+                    self.helmet = False
+            else:   # 没有防具
+                self.health -= damage
         else:
             print('警告：植物攻击类型错误，现在默认进行类豌豆射手型攻击')
             setDamage(damage, ice=ice, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
         
         # 记录攻击时间              
         self.hit_timer = self.current_time
-        # 冰冻减速效果
-        if ice:
-            self.setIceSlow()
 
     def setWalk(self):
         self.state = c.WALK
@@ -431,7 +453,8 @@ class BucketHeadZombie(Zombie):
 
 class FlagZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.FLAG_ZOMBIE, head_group, bodyHealth=c.FLAG_HEALTH + c.NORMAL_HEALTH)
+        Zombie.__init__(self, x, y, c.FLAG_ZOMBIE, head_group)
+        self.speed = 1.25
 
     def loadImages(self):
         self.walk_frames = []
