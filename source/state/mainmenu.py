@@ -63,6 +63,7 @@ class Menu(tool.State):
            y >= self.option_rect.y and y <= self.option_rect.bottom):
             self.option_clicked = True
             self.option_timer = self.option_start = self.current_time
+        self.persist[c.LITTLEGAME_BUTTON] = False
         return False
     
     # 点击到按钮，修改转态的done属性
@@ -81,6 +82,7 @@ class Menu(tool.State):
            y >= self.option_littleGame_rect.y and y <= self.option_littleGame_rect.bottom):
             self.done = True
             # 确实小游戏还是用的level
+            # 因为目前暂时没有生存模式和解谜模式，所以暂时设置为这样
             self.persist[c.LITTLEGAME_BUTTON] = True
 
     def update(self, surface, current_time, mouse_pos, mouse_click):

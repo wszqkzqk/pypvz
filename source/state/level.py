@@ -31,7 +31,7 @@ class Level(tool.State):
 
     def loadMap(self):
         modeList = ['adventure', 'littleGame']
-        if c.LITTLEGAME_BUTTON in self.game_info:
+        if c.LITTLEGAME_BUTTON in self.game_info and self.game_info[c.LITTLEGAME_BUTTON]:
             map_file = 'littleGame_' + str(self.game_info[c.LITTLEGAME_NUM]) + '.json'
             mode = 'littleGame'
         else:
