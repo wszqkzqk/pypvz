@@ -50,6 +50,7 @@ class Level(tool.State):
             pg.mixer.music.stop()
             pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
             pg.mixer.music.play(-1, 0)
+            # 这里应该设置有复原状态的操作，避免完成一轮后无法再玩
             return
         if self.map_data[c.SHOVEL] == 0:
             self.hasShovel = False
@@ -609,6 +610,7 @@ class Level(tool.State):
                         if plant.canHit(i):
                             zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
                             # 注意：以上语句为通用处理，以后加入了铁门僵尸需要单独设置直接冲撞就直接杀死
+                            # 可以给坚果保龄球设置attacked属性，如果attacked就秒杀（setDamage的攻击类型此时设置为COMMMON）铁门
                             plant.changeDirection(i)
                     elif plant.name == c.REDWALLNUTBOWLING:
                         if plant.state == c.IDLE:
@@ -831,6 +833,7 @@ class Level(tool.State):
         surface.blit(self.level, (0,0), self.viewport)
         if self.state == c.CHOOSE:
             self.panel.draw(surface)
+        # 以后可能需要插入一个预备的状态（预览显示僵尸、返回战场）
         elif self.state == c.PLAY:
             if self.hasShovel:
                 # 画铲子
