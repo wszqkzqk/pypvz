@@ -24,6 +24,7 @@ class Map():
         # 应当改成元组，保存南瓜头、花盆、睡莲等状态
         # 当然，不用元组的话字符串也行，但是得把判断植物写在母函数中，并且需要更多参数
         # 这样返回的就是一个具体信息，而非bool值了
+        # 到时候还要改一下变量名，还叫isMovable不合适
         return (self.map[map_y][map_x] == c.MAP_EMPTY)
     
     def getMapIndex(self, x, y):
