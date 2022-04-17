@@ -6,7 +6,7 @@ from .. import constants as c
 
 PANEL_Y_START = 87
 PANEL_X_START = 22
-PANEL_Y_INTERNAL = 74
+PANEL_Y_INTERNAL = 67
 PANEL_X_INTERNAL = 53
 # 以后可以增加到10，并且增加解锁功能
 CARD_LIST_NUM = 8

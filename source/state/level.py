@@ -16,6 +16,7 @@ class Level(tool.State):
         self.persist = self.game_info
         self.game_info[c.CURRENT_TIME] = current_time
         self.map_y_len = c.GRID_Y_LEN
+        # 可以给map加一个地图类型参数
         self.map = map.Map(c.GRID_X_LEN, self.map_y_len)
 
         # 暂停状态

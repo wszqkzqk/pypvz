@@ -9,7 +9,7 @@ class Map():
         self.height = height
         # 要把记录信息改成元组的话这里又得改
         # 而且不同场地还不一样
-        self.map = [[0 for x in range(self.width)] for y in range(self.height)]
+        self.map = [[c.MAP_EMPTY for x in range(self.width)] for y in range(self.height)]
 
     def isValid(self, map_x, map_y):
         if (map_x < 0 or map_x >= self.width or
@@ -21,13 +21,14 @@ class Map():
     def isMovable(self, map_x, map_y):
         # 目前没有南瓜头，所以用是否为空判断
         # 可将南瓜头新定义一个状态（如：2），基于此进一步判断
-        # 应当改成元组，保存南瓜头、花盆、睡莲等状态
+        # 应当改成元组，保存南瓜头、花盆、睡莲等状态（字典也可，还更方便）
         # 当然，不用元组的话字符串也行，但是得把判断植物写在母函数中，并且需要更多参数
         # 这样返回的就是一个具体信息，而非bool值了
         # 到时候还要改一下变量名，还叫isMovable不合适
         return (self.map[map_y][map_x] == c.MAP_EMPTY)
     
     def getMapIndex(self, x, y):
+        # 引入新地图后需要增加这里的内容
         x -= c.MAP_OFFSET_X
         y -= c.MAP_OFFSET_Y
         return (x // c.GRID_X_SIZE, y // c.GRID_Y_SIZE)
