@@ -26,16 +26,55 @@ class Map():
             return False
         return True
     
-    # 判断能否种植
-    def isMovable(self, map_x, map_y):
-        # 目前没有南瓜头，所以用是否为空判断
-        # 可将南瓜头新定义一个状态（如：2），基于此进一步判断
-        # 应当改成元组，保存南瓜头、花盆、睡莲等状态（字典也可，还更方便）
-        # 当然，不用元组的话字符串也行，但是得把判断植物写在母函数中，并且需要更多参数
-        # 这样返回的就是一个具体信息，而非bool值了
-        # 到时候还要改一下变量名，还叫isMovable不合适
-        #if self.map[map_y][map_x][c.]
-        return (self.map[map_y][map_x] == c.MAP_STATE_EMPTY)
+    # 判断位置是否可用
+    # 暂时没有写紫卡植物的判断方法
+    # 由于紫卡植物需要移除以前的植物，所以可用另外定义一个函数
+    # 注意咖啡豆生效后需要同时将植物的睡眠状态和格子的睡眠记录改变
+    def isAvailable(self, map_x, map_y, plantName):
+        if self.map[map_y][map_x][c.MAP_PLOT_TYPE] == c.MAP_GRASS:  # 草地
+            # 首先需要判断植物是否是水生植物，水生植物不能种植在陆地上
+            if plantName not in {'睡莲（未实现）', '海蘑菇（未实现）', '缠绕水草（未实现）'}: # 这里的集合也可以换成存储在某一文件中的常数的表达
+                if not self.map[map_y][map_x][c.MAP_PLANT]: # 没有植物肯定可以种植
+                    return True
+                elif ((self.map[map_y][map_x][c.MAP_PLANT] | {'花盆（未实现）', '南瓜头（未实现）'} == {'花盆（未实现）', '南瓜头（未实现）'})
+                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                    return True
+                elif plantName == '咖啡豆（未实现）' and self.map[map_y][map_x][c.MAP_SLEEP]:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        elif self.map[map_y][map_x][c.MAP_PLOT_TYPE] == c.MAP_TILE: # 屋顶
+            # 首先需要判断植物是否是水生植物，水生植物不能种植在陆地上
+            if plantName not in {'睡莲（未实现）', '海蘑菇（未实现）', '缠绕水草（未实现）'}: # 这里的集合也可以换成存储在某一文件中的常数的表达
+                if '花盆（未实现）' in self.map[map_y][map_x][c.MAP_PLANT]:
+                    if ((self.map[map_y][map_x][c.MAP_PLANT] | {'花盆（未实现）', '南瓜头（未实现）'} == {'花盆（未实现）', '南瓜头（未实现）'})
+                        and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                        return True
+                elif plantName == '花盆（未实现）': # 这一格本来没有花盆而且新来的植物是花盆，可以种
+                    return True
+                elif plantName == '咖啡豆（未实现）' and self.map[map_y][map_x][c.MAP_SLEEP]:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        else:   # 水里
+            if plantName in {'睡莲（未实现）', '海蘑菇（未实现）', '缠绕水草（未实现）'}:   # 是水生植物
+                if not self.map[map_y][map_x][c.MAP_PLANT]: # 只有无植物时才能在水里种植水生植物
+                    return True
+                else:
+                    return False
+            else:   # 非水生植物，依赖睡莲
+                if '睡莲（未实现）' in self.map[map_y][map_x][c.MAP_PLANT]:
+                    if ((self.map[map_y][map_x][c.MAP_PLANT] | {'睡莲（未实现）', '花盆（未实现）', '南瓜头（未实现）'} == {'睡莲（未实现）', '花盆（未实现）', '南瓜头（未实现）'})
+                        and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
     
     def getMapIndex(self, x, y):
         # 引入新地图后需要增加这里的内容
@@ -71,8 +110,9 @@ class Map():
     def setMapGridType(self, map_x, map_y, type):
         self.map[map_y][map_x] = type
 
-    def addMapPlant(self, map_x, map_y, plantName):
+    def addMapPlant(self, map_x, map_y, plantName, sleep=False):
         self.map[map_y][map_x][c.MAP_PLANT].add(plantName)
+        self.map[map_y][map_x][c.MAP_SLEEP] = sleep
     
     def removeMapPlant(self, map_x, map_y, plantName):
         self.map[map_y][map_x][c.MAP_PLANT].remove(plantName)
@@ -82,9 +122,9 @@ class Map():
         map_y = random.randint(0, self.height-1)
         return (map_x, map_y)
 
-    def showPlant(self, x, y):
+    def checkPlantToSeed(self, x, y, plantName):
         pos = None
         map_x, map_y = self.getMapIndex(x, y)
-        if self.isValid(map_x, map_y) and self.isMovable(map_x, map_y):
+        if self.isValid(map_x, map_y) and self.isAvailable(map_x, map_y, plantName):
             pos = self.getMapGridPos(map_x, map_y)
         return pos

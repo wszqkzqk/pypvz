@@ -460,18 +460,15 @@ class Level(tool.State):
             self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X, y, self.head_group))
 
     # 能否种植物的判断：
-    # 调用self.map.showPlant(x, y)
     # 先判断位置是否合法 isValid(map_x, map_y)
     # 再判断位置是否可用 isMovable(map_x, map_y)
-    # 因为现在还没有做南瓜头，所以目前判断的是map[map_y][map_x]是否为空（c.MAP_STATE_EMPTY，即0）
-    # 写了南瓜头需要改这个验证
-    def canSeedPlant(self):
+    def canSeedPlant(self, plantName):
         x, y = pg.mouse.get_pos()
-        return self.map.showPlant(x, y)
+        return self.map.checkPlantToSeed(x, y, plantName)
         
     # 种植物
     def addPlant(self):
-        pos = self.canSeedPlant()
+        pos = self.canSeedPlant(self.plant_name)
         if pos is None:
             return
 
@@ -522,6 +519,9 @@ class Level(tool.State):
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()
+            mushroomSleep = True
+        else:
+            mushroomSleep = False
         self.plant_groups[map_y].add(new_plant)
         if self.bar_type == c.CHOOSEBAR_STATIC:
             self.menubar.decreaseSunValue(self.select_plant.sun_cost)
@@ -530,7 +530,7 @@ class Level(tool.State):
             self.menubar.deleateCard(self.select_plant)
 
         if self.bar_type != c.CHOSSEBAR_BOWLING:
-            self.map.addMapPlant(map_x, map_y, self.plant_name)
+                self.map.addMapPlant(map_x, map_y, self.plant_name, sleep=mushroomSleep)
         self.removeMouseImage()
         #print('addPlant map[%d,%d], grid pos[%d, %d] pos[%d, %d]' % (map_x, map_y, x, y, pos[0], pos[1]))
 
@@ -672,6 +672,9 @@ class Level(tool.State):
         if self.bar_type != c.CHOSSEBAR_BOWLING:
             # 更改地图类型、添加南瓜头、睡莲、花盆后可能也需要改这里
             self.map.removeMapPlant(map_x, map_y, plant.name)
+        # 将睡眠植物移除后更新睡眠状态
+        if plant.state == c.SLEEP:
+            self.map[map_y][map_x][c.MAP_SLEEP] = False
         # 用铲子铲不用触发植物功能
         if not shovel:
             if (plant.name == c.CHERRYBOMB or plant.name == c.JALAPENO or
