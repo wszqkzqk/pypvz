@@ -146,7 +146,7 @@ class Level(tool.State):
         print('initBowlingMap')
         for x in range(3, self.map.width):
             for y in range(self.map.height):
-                self.map.setMapGridType(x, y, c.MAP_COMMON_PLANT)
+                self.map.setMapGridType(x, y, c.MAP_STATE_TILE) # 将坚果保龄球红线右侧视为屋顶的瓦片以达到不能直接种植植物的效果
 
     def initState(self):
         # 小游戏才有CHOOSEBAR_TYPE
@@ -530,7 +530,7 @@ class Level(tool.State):
             self.menubar.deleateCard(self.select_plant)
 
         if self.bar_type != c.CHOSSEBAR_BOWLING:
-            self.map.setMapGridType(map_x, map_y, c.MAP_COMMON_PLANT)
+            self.map.addMapPlant(map_x, map_y, self.plant_name)
         self.removeMouseImage()
         #print('addPlant map[%d,%d], grid pos[%d, %d] pos[%d, %d]' % (map_x, map_y, x, y, pos[0], pos[1]))
 
@@ -671,7 +671,7 @@ class Level(tool.State):
         map_x, map_y = self.map.getMapIndex(x, y)
         if self.bar_type != c.CHOSSEBAR_BOWLING:
             # 更改地图类型、添加南瓜头、睡莲、花盆后可能也需要改这里
-            self.map.setMapGridType(map_x, map_y, c.MAP_STATE_EMPTY)
+            self.map.removeMapPlant(map_x, map_y, plant.name)
         # 用铲子铲不用触发植物功能
         if not shovel:
             if (plant.name == c.CHERRYBOMB or plant.name == c.JALAPENO or

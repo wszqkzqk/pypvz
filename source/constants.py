@@ -1,4 +1,4 @@
-START_LEVEL_NUM = 4
+START_LEVEL_NUM = 1
 START_LITTLE_GAME_NUM = 1
 
 ORIGINAL_CAPTION = 'pypvz'
@@ -92,16 +92,15 @@ BACKGROUND_WALLNUTBOWLING = 6
 BACKGROUND_SINGLE = 7
 BACKGROUND_TRIPLE = 8
 
-
-MAP_STATE_EMPTY = 0
-MAP_COMMON_PLANT = 1
-# 只有南瓜头
-MAP_PUMPKIN_ONLY = 2
-# 有南瓜头和其他植物
-MAP_PUMPKIN_WITH = 3
-# 可能还需要给咖啡豆定义一个状态，但是这个最好是在种植的时候判断那里是否有睡眠的蘑菇
-# 睡莲与花盆更为特殊，可能需要更复杂的定义
-# 可能可以用元组或者字符串
+MAP_PLANT = 'plantnames'
+MAP_SLEEP = 'sleep' # 有没有休眠的蘑菇，作是否能种植咖啡豆的判断
+MAP_PLOT_TYPE = 'plotType'
+MAP_GRASS = 'grass'
+MAP_WATER = 'water'
+MAP_TILE = 'tile'  # 指屋顶上的瓦片
+MAP_STATE_EMPTY = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_GRASS}  # 由于同一格显然不可能种两个相同的植物，所以用集合
+MAP_STATE_WATER = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_WATER}
+MAP_STATE_TILE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_TILE}
 
 BACKGROUND_OFFSET_X = 220
 MAP_OFFSET_X = 35

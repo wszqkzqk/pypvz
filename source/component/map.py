@@ -2,6 +2,7 @@ import random
 import pygame as pg
 from .. import tool
 from .. import constants as c
+from copy import deepcopy
 
 class Map():
     def __init__(self, background_type):
@@ -9,15 +10,15 @@ class Map():
         if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
             self.width = c.GRID_POOL_X_LEN
             self.height = c.GRID_POOL_Y_LEN
+            self.map = [[(deepcopy(c.MAP_STATE_EMPTY), deepcopy(c.MAP_STATE_WATER))[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
         elif self.background_type in {c.BACKGROUND_ROOF, c.BACKGROUND_ROOFNIGHT}:
             self.width = c.GRID_ROOF_X_LEN
             self.height = c.GRID_ROOF_Y_LEN
+            self.map = [[deepcopy(c.MAP_STATE_TILE) for x in range(self.width)] for y in range(self.height)]
         else:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
-        # 要把记录信息改成元组的话这里又得改
-        # 而且不同场地还不一样
-        self.map = [[c.MAP_STATE_EMPTY for x in range(self.width)] for y in range(self.height)]
+            self.map = [[deepcopy(c.MAP_STATE_EMPTY) for x in range(self.width)] for y in range(self.height)]
 
     def isValid(self, map_x, map_y):
         if (map_x < 0 or map_x >= self.width or
@@ -33,6 +34,7 @@ class Map():
         # 当然，不用元组的话字符串也行，但是得把判断植物写在母函数中，并且需要更多参数
         # 这样返回的就是一个具体信息，而非bool值了
         # 到时候还要改一下变量名，还叫isMovable不合适
+        #if self.map[map_y][map_x][c.]
         return (self.map[map_y][map_x] == c.MAP_STATE_EMPTY)
     
     def getMapIndex(self, x, y):
@@ -68,6 +70,12 @@ class Map():
     
     def setMapGridType(self, map_x, map_y, type):
         self.map[map_y][map_x] = type
+
+    def addMapPlant(self, map_x, map_y, plantName):
+        self.map[map_y][map_x][c.MAP_PLANT].add(plantName)
+    
+    def removeMapPlant(self, map_x, map_y, plantName):
+        self.map[map_y][map_x][c.MAP_PLANT].remove(plantName)
 
     def getRandomMapIndex(self):
         map_x = random.randint(0, self.width-1)
