@@ -23,13 +23,12 @@ class Level(tool.State):
         # 默认显然不用显示菜单
         self.showLittleMenu = False
         
+        # 导入地图参数
         self.loadMap()
-        self.setupBackground()
-        self.initState()
-
-        # 可以给map加一个地图类型参数
         self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
         self.map_y_len = self.map.height
+        self.setupBackground()
+        self.initState()
 
     def loadMap(self):
         if c.LITTLEGAME_BUTTON in self.game_info and self.game_info[c.LITTLEGAME_BUTTON]:
