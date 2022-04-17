@@ -15,9 +15,6 @@ class Level(tool.State):
         self.game_info = persist
         self.persist = self.game_info
         self.game_info[c.CURRENT_TIME] = current_time
-        self.map_y_len = c.GRID_Y_LEN
-        # 可以给map加一个地图类型参数
-        self.map = map.Map(c.GRID_X_LEN, self.map_y_len)
 
         # 暂停状态
         self.pause = False
@@ -30,14 +27,17 @@ class Level(tool.State):
         self.setupBackground()
         self.initState()
 
+        # 可以给map加一个地图类型参数
+        self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
+        self.map_y_len = self.map.height
+
     def loadMap(self):
-        modeList = ['adventure', 'littleGame']
         if c.LITTLEGAME_BUTTON in self.game_info and self.game_info[c.LITTLEGAME_BUTTON]:
             map_file = 'littleGame_' + str(self.game_info[c.LITTLEGAME_NUM]) + '.json'
-            mode = 'littleGame'
+            self.mode = c.MODE_LITTLEGAME
         else:
             map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
-            mode = 'adventure'
+            self.mode = c.MODE_ADVENTURE
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
@@ -46,12 +46,15 @@ class Level(tool.State):
             f.close()
         except Exception as e:
             print("游戏结束")
+            if self.mode == c.MODE_ADVENTURE:
+                self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
+            elif self.mode == c.MODE_LITTLEGAME:
+                self.game_info[c.LITTLEGAME_NUM] = c.START_LITTLE_GAME_NUM
             self.done = True
             self.next = c.MAIN_MENU
             pg.mixer.music.stop()
             pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
             pg.mixer.music.play(-1, 0)
-            # 这里应该设置有复原状态的操作，避免完成一轮后无法再玩
             return
         if self.map_data[c.SHOVEL] == 0:
             self.hasShovel = False
@@ -60,12 +63,14 @@ class Level(tool.State):
 
         # 同时播放音乐
         global bgm
-        if mode == modeList[0]: # 冒险模式
+        if self.mode == c.MODE_ADVENTURE: # 冒险模式
             if self.game_info[c.LEVEL_NUM] in {0, 1, 2}:    # 白天关卡
                 bgm = 'dayLevel.opus'
             elif self.game_info[c.LEVEL_NUM] in {3}:    # 夜晚关卡
                 bgm = 'nightLevel.opus'
-        elif mode == modeList[1]:   # 小游戏模式
+            elif self.game_info[c.LEVEL_NUM] in {4}:
+                bgm = 'poolLevel.opus'
+        elif self.mode == c.MODE_LITTLEGAME:   # 小游戏模式
             if self.game_info[c.LITTLEGAME_NUM] in {1}:   # 传送带大战
                 bgm = 'battle.opus'
             elif self.game_info[c.LITTLEGAME_NUM] in {2}:    # 坚果保龄球
@@ -183,7 +188,7 @@ class Level(tool.State):
         self.hint_plant = False
         # 0:白天 1:夜晚 2:泳池 3:浓雾 4:屋顶 5:月夜 6:坚果保龄球
         # 还准备加入    7:单行草皮 8:三行草皮 但是目前没有找到图（
-        if self.background_type in {0, 2, 4, -1, -2} and self.bar_type == c.CHOOSEBAR_STATIC:
+        if self.background_type in {0, 2, 4, 7, 8} and self.bar_type == c.CHOOSEBAR_STATIC:
             self.produce_sun = True
         else:
             self.produce_sun = False
@@ -458,7 +463,7 @@ class Level(tool.State):
     # 调用self.map.showPlant(x, y)
     # 先判断位置是否合法 isValid(map_x, map_y)
     # 再判断位置是否可用 isMovable(map_x, map_y)
-    # 因为现在还没有做南瓜头，所以目前判断的是map[map_y][map_x]是否为空（c.MAP_EMPTY，即0）
+    # 因为现在还没有做南瓜头，所以目前判断的是map[map_y][map_x]是否为空（c.MAP_STATE_EMPTY，即0）
     # 写了南瓜头需要改这个验证
     def canSeedPlant(self):
         x, y = pg.mouse.get_pos()
@@ -515,7 +520,7 @@ class Level(tool.State):
         elif self.plant_name == c.REDWALLNUTBOWLING:
             new_plant = plant.RedWallNutBowling(x, y)
 
-        if new_plant.can_sleep and self.background_type == c.BACKGROUND_DAY:
+        if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()
         self.plant_groups[map_y].add(new_plant)
         if self.bar_type == c.CHOOSEBAR_STATIC:
@@ -666,7 +671,7 @@ class Level(tool.State):
         map_x, map_y = self.map.getMapIndex(x, y)
         if self.bar_type != c.CHOSSEBAR_BOWLING:
             # 更改地图类型、添加南瓜头、睡莲、花盆后可能也需要改这里
-            self.map.setMapGridType(map_x, map_y, c.MAP_EMPTY)
+            self.map.setMapGridType(map_x, map_y, c.MAP_STATE_EMPTY)
         # 用铲子铲不用触发植物功能
         if not shovel:
             if (plant.name == c.CHERRYBOMB or plant.name == c.JALAPENO or
