@@ -535,7 +535,7 @@ class Level(tool.State):
         #print('addPlant map[%d,%d], grid pos[%d, %d] pos[%d, %d]' % (map_x, map_y, x, y, pos[0], pos[1]))
 
     def setupHintImage(self):
-        pos = self.canSeedPlant()
+        pos = self.canSeedPlant(self.plant_name)
         if pos and self.mouse_image:
             if (self.hint_image and pos[0] == self.hint_rect.x and
                 pos[1] == self.hint_rect.y):
@@ -670,11 +670,13 @@ class Level(tool.State):
         x, y = plant.getPosition()
         map_x, map_y = self.map.getMapIndex(x, y)
         if self.bar_type != c.CHOSSEBAR_BOWLING:
-            # 更改地图类型、添加南瓜头、睡莲、花盆后可能也需要改这里
-            self.map.removeMapPlant(map_x, map_y, plant.name)
+            try:
+                self.map.removeMapPlant(map_x, map_y, plant.name)
+            except KeyError:
+                pass
         # 将睡眠植物移除后更新睡眠状态
         if plant.state == c.SLEEP:
-            self.map[map_y][map_x][c.MAP_SLEEP] = False
+            self.map.map[map_y][map_x][c.MAP_SLEEP] = False
         # 用铲子铲不用触发植物功能
         if not shovel:
             if (plant.name == c.CHERRYBOMB or plant.name == c.JALAPENO or
