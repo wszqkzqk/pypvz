@@ -670,7 +670,7 @@ class Level(tool.State):
         x, y = plant.getPosition()
         map_x, map_y = self.map.getMapIndex(x, y)
         if self.bar_type != c.CHOSSEBAR_BOWLING:
-            try:
+            try:    # 避免炸弹等本身就不在集合里面的问题
                 self.map.removeMapPlant(map_x, map_y, plant.name)
             except KeyError:
                 pass
