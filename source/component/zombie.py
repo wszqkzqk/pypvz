@@ -80,6 +80,8 @@ class Zombie(pg.sprite.Sprite):
                 self.health -= (self.current_time - self.losthead_timer) / 40
                 self.losthead_timer = self.current_time
                 return False
+        else:
+            return False
 
     def walking(self):
         if self.checkToDie(self.losthead_walk_frames):

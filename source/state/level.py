@@ -828,11 +828,12 @@ class Level(tool.State):
         self.shovel_rect.centery = y
         # 铲子接近植物时会高亮提示
         map_x, map_y = self.map.getMapIndex(x, y)
+        surface.blit(self.shovel, self.shovel_rect)
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
                 i.highlightTime = self.current_time
-        surface.blit(self.shovel, self.shovel_rect)
+                return
 
     def drawZombieFreezeTrap(self, i, surface):
         for zombie in self.zombie_groups[i]:
