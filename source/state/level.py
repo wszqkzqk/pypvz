@@ -653,7 +653,7 @@ class Level(tool.State):
                 continue
             for zombie in self.zombie_groups[i]:
                 if ((abs(zombie.rect.centerx - x) <= x_range) or
-                ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.15, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.15)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
+                ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.2, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
                     zombie.setDamage(1800, damageType=c.ZOMBIE_ASH_DAMAGE)
                     if zombie.health <= 0:
                         zombie.setBoomDie()
@@ -696,7 +696,7 @@ class Level(tool.State):
                         continue
                     for zombie in self.zombie_groups[i]:
                         if ((abs(zombie.rect.centerx - x) <= plant.explode_y_range) or
-                        ((zombie.rect.right - (x-plant.explode_x_range) > 20) or (zombie.rect.right - (x-plant.explode_x_range))/zombie.rect.width > 0.15, ((x+plant.explode_x_range) - zombie.rect.left > 20) or ((x+plant.explode_x_range) - zombie.rect.left)/zombie.rect.width > 0.15)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
+                        ((zombie.rect.right - (x-plant.explode_x_range) > 20) or (zombie.rect.right - (x-plant.explode_x_range))/zombie.rect.width > 0.2, ((x+plant.explode_x_range) - zombie.rect.left > 20) or ((x+plant.explode_x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
                             zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
 
         # 避免僵尸在用铲子移除植物后还在原位啃食

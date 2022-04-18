@@ -70,16 +70,20 @@ class Zombie(pg.sprite.Sprite):
     def checkToDie(self, framesKind):
         if self.health <= 0:
             self.setDie()
+            return True
         elif self.health <= c.LOSTHEAD_HEALTH:
             if not self.lostHead:
                 self.changeFrames(framesKind)
                 self.setLostHead()
+                return True
             else:
                 self.health -= (self.current_time - self.losthead_timer) / 40
                 self.losthead_timer = self.current_time
+                return False
 
     def walking(self):
-        self.checkToDie(self.losthead_walk_frames)
+        if self.checkToDie(self.losthead_walk_frames):
+            return
 
         if self.helmetHealth <= 0 and self.helmet:
             self.changeFrames(self.walk_frames)
@@ -98,7 +102,8 @@ class Zombie(pg.sprite.Sprite):
                 self.rect.x -= 1
 
     def attacking(self):
-        self.checkToDie(self.losthead_attack_frames)
+        if self.checkToDie(self.losthead_attack_frames):
+            return
         
         if self.helmetHealth <= 0 and self.helmet:
             self.changeFrames(self.attack_frames)
@@ -125,9 +130,11 @@ class Zombie(pg.sprite.Sprite):
 
     def freezing(self):
         if self.old_state == c.WALK:
-            self.checkToDie(self.losthead_walk_frames)
+            if self.checkToDie(self.losthead_walk_frames):
+                return
         else:
-            self.checkToDie(self.losthead_attack_frames)
+            if self.checkToDie(self.losthead_attack_frames):
+                return
 
         if (self.current_time - self.freeze_timer) > c.FREEZE_TIME:
             self.setWalk()
