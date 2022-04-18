@@ -153,3 +153,4 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 ![截屏4](/demo/demo4.webp)
 ![截屏5](/demo/demo5.webp)
 ![截屏6](/demo/demo6.webp)
+![截屏7](/demo/demo7.webp)
