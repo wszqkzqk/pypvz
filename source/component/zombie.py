@@ -182,7 +182,7 @@ class Zombie(pg.sprite.Sprite):
         if (self.current_time - self.hit_timer) >= 200:
             self.image.set_alpha(255)
         else:
-            self.image.set_alpha(192)
+            self.image.set_alpha(150)
 
     def getTimeRatio(self):
         return (self.ice_slow_ratio / self.speed)   # 目前的机制为：冰冻减速状态与自身速度共同决定行走的时间间隔
