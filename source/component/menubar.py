@@ -391,8 +391,9 @@ class Panel():
         if self.selected_num >= CARD_LIST_NUM:
             surface.blit(self.button_image, self.button_rect)
 
+# 传送带模式
 class MoveCard():
-    def __init__(self, x, y, card_name, plant_name, scale=0.78):
+    def __init__(self, x, y, card_name, plant_name, scale=0.5):
         self.loadFrame(card_name, scale)
         self.rect = self.orig_image.get_rect()
         self.rect.x = x
