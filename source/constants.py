@@ -1,4 +1,4 @@
-START_LEVEL_NUM = 1
+START_LEVEL_NUM = 4
 START_LITTLE_GAME_NUM = 1
 
 ORIGINAL_CAPTION = 'pypvz'
@@ -105,7 +105,7 @@ MAP_STATE_TILE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_TILE}
 BACKGROUND_OFFSET_X = 220
 MAP_OFFSET_X = 35
 MAP_OFFSET_Y = 100
-MAP_POOL_OFFSET_X = 40  # 暂时还不清楚数据
+MAP_POOL_OFFSET_X = 45  # 暂时还不清楚数据
 MAP_POOL_OFFSET_Y = 115 # 暂时还不清楚数据
 MAP_ROOF_OFFSET_X = 35  # 暂时还不清楚数据
 MAP_ROOF_OFFSET_Y = 105 # 暂时还不清楚数据
@@ -185,6 +185,7 @@ CARD_SUNSHROOM = 'card_sunshroom'
 CARD_ICESHROOM = 'card_iceshroom'
 CARD_HYPNOSHROOM = 'card_hypnoshroom'
 CARD_REDWALLNUT = 'card_redwallnut'
+CARD_LILYPAD = 'card_lilypad'
 
 #BULLET INFO
 BULLET_PEA = 'PeaNormal'

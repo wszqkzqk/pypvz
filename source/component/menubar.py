@@ -9,23 +9,88 @@ PANEL_X_START = 22
 PANEL_Y_INTERNAL = 67
 PANEL_X_INTERNAL = 53
 # 以后可以增加到10，并且增加解锁功能
-CARD_LIST_NUM = 8
-CARD_MAX_NUM = CARD_LIST_NUM
+CARD_MAX_NUM = 8
+CARD_LIST_NUM = 0
+
+'''
+plantDict = {# 字典 植物名称:(卡片名称, 阳光, 冷却时间)
+            c.SUNFLOWER:(c.CARD_SUNFLOWER,
+                            50,
+                            7500),
+            c.PEASHOOTER:(c.CARD_PEASHOOTER,
+                            100,
+                            7500),
+            c.SNOWPEASHOOTER:(c.CARD_SNOWPEASHOOTER,
+                            175,
+                            7500),
+            c.WALLNUT:(c.CARD_WALLNUT,
+                            50,
+                            30000),
+            c.CHERRYBOMB:(c.CARD_CHERRYBOMB,
+                            150,
+                            50000),
+            c.THREEPEASHOOTER:(c.CARD_THREEPEASHOOTER,
+                            325,
+                            7500),
+            c.REPEATERPEA:(c.CARD_REPEATERPEA,
+                            200,
+                            7500),
+            c.CHOMPER:(c.CARD_CHOMPER,
+                            150,
+                            7500),
+            c.PUFFSHROOM:(c.CARD_PUFFSHROOM,
+                            0,
+                            7500),
+            c.POTATOMINE:(c.CARD_POTATOMINE, 
+                            25,
+                            30000),
+            c.SQUASH:(c.CARD_SQUASH,
+                            50,
+                            30000),
+            c.SPIKEWEED:(c.CARD_SPIKEWEED,
+                            100,
+                            7500),
+            c.JALAPENO:(c.CARD_JALAPENO,
+                            125,
+                            30000),
+            c.SCAREDYSHROOM:(c.CARD_SCAREDYSHROOM,
+                            25,
+                            7500),
+            c.SUNSHROOM:(c.CARD_SUNSHROOM,
+                            25,
+                            7500),
+            c.ICESHROOM:(c.CARD_ICESHROOM,
+                            75,
+                            50000),
+            c.HYPNOSHROOM:(c.CARD_HYPNOSHROOM,
+                            75,
+                            30000),
+            c.WALLNUTBOWLING:(c.CARD_WALLNUT,
+                            0,
+                            0),
+            c.REDWALLNUTBOWLING:(c.CARD_REDWALLNUT,
+                            0,
+                            0),
+            c.LILYPAD:(c.CARD_LILYPAD,
+                            25,
+                            7500)}
+'''
 
 card_name_list = [c.CARD_SUNFLOWER, c.CARD_PEASHOOTER, c.CARD_SNOWPEASHOOTER, c.CARD_WALLNUT,
                   c.CARD_CHERRYBOMB, c.CARD_THREEPEASHOOTER, c.CARD_REPEATERPEA, c.CARD_CHOMPER,
                   c.CARD_PUFFSHROOM, c.CARD_POTATOMINE, c.CARD_SQUASH, c.CARD_SPIKEWEED,
                   c.CARD_JALAPENO, c.CARD_SCAREDYSHROOM, c.CARD_SUNSHROOM, c.CARD_ICESHROOM,
-                  c.CARD_HYPNOSHROOM, c.CARD_WALLNUT, c.CARD_REDWALLNUT]
+                  c.CARD_HYPNOSHROOM, c.CARD_WALLNUT, c.CARD_REDWALLNUT, c.CARD_LILYPAD]
 plant_name_list = [c.SUNFLOWER, c.PEASHOOTER, c.SNOWPEASHOOTER, c.WALLNUT,
                    c.CHERRYBOMB, c.THREEPEASHOOTER, c.REPEATERPEA, c.CHOMPER,
                    c.PUFFSHROOM, c.POTATOMINE, c.SQUASH, c.SPIKEWEED,
                    c.JALAPENO, c.SCAREDYSHROOM, c.SUNSHROOM, c.ICESHROOM,
-                   c.HYPNOSHROOM, c.WALLNUTBOWLING, c.REDWALLNUTBOWLING]
-plant_sun_list = [50, 100, 175, 50, 150, 325, 200, 150, 0, 25, 50, 100, 125, 25, 25, 75, 75, 0, 0]
+                   c.HYPNOSHROOM, c.WALLNUTBOWLING, c.REDWALLNUTBOWLING, c.LILYPAD]
+plant_sun_list = [50, 100, 175, 50, 150, 325, 200, 150, 0, 25, 50, 100, 125, 25, 25, 75, 75, 0, 0, 25]
 plant_frozen_time_list = [7500, 7500, 7500, 30000, 50000, 7500, 7500, 7500, 7500, 30000,
-                          30000, 7500, 50000, 7500, 7500, 50000, 30000, 0, 0]
-all_card_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+                          30000, 7500, 50000, 7500, 7500, 50000, 30000, 0, 0, 7500]
+all_card_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 19]
+
 
 def getSunValueImage(sun_value):
     # for pack, must include ttf
@@ -55,7 +120,7 @@ def getCardPool(data):
     return card_pool
 
 class Card():
-    def __init__(self, x, y, name_index, scale=0.78):
+    def __init__(self, x, y, name_index, scale=0.5):
         self.loadFrame(card_name_list[name_index], scale)
         self.rect = self.orig_image.get_rect()
         self.rect.x = x
@@ -264,7 +329,7 @@ class Panel():
                 x = PANEL_X_START - PANEL_X_INTERNAL
                 y += PANEL_Y_INTERNAL
             x += PANEL_X_INTERNAL
-            self.card_list.append(Card(x, y, index, 0.75))
+            self.card_list.append(Card(x, y, index, 0.5))
 
     def checkCardClick(self, mouse_pos):
         delete_card = None
