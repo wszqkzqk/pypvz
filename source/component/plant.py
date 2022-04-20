@@ -190,8 +190,10 @@ class Plant(pg.sprite.Sprite):
             self.animate_timer = self.current_time
 
         self.image = self.frames[self.frame_index]
-        if ((self.current_time - self.hit_timer) < 200) or (self.current_time - self.highlightTime < 200):
+        if  (self.current_time - self.highlightTime < 200):
             self.image.set_alpha(150)
+        elif ((self.current_time - self.hit_timer) < 200):
+            self.image.set_alpha(192)
         else:
             self.image.set_alpha(255)
 
