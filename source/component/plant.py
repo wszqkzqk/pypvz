@@ -106,6 +106,17 @@ class Bullet(pg.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
+class StarBullet(Bullet):
+    def __init__(self, x, y, name):
+        self.name = name
+        self.frames = []
+        self.frame_index = 0
+        self.load_images()
+        self.image = self.frames[self.frame_index]
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
 
 class Plant(pg.sprite.Sprite):
     def __init__(self, x, y, name, health, bullet_group, scale=1):
