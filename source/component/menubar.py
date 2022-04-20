@@ -6,11 +6,11 @@ from .. import constants as c
 
 PANEL_Y_START = 87
 PANEL_X_START = 22
-PANEL_Y_INTERNAL = 67
+PANEL_Y_INTERNAL = 73
 PANEL_X_INTERNAL = 53
 # 以后可以增加到10，并且增加解锁功能
 CARD_MAX_NUM = 8
-CARD_LIST_NUM = 0
+CARD_LIST_NUM = CARD_MAX_NUM
 
 '''
 plantDict = {# 字典 植物名称:(卡片名称, 阳光, 冷却时间)
