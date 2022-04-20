@@ -1016,3 +1016,7 @@ class RedWallNutBowling(Plant):
 
     def getPosition(self):
         return (self.rect.centerx, self.orig_y)
+
+class LilyPad(Plant):
+    def __init__(self, x, y):
+        Plant.__init__(self, x, y, c.LILYPAD, c.PLANT_HEALTH, None)

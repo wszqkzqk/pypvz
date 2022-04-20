@@ -515,6 +515,8 @@ class Level(tool.State):
             new_plant = plant.WallNutBowling(x, y, map_y, self)
         elif self.plant_name == c.REDWALLNUTBOWLING:
             new_plant = plant.RedWallNutBowling(x, y)
+        elif self.plant_name == c.LILYPAD:
+            new_plant = plant.LilyPad(x, y)
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()
