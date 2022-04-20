@@ -498,7 +498,7 @@ class Level(tool.State):
         elif self.plant_name == c.POTATOMINE:
             new_plant = plant.PotatoMine(x, y)
         elif self.plant_name == c.SQUASH:
-            new_plant = plant.Squash(x, y)
+            new_plant = plant.Squash(x, y, self.map.map[map_y][map_x][c.MAP_PLANT])
         elif self.plant_name == c.SPIKEWEED:
             new_plant = plant.Spikeweed(x, y)
         elif self.plant_name == c.JALAPENO:

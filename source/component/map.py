@@ -51,7 +51,10 @@ class Map():
                 if '花盆（未实现）' in self.map[map_y][map_x][c.MAP_PLANT]:
                     if ((self.map[map_y][map_x][c.MAP_PLANT] | {'花盆（未实现）', '南瓜头（未实现）'} == {'花盆（未实现）', '南瓜头（未实现）'})
                         and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
-                        return True
+                        if plantName in {c.SPIKEWEED}: # 不能在花盆上种植的植物
+                            return False
+                        else:
+                            return True
                 elif plantName == '花盆（未实现）': # 这一格本来没有花盆而且新来的植物是花盆，可以种
                     return True
                 elif plantName == '咖啡豆（未实现）' and self.map[map_y][map_x][c.MAP_SLEEP]:
@@ -70,7 +73,10 @@ class Map():
                 if c.LILYPAD in self.map[map_y][map_x][c.MAP_PLANT]:
                     if ((self.map[map_y][map_x][c.MAP_PLANT] | {c.LILYPAD, '花盆（未实现）', '南瓜头（未实现）'} == {c.LILYPAD, '花盆（未实现）', '南瓜头（未实现）'})
                         and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
-                        return True
+                        if plantName in {c.SPIKEWEED}: # 不能在睡莲上种植的植物
+                            return False
+                        else:
+                            return True
                     else:
                         return False
                 else:
