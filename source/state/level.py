@@ -517,6 +517,8 @@ class Level(tool.State):
             new_plant = plant.RedWallNutBowling(x, y)
         elif self.plant_name == c.LILYPAD:
             new_plant = plant.LilyPad(x, y)
+        elif self.plant_name == c.TORCHWOOD:
+            new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y])
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()
@@ -597,9 +599,15 @@ class Level(tool.State):
                 if bullet.state == c.FLY:
                     zombie = pg.sprite.spritecollideany(bullet, self.zombie_groups[i], collided_func)
                     if zombie and zombie.state != c.DIE:
-                        zombie.setDamage(bullet.damage, ice=bullet.ice, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+                        # 这里生效代表已经发生了碰撞
+                        zombie.setDamage(bullet.damage, effect=bullet.effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
                         bullet.setExplode()
-    
+                        # 火球有溅射伤害
+                        if bullet.name == c.BULLET_FIREBALL:
+                            for rangeZombie in self.zombie_groups[i]:
+                                if abs(rangeZombie.rect.x - bullet.rect.x) <= (c.GRID_X_SIZE // 2):
+                                    rangeZombie.setDamage(c.BULLET_DAMAGE_FIREBALL_RANGE, effect=False, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+
     def checkZombieCollisions(self):
         if self.bar_type == c.CHOSSEBAR_BOWLING:
             ratio = 0.6
@@ -649,13 +657,15 @@ class Level(tool.State):
             if car.dead:
                 self.cars.remove(car)
 
-    def boomZombies(self, x, map_y, y_range, x_range):
+    def boomZombies(self, x, map_y, y_range, x_range, effect=False):
         for i in range(self.map_y_len):
             if abs(i - map_y) > y_range:
                 continue
             for zombie in self.zombie_groups[i]:
                 if ((abs(zombie.rect.centerx - x) <= x_range) or
                 ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.2, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
+                    if effect == c.BULLET_EFFECT_UNICE:
+                        zombie.ice_slow_ratio = 1
                     zombie.setDamage(1800, damageType=c.ZOMBIE_ASH_DAMAGE)
                     if zombie.health <= 0:
                         zombie.setBoomDie()
@@ -680,10 +690,12 @@ class Level(tool.State):
             self.map.map[map_y][map_x][c.MAP_SLEEP] = False
         # 用铲子铲不用触发植物功能
         if not shovel:
-            if (plant.name == c.CHERRYBOMB or plant.name == c.JALAPENO or
-                plant.name == c.REDWALLNUTBOWLING):
+            if (plant.name == c.CHERRYBOMB or plant.name == c.REDWALLNUTBOWLING):
                 self.boomZombies(plant.rect.centerx, map_y, plant.explode_y_range,
                                 plant.explode_x_range)
+            elif plant.name == c.JALAPENO:
+                self.boomZombies(plant.rect.centerx, map_y, plant.explode_y_range,
+                                plant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
             elif plant.name == c.ICESHROOM and plant.state != c.SLEEP:
                 self.freezeZombies(plant)
             elif plant.name == c.HYPNOSHROOM and plant.state != c.SLEEP:

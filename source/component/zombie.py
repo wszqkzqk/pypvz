@@ -200,14 +200,21 @@ class Zombie(pg.sprite.Sprite):
             if (self.current_time - self.ice_slow_timer) > c.ICE_SLOW_TIME:
                 self.ice_slow_ratio = 1
 
-    def setDamage(self, damage, ice=False, damageType=c.ZOMBIE_COMMON_DAMAGE):
+    def setDamage(self, damage, effect=False, damageType=c.ZOMBIE_COMMON_DAMAGE):
         # 冰冻减速效果
-        if ice:
+        if effect == c.BULLET_EFFECT_ICE:
             if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
                 if not self.helmetType2:
                     self.setIceSlow()
             else:
                 self.setIceSlow()
+        # 解冻
+        elif effect == c.BULLET_EFFECT_UNICE:
+            if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
+                if not self.helmetType2:
+                    self.ice_slow_ratio = 1
+            else:
+                self.ice_slow_ratio = 1
 
         if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 不穿透二类防具的攻击
             # 从第二类防具开始逐级传递
@@ -274,7 +281,7 @@ class Zombie(pg.sprite.Sprite):
                 self.health -= damage
         else:
             print('警告：植物攻击类型错误，现在默认进行类豌豆射手型攻击')
-            setDamage(damage, ice=ice, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+            setDamage(damage, effect=effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
         
         # 记录攻击时间              
         self.hit_timer = self.current_time

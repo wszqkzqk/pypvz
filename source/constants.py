@@ -149,6 +149,7 @@ HYPNOSHROOM = 'HypnoShroom'
 WALLNUTBOWLING = 'WallNutBowling'
 REDWALLNUTBOWLING = 'RedWallNutBowling'
 LILYPAD = 'LilyPad'
+TORCHWOOD = 'TorchWood'
 
 PLANT_HEALTH = 300
 WALLNUT_HEALTH = 4000
@@ -186,12 +187,21 @@ CARD_ICESHROOM = 'card_iceshroom'
 CARD_HYPNOSHROOM = 'card_hypnoshroom'
 CARD_REDWALLNUT = 'card_redwallnut'
 CARD_LILYPAD = 'card_lilypad'
+CARD_TORCHWOOD = 'card_torchwood'
 
 #BULLET INFO
+# 子弹类型
 BULLET_PEA = 'PeaNormal'
 BULLET_PEA_ICE = 'PeaIce'
+BULLET_FIREBALL = 'Fireball'
 BULLET_MUSHROOM = 'BulletMushRoom'
+# 子弹伤害
 BULLET_DAMAGE_NORMAL = 20
+BULLET_DAMAGE_FIREBALL_BODY = 27 # 这是火球本体的伤害，注意不是40，本体(27) + 溅射(13)才是40
+BULLET_DAMAGE_FIREBALL_RANGE = 13
+# 子弹效果
+BULLET_EFFECT_ICE = 'ice'
+BULLET_EFFECT_UNICE = 'unice'
 
 #ZOMBIE INFO
 ZOMBIE_IMAGE_RECT = 'zombie_image_rect'

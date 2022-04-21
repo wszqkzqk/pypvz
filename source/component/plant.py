@@ -36,7 +36,7 @@ class Car(pg.sprite.Sprite):
 
 
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, x, start_y, dest_y, name, damage, ice):
+    def __init__(self, x, start_y, dest_y, name, damage, effect=False, passedTorchWood=None):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -51,9 +51,10 @@ class Bullet(pg.sprite.Sprite):
         self.y_vel = 4 if (dest_y > start_y) else -4
         self.x_vel = 10
         self.damage = damage
-        self.ice = ice
+        self.effect = effect
         self.state = c.FLY
         self.current_time = 0
+        self.passedTorchWood = passedTorchWood  # 记录最近通过的火炬树横坐标，如果没有缺省为None
 
     def loadFrames(self, frames, name):
         frame_list = tool.GFX[name]
@@ -211,7 +212,7 @@ class Plant(pg.sprite.Sprite):
     def canAttack(self, zombie):
         if (self.state != c.SLEEP and zombie.state != c.DIE and (not zombie.lostHead) and
                 self.rect.x <= zombie.rect.right):
-            return True
+                return True
         return False
 
     def setAttack(self):
@@ -297,7 +298,7 @@ class PeaShooter(Plant):
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
 
 
@@ -313,12 +314,12 @@ class RepeaterPea(Plant):
         if (self.current_time - self.shoot_timer > 1400):
             self.firstShot = True
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
         elif self.firstShot and (self.current_time - self.shoot_timer) > 100:
             self.firstShot = False
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
 
 
 class ThreePeaShooter(Plant):
@@ -337,7 +338,7 @@ class ThreePeaShooter(Plant):
                     continue
                 dest_y = self.rect.y + (i - 1) * c.GRID_Y_SIZE + offset_y
                 self.bullet_groups[tmp_y].add(Bullet(self.rect.right  - 15, self.rect.y, dest_y,
-                                                     c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, False))
+                                                     c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
 
 
@@ -349,7 +350,7 @@ class SnowPeaShooter(Plant):
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right  - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, True))
+                                         c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, effect=c.BULLET_EFFECT_ICE))
             self.shoot_timer = self.current_time
 
 
@@ -507,7 +508,7 @@ class PuffShroom(Plant):
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 10, self.rect.y + 10,
-                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, False))
+                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
 
     def canAttack(self, zombie):
@@ -760,7 +761,7 @@ class ScaredyShroom(Plant):
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y + 40, self.rect.y + 40,
-                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, False))
+                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
 
 
@@ -1036,3 +1037,20 @@ class RedWallNutBowling(Plant):
 class LilyPad(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.LILYPAD, c.PLANT_HEALTH, None)
+
+class TorchWood(Plant):
+    def __init__(self, x, y, bullet_group):
+        Plant.__init__(self, x, y, c.TORCHWOOD, c.PLANT_HEALTH, bullet_group)
+
+    def idling(self):
+        for i in self.bullet_group:
+            if i.passedTorchWood != self.rect.x:
+                if -10 <= i.rect.x - self.rect.x <= 20:
+                    if i.name == c.BULLET_PEA:
+                        self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
+                                            c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, effect=c.BULLET_EFFECT_UNICE, passedTorchWood=self.rect.x))
+                        i.kill()
+                    elif i.name == c.BULLET_PEA_ICE:
+                        self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
+                                            c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False, passedTorchWood=self.rect.x))
+                        i.kill()
