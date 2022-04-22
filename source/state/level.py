@@ -564,8 +564,13 @@ class Level(tool.State):
             image.set_alpha(128)
             self.hint_image = image
             self.hint_rect = image.get_rect()
-            self.hint_rect.centerx = pos[0]
-            self.hint_rect.bottom = pos[1]
+            # 花盆、睡莲图片应当下移一些
+            if self.plant_name in {c.LILYPAD, '花盆（未实现）'}:
+                self.hint_rect.centerx = pos[0]
+                self.hint_rect.bottom = pos[1] + 25
+            else:
+                self.hint_rect.centerx = pos[0]
+                self.hint_rect.bottom = pos[1]
             self.hint_plant = True
         else:
             self.hint_plant = False

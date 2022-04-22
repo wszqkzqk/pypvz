@@ -625,7 +625,6 @@ class Squash(Plant):
                     if self.canAttack(zombie):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
                 self.health = 0 # 避免僵尸在原位啃食
-                print(self.orig_pos)
                 self.mapObjSet.remove(c.SQUASH)
                 self.kill()
         elif self.aim_timer == 0:
