@@ -63,7 +63,7 @@ class Map():
                     return False
             else:
                 return False
-        else:   # 水里
+        elif self.map[map_y][map_x][c.MAP_PLOT_TYPE] == c.MAP_WATER:   # 水里
             if plantName in {c.LILYPAD, '海蘑菇（未实现）', '缠绕水草（未实现）'}:   # 是水生植物
                 if not self.map[map_y][map_x][c.MAP_PLANT]: # 只有无植物时才能在水里种植水生植物
                     return True
@@ -71,9 +71,9 @@ class Map():
                     return False
             else:   # 非水生植物，依赖睡莲
                 if c.LILYPAD in self.map[map_y][map_x][c.MAP_PLANT]:
-                    if ((self.map[map_y][map_x][c.MAP_PLANT] | {c.LILYPAD, '花盆（未实现）', '南瓜头（未实现）'} == {c.LILYPAD, '花盆（未实现）', '南瓜头（未实现）'})
+                    if ((self.map[map_y][map_x][c.MAP_PLANT] | {c.LILYPAD, '南瓜头（未实现）'} == {c.LILYPAD, '南瓜头（未实现）'})
                         and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
-                        if plantName in {c.SPIKEWEED}: # 不能在睡莲上种植的植物
+                        if plantName in {c.SPIKEWEED, '花盆（未实现）'}: # 不能在睡莲上种植的植物
                             return False
                         else:
                             return True
@@ -81,6 +81,8 @@ class Map():
                         return False
                 else:
                     return False
+        else:   # 不可种植区域
+            return False
     
     def getMapIndex(self, x, y):
         # 引入新地图后需要增加这里的内容

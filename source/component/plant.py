@@ -107,6 +107,7 @@ class Bullet(pg.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
+# 暂时是杨桃的子弹，以后可以扩展到非定行飞行的子弹
 class StarBullet(Bullet):
     def __init__(self, x, y, name):
         self.name = name

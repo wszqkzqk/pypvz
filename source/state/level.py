@@ -185,6 +185,10 @@ class Level(tool.State):
 
         self.hint_image = None
         self.hint_plant = False
+
+        # 种植植物后应当刷新僵尸的攻击对象，当然，默认初始时不用刷新
+        self.refreshZombieAttack = False
+
         # 0:白天 1:夜晚 2:泳池 3:浓雾 4:屋顶 5:月夜 6:坚果保龄球
         # 还准备加入    7:单行草皮 8:三行草皮 但是目前没有找到图（
         if self.background_type in {0, 2, 4, 7, 8} and self.bar_type == c.CHOOSEBAR_STATIC:
@@ -285,6 +289,14 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
+                # 优先移除花盆、睡莲上的植物而非花盆、睡莲本身
+                if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
+                    if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                        if i.name == c.LILYPAD:
+                            continue
+                    elif '花盆（未实现）' in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                        if i.name == '花盆（未实现）':
+                            continue
                 self.killPlant(i, shovel=True)
                 # 使用后默认铲子复原
                 self.drag_shovel = not self.drag_shovel
@@ -526,6 +538,8 @@ class Level(tool.State):
         else:
             mushroomSleep = False
         self.plant_groups[map_y].add(new_plant)
+        # 种植植物后应当刷新僵尸的攻击对象
+        self.refreshZombieAttack = True
         if self.bar_type == c.CHOOSEBAR_STATIC:
             self.menubar.decreaseSunValue(self.select_plant.sun_cost)
             self.menubar.setCardFrozenTime(self.plant_name)
@@ -618,7 +632,8 @@ class Level(tool.State):
             hypo_zombies = []
             for zombie in self.zombie_groups[i]:
                 if zombie.state != c.WALK:
-                    continue
+                    if not self.refreshZombieAttack:
+                        continue
                 plant = pg.sprite.spritecollideany(zombie, self.plant_groups[i], collided_func)
                 if plant:
                     if plant.name == c.WALLNUTBOWLING:
@@ -630,8 +645,23 @@ class Level(tool.State):
                     elif plant.name == c.REDWALLNUTBOWLING:
                         if plant.state == c.IDLE:
                             plant.setAttack()
-                    elif plant.name != c.SPIKEWEED:
-                        zombie.setAttack(plant)
+                    elif plant.name == c.SPIKEWEED:
+                        continue
+                    # 在睡莲、花盆上有植物时应当优先攻击其上的植物
+                    # 这一段代码目前未能生效
+                    elif plant.name in {c.LILYPAD, '花盆（未实现）'}:
+                        map_x, map_y = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
+                        if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
+                            # 这里暂时没有南瓜头优先攻击逻辑，这整个模块都没有对南瓜头的设计
+                            for actualTargetPlant in self.plant_groups[i]:
+                                # 检测同一格的其他植物
+                                if self.map.getMapIndex(actualTargetPlant.rect.centerx, actualTargetPlant.rect.bottom) == (map_x, map_y):
+                                    if actualTargetPlant.name != c.LILYPAD:
+                                        zombie.setAttack(actualTargetPlant)
+                                        continue
+                    zombie.setAttack(plant)
+        else:
+            self.refreshZombieAttack = False    # 生效后需要解除刷新设置
 
             for hypno_zombie in self.hypno_zombie_groups[i]:
                 if hypno_zombie.health <= 0:
@@ -846,6 +876,14 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
+                # 优先选中睡莲、花盆上的植物
+                if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
+                    if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                        if i.name == c.LILYPAD:
+                            continue
+                    elif '花盆（未实现）' in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                        if i.name == '花盆（未实现）':
+                            continue
                 i.highlightTime = self.current_time
                 return
 

@@ -299,6 +299,7 @@ class Zombie(pg.sprite.Sprite):
 
     def setAttack(self, prey, is_plant=True):
         self.prey = prey  # prey can be plant or other zombies
+        print(self.prey)
         self.prey_is_plant = is_plant
         self.state = c.ATTACK
         self.attack_timer = self.current_time
