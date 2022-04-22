@@ -164,7 +164,7 @@ class Level(tool.State):
 
     def initChoose(self):
         self.state = c.CHOOSE
-        self.panel = menubar.Panel(menubar.all_card_list, self.map_data[c.INIT_SUN_NAME])
+        self.panel = menubar.Panel(menubar.cards_to_choose, self.map_data[c.INIT_SUN_NAME])
 
     def choose(self, mouse_pos, mouse_click):
         if mouse_pos and mouse_click[0]:

@@ -4,93 +4,96 @@ import pygame as pg
 from .. import tool
 from .. import constants as c
 
-PANEL_Y_START = 87
-PANEL_X_START = 22
-PANEL_Y_INTERNAL = 73
-PANEL_X_INTERNAL = 53
-BAR_CARD_X_INTERNAL = 51
-# 以后可以增加解锁功能
-CARD_MAX_NUM = 10
-CARD_LIST_NUM = CARD_MAX_NUM
+plantInfo = (#元组 (植物名称, 卡片名称, 阳光, 冷却时间)
+            (c.PEASHOOTER,
+                c.CARD_PEASHOOTER,
+                100,
+                7500),
+            (c.SUNFLOWER,
+                c.CARD_SUNFLOWER,
+                50,
+                7500),
+            (c.CHERRYBOMB,
+                c.CARD_CHERRYBOMB,
+                150,
+                50000),
+            (c.WALLNUT,
+                c.CARD_WALLNUT,
+                50,
+                30000),
+            (c.POTATOMINE,
+                c.CARD_POTATOMINE, 
+                25,
+                30000),
+            (c.SNOWPEASHOOTER,
+                c.CARD_SNOWPEASHOOTER,
+                175,
+                7500),
+            (c.CHOMPER,
+                c.CARD_CHOMPER,
+                150,
+                7500),
+            (c.REPEATERPEA,
+                c.CARD_REPEATERPEA,
+                200,
+                7500),
+            (c.PUFFSHROOM,
+                c.CARD_PUFFSHROOM,
+                0,
+                7500),
+            (c.SUNSHROOM,
+                c.CARD_SUNSHROOM,
+                25,
+                7500),
+            (c.HYPNOSHROOM,
+                c.CARD_HYPNOSHROOM,
+                75,
+                30000),
+            (c.SCAREDYSHROOM,
+                c.CARD_SCAREDYSHROOM,
+                25,
+                7500),
+            (c.ICESHROOM,
+                c.CARD_ICESHROOM,
+                75,
+                50000),
+            (c.LILYPAD,
+                c.CARD_LILYPAD,
+                25,
+                7500),
+            (c.SQUASH,
+                c.CARD_SQUASH,
+                50,
+                30000),
+            (c.THREEPEASHOOTER,
+                c.CARD_THREEPEASHOOTER,
+                325,
+                7500),
+            (c.JALAPENO,
+                c.CARD_JALAPENO,
+                125,
+                30000),
+            (c.SPIKEWEED,
+                c.CARD_SPIKEWEED,
+                100,
+                7500),
+            (c.TORCHWOOD,
+                c.CARD_TORCHWOOD,
+                175,
+                7500),
+            # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
+            (c.WALLNUTBOWLING,
+                c.CARD_WALLNUT,
+                0,
+                0),
+            (c.REDWALLNUTBOWLING,
+                c.CARD_REDWALLNUT,
+                0,
+                0),
+            )
 
-'''
-plantDict = {# 字典 植物名称:(卡片名称, 阳光, 冷却时间)
-            c.SUNFLOWER:(c.CARD_SUNFLOWER,
-                            50,
-                            7500),
-            c.PEASHOOTER:(c.CARD_PEASHOOTER,
-                            100,
-                            7500),
-            c.SNOWPEASHOOTER:(c.CARD_SNOWPEASHOOTER,
-                            175,
-                            7500),
-            c.WALLNUT:(c.CARD_WALLNUT,
-                            50,
-                            30000),
-            c.CHERRYBOMB:(c.CARD_CHERRYBOMB,
-                            150,
-                            50000),
-            c.THREEPEASHOOTER:(c.CARD_THREEPEASHOOTER,
-                            325,
-                            7500),
-            c.REPEATERPEA:(c.CARD_REPEATERPEA,
-                            200,
-                            7500),
-            c.CHOMPER:(c.CARD_CHOMPER,
-                            150,
-                            7500),
-            c.PUFFSHROOM:(c.CARD_PUFFSHROOM,
-                            0,
-                            7500),
-            c.POTATOMINE:(c.CARD_POTATOMINE, 
-                            25,
-                            30000),
-            c.SQUASH:(c.CARD_SQUASH,
-                            50,
-                            30000),
-            c.SPIKEWEED:(c.CARD_SPIKEWEED,
-                            100,
-                            7500),
-            c.JALAPENO:(c.CARD_JALAPENO,
-                            125,
-                            30000),
-            c.SCAREDYSHROOM:(c.CARD_SCAREDYSHROOM,
-                            25,
-                            7500),
-            c.SUNSHROOM:(c.CARD_SUNSHROOM,
-                            25,
-                            7500),
-            c.ICESHROOM:(c.CARD_ICESHROOM,
-                            75,
-                            50000),
-            c.HYPNOSHROOM:(c.CARD_HYPNOSHROOM,
-                            75,
-                            30000),
-            c.WALLNUTBOWLING:(c.CARD_WALLNUT,
-                            0,
-                            0),
-            c.REDWALLNUTBOWLING:(c.CARD_REDWALLNUT,
-                            0,
-                            0),
-            c.LILYPAD:(c.CARD_LILYPAD,
-                            25,
-                            7500)}
-'''
-
-card_name_list = (c.CARD_SUNFLOWER, c.CARD_PEASHOOTER, c.CARD_SNOWPEASHOOTER, c.CARD_WALLNUT,
-                  c.CARD_CHERRYBOMB, c.CARD_THREEPEASHOOTER, c.CARD_REPEATERPEA, c.CARD_CHOMPER,
-                  c.CARD_PUFFSHROOM, c.CARD_POTATOMINE, c.CARD_SQUASH, c.CARD_SPIKEWEED,
-                  c.CARD_JALAPENO, c.CARD_SCAREDYSHROOM, c.CARD_SUNSHROOM, c.CARD_ICESHROOM,
-                  c.CARD_HYPNOSHROOM, c.CARD_LILYPAD, c.CARD_TORCHWOOD, c.CARD_WALLNUT, c.CARD_REDWALLNUT)
-plant_name_list = (c.SUNFLOWER, c.PEASHOOTER, c.SNOWPEASHOOTER, c.WALLNUT,
-                   c.CHERRYBOMB, c.THREEPEASHOOTER, c.REPEATERPEA, c.CHOMPER,
-                   c.PUFFSHROOM, c.POTATOMINE, c.SQUASH, c.SPIKEWEED,
-                   c.JALAPENO, c.SCAREDYSHROOM, c.SUNSHROOM, c.ICESHROOM,
-                   c.HYPNOSHROOM, c.LILYPAD, c.TORCHWOOD, c.WALLNUTBOWLING, c.REDWALLNUTBOWLING)
-plant_sun_list = (50, 100, 175, 50, 150, 325, 200, 150, 0, 25, 50, 100, 125, 25, 25, 75, 75, 25, 175,0, 0)
-plant_frozen_time_list = (7500, 7500, 7500, 30000, 50000, 7500, 7500, 7500, 7500, 30000,
-                          30000, 7500, 50000, 7500, 7500, 50000, 30000, 7500, 7500, 0, 0)
-all_card_list = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)
+# 指定了哪些卡可选
+cards_to_choose = range(len(plantInfo) - 2)
 
 
 def getSunValueImage(sun_value):
@@ -114,22 +117,22 @@ def getCardPool(data):
     card_pool = []
     for card in data:
         tmp = card['name']
-        for i,name in enumerate(plant_name_list):
-            if name == tmp:
+        for i,name in enumerate(plantInfo):
+            if name[c.PLANT_NAME_INDEX] == tmp:
                 card_pool.append(i)
                 break
     return card_pool
 
 class Card():
-    def __init__(self, x, y, name_index, scale=0.5):
-        self.loadFrame(card_name_list[name_index], scale)
+    def __init__(self, x, y, index, scale=0.5):
+        self.loadFrame(plantInfo[index][c.CARD_INDEX], scale)
         self.rect = self.orig_image.get_rect()
         self.rect.x = x
         self.rect.y = y
         
-        self.name_index = name_index
-        self.sun_cost = plant_sun_list[name_index]
-        self.frozen_time = plant_frozen_time_list[name_index]
+        self.index = index
+        self.sun_cost = plantInfo[index][c.SUN_INDEX]
+        self.frozen_time = plantInfo[index][c.FROZEN_INDEX]
         self.frozen_timer = -self.frozen_time
         self.refresh_timer = 0
         self.select = True
@@ -240,7 +243,7 @@ class MenuBar():
         x = self.card_offset_x
         y = 8
         for index in card_list:
-            x += BAR_CARD_X_INTERNAL
+            x += c.BAR_CARD_X_INTERNAL
             self.card_list.append(Card(x, y, index))
 
     def checkCardClick(self, mouse_pos):
@@ -248,7 +251,7 @@ class MenuBar():
         for card in self.card_list:
             if card.checkMouseClick(mouse_pos):
                 if card.canClick(self.sun_value, self.current_time):
-                    result = (plant_name_list[card.name_index], card)
+                    result = (plantInfo[card.index][c.PLANT_NAME_INDEX], card)
                 break
         return result
     
@@ -267,7 +270,7 @@ class MenuBar():
 
     def setCardFrozenTime(self, plant_name):
         for card in self.card_list:
-            if plant_name_list[card.name_index] == plant_name:
+            if plantInfo[card.index][c.PLANT_NAME_INDEX] == plant_name:
                 card.setFrozenTime(self.current_time)
                 break
 
@@ -309,7 +312,7 @@ class Panel():
         self.panel_image = self.loadFrame(c.PANEL_BACKGROUND)
         self.panel_rect = self.panel_image.get_rect()
         self.panel_rect.x = 0
-        self.panel_rect.y = PANEL_Y_START
+        self.panel_rect.y = c.PANEL_Y_START
 
         
         self.value_image = getSunValueImage(sun_value)
@@ -324,29 +327,29 @@ class Panel():
 
     def setupCards(self, card_list):
         self.card_list = []
-        x = PANEL_X_START - PANEL_X_INTERNAL
-        y = PANEL_Y_START + 43 - PANEL_Y_INTERNAL
+        x = c.PANEL_X_START - c.PANEL_X_INTERNAL
+        y = c.PANEL_Y_START + 43 - c.PANEL_Y_INTERNAL
         for i, index in enumerate(card_list):
             if i % 8 == 0:
-                x = PANEL_X_START - PANEL_X_INTERNAL
-                y += PANEL_Y_INTERNAL
-            x += PANEL_X_INTERNAL
+                x = c.PANEL_X_START - c.PANEL_X_INTERNAL
+                y += c.PANEL_Y_INTERNAL
+            x += c.PANEL_X_INTERNAL
             self.card_list.append(Card(x, y, index, 0.5))
 
     def checkCardClick(self, mouse_pos):
         delete_card = None
         for card in self.selected_cards:
             if delete_card: # when delete a card, move right cards to left
-                card.rect.x -= BAR_CARD_X_INTERNAL
+                card.rect.x -= c.BAR_CARD_X_INTERNAL
             elif card.checkMouseClick(mouse_pos):
-                self.deleteCard(card.name_index)
+                self.deleteCard(card.index)
                 delete_card = card
 
         if delete_card:
             self.selected_cards.remove(delete_card)
             self.selected_num -= 1
 
-        if self.selected_num >= CARD_MAX_NUM:
+        if self.selected_num >= c.BAR_CARD_X_INTERNAL:
             return
 
         for card in self.card_list:
@@ -358,15 +361,15 @@ class Panel():
     def addCard(self, card):
         card.setSelect(False)
         y = 8
-        x = 77 + self.selected_num * BAR_CARD_X_INTERNAL
-        self.selected_cards.append(Card(x, y, card.name_index))
+        x = 77 + self.selected_num * c.BAR_CARD_X_INTERNAL
+        self.selected_cards.append(Card(x, y, card.index))
         self.selected_num += 1
 
     def deleteCard(self, index):
         self.card_list[index].setSelect(True)
 
     def checkStartButtonClick(self, mouse_pos):
-        if self.selected_num < CARD_LIST_NUM:
+        if self.selected_num < c.CARD_LIST_NUM:
             return False
 
         x, y = mouse_pos
@@ -378,7 +381,7 @@ class Panel():
     def getSelectedCards(self):
         card_index_list = []
         for card in self.selected_cards:
-            card_index_list.append(card.name_index)
+            card_index_list.append(card.index)
         return card_index_list
 
     def draw(self, surface):
@@ -390,7 +393,7 @@ class Panel():
         for card in self.selected_cards:
             card.draw(surface)
 
-        if self.selected_num >= CARD_LIST_NUM:
+        if self.selected_num >= c.CARD_LIST_NUM:
             surface.blit(self.button_image, self.button_rect)
 
 # 传送带模式
@@ -473,8 +476,8 @@ class MoveBar():
         y = 6
         index = random.randint(0, len(self.card_pool) - 1)
         card_index = self.card_pool[index]
-        card_name = card_name_list[card_index] + '_move'
-        plant_name = plant_name_list[card_index]
+        card_name = plantInfo[card_index][c.CARD_INDEX] + '_move'
+        plant_name = plantInfo[card_index][c.PLANT_NAME_INDEX]
         self.card_list.append(MoveCard(x, y, card_name, plant_name))
         return True
 
