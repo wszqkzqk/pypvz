@@ -8,8 +8,9 @@ PANEL_Y_START = 87
 PANEL_X_START = 22
 PANEL_Y_INTERNAL = 73
 PANEL_X_INTERNAL = 53
-# 以后可以增加到10，并且增加解锁功能
-CARD_MAX_NUM = 8
+BAR_CARD_X_INTERNAL = 51
+# 以后可以增加解锁功能
+CARD_MAX_NUM = 10
 CARD_LIST_NUM = CARD_MAX_NUM
 
 '''
@@ -194,6 +195,7 @@ class Card():
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
+# 植物栏
 class MenuBar():
     def __init__(self, card_list, sun_value):
         self.loadFrame(c.MENUBAR_BACKGROUND)
@@ -202,7 +204,7 @@ class MenuBar():
         self.rect.y = 0
         
         self.sun_value = sun_value
-        self.card_offset_x = 23
+        self.card_offset_x = 26
         self.setupCards(card_list)
 
     def loadFrame(self, name):
@@ -238,7 +240,7 @@ class MenuBar():
         x = self.card_offset_x
         y = 8
         for index in card_list:
-            x += 55
+            x += BAR_CARD_X_INTERNAL
             self.card_list.append(Card(x, y, index))
 
     def checkCardClick(self, mouse_pos):
@@ -335,7 +337,7 @@ class Panel():
         delete_card = None
         for card in self.selected_cards:
             if delete_card: # when delete a card, move right cards to left
-                card.rect.x -= 55
+                card.rect.x -= BAR_CARD_X_INTERNAL
             elif card.checkMouseClick(mouse_pos):
                 self.deleteCard(card.name_index)
                 delete_card = card
@@ -356,7 +358,7 @@ class Panel():
     def addCard(self, card):
         card.setSelect(False)
         y = 8
-        x = 78 + self.selected_num * 55
+        x = 77 + self.selected_num * BAR_CARD_X_INTERNAL
         self.selected_cards.append(Card(x, y, card.name_index))
         self.selected_num += 1
 
