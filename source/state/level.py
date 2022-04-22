@@ -648,7 +648,6 @@ class Level(tool.State):
                     elif plant.name == c.SPIKEWEED:
                         continue
                     # 在睡莲、花盆上有植物时应当优先攻击其上的植物
-                    # 这一段代码目前未能生效
                     elif plant.name in {c.LILYPAD, '花盆（未实现）'}:
                         map_x, map_y = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
                         if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
@@ -656,12 +655,13 @@ class Level(tool.State):
                             for actualTargetPlant in self.plant_groups[i]:
                                 # 检测同一格的其他植物
                                 if self.map.getMapIndex(actualTargetPlant.rect.centerx, actualTargetPlant.rect.bottom) == (map_x, map_y):
-                                    if actualTargetPlant.name != c.LILYPAD:
+                                    if actualTargetPlant.name != plant.name:
                                         zombie.setAttack(actualTargetPlant)
-                                        continue
-                    zombie.setAttack(plant)
-        else:
-            self.refreshZombieAttack = False    # 生效后需要解除刷新设置
+                                        break
+                        else:
+                            zombie.setAttack(plant)
+                    else:
+                        zombie.setAttack(plant)
 
             for hypno_zombie in self.hypno_zombie_groups[i]:
                 if hypno_zombie.health <= 0:
@@ -675,6 +675,9 @@ class Level(tool.State):
                         zombie.setAttack(hypno_zombie, False)
                     if hypno_zombie.state == c.WALK:
                         hypno_zombie.setAttack(zombie, False)
+
+        else:
+            self.refreshZombieAttack = False    # 生效后需要解除刷新设置
 
     def checkCarCollisions(self):
         for car in self.cars:
