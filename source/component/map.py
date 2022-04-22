@@ -89,7 +89,7 @@ class Map():
         if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
             x -= c.MAP_POOL_OFFSET_X
             y -= c.MAP_POOL_OFFSET_Y
-            return (x // c.GIRD_POOL_X_SIZE, y // c.GRID_POOL_Y_SIZE)
+            return (x // c.GRID_POOL_X_SIZE, y // c.GRID_POOL_Y_SIZE)
         elif self.background_type in {c.BACKGROUND_ROOF, c.BACKGROUND_ROOFNIGHT}:
             x -= c.MAP_ROOF_OFFSET_X
             y -= c.MAP_ROOF_OFFSET_X
@@ -106,11 +106,11 @@ class Map():
     
     def getMapGridPos(self, map_x, map_y):
         if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
-            return (map_x * c.GRID_ROOF_X_SIZE + c.GRID_X_SIZE//2 + c.MAP_ROOF_OFFSET_X,
-                    map_y * c.GRID_ROOF_Y_SIZE + c.GRID_Y_SIZE//5 * 3 + c.MAP_ROOF_OFFSET_Y)
+            return (map_x * c.GRID_POOL_X_SIZE + c.GRID_POOL_X_SIZE//2 + c.MAP_POOL_OFFSET_X,
+                    map_y * c.GRID_POOL_Y_SIZE + c.GRID_POOL_Y_SIZE//5 * 3 + c.MAP_POOL_OFFSET_Y)
         elif self.background_type in {c.BACKGROUND_ROOF, c.BACKGROUND_ROOFNIGHT}:
-            return (map_x * c.GRID_POOL_X_SIZE + c.GRID_X_SIZE//2 + c.MAP_POOL_OFFSET_X,
-                    map_y * c.GRID_POOL_Y_SIZE + 20 * max(0, (6 - map_y)) + c.GRID_Y_SIZE//5 * 3 + c.MAP_POOL_OFFSET_Y)
+            return (map_x * c.GRID_ROOF_X_SIZE + c.GRID_ROOF_X_SIZE//2 + c.MAP_ROOF_OFFSET_X,
+                    map_y * c.GRID_ROOF_Y_SIZE + 20 * max(0, (6 - map_y)) + c.GRID_ROOF_Y_SIZE//5 * 3 + c.MAP_POOL_OFFSET_Y)
         else:
             return (map_x * c.GRID_X_SIZE + c.GRID_X_SIZE//2 + c.MAP_OFFSET_X,
                     map_y * c.GRID_Y_SIZE + c.GRID_Y_SIZE//5 * 3 + c.MAP_OFFSET_Y)
