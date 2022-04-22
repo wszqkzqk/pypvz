@@ -115,8 +115,8 @@ class Map():
             return (map_x * c.GRID_X_SIZE + c.GRID_X_SIZE//2 + c.MAP_OFFSET_X,
                     map_y * c.GRID_Y_SIZE + c.GRID_Y_SIZE//5 * 3 + c.MAP_OFFSET_Y)
     
-    def setMapGridType(self, map_x, map_y, type):
-        self.map[map_y][map_x] = type
+    def setMapGridType(self, map_x, map_y, plot_type):
+        self.map[map_y][map_x] = plot_type
 
     def addMapPlant(self, map_x, map_y, plantName, sleep=False):
         self.map[map_y][map_x][c.MAP_PLANT].add(plantName)

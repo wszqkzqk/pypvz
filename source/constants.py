@@ -105,10 +105,11 @@ MAP_PLOT_TYPE = 'plotType'
 MAP_GRASS = 'grass'
 MAP_WATER = 'water'
 MAP_TILE = 'tile'  # 指屋顶上的瓦片
-MAP_DAMAGED = 'damaged'
+MAP_UNAVAILABLE = 'unavailable' # 指完全不能种植物的地方，包括无草皮的荒地、毁灭菇坑、冰车留下的冰
 MAP_STATE_EMPTY = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_GRASS}  # 由于同一格显然不可能种两个相同的植物，所以用集合
 MAP_STATE_WATER = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_WATER}
 MAP_STATE_TILE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_TILE}
+MAP_STATE_UNAVAILABLE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_UNAVAILABLE}
 
 # 地图相关像素数据
 BACKGROUND_OFFSET_X = 220

@@ -145,7 +145,7 @@ class Level(tool.State):
         print('initBowlingMap')
         for x in range(3, self.map.width):
             for y in range(self.map.height):
-                self.map.setMapGridType(x, y, c.MAP_STATE_TILE) # 将坚果保龄球红线右侧视为屋顶的瓦片以达到不能直接种植植物的效果
+                self.map.setMapGridType(x, y, c.MAP_STATE_UNAVAILABLE) # 将坚果保龄球红线右侧设置为不可种植任何植物
 
     def initState(self):
         # 小游戏才有CHOOSEBAR_TYPE
