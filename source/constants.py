@@ -1,16 +1,21 @@
+# 冒险模式起始关卡
 START_LEVEL_NUM = 1
+# 小游戏模式起始关卡
 START_LITTLE_GAME_NUM = 1
 
+# 窗口标题
 ORIGINAL_CAPTION = 'pypvz'
 
 # 游戏模式
 MODE_ADVENTURE = 'adventure'
 MODE_LITTLEGAME = 'littleGame'
 
+# 窗口大小
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
+# 方格数据
 # 一般
 GRID_X_LEN = 9
 GRID_Y_LEN = 5
@@ -30,6 +35,7 @@ GRID_ROOF_Y_SIZE = 85
 # 游戏速度倍率（调试用）
 GAME_RATE = 1
 
+# 颜色
 WHITE        = (255, 255, 255)
 NAVYBLUE     = ( 60,  60, 100)
 SKY_BLUE     = ( 39, 145, 251)
@@ -40,7 +46,7 @@ PURPLE       = (255,   0, 255)
 GOLD         = (255, 215,   0)
 GREEN        = (  0, 255,   0)
 
-SIZE_MULTIPLIER = 1.3
+# SIZE_MULTIPLIER = 1.3 # 没有用
 
 # 退出游戏按钮
 EXIT = 'exit'
@@ -58,12 +64,12 @@ SHOVEL = 'shovel'
 SHOVEL_BOX = 'shovelBox'
 
 
-#GAME INFO DICTIONARY KEYS
+# GAME INFO字典键值
 CURRENT_TIME = 'current time'
 LEVEL_NUM = 'level num'
 LITTLEGAME_NUM = 'littleGame num'
 
-#STATES FOR ENTIRE GAME
+# 整个游戏的状态
 MAIN_MENU = 'main menu'
 LOAD_SCREEN = 'load screen'
 GAME_LOSE = 'game los'
@@ -75,13 +81,13 @@ OPTION_ADVENTURE = 'Adventure'
 GAME_LOOSE_IMAGE = 'GameLoose'
 GAME_VICTORY_IMAGE = 'GameVictory'
 
-#MAP COMPONENTS
+# 地图相关内容
 BACKGROUND_NAME = 'Background'
 BACKGROUND_TYPE = 'background_type'
 INIT_SUN_NAME = 'init_sun_value'
 ZOMBIE_LIST = 'zombie_list'
 
-#BACKGROUND
+# 地图类型
 BACKGROUND_DAY = 0
 BACKGROUND_NIGHT = 1
 BACKGROUND_POOL = 2
@@ -92,6 +98,7 @@ BACKGROUND_WALLNUTBOWLING = 6
 BACKGROUND_SINGLE = 7
 BACKGROUND_TRIPLE = 8
 
+# 地图单元格属性
 MAP_PLANT = 'plantnames'
 MAP_SLEEP = 'sleep' # 有没有休眠的蘑菇，作是否能种植咖啡豆的判断
 MAP_PLOT_TYPE = 'plotType'
@@ -103,15 +110,16 @@ MAP_STATE_EMPTY = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_GRASS}  #
 MAP_STATE_WATER = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_WATER}
 MAP_STATE_TILE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_TILE}
 
+# 地图相关像素数据
 BACKGROUND_OFFSET_X = 220
 MAP_OFFSET_X = 35
 MAP_OFFSET_Y = 100
-MAP_POOL_OFFSET_X = 42  # 暂时还不清楚数据
-MAP_POOL_OFFSET_Y = 115 # 暂时还不清楚数据
+MAP_POOL_OFFSET_X = 42
+MAP_POOL_OFFSET_Y = 115
 MAP_ROOF_OFFSET_X = 35  # 暂时还不清楚数据
 MAP_ROOF_OFFSET_Y = 105 # 暂时还不清楚数据
 
-#MENUBAR
+# 植物选择菜单栏、传送带菜单栏等类型设定
 CHOOSEBAR_TYPE = 'choosebar_type'
 CHOOSEBAR_STATIC = 0
 CHOOSEBAR_MOVE = 1
@@ -128,8 +136,7 @@ PANEL_X_START = 22
 PANEL_Y_INTERNAL = 73
 PANEL_X_INTERNAL = 53
 BAR_CARD_X_INTERNAL = 51
-# 这里以后可以增加解锁功能
-CARD_MAX_NUM = 10
+CARD_MAX_NUM = 10   # 这里以后可以增加解锁功能，从最初的6格逐渐解锁到10格
 CARD_LIST_NUM = CARD_MAX_NUM
 
 # 所选植物信息索引
@@ -138,13 +145,15 @@ CARD_INDEX = 1
 SUN_INDEX = 2
 FROZEN_INDEX = 3
 
+# 传送带模式中的刷新间隔和移动速率
 MOVEBAR_CARD_FRESH_TIME = 6000
 CARD_MOVE_TIME = 60
 
-#PLANT INFO
+# 植物相关信息
 PLANT_IMAGE_RECT = 'plant_image_rect'
 CAR = 'car'
 SUN = 'Sun'
+# 植物名称
 SUNFLOWER = 'SunFlower'
 PEASHOOTER = 'Peashooter'
 SNOWPEASHOOTER = 'SnowPea'
@@ -168,23 +177,25 @@ REDWALLNUTBOWLING = 'RedWallNutBowling'
 LILYPAD = 'LilyPad'
 TORCHWOOD = 'TorchWood'
 
+# 植物生命值
 PLANT_HEALTH = 300
 WALLNUT_HEALTH = 4000
 WALLNUT_CRACKED1_HEALTH = 4000//3 * 2
 WALLNUT_CRACKED2_HEALTH = 4000//3
 WALLNUT_BOWLING_DAMAGE = 550
 
+# 阳光生成属性
 PRODUCE_SUN_INTERVAL = 4250 # 基准
 FLOWER_SUN_INTERVAL = 24000
 SUN_LIVE_TIME = 10000
 SUN_VALUE = 25
 
+# 僵尸冷冻
 ICE_SLOW_TIME = 10000
-
 FREEZE_TIME = 7500
 ICETRAP = 'IceTrap'
 
-#PLANT CARD INFO
+# 植物卡片信息
 CARD_SUNFLOWER = 'card_sunflower'
 CARD_PEASHOOTER = 'card_peashooter'
 CARD_SNOWPEASHOOTER = 'card_snowpea'
@@ -206,7 +217,7 @@ CARD_REDWALLNUT = 'card_redwallnut'
 CARD_LILYPAD = 'card_lilypad'
 CARD_TORCHWOOD = 'card_torchwood'
 
-#BULLET INFO
+# 子弹信息
 # 子弹类型
 BULLET_PEA = 'PeaNormal'
 BULLET_PEA_ICE = 'PeaIce'
@@ -220,7 +231,7 @@ BULLET_DAMAGE_FIREBALL_RANGE = 13
 BULLET_EFFECT_ICE = 'ice'
 BULLET_EFFECT_UNICE = 'unice'
 
-#ZOMBIE INFO
+# 僵尸信息
 ZOMBIE_IMAGE_RECT = 'zombie_image_rect'
 ZOMBIE_HEAD = 'ZombieHead'
 NORMAL_ZOMBIE = 'Zombie'
@@ -239,19 +250,23 @@ ZOMBIE_ASH_DAMAGE = 'ashDamage' # 灰烬植物攻击，直接伤害本体
 ZOMBIE_WALLNUT_BOWLING_DANMAGE = 'wallnutBowlingDamage' # 坚果保龄球冲撞伤害
 
 # 僵尸生命值设置
+# 有关本体
 LOSTHEAD_HEALTH = 70
 NORMAL_HEALTH = 200 # 普通僵尸生命值
-
+# 有关一类防具
 CONEHEAD_HEALTH = 370
 BUCKETHEAD_HEALTH = 1100
+# 有关二类防具
 NEWSPAPER_HEALTH = 150
 
+# 僵尸行动信息
 ATTACK_INTERVAL = 500
 ZOMBIE_WALK_INTERVAL = 60  # 僵尸步行间隔
 
+# 僵尸生成位置
 ZOMBIE_START_X = SCREEN_WIDTH + 50
 
-#STATE
+# 状态类型
 IDLE = 'idle'
 FLY = 'fly'
 EXPLODE = 'explode'
@@ -264,6 +279,6 @@ CRY = 'cry'
 FREEZE = 'freeze'
 SLEEP = 'sleep'
 
-#LEVEL STATE
+# 关卡状态
 CHOOSE = 'choose'
 PLAY = 'play'
