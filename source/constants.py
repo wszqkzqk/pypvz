@@ -237,6 +237,14 @@ BULLET_DAMAGE_FIREBALL_RANGE = 13
 BULLET_EFFECT_ICE = 'ice'
 BULLET_EFFECT_UNICE = 'unice'
 
+# 杨桃子弹
+# 子弹方向
+STAR_FORWARD_UP = 'forwardUp'   # 向前上方
+STAR_FORWARD_DOWN = 'forwardDown'   #向前下方
+STAR_BACKWARD = 'backward'  #向后
+STAR_UPWARD = 'upward'  # 向上
+STAR_DOWNWARD = 'downward'  # 向下
+
 # 僵尸信息
 ZOMBIE_IMAGE_RECT = 'zombie_image_rect'
 ZOMBIE_HEAD = 'ZombieHead'

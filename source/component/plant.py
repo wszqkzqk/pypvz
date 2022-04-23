@@ -34,7 +34,7 @@ class Car(pg.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
-
+# 豌豆及孢子类普通子弹
 class Bullet(pg.sprite.Sprite):
     def __init__(self, x, start_y, dest_y, name, damage, effect=False, passedTorchWood=None):
         pg.sprite.Sprite.__init__(self)
@@ -107,9 +107,11 @@ class Bullet(pg.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
-# 杨桃的子弹，看作豌豆、孢子类子弹的特殊子类
+# 杨桃的子弹
 class StarBullet(Bullet):
-    def __init__(self, x, y, name):
+    def __init__(self, x, start_y, name, damage, direction):    # direction指星星飞行方向
+        pg.sprite.Sprite.__init__(self)
+
         self.name = name
         self.frames = []
         self.frame_index = 0
@@ -117,7 +119,59 @@ class StarBullet(Bullet):
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.x = x
-        self.rect.y = y
+        self.rect.y = start_y
+        self.direction = direction
+        self.damage = damage
+        self.state = c.FLY
+        self.current_time = 0
+
+    def loadFrames(self, frames, name):
+        frame_list = tool.GFX[name]
+        if name in tool.PLANT_RECT:
+            data = tool.PLANT_RECT[name]
+            x, y, width, height = data['x'], data['y'], data['width'], data['height']
+        else:
+            x, y = 0, 0
+            rect = frame_list[0].get_rect()
+            width, height = rect.w, rect.h
+
+        for frame in frame_list:
+            frames.append(tool.get_image(frame, x, y, width, height))
+
+    def load_images(self):
+        self.fly_frames = []
+        self.explode_frames = []
+
+        fly_name = self.name
+        explode_name = 'PeaNormalExplode'
+
+        self.loadFrames(self.fly_frames, fly_name)
+        self.loadFrames(self.explode_frames, explode_name)
+
+        self.frames = self.fly_frames
+
+    def update(self, game_info):
+        self.current_time = game_info[c.CURRENT_TIME]
+        if self.state == c.FLY:
+            if self.rect.y != self.dest_y:
+                self.rect.y += self.y_vel
+                if self.y_vel * (self.dest_y - self.rect.y) < 0:
+                    self.rect.y = self.dest_y
+            self.rect.x += self.x_vel
+            if self.rect.x > c.SCREEN_WIDTH:
+                self.kill()
+        elif self.state == c.EXPLODE:
+            if (self.current_time - self.explode_timer) > 250:
+                self.kill()
+
+    def setExplode(self):
+        self.state = c.EXPLODE
+        self.explode_timer = self.current_time
+        self.frames = self.explode_frames
+        self.image = self.frames[self.frame_index]
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
 
 
 class Plant(pg.sprite.Sprite):
