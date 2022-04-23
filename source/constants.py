@@ -181,6 +181,7 @@ WALLNUTBOWLING = 'WallNutBowling'
 REDWALLNUTBOWLING = 'RedWallNutBowling'
 LILYPAD = 'LilyPad'
 TORCHWOOD = 'TorchWood'
+STARFRUIT = 'StarFruit'
 
 # 植物生命值
 PLANT_HEALTH = 300
@@ -222,6 +223,7 @@ CARD_HYPNOSHROOM = 'card_hypnoshroom'
 CARD_REDWALLNUT = 'card_redwallnut'
 CARD_LILYPAD = 'card_lilypad'
 CARD_TORCHWOOD = 'card_torchwood'
+CARD_STARFRUIT = 'card_starfruit'
 
 # 子弹信息
 # 子弹类型
@@ -237,7 +239,10 @@ BULLET_DAMAGE_FIREBALL_RANGE = 13
 BULLET_EFFECT_ICE = 'ice'
 BULLET_EFFECT_UNICE = 'unice'
 
+# 特殊子弹
 # 杨桃子弹
+# 子弹名称
+BULLET_STAR = 'StarBullet'
 # 子弹方向
 STAR_FORWARD_UP = 'forwardUp'   # 向前上方
 STAR_FORWARD_DOWN = 'forwardDown'   #向前下方

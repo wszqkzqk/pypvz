@@ -109,10 +109,10 @@ class Bullet(pg.sprite.Sprite):
 
 # 杨桃的子弹
 class StarBullet(Bullet):
-    def __init__(self, x, start_y, name, damage, direction):    # direction指星星飞行方向
+    def __init__(self, x, start_y, damage, direction):    # direction指星星飞行方向
         pg.sprite.Sprite.__init__(self)
 
-        self.name = name
+        self.name = c.BULLET_STAR
         self.frames = []
         self.frame_index = 0
         self.load_images()
@@ -143,7 +143,7 @@ class StarBullet(Bullet):
         self.explode_frames = []
 
         fly_name = self.name
-        explode_name = 'PeaNormalExplode'
+        explode_name = 'StarBulletExplode'
 
         self.loadFrames(self.fly_frames, fly_name)
         self.loadFrames(self.explode_frames, explode_name)
@@ -153,12 +153,20 @@ class StarBullet(Bullet):
     def update(self, game_info):
         self.current_time = game_info[c.CURRENT_TIME]
         if self.state == c.FLY:
-            if self.rect.y != self.dest_y:
-                self.rect.y += self.y_vel
-                if self.y_vel * (self.dest_y - self.rect.y) < 0:
-                    self.rect.y = self.dest_y
-            self.rect.x += self.x_vel
-            if self.rect.x > c.SCREEN_WIDTH:
+            if self.direction == c.STAR_FORWARD_UP:
+                self.rect.x += 7
+                self.rect.y -= 7
+            elif self.direction == c.STAR_FORWARD_DOWN:
+                self.rect.x += 7
+                self.rect.y += 7
+            elif self.direction == c.STAR_UPWARD:
+                self.rect.y -= 10
+            elif self.direction == c.STAR_DOWNWARD:
+                self.rect.y += 10
+            else:
+                self.rect.x -= 10
+            if ((self.rect.x > c.SCREEN_WIDTH) or (self.rect.x < 0)
+                or (self.rect.y > c.SCREEN_HEIGHT) or (self.rect.y < 0)):
                 self.kill()
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
@@ -1112,3 +1120,29 @@ class TorchWood(Plant):
                         self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
                                             c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False, passedTorchWood=self.rect.x))
                         i.kill()
+
+class StarFruit(Plant):
+    def __init__(self, x, y, bullet_group, global_bullet_group):
+        Plant.__init__(self, x, y, c.STARFRUIT, c.PLANT_HEALTH, bullet_group)
+        self.global_bullet_group = global_bullet_group
+        self.shoot_timer = 0
+
+    def canAttack(self, zombie):
+        if zombie.state != c.DIE:
+            if (self.rect.x >= zombie.rect.x) and abs(zombie.rect.bottom - self.rect.bottom) <= 30:  # 对于同行且在杨桃后的僵尸
+                return True
+            elif 0.9*abs(zombie.rect.y - self.rect.y) <= abs(zombie.rect.x - self.rect.x) <= 1.1*abs(zombie.rect.y - self.rect.y):
+                return True
+            elif zombie.rect.left <= self.rect.x <= zombie.rect.right:
+                return True
+        return False
+
+    def attacking(self):
+        if (self.current_time - self.shoot_timer) > 1400:
+            self.bullet_group.add(StarBullet(self.rect.left + 10, self.rect.y, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD))
+            self.global_bullet_group.add(StarBullet(self.rect.centerx, self.rect.bottom - self.rect.h + 5, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD))
+            self.global_bullet_group.add(StarBullet(self.rect.centerx, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD))
+            self.global_bullet_group.add(StarBullet(self.rect.left + 5, self.rect.y + 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN))
+            self.global_bullet_group.add(StarBullet(self.rect.left + 5, self.rect.y - 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_UP))
+            self.shoot_timer = self.current_time
+

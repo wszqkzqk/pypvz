@@ -202,6 +202,7 @@ class Zombie(pg.sprite.Sprite):
 
     def setDamage(self, damage, effect=False, damageType=c.ZOMBIE_COMMON_DAMAGE):
         # 冰冻减速效果
+        print(damage, effect, damageType)
         if effect == c.BULLET_EFFECT_ICE:
             if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
                 if not self.helmetType2:

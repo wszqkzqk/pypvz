@@ -81,6 +81,10 @@ plantInfo = (#元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 c.CARD_TORCHWOOD,
                 175,
                 7500),
+            (c.STARFRUIT,
+                c.CARD_STARFRUIT,
+                125,
+                7500),
             # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
             (c.WALLNUTBOWLING,
                 c.CARD_WALLNUT,
@@ -349,7 +353,7 @@ class Panel():
             self.selected_cards.remove(delete_card)
             self.selected_num -= 1
 
-        if self.selected_num >= c.BAR_CARD_X_INTERNAL:
+        if self.selected_num >= c.CARD_MAX_NUM:
             return
 
         for card in self.card_list:

@@ -97,6 +97,7 @@ class Level(tool.State):
         self.zombie_groups = []
         self.hypno_zombie_groups = [] #zombies who are hypno after eating hypnoshroom
         self.bullet_groups = []
+        self.global_bullet_group = pg.sprite.Group()   # 全局可用的子弹
         for i in range(self.map_y_len):
             self.plant_groups.append(pg.sprite.Group())
             self.zombie_groups.append(pg.sprite.Group())
@@ -360,6 +361,7 @@ class Level(tool.State):
                     self.createZombie(data[1])
                     self.zombie_list.remove(data)
 
+        self.global_bullet_group.update((self.game_info))
         for i in range(self.map_y_len):
             self.bullet_groups[i].update(self.game_info)
             self.plant_groups[i].update(self.game_info)
@@ -434,6 +436,7 @@ class Level(tool.State):
 
         # 检查碰撞啥的
         self.checkBulletCollisions()
+        self.checkGlobalBulletCollision()
         self.checkZombieCollisions()
         self.checkPlants()
         self.checkCarCollisions()
@@ -535,6 +538,8 @@ class Level(tool.State):
             new_plant = plant.LilyPad(x, y)
         elif self.plant_name == c.TORCHWOOD:
             new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y])
+        elif self.plant_name == c.STARFRUIT:
+            new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self.global_bullet_group)
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()
@@ -630,6 +635,19 @@ class Level(tool.State):
                             for rangeZombie in self.zombie_groups[i]:
                                 if abs(rangeZombie.rect.x - bullet.rect.x) <= (c.GRID_X_SIZE // 2):
                                     rangeZombie.setDamage(c.BULLET_DAMAGE_FIREBALL_RANGE, effect=False, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+
+
+    def checkGlobalBulletCollision(self):
+        collided_func = pg.sprite.collide_circle_ratio(0.7)
+        for i in range(self.map_y_len):
+            for globalBullet in self.global_bullet_group:
+                if globalBullet.state == c.FLY:
+                    zombie = pg.sprite.spritecollideany(globalBullet, self.zombie_groups[i], collided_func)
+                    if zombie and zombie.state != c.DIE:
+                        # 这里生效代表已经发生了碰撞
+                        zombie.setDamage(globalBullet.damage, damageType=c.ZOMBIE_COMMON_DAMAGE)    # 这里设定刻意与原版不同：逻辑上，杨桃是斜着打的，伤害应当可用穿透二类防具
+                        globalBullet.setExplode()
+
 
     def checkZombieCollisions(self):
         if self.bar_type == c.CHOSSEBAR_BOWLING:
@@ -820,6 +838,24 @@ class Level(tool.State):
                     plant.setAttack()
             elif plant.state != c.IDLE:
                 plant.setIdle()
+        elif plant.name == c.STARFRUIT:
+            can_attack = False
+            if (plant.state == c.IDLE):
+                '''
+                totalZombie = 0
+                for zombieColumn in range(self.map_y_len):
+                    totalZombie += len(self.zombie_groups[zombieColumn])
+                if totalZombie > 0:   # 只要场上有僵尸就需要判断
+                '''
+                for zombie_group in self.zombie_groups: # 遍历循环所有僵尸
+                    for zombie in zombie_group:
+                        if plant.canAttack(zombie):
+                            can_attack = True
+                            break
+            if plant.state == c.IDLE and can_attack:
+                plant.setAttack()
+            elif (plant.state == c.ATTACK and not can_attack):
+                plant.setIdle()
         elif(plant.name == c.WALLNUTBOWLING or
              plant.name == c.REDWALLNUTBOWLING):
             pass
@@ -920,6 +956,7 @@ class Level(tool.State):
             self.menubar.draw(surface)
             for car in self.cars:
                 car.draw(surface)
+            self.global_bullet_group.draw(surface)
             for i in range(self.map_y_len):
                 self.plant_groups[i].draw(surface)
                 self.zombie_groups[i].draw(surface)
