@@ -76,6 +76,8 @@ class Bullet(pg.sprite.Sprite):
         fly_name = self.name
         if self.name == c.BULLET_MUSHROOM:
             explode_name = 'BulletMushRoomExplode'
+        elif self.name == c.BULLET_PEA_ICE:
+            explode_name = 'PeaIceExplode'
         else:
             explode_name = 'PeaNormalExplode'
 

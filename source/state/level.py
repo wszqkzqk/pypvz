@@ -638,7 +638,7 @@ class Level(tool.State):
 
 
     def checkGlobalBulletCollision(self):
-        collided_func = pg.sprite.collide_circle_ratio(0.7)
+        collided_func = pg.sprite.collide_circle_ratio(0.6)
         for i in range(self.map_y_len):
             for globalBullet in self.global_bullet_group:
                 if globalBullet.state == c.FLY:
@@ -841,12 +841,6 @@ class Level(tool.State):
         elif plant.name == c.STARFRUIT:
             can_attack = False
             if (plant.state == c.IDLE):
-                '''
-                totalZombie = 0
-                for zombieColumn in range(self.map_y_len):
-                    totalZombie += len(self.zombie_groups[zombieColumn])
-                if totalZombie > 0:   # 只要场上有僵尸就需要判断
-                '''
                 for zombie_group in self.zombie_groups: # 遍历循环所有僵尸
                     for zombie in zombie_group:
                         if plant.canAttack(zombie):
