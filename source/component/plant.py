@@ -48,7 +48,7 @@ class Bullet(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.y = start_y
         self.dest_y = dest_y
-        self.y_vel = 4 if (dest_y > start_y) else -4
+        self.y_vel = 15 if (dest_y > start_y) else -15
         self.x_vel = 10
         self.damage = damage
         self.effect = effect
@@ -107,7 +107,7 @@ class Bullet(pg.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
-# 暂时是杨桃的子弹，以后可以扩展到非定行飞行的子弹
+# 杨桃的子弹，看作豌豆、孢子类子弹的特殊子类
 class StarBullet(Bullet):
     def __init__(self, x, y, name):
         self.name = name
@@ -324,11 +324,12 @@ class RepeaterPea(Plant):
 
 
 class ThreePeaShooter(Plant):
-    def __init__(self, x, y, bullet_groups, map_y):
+    def __init__(self, x, y, bullet_groups, map_y, background_type):
         Plant.__init__(self, x, y, c.THREEPEASHOOTER, c.PLANT_HEALTH, None)
         self.shoot_timer = 0
         self.map_y = map_y
         self.bullet_groups = bullet_groups
+        self.background_type = background_type
 
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
@@ -337,7 +338,10 @@ class ThreePeaShooter(Plant):
                 tmp_y = self.map_y + (i - 1)
                 if tmp_y < 0 or tmp_y >= c.GRID_Y_LEN:
                     continue
-                dest_y = self.rect.y + (i - 1) * c.GRID_Y_SIZE + offset_y
+                if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG, c.BACKGROUND_ROOF, c.BACKGROUND_ROOFNIGHT}:
+                    dest_y = self.rect.y + (i - 1) * c.GRID_POOL_Y_SIZE + offset_y
+                else:
+                    dest_y = self.rect.y + (i - 1) * c.GRID_Y_SIZE + offset_y
                 self.bullet_groups[tmp_y].add(Bullet(self.rect.right  - 15, self.rect.y, dest_y,
                                                      c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time

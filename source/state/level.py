@@ -504,7 +504,7 @@ class Level(tool.State):
         elif self.plant_name == c.CHERRYBOMB:
             new_plant = plant.CherryBomb(x, y)
         elif self.plant_name == c.THREEPEASHOOTER:
-            new_plant = plant.ThreePeaShooter(x, y, self.bullet_groups, map_y)
+            new_plant = plant.ThreePeaShooter(x, y, self.bullet_groups, map_y, self.map.background_type)
         elif self.plant_name == c.REPEATERPEA:
             new_plant = plant.RepeaterPea(x, y, self.bullet_groups[map_y])
         elif self.plant_name == c.CHOMPER:

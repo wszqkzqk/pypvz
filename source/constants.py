@@ -46,8 +46,6 @@ PURPLE       = (255,   0, 255)
 GOLD         = (255, 215,   0)
 GREEN        = (  0, 255,   0)
 
-# SIZE_MULTIPLIER = 1.3 # 没有用
-
 # 退出游戏按钮
 EXIT = 'exit'
 # 当想要一个特殊值时用
@@ -76,6 +74,7 @@ GAME_LOSE = 'game los'
 GAME_VICTORY = 'game victory'
 LEVEL = 'level'
 
+# 界面图片文件名
 MAIN_MENU_IMAGE = 'MainMenu'
 OPTION_ADVENTURE = 'Adventure'
 GAME_LOOSE_IMAGE = 'GameLoose'
@@ -102,10 +101,15 @@ BACKGROUND_TRIPLE = 8
 MAP_PLANT = 'plantnames'
 MAP_SLEEP = 'sleep' # 有没有休眠的蘑菇，作是否能种植咖啡豆的判断
 MAP_PLOT_TYPE = 'plotType'
+# 地图单元格区域类型
 MAP_GRASS = 'grass'
 MAP_WATER = 'water'
 MAP_TILE = 'tile'  # 指屋顶上的瓦片
-MAP_UNAVAILABLE = 'unavailable' # 指完全不能种植物的地方，包括无草皮的荒地、毁灭菇坑、冰车留下的冰
+MAP_UNAVAILABLE = 'unavailable' # 指完全不能种植物的地方，包括无草皮的荒地和坚果保龄球等红线右侧
+# 特殊的：冰车冰路（自动消除、辣椒消除）、毁灭菇坑（自动消除），由于这些只能在关卡中产生而不能初始化产生，所以只有区域类型没有初始状态
+MAP_FROZEN = 'frozen'
+MAP_HOLE = 'hole'
+# 地图单元格状态
 MAP_STATE_EMPTY = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_GRASS}  # 由于同一格显然不可能种两个相同的植物，所以用集合
 MAP_STATE_WATER = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_WATER}
 MAP_STATE_TILE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_TILE}
@@ -181,8 +185,9 @@ TORCHWOOD = 'TorchWood'
 # 植物生命值
 PLANT_HEALTH = 300
 WALLNUT_HEALTH = 4000
-WALLNUT_CRACKED1_HEALTH = 4000//3 * 2
-WALLNUT_CRACKED2_HEALTH = 4000//3
+WALLNUT_CRACKED1_HEALTH = WALLNUT_HEALTH//3 * 2
+WALLNUT_CRACKED2_HEALTH = WALLNUT_HEALTH//3
+# 坚果保龄球攻击伤害
 WALLNUT_BOWLING_DAMAGE = 550
 
 # 阳光生成属性
