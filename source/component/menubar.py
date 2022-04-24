@@ -4,7 +4,7 @@ import pygame as pg
 from .. import tool
 from .. import constants as c
 
-plantInfo = (#元组 (植物名称, 卡片名称, 阳光, 冷却时间)
+plantInfo = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (c.PEASHOOTER,
                 c.CARD_PEASHOOTER,
                 100,

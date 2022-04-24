@@ -536,7 +536,7 @@ class Level(tool.State):
         elif self.plant_name == c.TORCHWOOD:
             new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y])
         elif self.plant_name == c.STARFRUIT:
-            new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y])
+            new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self)
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()
@@ -618,9 +618,12 @@ class Level(tool.State):
         self.shovel_rect.y = self.shovel_positon[1]
 
     def checkBulletCollisions(self):
-        collided_func = pg.sprite.collide_circle_ratio(0.7)
         for i in range(self.map_y_len):
             for bullet in self.bullet_groups[i]:
+                if bullet.name == c.BULLET_STAR:
+                    collided_func = pg.sprite.collide_circle_ratio(1)
+                else:
+                    collided_func = pg.sprite.collide_circle_ratio(0.7)
                 if bullet.state == c.FLY:
                     zombie = pg.sprite.spritecollideany(bullet, self.zombie_groups[i], collided_func)
                     if zombie and zombie.state != c.DIE:
