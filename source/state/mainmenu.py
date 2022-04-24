@@ -142,7 +142,7 @@ class Menu(tool.State):
                 self.checkLittleGameClick(mouse_pos)
         else:
             # 点到后播放动画
-            if(self.current_time - self.option_timer) > 200:
+            if(self.current_time - self.option_timer) > 150:
                 self.option_frame_index += 1
                 if self.option_frame_index >= 2:
                     self.option_frame_index = 0
