@@ -71,23 +71,40 @@ class Menu(tool.State):
         self.option_timer = 0
         self.option_clicked = False
     
-    def checkHilight(self, x, y):
-        # 高亮冒险模式按钮
+    def inAreaAdventure(self, x, y):
         if (x >= self.option_rect.x and x <= self.option_rect.right and
             y >= self.option_rect.y and y <= self.option_rect.bottom):
-            self.adventure_highlight_time = self.current_time
-        elif (x >= self.exit_rect.x - 20 and x <= self.exit_rect.right + 20 and
-            y >= self.exit_rect.y - 5 and y <= self.exit_rect.bottom + 10):
-            self.exit_highlight_time = self.current_time
-        elif (x >= self.littleGame_rect.x and x <= self.littleGame_rect.right and
+            return True
+        else:
+            return False
+    
+    def inAreaExit(self, x, y):
+        if (x >= self.exit_rect.x and x <= self.exit_rect.right and
+            y >= self.exit_rect.y and y <= self.exit_rect.bottom):
+            return True
+        else:
+            return False
+    
+    def inAreaLittleGame(self, x, y):
+        if (x >= self.littleGame_rect.x and x <= self.littleGame_rect.right and
             y >= self.littleGame_rect.y and y <= self.littleGame_rect.bottom):
+            return True
+        else:
+            return False
+
+    def checkHilight(self, x, y):
+        # 高亮冒险模式按钮
+        if self.inAreaAdventure(x, y):
+            self.adventure_highlight_time = self.current_time
+        elif self.inAreaExit(x, y):
+            self.exit_highlight_time = self.current_time
+        elif self.inAreaLittleGame(x, y):
             self.littleGame_highlight_time = self.current_time
 
 
     def checkAdventureClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.option_rect.x and x <= self.option_rect.right and
-           y >= self.option_rect.y and y <= self.option_rect.bottom):
+        if self.inAreaAdventure(x, y):
             self.option_clicked = True
             self.option_timer = self.option_start = self.current_time
         self.persist[c.LITTLEGAME_BUTTON] = False
@@ -97,16 +114,14 @@ class Menu(tool.State):
     def checkExitClick(self, mouse_pos):
         x, y = mouse_pos
         # 这里检查范围应当拟合花瓶下部整个区域
-        if(x >= self.exit_rect.x - 20 and x <= self.exit_rect.right + 20 and
-           y >= self.exit_rect.y - 5 and y <= self.exit_rect.bottom + 10):
+        if self.inAreaExit(x, y):
             self.done = True
             self.next = c.EXIT
 
     # 检查有没有按到小游戏
     def checkLittleGameClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.littleGame_rect.x and x <= self.littleGame_rect.right and
-           y >= self.littleGame_rect.y and y <= self.littleGame_rect.bottom):
+        if self.inAreaLittleGame(x, y):
             self.done = True
             # 确实小游戏还是用的level
             # 因为目前暂时没有生存模式和解谜模式，所以暂时设置为这样
