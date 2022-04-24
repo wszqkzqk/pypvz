@@ -27,9 +27,10 @@ class Menu(tool.State):
         self.bg_rect.y = 0
         
     def setupOption(self):
+        # 冒险模式
         self.option_frames = []
-        frame_names = [c.OPTION_ADVENTURE + '_0', c.OPTION_ADVENTURE + '_1']
-        frame_rect = [0, 0, 330, 140]
+        frame_names = (c.OPTION_ADVENTURE + '_0', c.OPTION_ADVENTURE + '_1')
+        frame_rect = (0, 0, 330, 140)
         
         for name in frame_names:
             self.option_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1))
@@ -38,25 +39,51 @@ class Menu(tool.State):
         self.option_rect = self.option_image.get_rect()
         self.option_rect.x = 400
         self.option_rect.y = 60
+        self.adventure_highlight_time = 0
         
         # 退出按钮
-        frame_rect = [0, 0, 47, 27]
-        self.option_exit = tool.get_image_menu(tool.GFX[c.EXIT], *frame_rect, c.BLACK, 1.1)
-        self.exit_rect = self.option_exit.get_rect()
+        self.exit_frames = []
+        exit_frame_names = (c.EXIT + '_0', c.EXIT + '_1')
+        exit_frame_rect = (0, 0, 47, 27)
+        for name in exit_frame_names:
+            self.exit_frames.append(tool.get_image_menu(tool.GFX[name], *exit_frame_rect, c.BLACK, 1.1))
+        self.exit_frame_index = 0
+        self.exit_image = self.exit_frames[self.exit_frame_index]
+        self.exit_rect = self.exit_image.get_rect()
         self.exit_rect.x = 730
         self.exit_rect.y = 507
+        self.exit_highlight_time = 0
 
         # 小游戏
-        frame_rect = [0, 7, 317, 135]
-        self.option_littleGame = tool.get_image_menu(tool.GFX[c.LITTLEGAME_BUTTON], *frame_rect, c.BLACK, 1)
-        self.option_littleGame_rect = self.option_littleGame.get_rect()
-        self.option_littleGame_rect.x = 397
-        self.option_littleGame_rect.y = 175
+        self.littleGame_frames = []
+        littleGame_frame_names = (c.LITTLEGAME_BUTTON + '_0', c.LITTLEGAME_BUTTON + '_1')
+        littleGame_frame_rect = (0, 7, 317, 135)
+        for name in littleGame_frame_names:
+            self.littleGame_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1))
+        self.littleGame_frame_index = 0
+        self.littleGame_image = self.littleGame_frames[self.littleGame_frame_index]
+        self.littleGame_rect = self.littleGame_image.get_rect()
+        self.littleGame_rect.x = 397
+        self.littleGame_rect.y = 175
+        self.littleGame_highlight_time = 0
 
         self.option_start = 0
         self.option_timer = 0
         self.option_clicked = False
     
+    def checkHilight(self, x, y):
+        # 高亮冒险模式按钮
+        if (x >= self.option_rect.x and x <= self.option_rect.right and
+            y >= self.option_rect.y and y <= self.option_rect.bottom):
+            self.adventure_highlight_time = self.current_time
+        elif (x >= self.exit_rect.x - 20 and x <= self.exit_rect.right + 20 and
+            y >= self.exit_rect.y - 5 and y <= self.exit_rect.bottom + 10):
+            self.exit_highlight_time = self.current_time
+        elif (x >= self.littleGame_rect.x and x <= self.littleGame_rect.right and
+            y >= self.littleGame_rect.y and y <= self.littleGame_rect.bottom):
+            self.littleGame_highlight_time = self.current_time
+
+
     def checkAdventureClick(self, mouse_pos):
         x, y = mouse_pos
         if(x >= self.option_rect.x and x <= self.option_rect.right and
@@ -78,8 +105,8 @@ class Menu(tool.State):
     # 检查有没有按到小游戏
     def checkLittleGameClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.option_littleGame_rect.x and x <= self.option_littleGame_rect.right and
-           y >= self.option_littleGame_rect.y and y <= self.option_littleGame_rect.bottom):
+        if(x >= self.littleGame_rect.x and x <= self.littleGame_rect.right and
+           y >= self.littleGame_rect.y and y <= self.littleGame_rect.bottom):
             self.done = True
             # 确实小游戏还是用的level
             # 因为目前暂时没有生存模式和解谜模式，所以暂时设置为这样
@@ -90,6 +117,25 @@ class Menu(tool.State):
         
         # 没有选到选项时，检查有没有点到选项
         if not self.option_clicked:
+            # 先检查选项高亮预览
+            x, y = pg.mouse.get_pos()
+            self.checkHilight(x, y)
+            if (self.current_time - self.adventure_highlight_time) < 80:
+                self.option_frame_index = 1
+            else:
+                self.option_frame_index = 0
+            self.option_image = self.option_frames[self.option_frame_index]
+            if (self.current_time - self.exit_highlight_time) < 80:
+                self.exit_frame_index = 1
+            else:
+                self.exit_frame_index = 0
+            self.exit_image = self.exit_frames[self.exit_frame_index]
+            if (self.current_time - self.littleGame_highlight_time) < 80:
+                self.littleGame_frame_index= 1
+            else:
+                self.littleGame_frame_index = 0
+            self.littleGame_image = self.littleGame_frames[self.littleGame_frame_index]
+
             if mouse_pos:
                 self.checkAdventureClick(mouse_pos)
                 self.checkExitClick(mouse_pos)
@@ -108,5 +154,5 @@ class Menu(tool.State):
 
         surface.blit(self.bg_image, self.bg_rect)
         surface.blit(self.option_image, self.option_rect)
-        surface.blit(self.option_exit, self.exit_rect)
-        surface.blit(self.option_littleGame, self.option_littleGame_rect)
+        surface.blit(self.exit_image, self.exit_rect)
+        surface.blit(self.littleGame_image, self.littleGame_rect)
