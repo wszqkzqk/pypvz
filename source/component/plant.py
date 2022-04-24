@@ -159,8 +159,8 @@ class StarBullet(Bullet):
         self.current_time = game_info[c.CURRENT_TIME]
         if self.state == c.FLY:
             if self.direction == c.STAR_FORWARD_UP:
-                self.rect.x += 7
-                self.rect.y -= 7
+                self.rect.x += 8
+                self.rect.y -= 6
             elif self.direction == c.STAR_FORWARD_DOWN:
                 self.rect.x += 7
                 self.rect.y += 7
@@ -189,9 +189,9 @@ class StarBullet(Bullet):
 
     # 这里用的是坚果保龄球的代码改一下，实现子弹换行
     def handleMapYPosition(self):
-        _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery)
-        _, map_y2 = self.level.map.getMapIndex(self.rect.x, self.rect.bottom)
-        if (self.map_y != map_y1) and (0 <= map_y1 <= self.level.map_y_len-1) and map_y1 == map_y2:    # 换行
+        _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery +20)
+        _, map_y2 = self.level.map.getMapIndex(self.rect.x, self.rect.bottom +20)
+        if (self.map_y != map_y1) and (0 <= map_y1 <= self.level.map_y_len-1):    # 换行
             self.level.bullet_groups[self.map_y].remove(self)
             self.level.bullet_groups[map_y1].add(self)
             self.map_y = map_y1
@@ -1148,11 +1148,11 @@ class StarFruit(Plant):
             _, zombieMapY = self.level.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
             if (self.rect.x >= zombie.rect.x) and (self.map_y == zombieMapY):  # 对于同行且在杨桃后的僵尸
                 return True
-            # 斜向上，理想直线方程为：f(zombie.rect.x) = -zombie.rect.x + self.rect.y + self.rect.right - 15
-            elif abs(zombie.rect.y - (-zombie.rect.x + self.rect.y + self.rect.right - 15)) <= 60:
+            # 斜向上，理想直线方程为：f(zombie.rect.x) = -0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10
+            elif -100 <= (zombie.rect.y - (-0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10)) <= 70:
                 return True
             # 斜向下，理想直线方程为：f(zombie.rect.x) = zombie.rect.x + self.rect.y - self.rect.right - 15
-            elif abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 60:
+            elif abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 70:
                 return True
             elif zombie.rect.left <= self.rect.x <= zombie.rect.right:
                 return True
@@ -1160,7 +1160,7 @@ class StarFruit(Plant):
 
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
-            self.bullet_group.add(StarBullet(self.rect.left + 10, self.rect.y + 20, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
+            self.bullet_group.add(StarBullet(self.rect.left + 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h + 5, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.bottom - 20, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN, self.level))
