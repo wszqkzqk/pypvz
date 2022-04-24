@@ -30,7 +30,7 @@ class Menu(tool.State):
         # 冒险模式
         self.option_frames = []
         frame_names = (c.OPTION_ADVENTURE + '_0', c.OPTION_ADVENTURE + '_1')
-        frame_rect = (0, 0, 330, 140)
+        frame_rect = (0, 0, 330, 144)
         
         for name in frame_names:
             self.option_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1))
