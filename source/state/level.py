@@ -88,7 +88,7 @@ class Level(tool.State):
         self.viewport = tool.SCREEN.get_rect(bottom=self.bg_rect.bottom)
         self.viewport.x += c.BACKGROUND_OFFSET_X
 
-    
+
     def setupGroups(self):
         self.sun_group = pg.sprite.Group()
         self.head_group = pg.sprite.Group()
