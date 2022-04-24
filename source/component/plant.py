@@ -123,6 +123,7 @@ class StarBullet(Bullet):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = start_y
+        _, self.map_y = self.level.map.getMapIndex(self.rect.x, self.rect.centery)
         self.direction = direction
         self.damage = damage
         self.state = c.FLY
@@ -168,6 +169,7 @@ class StarBullet(Bullet):
                 self.rect.y += 10
             else:
                 self.rect.x -= 10
+            self.handleMapYPosition()
             if ((self.rect.x > c.SCREEN_WIDTH) or (self.rect.x < 0)
                 or (self.rect.y > c.SCREEN_HEIGHT) or (self.rect.y < 0)):
                 self.kill()
@@ -183,6 +185,15 @@ class StarBullet(Bullet):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
+
+    # 这里可以用坚果保龄球的代码改一下
+    def handleMapYPosition(self):
+        _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery)
+        if self.map_y != map_y1:
+            # 换行
+            self.level.bullet_groups[self.map_y].remove(self)
+            self.level.bullet_groups[map_y1].add(self)
+            self.map_y = map_y1
 
 
 class Plant(pg.sprite.Sprite):
@@ -1125,9 +1136,8 @@ class TorchWood(Plant):
                         i.kill()
 
 class StarFruit(Plant):
-    def __init__(self, x, y, bullet_group, global_bullet_group):
+    def __init__(self, x, y, bullet_group):
         Plant.__init__(self, x, y, c.STARFRUIT, c.PLANT_HEALTH, bullet_group)
-        self.global_bullet_group = global_bullet_group
         self.shoot_timer = 0
 
     def canAttack(self, zombie):
@@ -1143,9 +1153,9 @@ class StarFruit(Plant):
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
             self.bullet_group.add(StarBullet(self.rect.left + 10, self.rect.y, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD))
-            self.global_bullet_group.add(StarBullet(self.rect.centerx, self.rect.bottom - self.rect.h + 5, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD))
-            self.global_bullet_group.add(StarBullet(self.rect.centerx, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD))
-            self.global_bullet_group.add(StarBullet(self.rect.left + 5, self.rect.y + 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN))
-            self.global_bullet_group.add(StarBullet(self.rect.left + 5, self.rect.y - 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_UP))
+            self.bullet_group.add(StarBullet(self.rect.centerx, self.rect.bottom - self.rect.h + 5, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD))
+            self.bullet_group.add(StarBullet(self.rect.centerx, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD))
+            self.bullet_group.add(StarBullet(self.rect.left + 5, self.rect.y + 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN))
+            self.bullet_group.add(StarBullet(self.rect.left + 5, self.rect.y - 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_UP))
             self.shoot_timer = self.current_time
 
