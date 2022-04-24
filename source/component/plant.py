@@ -116,6 +116,7 @@ class StarBullet(Bullet):
 
         self.name = c.BULLET_STAR
         self.frames = []
+        self.effect = False
         self.frame_index = 0
         self.load_images()
         self.image = self.frames[self.frame_index]
