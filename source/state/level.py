@@ -148,7 +148,6 @@ class Level(tool.State):
                 self.map.setMapGridType(x, y, c.MAP_STATE_UNAVAILABLE) # 将坚果保龄球红线右侧设置为不可种植任何植物
 
     def initState(self):
-        # 小游戏才有CHOOSEBAR_TYPE
         if c.CHOOSEBAR_TYPE in self.map_data:
             self.bar_type = self.map_data[c.CHOOSEBAR_TYPE]
         else:

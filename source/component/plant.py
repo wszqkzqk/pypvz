@@ -190,7 +190,8 @@ class StarBullet(Bullet):
     # 这里用的是坚果保龄球的代码改一下，实现子弹换行
     def handleMapYPosition(self):
         _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery)
-        if (self.map_y != map_y1) and (0 <= map_y1 <= self.level.map_y_len-1):    # 换行
+        _, map_y2 = self.level.map.getMapIndex(self.rect.x, self.rect.bottom)
+        if (self.map_y != map_y1) and (0 <= map_y1 <= self.level.map_y_len-1) and map_y1 == map_y2:    # 换行
             self.level.bullet_groups[self.map_y].remove(self)
             self.level.bullet_groups[map_y1].add(self)
             self.map_y = map_y1
@@ -1140,12 +1141,18 @@ class StarFruit(Plant):
         Plant.__init__(self, x, y, c.STARFRUIT, c.PLANT_HEALTH, bullet_group)
         self.shoot_timer = 0
         self.level = level
+        self.map_x, self.map_y = self.level.map.getMapIndex(x, y)
 
     def canAttack(self, zombie):
         if zombie.state != c.DIE:
-            if (self.rect.x >= zombie.rect.x) and abs(zombie.rect.bottom - self.rect.bottom) <= 30:  # 对于同行且在杨桃后的僵尸
+            _, zombieMapY = self.level.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
+            if (self.rect.x >= zombie.rect.x) and (self.map_y == zombieMapY):  # 对于同行且在杨桃后的僵尸
                 return True
-            elif 0.9*abs(zombie.rect.y - self.rect.y) <= abs(zombie.rect.x - self.rect.x) <= 1.1*abs(zombie.rect.y - self.rect.y):
+            # 斜向上，理想直线方程为：f(zombie.rect.x) = -zombie.rect.x + self.rect.y + self.rect.right - 15
+            elif abs(zombie.rect.y - (-zombie.rect.x + self.rect.y + self.rect.right - 15)) <= 60:
+                return True
+            # 斜向下，理想直线方程为：f(zombie.rect.x) = zombie.rect.x + self.rect.y - self.rect.right - 15
+            elif abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 60:
                 return True
             elif zombie.rect.left <= self.rect.x <= zombie.rect.right:
                 return True
@@ -1153,7 +1160,7 @@ class StarFruit(Plant):
 
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
-            self.bullet_group.add(StarBullet(self.rect.left + 10, self.rect.y, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
+            self.bullet_group.add(StarBullet(self.rect.left + 10, self.rect.y + 20, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h + 5, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.bottom - 20, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN, self.level))
