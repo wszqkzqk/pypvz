@@ -271,6 +271,8 @@ class MenuBar():
 
     def increaseSunValue(self, value):
         self.sun_value += value
+        if self.sun_value > 9990:
+            self.sun_value = 9990
 
     def setCardFrozenTime(self, plant_name):
         for card in self.card_list:
