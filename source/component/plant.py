@@ -190,7 +190,7 @@ class StarBullet(Bullet):
     # 这里用的是坚果保龄球的代码改一下，实现子弹换行
     def handleMapYPosition(self):
         _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery +20)
-        _, map_y2 = self.level.map.getMapIndex(self.rect.x, self.rect.bottom +20)
+        # _, map_y2 = self.level.map.getMapIndex(self.rect.x, self.rect.bottom +20)
         if (self.map_y != map_y1) and (0 <= map_y1 <= self.level.map_y_len-1):    # 换行
             self.level.bullet_groups[self.map_y].remove(self)
             self.level.bullet_groups[map_y1].add(self)

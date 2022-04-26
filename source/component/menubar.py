@@ -175,8 +175,7 @@ class Card():
         self.frozen_timer = current_time
 
     def createShowImage(self, sun_value, current_time):
-        '''create a card image to show cool down status
-           or disable status when have not enough sun value'''
+        # 有关是否满足冷却与阳光条件的图片形式
         time = current_time - self.frozen_timer
         if time < self.frozen_time: #cool down status
             image = pg.Surface([self.rect.w, self.rect.h])
@@ -434,7 +433,7 @@ class MoveCard():
         return False
 
     def createShowImage(self):
-        '''create a part card image when card appears from left'''
+        # 新增卡片时显示图片
         if self.rect.w < self.orig_rect.w: #create a part card image
             image = pg.Surface([self.rect.w, self.rect.h])
             image.blit(self.orig_image, (0, 0), (0, 0, self.rect.w, self.rect.h))
