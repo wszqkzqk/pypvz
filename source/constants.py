@@ -258,6 +258,7 @@ CONEHEAD_ZOMBIE = 'ConeheadZombie'
 BUCKETHEAD_ZOMBIE = 'BucketheadZombie'
 FLAG_ZOMBIE = 'FlagZombie'
 NEWSPAPER_ZOMBIE = 'NewspaperZombie'
+FOOTBALL_ZOMBIE = 'FootballZombie'
 BOOMDIE = 'BoomDie'
 
 # 对僵尸的攻击类型设置
@@ -275,6 +276,7 @@ NORMAL_HEALTH = 200 # 普通僵尸生命值
 # 有关一类防具
 CONEHEAD_HEALTH = 370
 BUCKETHEAD_HEALTH = 1100
+FOOTBALL_HELMET_HEALTH = 1400
 # 有关二类防具
 NEWSPAPER_HEALTH = 150
 
