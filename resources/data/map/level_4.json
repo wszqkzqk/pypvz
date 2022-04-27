@@ -16,6 +16,6 @@
         {"time":94000, "name":"Zombie"},
         {"time":95000, "name":"FlagZombie"},
         {"time":96000, "name":"BucketheadZombie"},
-        {"time":97000, "name":"FlagZombie"}
+        {"time":97000, "name":"FootballZombie"}
     ]
 }
