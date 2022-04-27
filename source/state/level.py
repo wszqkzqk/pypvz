@@ -3,6 +3,7 @@ import json
 import sys
 import pygame as pg
 from random import randint
+from random import choices
 from .. import tool
 from .. import constants as c
 from ..component import map, plant, zombie, menubar
@@ -215,6 +216,16 @@ class Level(tool.State):
             self.shovel_rect.y = self.shovel_box_rect.y = self.shovel_positon[1] 
 
         self.setupLittleMenu()
+
+        # 新的僵尸生成机制：级别——权重生成
+        self.createZombieInfo = {# 生成僵尸:(级别, 权重)
+                    c.NORMAL_ZOMBIE:(1, 4000),
+                    c.FLAG_ZOMBIE:(1, 0),
+                    c.CONEHEAD_ZOMBIE:(2, 4000),
+                    c.BUCKETHEAD_ZOMBIE:(4, 3000),
+                    c.NEWSPAPER_ZOMBIE:(2, 1000),
+                    c.FOOTBALL_ZOMBIE:(2, 2000)
+                    }
 
     # 小菜单
     def setupLittleMenu(self):
@@ -437,6 +448,46 @@ class Level(tool.State):
         self.checkPlants()
         self.checkCarCollisions()
         self.checkGameState()
+
+
+    # 按照规则生成每一波僵尸
+    # 可以考虑将波刷新和一波中的僵尸生成分开
+    # useableZombie是指可用的僵尸种类的元组
+    # inevitableZombie指在本轮必然出现的僵尸，输入形式为字典: {波数1:(僵尸1, 僵尸2……), 波数2:(僵尸1, 僵尸2……)……}
+    def createWaves(self, useableZombies, numFlags, survivalRounds=0, inevitableZombieDict=None):
+        waves = []
+
+        # 权重值
+        weights = []
+        for zombie in useableZombies:
+            weights.append(self.createZombieInfo[zombie][1])
+
+        # 按照原版pvz设计的僵尸容量函数，是从无尽解析的，但是普通关卡也可以遵循
+        for wave in range(1, 10 * numFlags + 1):
+            volume = int(int((wave + survivalRounds*20)*0.8)/2) + 1
+            if wave % 10 == 0:
+                volume = int(volume*2.5)
+            zombieList = []
+
+            if inevitableZombieDict and (wave in inevitableZombieDict.keys()):
+                for newZombie in inevitableZombieDict[wave]:
+                    zombieList += newZombie
+                    volume -= self.createZombieInfo[newZombie][0]
+                if volume < 0:
+                    volume = 0  # 避免手动指定的最后一个僵尸被while循环的else删除
+                    print('警告：第{}波中手动设置的僵尸级别总数超过上限！'.format(wave))
+
+            while (volume >= 0) and (len(zombieList) <= 50):
+                newZombie = choices(useableZombies, weights)    # 注意这个的输出是列表
+                zombieList += newZombie
+                volume -= self.createZombieInfo[newZombie][0]
+            else:
+                zombieList.pop()
+            waves.append(zombieList)
+
+        return waves    # 输出为分波列出的本关所有波的僵尸
+
+
 
     def createZombie(self, name, map_y=None):
         # 有指定时按照指定生成，无指定时随机位置生成
