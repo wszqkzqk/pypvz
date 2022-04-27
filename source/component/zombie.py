@@ -542,7 +542,7 @@ class FootballZombie(Zombie):
         self.speed = 1.88
         self.animate_interval = 50
         self.walk_animate_interval = 50
-        self.attack_animate_interval = 50
+        self.attack_animate_interval = 60
         self.lostHead_animate_interval = 50
         self.die_animate_interval = 50
 

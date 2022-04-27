@@ -129,6 +129,7 @@ class StarBullet(Bullet):
         self.damage = damage
         self.state = c.FLY
         self.current_time = 0
+        self.passedTorchWood = None
 
     def loadFrames(self, frames, name):
         frame_list = tool.GFX[name]
