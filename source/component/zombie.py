@@ -53,7 +53,6 @@ class Zombie(pg.sprite.Sprite):
         if name in tool.ZOMBIE_RECT:
             data = tool.ZOMBIE_RECT[name]
             x, width = data['x'], data['width']
-            width -= x
         else:
             x = 0
         for frame in frame_list:

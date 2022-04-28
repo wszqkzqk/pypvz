@@ -357,6 +357,7 @@ class Level(tool.State):
                     pg.mixer.music.play(-1, 0)
             return
 
+        # 旧僵尸生成方式
         if self.zombie_start_time == 0:
             self.zombie_start_time = self.current_time
         elif len(self.zombie_list) > 0:
@@ -474,19 +475,16 @@ class Level(tool.State):
                     zombieList += newZombie
                     volume -= self.createZombieInfo[newZombie][0]
                 if volume < 0:
-                    volume = 0  # 避免手动指定的最后一个僵尸被while循环的else删除
                     print('警告：第{}波中手动设置的僵尸级别总数超过上限！'.format(wave))
 
-            while (volume >= 0) and (len(zombieList) <= 50):
+            while (volume > 0) and (len(zombieList) < 50):
                 newZombie = choices(useableZombies, weights)    # 注意这个的输出是列表
-                zombieList += newZombie
-                volume -= self.createZombieInfo[newZombie][0]
-            else:
-                zombieList.pop()
+                if self.createZombieInfo[newZombie][0] <= volume:
+                    zombieList += newZombie
+                    volume -= self.createZombieInfo[newZombie][0]
             waves.append(zombieList)
 
-        return waves    # 输出为分波列出的本关所有波的僵尸
-
+        self.waves = waves
 
 
     def createZombie(self, name, map_y=None):
