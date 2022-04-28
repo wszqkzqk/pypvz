@@ -36,7 +36,7 @@ class Zombie(pg.sprite.Sprite):
         self.walk_animate_interval = 180
         self.attack_animate_interval = 100
         self.lostHead_animate_interval = 180
-        self.die_animate_interval = 80
+        self.die_animate_interval = 50
         self.boomDie_animate_interval = 100
         self.ice_slow_ratio = 1
         self.ice_slow_timer = 0
