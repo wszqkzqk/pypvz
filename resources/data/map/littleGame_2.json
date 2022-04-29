@@ -2,6 +2,8 @@
     "background_type":6,
     "choosebar_type":2,
     "shovel":0,
+    "spawn_zombies":"auto",
+    "num_flags":4,
     "card_pool":[
         {"name":"WallNutBowling"},
         {"name":"RedWallNutBowling"}

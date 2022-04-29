@@ -2,6 +2,9 @@
     "background_type": 0,
     "init_sun_value": 50,
     "shovel": 1,
+    "spawn_zombies":"auto",
+    "included_zombies":["Zombie"],
+    "num_flags":2,
     "zombie_list": [
         { "time": 20000, "name": "Zombie" },
         { "time": 40000, "name": "FlagZombie" },
