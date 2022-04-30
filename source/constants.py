@@ -97,6 +97,16 @@ BACKGROUND_WALLNUTBOWLING = 6
 BACKGROUND_SINGLE = 7
 BACKGROUND_TRIPLE = 8
 
+# 僵尸生成方式
+SPAWN_ZOMBIES = 'spawn_zombies'
+SPAWN_ZOMBIES_AUTO = 'auto'
+SPAWN_ZOMBIES_LIST = 'list'
+INCLUDED_ZOMBIES = 'included_zombies'
+NUM_FLAGS = 'num_flags'
+INEVITABLE_ZOMBIE_DICT = 'inevitable_zombie_list'
+SURVIVAL_ROUNDS = 'survival_rounds'
+
+
 # 地图单元格属性
 MAP_PLANT = 'plantnames'
 MAP_SLEEP = 'sleep' # 有没有休眠的蘑菇，作是否能种植咖啡豆的判断

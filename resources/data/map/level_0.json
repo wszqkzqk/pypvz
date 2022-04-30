@@ -2,6 +2,7 @@
     "background_type":2,
     "init_sun_value":5000,
     "shovel":1,
+    "spawn_zombies":"zombie_list",
     "zombie_list":[
         {"time":1000, "map_y":2, "name":"FootballZombie"},
         {"time":60000, "map_y":2, "name":"Zombie"}
