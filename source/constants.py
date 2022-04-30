@@ -101,6 +101,7 @@ BACKGROUND_TRIPLE = 8
 SPAWN_ZOMBIES = 'spawn_zombies'
 SPAWN_ZOMBIES_AUTO = 'auto'
 SPAWN_ZOMBIES_LIST = 'list'
+INCLUDED_ZOMBIES = 'included_zombies'
 NUM_FLAGS = 'num_flags'
 INEVITABLE_ZOMBIE_DICT = 'inevitable_zombie_list'
 SURVIVAL_ROUNDS = 'survival_rounds'

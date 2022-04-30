@@ -3,6 +3,7 @@
     "init_sun_value":50,
     "shovel":1,
     "spawn_zombies":"auto",
+    "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie", "FootballZombie"],
     "num_flags":4,
     "zombie_list":[
         {"time":20000, "name":"Zombie"},

@@ -3,6 +3,7 @@
     "choosebar_type":2,
     "shovel":0,
     "spawn_zombies":"auto",
+    "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie"],
     "num_flags":4,
     "card_pool":[
         {"name":"WallNutBowling"},

@@ -4,6 +4,7 @@
     "shovel":1,
     "spawn_zombies":"auto",
     "num_flags":4,
+    "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie"],
     "card_pool":[
         {"name":"Peashooter"},
         {"name":"SnowPea"},

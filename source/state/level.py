@@ -103,16 +103,7 @@ class Level(tool.State):
             self.zombie_groups.append(pg.sprite.Group())
             self.hypno_zombie_groups.append(pg.sprite.Group())
             self.bullet_groups.append(pg.sprite.Group())
-    
-    # 新的僵尸生成机制：级别——权重生成
-    self.createZombieInfo = {# 生成僵尸:(级别, 权重)
-                c.NORMAL_ZOMBIE:(1, 4000),
-                c.FLAG_ZOMBIE:(1, 0),
-                c.CONEHEAD_ZOMBIE:(2, 4000),
-                c.BUCKETHEAD_ZOMBIE:(4, 3000),
-                c.NEWSPAPER_ZOMBIE:(2, 1000),
-                c.FOOTBALL_ZOMBIE:(2, 2000)
-                }
+
 
     # 按照规则生成每一波僵尸
     # 可以考虑将波刷新和一波中的僵尸生成分开
@@ -135,19 +126,60 @@ class Level(tool.State):
 
             if inevitableZombieDict and (wave in inevitableZombieDict.keys()):
                 for newZombie in inevitableZombieDict[wave]:
-                    zombieList += newZombie
+                    zombieList.append(newZombie)
                     volume -= self.createZombieInfo[newZombie][0]
                 if volume < 0:
                     print('警告：第{}波中手动设置的僵尸级别总数超过上限！'.format(wave))
 
             while (volume > 0) and (len(zombieList) < 50):
-                newZombie = choices(useableZombies, weights)    # 注意这个的输出是列表
+                newZombie = choices(useableZombies, weights)[0]
                 if self.createZombieInfo[newZombie][0] <= volume:
-                    zombieList += newZombie
+                    zombieList.append(newZombie)
                     volume -= self.createZombieInfo[newZombie][0]
             waves.append(zombieList)
 
         self.waves = waves
+
+
+    # 僵尸的刷新机制
+    def refreshWaves(self, current_time, survivalRounds=0):
+        if self.waveNum >= self.map_data[c.NUM_FLAGS] * 10:
+            return
+        if (self.waveNum == 0):    # 还未开始出现僵尸
+            if (self.waveTime == 0):    # 表明刚刚开始游戏
+                self.waveTime = current_time
+            else:
+                if (survivalRounds == 0) and (self.bar_type == c.CHOOSEBAR_STATIC): # 首次选卡等待时间较长
+                    if current_time - self.waveTime >= 18000:
+                        self.waveNum += 1
+                        self.waveTime = current_time
+                        self.waveZombies = self.waves[self.waveNum - 1]
+                        self.numZombie = len(self.waveZombies)
+                else:
+                    if (current_time - self.waveTime >= 6000):
+                        self.waveNum += 1
+                        self.waveTime = current_time
+                        self.waveZombies = self.waves[self.waveNum - 1]
+                        self.numZombie = len(self.waveZombies)
+            return
+        if (current_time - self.waveTime >= 25000 + randint(0, 6000)) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 12500 + randint(0, 3000)):
+            self.waveNum += 1
+            self.waveTime = current_time
+            self.waveZombies = self.waves[self.waveNum - 1]
+            self.numZombie = len(self.waveZombies)
+            return
+
+
+        numZombies = 0
+        for i in range(self.map_y_len):
+            numZombies += len(self.zombie_groups[i])
+        if numZombies / self.numZombie < 0.15:
+            self.waveNum += 1
+            self.waveTime = current_time
+            self.waveZombies = self.waves[self.waveNum - 1]
+            return
+        
+
 
     def setupZombies(self):
         def takeTime(element):
@@ -247,14 +279,29 @@ class Level(tool.State):
         if (c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
             self.setupZombies()
         else:
+            # 僵尸波数数据及僵尸生成数据
+            self.waveNum = 0   # 还未出现僵尸时定义为0
+            self.waveTime = 0
+            self.waveZombies = []
+            self.numZombie = 0
+            # 新的僵尸生成机制：级别——权重生成
+            self.createZombieInfo = {# 生成僵尸:(级别, 权重)
+                        c.NORMAL_ZOMBIE:(1, 4000),
+                        c.FLAG_ZOMBIE:(1, 0),
+                        c.CONEHEAD_ZOMBIE:(2, 4000),
+                        c.BUCKETHEAD_ZOMBIE:(4, 3000),
+                        c.NEWSPAPER_ZOMBIE:(2, 1000),
+                        c.FOOTBALL_ZOMBIE:(2, 2000)
+                        }
+
             # 暂时没有生存模式，所以 survivalRounds = 0
             if c.INEVITABLE_ZOMBIE_DICT in self.map_data.keys():
-                self.createWaves(   useableZombies=self.map_data[c.USEABLE_ZOMBIES],
+                self.createWaves(   useableZombies=self.map_data[c.INCLUDED_ZOMBIES],
                                     numFlags=self.map_data[c.NUM_FLAGS],
                                     survivalRounds=0,
                                     inevitableZombieDict=self.map_data[c.INEVITABLE_ZOMBIE_DICT])
             else:
-                self.createWaves(   useableZombies=self.map_data[c.USEABLE_ZOMBIES],
+                self.createWaves(   useableZombies=self.map_data[c.INCLUDED_ZOMBIES],
                                     numFlags=self.map_data[c.NUM_FLAGS],
                                     survivalRounds=0)
         self.setupCars()
@@ -273,6 +320,7 @@ class Level(tool.State):
             self.shovel_rect.y = self.shovel_box_rect.y = self.shovel_positon[1] 
 
         self.setupLittleMenu()
+
 
     # 小菜单
     def setupLittleMenu(self):
@@ -404,19 +452,27 @@ class Level(tool.State):
                     pg.mixer.music.play(-1, 0)
             return
 
-        # 旧僵尸生成方式
-        if self.zombie_start_time == 0:
-            self.zombie_start_time = self.current_time
-        elif len(self.zombie_list) > 0:
-            data = self.zombie_list[0]  # 因此要求僵尸列表按照时间顺序排列
-            # data内容排列：[0]:时间 [1]:名称 [2]:坐标
-            if  data[0] <= (self.current_time - self.zombie_start_time):
-                if len(data) == 3:
-                    self.createZombie(data[1], data[2])
-                    self.zombie_list.remove(data)
-                else:   # len(data) == 2 没有指定map_y
-                    self.createZombie(data[1])
-                    self.zombie_list.remove(data)
+        if (c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+            # 旧僵尸生成方式
+            if self.zombie_start_time == 0:
+                self.zombie_start_time = self.current_time
+            elif len(self.zombie_list) > 0:
+                data = self.zombie_list[0]  # 因此要求僵尸列表按照时间顺序排列
+                # data内容排列：[0]:时间 [1]:名称 [2]:坐标
+                if  data[0] <= (self.current_time - self.zombie_start_time):
+                    if len(data) == 3:
+                        self.createZombie(data[1], data[2])
+                        self.zombie_list.remove(data)
+                    else:   # len(data) == 2 没有指定map_y
+                        self.createZombie(data[1])
+                        self.zombie_list.remove(data)
+        else:
+            self.refreshWaves(self.current_time)
+            for i in self.waveZombies:
+                self.createZombie(i)
+            else:
+                self.waveZombies = []
+
 
         for i in range(self.map_y_len):
             self.bullet_groups[i].update(self.game_info)
@@ -922,12 +978,20 @@ class Level(tool.State):
                     self.killPlant(plant)
 
     def checkVictory(self):
-        if len(self.zombie_list) > 0:
-            return False
-        for i in range(self.map_y_len):
-            if len(self.zombie_groups[i]) > 0:
+        if (c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+            if len(self.zombie_list) > 0:
                 return False
-        return True
+            for i in range(self.map_y_len):
+                if len(self.zombie_groups[i]) > 0:
+                    return False
+            return True
+        else:
+            if self.waveNum < self.map_data[c.NUM_FLAGS] * 10:
+                return False
+            for i in range(self.map_y_len):
+                if len(self.zombie_groups[i]) > 0:
+                    return False
+            return True
     
     def checkLose(self):
         for i in range(self.map_y_len):
