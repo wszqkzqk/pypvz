@@ -169,12 +169,20 @@ class Level(tool.State):
                         self.waveZombies = self.waves[self.waveNum - 1]
                         self.numZombie = len(self.waveZombies)
             return
-        if (current_time - self.waveTime >= 25000 + randint(0, 6000)) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 12500 + randint(0, 3000)):
-            self.waveNum += 1
-            self.waveTime = current_time
-            self.waveZombies = self.waves[self.waveNum - 1]
-            self.numZombie = len(self.waveZombies)
-            return
+        if (self.waveNum % 10 != 9):
+            if ((current_time - self.waveTime >= 25000 + randint(0, 6000)) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 12500 + randint(0, 3000))):
+                self.waveNum += 1
+                self.waveTime = current_time
+                self.waveZombies = self.waves[self.waveNum - 1]
+                self.numZombie = len(self.waveZombies)
+                return
+        else:
+            if ((current_time - self.waveTime >= 45000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 25000)):
+                self.waveNum += 1
+                self.waveTime = current_time
+                self.waveZombies = self.waves[self.waveNum - 1]
+                self.numZombie = len(self.waveZombies)
+                return
         numZombies = 0
         for i in range(self.map_y_len):
             numZombies += len(self.zombie_groups[i])
@@ -472,6 +480,7 @@ class Level(tool.State):
                         self.createZombie(data[1])
                         self.zombie_list.remove(data)
         else:
+            # 新僵尸生成方式
             self.refreshWaves(self.current_time)
             for i in self.waveZombies:
                 self.createZombie(i)
