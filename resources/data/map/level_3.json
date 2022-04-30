@@ -4,6 +4,7 @@
     "shovel":1,
     "spawn_zombies":"auto",
     "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie"],
+    "inevitable_zombie_list":{"20":["BucketheadZombie"]},
     "num_flags":3,
     "zombie_list":[
         {"time":20000, "name":"Zombie"},

@@ -124,8 +124,8 @@ class Level(tool.State):
                 volume = int(volume*2.5)
             zombieList = []
 
-            if inevitableZombieDict and (wave in inevitableZombieDict.keys()):
-                for newZombie in inevitableZombieDict[wave]:
+            if inevitableZombieDict and (str(wave) in inevitableZombieDict.keys()):
+                for newZombie in inevitableZombieDict[str(wave)]:
                     zombieList.append(newZombie)
                     volume -= self.createZombieInfo[newZombie][0]
                 if volume < 0:

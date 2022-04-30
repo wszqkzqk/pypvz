@@ -5,6 +5,7 @@
     "spawn_zombies":"auto",
     "num_flags":4,
     "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie"],
+    "inevitable_zombie_list":{"20":["BucketheadZombie"]},
     "card_pool":[
         {"name":"Peashooter"},
         {"name":"SnowPea"},

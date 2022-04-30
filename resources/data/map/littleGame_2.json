@@ -5,6 +5,7 @@
     "spawn_zombies":"auto",
     "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie"],
     "num_flags":4,
+    "inevitable_zombie_list":{"20":["BucketheadZombie"]},
     "card_pool":[
         {"name":"WallNutBowling"},
         {"name":"RedWallNutBowling"}
