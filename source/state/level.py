@@ -4,6 +4,7 @@ import sys
 import pygame as pg
 from random import randint
 from random import choices
+from random import uniform
 from .. import tool
 from .. import constants as c
 from ..component import map, plant, zombie, menubar
@@ -120,9 +121,15 @@ class Level(tool.State):
         # 按照原版pvz设计的僵尸容量函数，是从无尽解析的，但是普通关卡也可以遵循
         for wave in range(1, 10 * numFlags + 1):
             volume = int(int((wave + survivalRounds*20)*0.8)/2) + 1
-            if wave % 10 == 0:
-                volume = int(volume*2.5)
             zombieList = []
+
+            # 大波僵尸情况
+            if wave % 10 == 0:
+                # 容量增大至2.5倍
+                volume = int(volume*2.5)
+                # 先生成旗帜僵尸
+                zombieList.append(c.FLAG_ZOMBIE)
+                volume -= self.createZombieInfo[c.FLAG_ZOMBIE][0]
 
             if inevitableZombieDict and (str(wave) in inevitableZombieDict.keys()):
                 for newZombie in inevitableZombieDict[str(wave)]:
@@ -168,12 +175,10 @@ class Level(tool.State):
             self.waveZombies = self.waves[self.waveNum - 1]
             self.numZombie = len(self.waveZombies)
             return
-
-
         numZombies = 0
         for i in range(self.map_y_len):
             numZombies += len(self.zombie_groups[i])
-        if numZombies / self.numZombie < 0.15:
+        if numZombies / self.numZombie < uniform(0.15, 0.25):
             self.waveNum += 1
             self.waveTime = current_time
             self.waveZombies = self.waves[self.waveNum - 1]
