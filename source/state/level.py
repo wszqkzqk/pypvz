@@ -152,10 +152,6 @@ class Level(tool.State):
 
     # 僵尸的刷新机制
     def refreshWaves(self, current_time, survivalRounds=0):
-        
-        # 是否显示一大波僵尸即将来袭的红字
-        self.showHugeWaveApproching = False
-
         if self.waveNum >= self.map_data[c.NUM_FLAGS] * 10:
             return
         if (self.waveNum == 0):    # 还未开始出现僵尸
@@ -190,7 +186,7 @@ class Level(tool.State):
                 self.numZombie = len(self.waveZombies)
                 return
             elif ((current_time - self.waveTime >= 43000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 23000)):
-                self.showHugeWaveApproching = True
+                self.showHugeWaveApprochingTime = current_time
         numZombies = 0
         for i in range(self.map_y_len):
             numZombies += len(self.zombie_groups[i])
@@ -346,6 +342,7 @@ class Level(tool.State):
         self.setupLittleMenu()
 
         self.setupHugeWaveApprochingImage()
+        self.showHugeWaveApprochingTime = -2000 # 防止设置为0时刚刚打开游戏就已经启动红字
 
 
     # 小菜单
@@ -1119,5 +1116,5 @@ class Level(tool.State):
                 surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
 
             if not ((c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
-                if self.showHugeWaveApproching:
+                if self.current_time - self.showHugeWaveApprochingTime <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
