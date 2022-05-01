@@ -206,7 +206,7 @@ class Level(tool.State):
             return element[0]
 
         self.zombie_list = []
-        # 目前设置为从JSON文件中读取僵尸出现的时间、种类、位置信息，以后可以将时间设置为模仿原版的机制
+        # 旧机制，目前仅用于调试
         for data in self.map_data[c.ZOMBIE_LIST]:
             if 'map_y' in data.keys():
                 self.zombie_list.append((data['time'], data['name'], data['map_y']))
