@@ -194,12 +194,13 @@ class Level(tool.State):
         numZombies = 0
         for i in range(self.map_y_len):
             numZombies += len(self.zombie_groups[i])
-        if numZombies / self.numZombie < uniform(0.15, 0.25):
-            # 当僵尸所剩无几时，改变时间记录，使得2000 ms后刷新僵尸（所以需要判断剩余时间是否大于2000 ms）
-            if current_time - self.waveTime > 2000:
-                if self.bar_type == c.CHOOSEBAR_STATIC:
+        if (numZombies / self.numZombie < uniform(0.15, 0.25)) and (current_time - self.waveTime > 4000):
+            # 当僵尸所剩无几并且时间过了4000 ms以上时，改变时间记录，使得2000 ms后刷新僵尸（所以需要判断剩余时间是否大于2000 ms）
+            if self.bar_type == c.CHOOSEBAR_STATIC:
+                if current_time - 43000 < self.waveTime:    # 判断剩余时间是否有2000 ms
                     self.waveTime = current_time - 43000    # 即倒计时2000 ms
-                else:
+            else:
+                if current_time - 23000 < self.waveTime:    # 判断剩余时间是否有2000 ms
                     self.waveTime = current_time - 23000    # 即倒计时2000 ms
         
 
