@@ -60,6 +60,8 @@ LITTLEGAME_BUTTON = 'littleGameButton'
 # 小铲子
 SHOVEL = 'shovel'
 SHOVEL_BOX = 'shovelBox'
+# 一大波僵尸来袭图片
+HUGE_WAVE_APPROCHING = 'Approching'
 
 
 # GAME INFO字典键值
@@ -167,7 +169,6 @@ CARD_MOVE_TIME = 60
 # 其他显示物
 CAR = 'car'
 SUN = 'Sun'
-HUGE_WAVE_APPROCHING = 'Approching'
 # 植物相关信息
 PLANT_IMAGE_RECT = 'plant_image_rect'
 # 植物名称

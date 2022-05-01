@@ -2,9 +2,7 @@ import os
 import json
 import sys
 import pygame as pg
-from random import randint
-from random import choices
-from random import uniform
+from random import randint, uniform, choices
 from .. import tool
 from .. import constants as c
 from ..component import map, plant, zombie, menubar
@@ -154,6 +152,10 @@ class Level(tool.State):
 
     # 僵尸的刷新机制
     def refreshWaves(self, current_time, survivalRounds=0):
+        
+        # 是否显示一大波僵尸即将来袭的红字
+        self.showHugeWaveApproching = False
+
         if self.waveNum >= self.map_data[c.NUM_FLAGS] * 10:
             return
         if (self.waveNum == 0):    # 还未开始出现僵尸
@@ -187,14 +189,18 @@ class Level(tool.State):
                 self.waveZombies = self.waves[self.waveNum - 1]
                 self.numZombie = len(self.waveZombies)
                 return
+            elif ((current_time - self.waveTime >= 43000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 23000)):
+                self.showHugeWaveApproching = True
         numZombies = 0
         for i in range(self.map_y_len):
             numZombies += len(self.zombie_groups[i])
         if numZombies / self.numZombie < uniform(0.15, 0.25):
-            self.waveNum += 1
-            self.waveTime = current_time
-            self.waveZombies = self.waves[self.waveNum - 1]
-            return
+            # 当僵尸所剩无几时，改变时间记录，使得2000 ms后刷新僵尸（所以需要判断剩余时间是否大于2000 ms）
+            if current_time - self.waveTime > 2000:
+                if self.bar_type == c.CHOOSEBAR_STATIC:
+                    self.waveTime = current_time - 43000    # 即倒计时2000 ms
+                else:
+                    self.waveTime = current_time - 23000    # 即倒计时2000 ms
         
 
 
@@ -338,6 +344,8 @@ class Level(tool.State):
 
         self.setupLittleMenu()
 
+        self.setupHugeWaveApprochingImage()
+
 
     # 小菜单
     def setupLittleMenu(self):
@@ -371,6 +379,14 @@ class Level(tool.State):
         self.mainMenu_button_rect = self.mainMenu_button.get_rect()
         self.mainMenu_button_rect.x = 299
         self.mainMenu_button_rect.y = 372
+
+    # 一大波僵尸来袭图片显示
+    def setupHugeWaveApprochingImage(self):
+        frame_rect = [0, 0, 492, 80]
+        self.huge_wave_approching_image = tool.get_image_menu(tool.GFX[c.HUGE_WAVE_APPROCHING], *frame_rect, c.BLACK, 1)
+        self.huge_wave_approching_image_rect = self.huge_wave_approching_image.get_rect()
+        self.huge_wave_approching_image_rect.x = 140    # 猜的
+        self.huge_wave_approching_image_rect.y = 250    # 猜的
 
     # 检查小菜单有没有被点击
     def checkLittleMenuClick(self, mouse_pos):
@@ -1100,3 +1116,7 @@ class Level(tool.State):
                 surface.blit(self.return_button, self.return_button_rect)
                 surface.blit(self.restart_button, self.restart_button_rect)
                 surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
+
+            if not ((c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
+                if self.showHugeWaveApproching:
+                    surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
