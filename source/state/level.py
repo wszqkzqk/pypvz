@@ -123,6 +123,10 @@ class Level(tool.State):
             volume = int(int((wave + survivalRounds*20)*0.8)/2) + 1
             zombieList = []
 
+            # 传送带模式应当增大僵尸容量
+            if (self.bar_type != c.CHOOSEBAR_STATIC):
+                volume = min(max(int(volume*1.5), volume + 2), volume + 20)
+
             # 大波僵尸情况
             if wave % 10 == 0:
                 # 容量增大至2.5倍

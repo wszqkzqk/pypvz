@@ -164,10 +164,12 @@ FROZEN_INDEX = 3
 MOVEBAR_CARD_FRESH_TIME = 6000
 CARD_MOVE_TIME = 60
 
-# 植物相关信息
-PLANT_IMAGE_RECT = 'plant_image_rect'
+# 其他显示物
 CAR = 'car'
 SUN = 'Sun'
+HUGE_WAVE_APPROCHING = 'Approching'
+# 植物相关信息
+PLANT_IMAGE_RECT = 'plant_image_rect'
 # 植物名称
 SUNFLOWER = 'SunFlower'
 PEASHOOTER = 'Peashooter'
