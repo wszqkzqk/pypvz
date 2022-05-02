@@ -40,12 +40,11 @@ class Level(tool.State):
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
-            print(self.game_info[c.LEVEL_NUM])
             f = open(file_path)
             self.map_data = json.load(f)
             f.close()
         except Exception as e:
-            print("游戏结束")
+            print("game over")
             if self.mode == c.MODE_ADVENTURE:
                 self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
             elif self.mode == c.MODE_LITTLEGAME:
@@ -738,7 +737,6 @@ class Level(tool.State):
         if self.bar_type != c.CHOSSEBAR_BOWLING:
                 self.map.addMapPlant(map_x, map_y, self.plant_name, sleep=mushroomSleep)
         self.removeMouseImage()
-        #print('addPlant map[%d,%d], grid pos[%d, %d] pos[%d, %d]' % (map_x, map_y, x, y, pos[0], pos[1]))
 
     def setupHintImage(self):
         pos = self.canSeedPlant(self.plant_name)
@@ -1072,7 +1070,6 @@ class Level(tool.State):
                 self.game_info[c.LITTLEGAME_NUM] += 1
             else:
                 self.game_info[c.LEVEL_NUM] += 1
-                print(self.game_info[c.LEVEL_NUM])
             self.next = c.GAME_VICTORY
             self.done = True
         elif self.checkLose():
