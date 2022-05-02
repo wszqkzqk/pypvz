@@ -111,6 +111,8 @@ class Level(tool.State):
     def createWaves(self, useableZombies, numFlags, survivalRounds=0, inevitableZombieDict=None):
         waves = []
 
+        self.numFlags = numFlags
+
         # 权重值
         weights = []
         for zombie in useableZombies:
@@ -401,6 +403,13 @@ class Level(tool.State):
         self.level_progress_zombie_head_image_rect = self.level_progress_zombie_head_image.get_rect()
         self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x + 73      # 猜的
         self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
+
+        # 旗帜（这里只包括最后一面）
+        frame_rect = (0, 0, 20, 18)
+        self.level_progress_flag = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_FLAG], *frame_rect, c.BLACK, 1)
+        self.level_progress_flag_rect = self.level_progress_flag.get_rect()
+        self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x - 78     # 猜的
+        self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
 
     # 检查小菜单有没有被点击
     def checkLittleMenuClick(self, mouse_pos):
