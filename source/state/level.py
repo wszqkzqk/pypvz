@@ -125,7 +125,7 @@ class Level(tool.State):
 
             # 传送带模式应当增大僵尸容量
             if (self.bar_type != c.CHOOSEBAR_STATIC):
-                volume += volume
+                volume += 2
 
             # 大波僵尸情况
             if wave % 10 == 0:
