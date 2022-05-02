@@ -13,6 +13,8 @@
 * 支持全屏模式
   * 按`F`键进入全屏模式，按`U`键恢复至窗口模式
 * 支持用小铲子移除植物
+* 支持分波生成僵尸
+* 支持“关卡进程”进度条显示
 
 ## 环境要求
 
@@ -91,7 +93,6 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 
 ## ~~画大饼~~计划（不保证实施）
 
-* 增加“关卡进程”进度条
 * 增加保存数据文件以存储用户进度的功能
 * 增加调整音量的功能
 * 关卡开始前增加预览界面
@@ -158,3 +159,9 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
 ![截屏5](/demo/demo5.webp)
 ![截屏6](/demo/demo6.webp)
 ![截屏7](/demo/demo7.webp)
+![截屏8](/demo/demo8.webp)
+![截屏9](/demo/demo9.webp)
+![截屏10](/demo/demo10.webp)
+![截屏11](/demo/demo11.webp)
+![截屏12](/demo/demo12.webp)
+![截屏13](/demo/demo13.webp)
