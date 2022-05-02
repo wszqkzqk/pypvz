@@ -399,7 +399,7 @@ class Level(tool.State):
         self.level_progress_bar_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_BAR], *frame_rect, c.BLACK, 1)
         self.level_progress_bar_image_rect = self.level_progress_bar_image.get_rect()
         self.level_progress_bar_image_rect.x = 600      # 猜的
-        self.level_progress_bar_image_rect.y = 550      # 猜的
+        self.level_progress_bar_image_rect.y = 565      # 猜的
 
         # 僵尸头
         frame_rect = (0, 0, 23, 25)
@@ -1117,12 +1117,12 @@ class Level(tool.State):
         surface.blit(self.level_progress_bar_image, self.level_progress_bar_image_rect)
 
         # 按照当前波数生成僵尸头位置
-        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x - int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 140      # 常数为预计值
+        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x - int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 145      # 常数为预计值
         self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 常数为预计值
 
         # 填充的进度条信息
         # 常数为预计值
-        filledBarRect = (self.level_progress_zombie_head_image_rect.x + 3, self.level_progress_bar_image_rect.y + 6, int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 10, 9)
+        filledBarRect = (self.level_progress_zombie_head_image_rect.x + 3, self.level_progress_bar_image_rect.y + 6, int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 5, 9)
         # 画填充的进度条
         pg.draw.rect(surface, c.GREEN, filledBarRect)
         
@@ -1130,7 +1130,7 @@ class Level(tool.State):
         for i in range(self.numFlags):
             self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x + int((150*i)/self.numFlags) + 5   # 常数是猜的
             # 当指示进度的僵尸头在旗帜左侧时升高旗帜
-            if self.level_progress_flag_rect.x >= self.level_progress_zombie_head_image_rect.x:
+            if self.level_progress_flag_rect.x - 7 >= self.level_progress_zombie_head_image_rect.x:
                 self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 15  # 常数是猜的
             else:
                 self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3  # 常数是猜的
