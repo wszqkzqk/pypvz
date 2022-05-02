@@ -645,17 +645,17 @@ class Level(tool.State):
         x, y = self.map.getMapGridPos(0, map_y)
         # 新增的僵尸也需要在这里声明
         if name == c.NORMAL_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X + randint(-10, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.CONEHEAD_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.ConeHeadZombie(c.ZOMBIE_START_X + randint(-10, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.ConeHeadZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.BUCKETHEAD_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.BucketHeadZombie(c.ZOMBIE_START_X + randint(-10, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.BucketHeadZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.FLAG_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.FlagZombie(c.ZOMBIE_START_X, y, self.head_group))
         elif name == c.NEWSPAPER_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X + randint(-10, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.FOOTBALL_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + randint(-10, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)

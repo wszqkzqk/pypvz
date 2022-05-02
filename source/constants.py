@@ -302,7 +302,7 @@ ATTACK_INTERVAL = 500
 ZOMBIE_WALK_INTERVAL = 60  # 僵尸步行间隔
 
 # 僵尸生成位置
-ZOMBIE_START_X = SCREEN_WIDTH + 20  # 场宽度不一样，用于拟合
+ZOMBIE_START_X = SCREEN_WIDTH + 25  # 场宽度不一样，用于拟合
 
 # 状态类型
 IDLE = 'idle'
