@@ -1117,7 +1117,7 @@ class Level(tool.State):
 
         # 填充的进度条信息
         # 常数为预计值
-        filledBarRect = (self.level_progress_zombie_head_image_rect.x, self.level_progress_bar_image_rect.y + 5, int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)), 9)
+        filledBarRect = (self.level_progress_zombie_head_image_rect.x + 3, self.level_progress_bar_image_rect.y + 6, int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 10, 9)
         # 画填充的进度条
         pg.draw.rect(surface, c.GREEN, filledBarRect)
         
