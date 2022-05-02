@@ -1123,9 +1123,9 @@ class Level(tool.State):
         
         # 画旗帜
         for i in range(self.numFlags):
-            self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x + int((150*i)/self.numFlags)   # 常数是猜的
+            self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x + int((150*i)/self.numFlags) + 5   # 常数是猜的
             # 当指示进度的僵尸头在旗帜左侧时升高旗帜
-            if self.level_progress_flag_rect.x + 1 >= self.level_progress_zombie_head_image_rect.x:
+            if self.level_progress_flag_rect.x >= self.level_progress_zombie_head_image_rect.x:
                 self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 8  # 常数是猜的
             else:
                 self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3  # 常数是猜的
