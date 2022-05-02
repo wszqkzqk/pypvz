@@ -123,10 +123,6 @@ class Level(tool.State):
             volume = int(int((wave + survivalRounds*20)*0.8)/2) + 1
             zombieList = []
 
-            # 传送带模式应当增大僵尸容量
-            if (self.bar_type != c.CHOOSEBAR_STATIC):
-                volume += 2
-
             # 大波僵尸情况
             if wave % 10 == 0:
                 # 容量增大至2.5倍
@@ -134,6 +130,10 @@ class Level(tool.State):
                 # 先生成旗帜僵尸
                 zombieList.append(c.FLAG_ZOMBIE)
                 volume -= self.createZombieInfo[c.FLAG_ZOMBIE][0]
+
+            # 传送带模式应当增大僵尸容量
+            if (self.bar_type != c.CHOOSEBAR_STATIC):
+                volume += 2
 
             if inevitableZombieDict and (str(wave) in inevitableZombieDict.keys()):
                 for newZombie in inevitableZombieDict[str(wave)]:
