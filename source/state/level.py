@@ -639,9 +639,9 @@ class Level(tool.State):
 
         # 旗帜波出生点右移
         if self.waveNum % 10:
-            hugeWaveMove = 40
-        else:
             hugeWaveMove = 0
+        else:
+            hugeWaveMove = 40
         x, y = self.map.getMapGridPos(0, map_y)
         # 新增的僵尸也需要在这里声明
         if name == c.NORMAL_ZOMBIE:
