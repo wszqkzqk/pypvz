@@ -1126,7 +1126,7 @@ class Level(tool.State):
             self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x + int((150*i)/self.numFlags) + 5   # 常数是猜的
             # 当指示进度的僵尸头在旗帜左侧时升高旗帜
             if self.level_progress_flag_rect.x >= self.level_progress_zombie_head_image_rect.x:
-                self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 8  # 常数是猜的
+                self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 15  # 常数是猜的
             else:
                 self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3  # 常数是猜的
             surface.blit(self.level_progress_flag, self.level_progress_flag_rect)
