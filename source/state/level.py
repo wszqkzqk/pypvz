@@ -636,11 +636,14 @@ class Level(tool.State):
             else:
                 map_y = randint(0, 4)
 
-        # 旗帜波出生点右移
-        if self.waveNum % 10:
-            hugeWaveMove = 0
+        if not ((c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
+            # 旗帜波出生点右移
+            if self.waveNum % 10:
+                hugeWaveMove = 0
+            else:
+                hugeWaveMove = 40
         else:
-            hugeWaveMove = 40
+            hugeWaveMove = 0
         x, y = self.map.getMapGridPos(0, map_y)
         # 新增的僵尸也需要在这里声明
         if name == c.NORMAL_ZOMBIE:
@@ -1179,5 +1182,4 @@ class Level(tool.State):
             if not ((c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
                 if self.current_time - self.showHugeWaveApprochingTime <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
-
-            self.showLevelProgress(surface)
+                self.showLevelProgress(surface)

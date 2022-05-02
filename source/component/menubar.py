@@ -104,7 +104,7 @@ def getSunValueImage(sun_value):
     # for pack, must include ttf
     fontPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources', 'freesansbold.ttf')
     font = pg.font.Font(fontPath, 14)
-    width = 32
+    width = 35
     msg_image = font.render(str(sun_value), True, c.NAVYBLUE, c.LIGHTYELLOW)
     msg_rect = msg_image.get_rect()
     msg_w = msg_rect.width

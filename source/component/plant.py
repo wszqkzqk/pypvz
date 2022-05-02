@@ -290,7 +290,7 @@ class Plant(pg.sprite.Sprite):
 
     def canAttack(self, zombie):
         if (self.state != c.SLEEP and zombie.state != c.DIE and (not zombie.lostHead) and
-                self.rect.x <= zombie.rect.right):
+                self.rect.x <= zombie.rect.right and zombie.rect.left <= 800):
                 return True
         return False
 
@@ -1160,8 +1160,8 @@ class StarFruit(Plant):
 
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
-            self.bullet_group.add(StarBullet(self.rect.left + 5, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
-            self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h + 5, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
+            self.bullet_group.add(StarBullet(self.rect.left - 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
+            self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h - 15, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.bottom - 20, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN, self.level))
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.y - 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_UP, self.level))
