@@ -89,6 +89,7 @@ class Control():
             elif event.type == pg.MOUSEBUTTONDOWN:
                 self.mouse_pos = pg.mouse.get_pos()
                 self.mouse_click[0], _, self.mouse_click[1] = pg.mouse.get_pressed()
+                print('pos:', self.mouse_pos, ' mouse:', self.mouse_click)
 
 
     def run(self):
