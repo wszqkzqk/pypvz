@@ -44,7 +44,7 @@ class Level(tool.State):
             self.map_data = json.load(f)
             f.close()
         except Exception as e:
-            print("game over")
+            print("成功通关！")
             if self.mode == c.MODE_ADVENTURE:
                 self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
             elif self.mode == c.MODE_LITTLEGAME:
