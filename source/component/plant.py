@@ -732,7 +732,6 @@ class Spikeweed(Plant):
         self.loadFrames(self.frames, name, 0.9, c.WHITE)
 
     def setIdle(self):
-        print('spikeweed idle')
         self.animate_interval = 70
         self.state = c.IDLE
 
@@ -1161,7 +1160,7 @@ class StarFruit(Plant):
 
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
-            self.bullet_group.add(StarBullet(self.rect.left + 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
+            self.bullet_group.add(StarBullet(self.rect.left + 5, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h + 5, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.bottom - 20, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN, self.level))

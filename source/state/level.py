@@ -40,6 +40,7 @@ class Level(tool.State):
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
+            print(self.game_info[c.LEVEL_NUM])
             f = open(file_path)
             self.map_data = json.load(f)
             f.close()
@@ -242,7 +243,6 @@ class Level(tool.State):
         return self.beforePauseTime
 
     def initBowlingMap(self):
-        print('initBowlingMap')
         for x in range(3, self.map.width):
             for y in range(self.map.height):
                 self.map.setMapGridType(x, y, c.MAP_STATE_UNAVAILABLE) # 将坚果保龄球红线右侧设置为不可种植任何植物
@@ -1068,10 +1068,11 @@ class Level(tool.State):
 
     def checkGameState(self):
         if self.checkVictory():
-            if c.LITTLEGAME_BUTTON in self.game_info:
+            if (c.LITTLEGAME_BUTTON in self.game_info) and (self.game_info[c.LITTLEGAME_BUTTON]):
                 self.game_info[c.LITTLEGAME_NUM] += 1
             else:
                 self.game_info[c.LEVEL_NUM] += 1
+                print(self.game_info[c.LEVEL_NUM])
             self.next = c.GAME_VICTORY
             self.done = True
         elif self.checkLose():
