@@ -352,31 +352,31 @@ class Level(tool.State):
     # 小菜单
     def setupLittleMenu(self):
         # 具体运行游戏必定有个小菜单, 导入菜单和选项
-        frame_rect = [0, 0, 108, 31]
+        frame_rect = (0, 0, 108, 31)
         self.little_menu = tool.get_image_menu(tool.GFX[c.LITTLE_MENU], *frame_rect, c.BLACK, 1.1)
         self.little_menu_rect = self.little_menu.get_rect()
         self.little_menu_rect.x = 690
         self.little_menu_rect.y = 0 
 
-        frame_rect = [0, 0, 500, 500]
+        frame_rect = (0, 0, 500, 500)
         self.big_menu = tool.get_image_menu(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
         self.big_menu_rect = self.big_menu.get_rect()
         self.big_menu_rect.x = 150
         self.big_menu_rect.y = 0
 
-        frame_rect = [0, 0, 342, 87]
+        frame_rect = (0, 0, 342, 87)
         self.return_button = tool.get_image_menu(tool.GFX[c.RETURN_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.return_button_rect = self.return_button.get_rect()
         self.return_button_rect.x = 220
         self.return_button_rect.y = 440
 
-        frame_rect = [0, 0, 207, 45]
+        frame_rect = (0, 0, 207, 45)
         self.restart_button = tool.get_image_menu(tool.GFX[c.RESTART_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.restart_button_rect = self.restart_button.get_rect()
         self.restart_button_rect.x = 295
         self.restart_button_rect.y = 325
 
-        frame_rect = [0, 0, 206, 43]
+        frame_rect = (0, 0, 206, 43)
         self.mainMenu_button = tool.get_image_menu(tool.GFX[c.MAINMENU_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.mainMenu_button_rect = self.mainMenu_button.get_rect()
         self.mainMenu_button_rect.x = 299
@@ -390,7 +390,11 @@ class Level(tool.State):
         self.huge_wave_approching_image_rect.x = 140    # 猜的
         self.huge_wave_approching_image_rect.y = 250    # 猜的
 
+    # 关卡进程显示设置
     def setupLevelProgressBarImage(self):
+        # 注意：定位一律采用与主进度条的相对位置
+
+        # 主进度条
         frame_rect = (0, 0, 158, 26)
         self.level_progress_bar_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_BAR], *frame_rect, c.BLACK, 1)
         self.level_progress_bar_image_rect = self.level_progress_bar_image.get_rect()
@@ -401,7 +405,7 @@ class Level(tool.State):
         frame_rect = (0, 0, 23, 25)
         self.level_progress_zombie_head_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_ZOMBIE_HEAD], *frame_rect, c.BLACK, 1)
         self.level_progress_zombie_head_image_rect = self.level_progress_zombie_head_image.get_rect()
-        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x + 73      # 猜的
+        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x + 75      # 猜的
         self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
 
         # 旗帜（这里只包括最后一面）
@@ -1102,6 +1106,29 @@ class Level(tool.State):
         for zombie in self.zombie_groups[i]:
             zombie.drawFreezeTrap(surface)
 
+
+    def showLevelProgress(self, surface):
+        # 画进度条框
+        surface.blit(self.level_progress_bar_image, self.level_progress_bar_image_rect)
+
+        # 画填充的进度条
+        # 常数为预计值
+        filledBarRect = (self.level_progress_bar_image_rect.x + 140, self.level_progress_bar_image_rect.y - 3, -int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)), 9)
+        pg.draw.rect(surface, c.GREEN, filledBarRect)
+
+        # 画旗帜
+        self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
+        for i in range(self.numFlags):
+            self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x + int(150/self.numFlags)*i     # 猜的
+            surface.blit(self.level_progress_flag, self.level_progress_flag_rect)
+        
+        # 按照当前波数生成僵尸头位置
+        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x - int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 140      # 常数为预计值
+        self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 常数为预计值
+        # 画僵尸头
+        surface.blit(self.level_progress_zombie_head_image, self.level_progress_zombie_head_image_rect)
+
+
     def draw(self, surface):
         self.level.blit(self.background, self.viewport, self.viewport)
         surface.blit(self.level, (0,0), self.viewport)
@@ -1143,3 +1170,5 @@ class Level(tool.State):
             if not ((c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
                 if self.current_time - self.showHugeWaveApprochingTime <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
+
+            self.showLevelProgress(surface)
