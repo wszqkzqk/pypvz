@@ -341,6 +341,8 @@ class Level(tool.State):
 
         self.setupLittleMenu()
 
+        self.setupLevelProgressBarImage()
+        
         self.setupHugeWaveApprochingImage()
         self.showHugeWaveApprochingTime = -2000 # 防止设置为0时刚刚打开游戏就已经启动红字
 
@@ -380,11 +382,25 @@ class Level(tool.State):
 
     # 一大波僵尸来袭图片显示
     def setupHugeWaveApprochingImage(self):
-        frame_rect = [0, 0, 492, 80]
+        frame_rect = (0, 0, 492, 80)
         self.huge_wave_approching_image = tool.get_image_menu(tool.GFX[c.HUGE_WAVE_APPROCHING], *frame_rect, c.BLACK, 1)
         self.huge_wave_approching_image_rect = self.huge_wave_approching_image.get_rect()
         self.huge_wave_approching_image_rect.x = 140    # 猜的
         self.huge_wave_approching_image_rect.y = 250    # 猜的
+
+    def setupLevelProgressBarImage(self):
+        frame_rect = (0, 0, 158, 26)
+        self.level_progress_bar_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_BAR], *frame_rect, c.BLACK, 1)
+        self.level_progress_bar_image_rect = self.level_progress_bar_image.get_rect()
+        self.level_progress_bar_image_rect.x = 600      # 猜的
+        self.level_progress_bar_image_rect.y = 550      # 猜的
+
+        # 僵尸头
+        frame_rect = (0, 0, 23, 25)
+        self.level_progress_zombie_head_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_ZOMBIE_HEAD], *frame_rect, c.BLACK, 1)
+        self.level_progress_zombie_head_image_rect = self.level_progress_zombie_head_image.get_rect()
+        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x + 73      # 猜的
+        self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
 
     # 检查小菜单有没有被点击
     def checkLittleMenuClick(self, mouse_pos):

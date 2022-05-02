@@ -62,6 +62,10 @@ SHOVEL = 'shovel'
 SHOVEL_BOX = 'shovelBox'
 # 一大波僵尸来袭图片
 HUGE_WAVE_APPROCHING = 'Approching'
+# 关卡进程图片
+LEVEL_PROGRESS_BAR = 'LevelProgressBar'
+LEVEL_PROGRESS_ZOMBIE_HEAD = 'LevelProgressZombieHead'
+LEVEL_PROGRESS_FLAG = 'LevelProgressFlag'
 
 
 # GAME INFO字典键值
