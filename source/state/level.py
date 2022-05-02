@@ -1111,20 +1111,26 @@ class Level(tool.State):
         # 画进度条框
         surface.blit(self.level_progress_bar_image, self.level_progress_bar_image_rect)
 
-        # 画填充的进度条
-        # 常数为预计值
-        filledBarRect = (self.level_progress_bar_image_rect.x + 140, self.level_progress_bar_image_rect.y - 3, -int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)), 9)
-        pg.draw.rect(surface, c.GREEN, filledBarRect)
-
-        # 画旗帜
-        self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
-        for i in range(self.numFlags):
-            self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x + int(150/self.numFlags)*i     # 猜的
-            surface.blit(self.level_progress_flag, self.level_progress_flag_rect)
-        
         # 按照当前波数生成僵尸头位置
         self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x - int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 140      # 常数为预计值
         self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 常数为预计值
+
+        # 填充的进度条信息
+        # 常数为预计值
+        filledBarRect = (self.level_progress_zombie_head_image_rect.x, self.level_progress_bar_image_rect.y + 5, int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)), 9)
+        # 画填充的进度条
+        pg.draw.rect(surface, c.GREEN, filledBarRect)
+        
+        # 画旗帜
+        for i in range(self.numFlags):
+            self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x + int((150*i)/self.numFlags)   # 常数是猜的
+            # 当指示进度的僵尸头在旗帜左侧时升高旗帜
+            if self.level_progress_flag_rect.x + 1 >= self.level_progress_zombie_head_image_rect.x:
+                self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 8  # 常数是猜的
+            else:
+                self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3  # 常数是猜的
+            surface.blit(self.level_progress_flag, self.level_progress_flag_rect)
+        
         # 画僵尸头
         surface.blit(self.level_progress_zombie_head_image, self.level_progress_zombie_head_image_rect)
 
