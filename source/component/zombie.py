@@ -4,7 +4,7 @@ from .. import constants as c
 
 
 class Zombie(pg.sprite.Sprite):
-    def __init__(self, x, y, name, head_group=None, helmetHealth=0, helmetType2Health=0, bodyHealth=c.NORMAL_HEALTH + c.LOSTHEAD_HEALTH, damage=30):
+    def __init__(self, x, y, name, head_group=None, helmetHealth=0, helmetType2Health=0, bodyHealth=c.NORMAL_HEALTH + c.LOSTHEAD_HEALTH, damage=c.ZOMBIE_ATTACK_DAMAGE):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -123,7 +123,7 @@ class Zombie(pg.sprite.Sprite):
             self.helmetType2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
                 self.speed = 2.5
-        if ((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio())) and not self.lostHead:
+        if ((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio())) and (not self.lostHead):
             if self.prey.health > 0:
                 if self.prey_is_plant:
                     self.prey.setDamage(self.damage, self)
