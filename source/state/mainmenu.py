@@ -107,7 +107,7 @@ class Menu(tool.State):
         if self.inAreaAdventure(x, y):
             self.option_clicked = True
             self.option_timer = self.option_start = self.current_time
-        self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
+            self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
         return False
     
     # 点击到按钮，修改转态的done属性
