@@ -16,7 +16,7 @@ class Menu(tool.State):
         self.setupOption()
 
     def setupBackground(self):
-        frame_rect = [80, 0, 800, 600]
+        frame_rect = (80, 0, 800, 600)
         # 1、形参中加单星号，即f(*x)则表示x为元组，所有对x的操作都应将x视为元组类型进行。
         # 2、双星号同上，区别是x视为字典。
         # 3、在变量前加单星号表示将元组（列表、集合）拆分为单个元素。
@@ -113,7 +113,6 @@ class Menu(tool.State):
     # 点击到按钮，修改转态的done属性
     def checkExitClick(self, mouse_pos):
         x, y = mouse_pos
-        # 这里检查范围应当拟合花瓶下部整个区域
         if self.inAreaExit(x, y):
             self.done = True
             self.next = c.EXIT

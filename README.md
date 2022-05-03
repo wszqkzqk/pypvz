@@ -36,6 +36,7 @@ python main.py
 ### 使用Windows可执行文件
 
 在本仓库的`Release`页面中下载`pypvz.exe`文件，双击运行即可
+- 仅支持64位操作系统
 
 ## 方法
 
