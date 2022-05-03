@@ -7,6 +7,7 @@ START_LITTLE_GAME_NUM = 1
 ORIGINAL_CAPTION = 'pypvz'
 
 # 游戏模式
+GAME_MODE = 'mode'
 MODE_ADVENTURE = 'adventure'
 MODE_LITTLEGAME = 'littleGame'
 

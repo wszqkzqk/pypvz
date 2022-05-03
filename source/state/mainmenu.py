@@ -107,7 +107,7 @@ class Menu(tool.State):
         if self.inAreaAdventure(x, y):
             self.option_clicked = True
             self.option_timer = self.option_start = self.current_time
-        self.persist[c.LITTLEGAME_BUTTON] = False
+        self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
         return False
     
     # 点击到按钮，修改转态的done属性
@@ -125,7 +125,7 @@ class Menu(tool.State):
             self.done = True
             # 确实小游戏还是用的level
             # 因为目前暂时没有生存模式和解谜模式，所以暂时设置为这样
-            self.persist[c.LITTLEGAME_BUTTON] = True
+            self.persist[c.GAME_MODE] = c.MODE_LITTLEGAME
 
     def update(self, surface, current_time, mouse_pos, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time

@@ -31,10 +31,10 @@ class Level(tool.State):
         self.initState()
 
     def loadMap(self):
-        if c.LITTLEGAME_BUTTON in self.game_info and self.game_info[c.LITTLEGAME_BUTTON]:
+        if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
             map_file = 'littleGame_' + str(self.game_info[c.LITTLEGAME_NUM]) + '.json'
             self.mode = c.MODE_LITTLEGAME
-        else:
+        elif self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
             map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
             self.mode = c.MODE_ADVENTURE
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
@@ -1069,9 +1069,9 @@ class Level(tool.State):
 
     def checkGameState(self):
         if self.checkVictory():
-            if (c.LITTLEGAME_BUTTON in self.game_info) and (self.game_info[c.LITTLEGAME_BUTTON]):
+            if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
                 self.game_info[c.LITTLEGAME_NUM] += 1
-            else:
+            elif self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
                 self.game_info[c.LEVEL_NUM] += 1
             self.next = c.GAME_VICTORY
             self.done = True
