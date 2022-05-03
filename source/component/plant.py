@@ -596,7 +596,7 @@ class PuffShroom(Plant):
 
     def canAttack(self, zombie):
         if (self.rect.x <= zombie.rect.right and
-                (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH)):
+                (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 
