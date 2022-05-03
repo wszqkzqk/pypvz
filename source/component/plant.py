@@ -290,7 +290,7 @@ class Plant(pg.sprite.Sprite):
 
     def canAttack(self, zombie):
         if (self.state != c.SLEEP and zombie.state != c.DIE and (not zombie.lostHead) and
-                self.rect.x <= zombie.rect.right and zombie.rect.left <= 800):
+                self.rect.x <= zombie.rect.right and zombie.rect.left <= c.SCREEN_WIDTH + 3):
                 return True
         return False
 
@@ -596,7 +596,7 @@ class PuffShroom(Plant):
 
     def canAttack(self, zombie):
         if (self.rect.x <= zombie.rect.right and
-                (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x)):
+                (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 3)):
             return True
         return False
 
@@ -1149,10 +1149,10 @@ class StarFruit(Plant):
             if (self.rect.x >= zombie.rect.x) and (self.map_y == zombieMapY):  # 对于同行且在杨桃后的僵尸
                 return True
             # 斜向上，理想直线方程为：f(zombie.rect.x) = -0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10
-            elif -100 <= (zombie.rect.y - (-0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10)) <= 70:
+            elif -100 <= (zombie.rect.y - (-0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10)) <= 70 and (zombie.rect.left <= c.SCREEN_WIDTH + 3):
                 return True
             # 斜向下，理想直线方程为：f(zombie.rect.x) = zombie.rect.x + self.rect.y - self.rect.right - 15
-            elif abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 70:
+            elif abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 70 and (zombie.rect.left <= c.SCREEN_WIDTH + 3):
                 return True
             elif zombie.rect.left <= self.rect.x <= zombie.rect.right:
                 return True

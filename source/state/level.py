@@ -1180,6 +1180,6 @@ class Level(tool.State):
                 surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
 
             if not ((c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
+                self.showLevelProgress(surface)
                 if self.current_time - self.showHugeWaveApprochingTime <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
-                self.showLevelProgress(surface)
