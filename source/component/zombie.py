@@ -309,7 +309,8 @@ class Zombie(pg.sprite.Sprite):
         self.prey = prey  # prey can be plant or other zombies
         self.prey_is_plant = is_plant
         self.state = c.ATTACK
-        self.attack_timer = self.current_time
+        # 首次攻击间隔的延迟时间应当适当缩短
+        self.attack_timer = self.current_time - c.ATTACK_INTERVAL * self.getAttackTimeRatio()
         self.animate_interval = self.attack_animate_interval
 
         if self.helmet or self.helmetType2: # 这里暂时没有考虑同时有两种防具的僵尸
