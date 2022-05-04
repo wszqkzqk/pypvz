@@ -103,11 +103,25 @@ class Level(tool.State):
             self.bullet_groups.append(pg.sprite.Group())
 
 
+    # 将僵尸转化为水上变种的函数
+    # 普通僵尸、路障僵尸、铁桶僵尸有水上变种
+    def convertZombieInPool(self, newZombie):     
+        if newZombie == c.NORMAL_ZOMBIE:
+            return c.DUCKY_TUBE_ZOMBIE        
+        # elif newZombie == c.CONEHEAD_ZOMBIE:
+        #     return c.CONEHEAD_DUCKY_TUBE_ZOMBIE
+        # elif newZombie == c.BUCKETHEAD_ZOMBIE:
+        #     return c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE
+        else:
+            return newZombie
+
+
     # 按照规则生成每一波僵尸
     # 可以考虑将波刷新和一波中的僵尸生成分开
     # useableZombie是指可用的僵尸种类的元组
     # inevitableZombie指在本轮必然出现的僵尸，输入形式为字典: {波数1:(僵尸1, 僵尸2……), 波数2:(僵尸1, 僵尸2……)……}
     def createWaves(self, useableZombies, numFlags, survivalRounds=0, inevitableZombieDict=None):
+
         waves = []
 
         self.numFlags = numFlags
@@ -143,6 +157,16 @@ class Level(tool.State):
 
             while (volume > 0) and (len(zombieList) < 50):
                 newZombie = choices(useableZombies, weights)[0]
+                # 普通僵尸、路障僵尸、铁桶僵尸有概率生成水中变种
+                if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
+                    # 有泳池的第四波设定上生成水生僵尸
+                    if survivalRounds == 0 and wave == 4:
+                        newZombie = self.convertZombieInPool(newZombie)
+                        # 等完成以后加入路障等的判断
+                    elif survivalRounds > 0 or wave > 4:
+                        if randint(1, 4) == 1:  # 1/4概率水上
+                            newZombie = self.convertZombieInPool(newZombie)
+                            # 等完成以后加入路障等的判断
                 if self.createZombieInfo[newZombie][0] <= volume:
                     zombieList.append(newZombie)
                     volume -= self.createZombieInfo[newZombie][0]
@@ -311,7 +335,10 @@ class Level(tool.State):
                         c.CONEHEAD_ZOMBIE:(2, 4000),
                         c.BUCKETHEAD_ZOMBIE:(4, 3000),
                         c.NEWSPAPER_ZOMBIE:(2, 1000),
-                        c.FOOTBALL_ZOMBIE:(2, 2000)
+                        c.FOOTBALL_ZOMBIE:(2, 2000),
+                        c.DUCKY_TUBE_ZOMBIE:(1, 0),  # 作为变种，不主动生成
+                        c.CONEHEAD_DUCKY_TUBE_ZOMBIE:(2, 0),    # 作为变种，不主动生成
+                        c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:(4, 0),  # 作为变种，不主动生成
                         }
 
             # 暂时没有生存模式，所以 survivalRounds = 0
@@ -620,7 +647,7 @@ class Level(tool.State):
             # 情况复杂：分水路和陆路，不能简单实现，需要另外加判断
             # 0, 1, 4, 5路为陆路，2, 3路为水路
             if self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
-                if name in {}:  # 这里还没填，以后加了泳池模式填：水生僵尸集合
+                if name in {c.DUCKY_TUBE_ZOMBIE}:  # 水生僵尸集合
                     map_y = randint(2, 3)
                 elif name == '这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）':
                     map_y = randint(0, 5)

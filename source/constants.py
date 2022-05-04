@@ -281,6 +281,8 @@ FLAG_ZOMBIE = 'FlagZombie'
 NEWSPAPER_ZOMBIE = 'NewspaperZombie'
 FOOTBALL_ZOMBIE = 'FootballZombie'
 DUCKY_TUBE_ZOMBIE = 'DuckyTubeZombie'
+CONEHEAD_DUCKY_TUBE_ZOMBIE = 'ConeheadDuckyTubeZombie'
+BUCKETHEAD_DUCKY_TUBE_ZOMBIE = 'BucketheadDuckyTubeZombie'
 
 BOOMDIE = 'BoomDie'
 
