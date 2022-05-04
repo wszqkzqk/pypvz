@@ -13,7 +13,7 @@ class Menu(tool.State):
         self.persist = persist
         self.game_info = persist
         self.setupBackground()
-        self.setupAdventure()
+        self.setupOptions()
 
     def setupBackground(self):
         frame_rect = (80, 0, 800, 600)
@@ -26,7 +26,7 @@ class Menu(tool.State):
         self.bg_rect.x = 0
         self.bg_rect.y = 0
         
-    def setupAdventure(self):
+    def setupOptions(self):
         # 冒险模式
         self.adventure_frames = []
         frame_names = (c.OPTION_ADVENTURE + '_0', c.OPTION_ADVENTURE + '_1')
