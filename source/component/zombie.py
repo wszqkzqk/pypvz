@@ -4,7 +4,7 @@ from .. import constants as c
 
 
 class Zombie(pg.sprite.Sprite):
-    def __init__(self, x, y, name, head_group=None, helmetHealth=0, helmetType2Health=0, bodyHealth=c.NORMAL_HEALTH + c.LOSTHEAD_HEALTH, damage=c.ZOMBIE_ATTACK_DAMAGE):
+    def __init__(self, x, y, name, head_group=None, helmetHealth=0, helmetType2Health=0, bodyHealth=c.NORMAL_HEALTH + c.LOSTHEAD_HEALTH, damage=c.ZOMBIE_ATTACK_DAMAGE, canSwim=False):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -575,3 +575,34 @@ class FootballZombie(Zombie):
             self.loadFrames(frame_list[i], name)
 
         self.frames = self.helmet_walk_frames
+
+class DuckyTubeZombie(Zombie):
+    def __init__(self, x, y, head_group):
+        Zombie.__init__(self, x, y, c.DUCKY_TUBE_ZOMBIE, head_group, canSwim=True)
+
+    def loadImages(self):
+        self.walk_frames = []
+        self.swim_frames = []
+        self.attack_frames = []
+        self.losthead_walk_frames = []
+        self.losthead_attack_frames = []
+        self.die_frames = []
+        self.boomdie_frames = []
+
+        walk_name = self.name
+        swim_name = self.name + 'Swim'
+        attack_name = self.name + 'Attack'
+        losthead_walk_name = self.name + 'LostHead'
+        losthead_attack_name = self.name + 'LostHead'
+        die_name = self.name + 'Die'
+        boomdie_name = c.BOOMDIE
+
+        frame_list = [self.walk_frames, self.swim_frames, self.attack_frames, self.losthead_walk_frames,
+                      self.losthead_attack_frames, self.die_frames, self.boomdie_frames]
+        name_list = [walk_name, swim_name, attack_name, losthead_walk_name,
+                     losthead_attack_name, die_name, boomdie_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name)
+
+        self.frames = self.walk_frames

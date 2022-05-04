@@ -141,6 +141,9 @@ MAP_POOL_OFFSET_Y = 115
 MAP_ROOF_OFFSET_X = 35  # 暂时还不清楚数据
 MAP_ROOF_OFFSET_Y = 105 # 暂时还不清楚数据
 
+# 泳池前端陆地部分
+MAP_POOL_FRONT_X = 770
+
 # 植物选择菜单栏、传送带菜单栏等类型设定
 CHOOSEBAR_TYPE = 'choosebar_type'
 CHOOSEBAR_STATIC = 0
@@ -277,6 +280,8 @@ BUCKETHEAD_ZOMBIE = 'BucketheadZombie'
 FLAG_ZOMBIE = 'FlagZombie'
 NEWSPAPER_ZOMBIE = 'NewspaperZombie'
 FOOTBALL_ZOMBIE = 'FootballZombie'
+DUCKY_TUBE_ZOMBIE = 'DuckyTubeZombie'
+
 BOOMDIE = 'BoomDie'
 
 # 对僵尸的攻击类型设置

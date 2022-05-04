@@ -657,6 +657,8 @@ class Level(tool.State):
             self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.FOOTBALL_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.DUCKY_TUBE_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)
