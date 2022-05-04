@@ -951,7 +951,7 @@ class HypnoShroom(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.HYPNOSHROOM, c.PLANT_HEALTH, None)
         self.can_sleep = True
-        self.animate_interval = 200
+        self.animate_interval = 80
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -967,6 +967,11 @@ class HypnoShroom(Plant):
             self.loadFrames(frame_list[i], name, 1, c.WHITE)
 
         self.frames = self.idle_frames
+    
+    def idling(self):
+        # 现在没有投石车僵尸，所以暂时这样处理
+        if self.health < c.PLANT_HEALTH:
+            self.health = 0
 
 
 class WallNutBowling(Plant):
@@ -1176,11 +1181,13 @@ class CoffeeBean(Plant):
 
     def idling(self):
         if (self.frame_index + 1) == self.frame_num:
-            self.mapContent[c.MAP_SLEEP] = True
+            self.mapContent[c.MAP_SLEEP] = False
             for plant in self.plant_group:
                 if plant.can_sleep:
                     if plant.state == c.SLEEP:
+                        plant.state = c.IDLE
                         plant.setIdle()
+                        plant.changeFrames(plant.idle_frames)
             self.mapContent[c.MAP_PLANT].remove(self.name)
             self.kill()
             
