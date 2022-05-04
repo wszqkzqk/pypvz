@@ -33,10 +33,8 @@ class Level(tool.State):
     def loadMap(self):
         if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
             map_file = 'littleGame_' + str(self.game_info[c.LITTLEGAME_NUM]) + '.json'
-            self.mode = c.MODE_LITTLEGAME
         elif self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
             map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
-            self.mode = c.MODE_ADVENTURE
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
@@ -45,9 +43,9 @@ class Level(tool.State):
             f.close()
         except Exception as e:
             print("成功通关！")
-            if self.mode == c.MODE_ADVENTURE:
+            if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
                 self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
-            elif self.mode == c.MODE_LITTLEGAME:
+            elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
                 self.game_info[c.LITTLEGAME_NUM] = c.START_LITTLE_GAME_NUM
             self.done = True
             self.next = c.MAIN_MENU
@@ -55,27 +53,28 @@ class Level(tool.State):
             pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
             pg.mixer.music.play(-1, 0)
             return
-        if self.map_data[c.SHOVEL] == 0:
-            self.hasShovel = False
-        else:
-            self.hasShovel = True
+        # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
+        self.hasShovel = self.map_data[c.SHOVEL]
 
         # 同时播放音乐
-        global bgm
-        if self.mode == c.MODE_ADVENTURE: # 冒险模式
-            if self.game_info[c.LEVEL_NUM] in {0, 1, 2}:    # 白天关卡
-                bgm = 'dayLevel.opus'
-            elif self.game_info[c.LEVEL_NUM] in {3}:    # 夜晚关卡
-                bgm = 'nightLevel.opus'
-            elif self.game_info[c.LEVEL_NUM] in {4}:
-                bgm = 'poolLevel.opus'
-        elif self.mode == c.MODE_LITTLEGAME:   # 小游戏模式
-            if self.game_info[c.LITTLEGAME_NUM] in {1}:   # 传送带大战
-                bgm = 'battle.opus'
-            elif self.game_info[c.LITTLEGAME_NUM] in {2}:    # 坚果保龄球
-                bgm = 'bowling.opus'
+        if c.CHOOSEBAR_TYPE in self.map_data:  # 指定了choosebar_type的传送带关
+            if self.map_data[c.CHOOSEBAR_TYPE] == c.CHOSSEBAR_BOWLING:   # 坚果保龄球
+                self.bgm = 'bowling.opus'
+            elif self.map_data[c.CHOOSEBAR_TYPE] == c.CHOOSEBAR_MOVE:  # 传送带
+                self.bgm = 'battle.opus'
+        else:   # 一般选卡关，非传送带
+            # 白天类
+            if self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_DAY, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
+                self.bgm = 'dayLevel.opus'
+            # 夜晚
+            elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_NIGHT}:
+                self.bgm = 'nightLevel.opus'
+            # 泳池
+            elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL}:
+                self.bgm = 'poolLevel.opus'
+
         pg.mixer.music.stop()
-        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", bgm))
+        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", self.bgm))
         pg.mixer.music.play(-1, 0)
 
     def setupBackground(self):
@@ -200,15 +199,15 @@ class Level(tool.State):
             else:
                 if current_time - 23000 < self.waveTime:    # 判断剩余时间是否有2000 ms
                     self.waveTime = current_time - 23000    # 即倒计时2000 ms
-        
 
 
+
+    # 旧机制，目前仅用于调试
     def setupZombies(self):
         def takeTime(element):
             return element[0]
 
         self.zombie_list = []
-        # 旧机制，目前仅用于调试
         for data in self.map_data[c.ZOMBIE_LIST]:
             if 'map_y' in data.keys():
                 self.zombie_list.append((data['time'], data['name'], data['map_y']))
@@ -499,7 +498,7 @@ class Level(tool.State):
                     self.done = True
                     self.next = c.LEVEL
                     pg.mixer.music.stop()
-                    pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", bgm))
+                    pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", self.bgm))
                     pg.mixer.music.play(-1, 0)
                 elif self.checkMainMenuClick(mouse_pos):
                     self.done = True
