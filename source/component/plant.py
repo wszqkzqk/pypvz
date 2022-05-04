@@ -802,7 +802,7 @@ class ScaredyShroom(Plant):
         Plant.__init__(self, x, y, c.SCAREDYSHROOM, c.PLANT_HEALTH, bullet_group)
         self.can_sleep = True
         self.shoot_timer = 0
-        self.cry_x_range = c.GRID_X_SIZE * 2
+        self.cry_x_range = c.GRID_X_SIZE * 1.5
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -822,8 +822,7 @@ class ScaredyShroom(Plant):
         self.frames = self.idle_frames
 
     def needCry(self, zombie):
-        if (zombie.state != c.DIE and self.rect.x <= zombie.rect.right and
-                self.rect.x + self.cry_x_range > zombie.rect.x):
+        if (zombie.state != c.DIE and abs(self.rect.x - zombie.rect.x) < self.cry_x_range):
             return True
         return False
 
