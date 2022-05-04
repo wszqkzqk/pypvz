@@ -25,6 +25,12 @@
         "DukyTubeZombieAttack":{"x":55, "width":105},
         "DukyTubeZombieDie":{"x":55, "width":105},
         "DukyTubeZombieLostHead":{"x":55, "width":105},
-        "DukyTubeZombieSwim":{"x":55, "width":105}
+        "DukyTubeZombieSwim":{"x":55, "width":105},
+        "ConeheadDukyTubeZombie":{"x":55, "width":105},
+        "ConeheadDukyTubeZombieAttack":{"x":55, "width":105},
+        "ConeheadDukyTubeZombieSwim":{"x":55, "width":105},
+        "BucketheadDukyTubeZombie":{"x":55, "width":105},
+        "BucketheadDukyTubeZombieAttack":{"x":55, "width":105},
+        "BucketheadDukyTubeZombieSwim":{"x":55, "width":105}
     }
 }

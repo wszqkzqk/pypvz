@@ -4,7 +4,8 @@
     "shovel":1,
     "spawn_zombies":"list",
     "zombie_list":[
-        {"time":0, "map_y":3, "name":"DuckyTubeZombie"},
+        {"time":0, "map_y":3, "name":"BucketheadDuckyTubeZombie"},
+        {"time":0, "map_y":2, "name":"ConeheadDuckyTubeZombie"},
         {"time":60000, "map_y":2, "name":"Zombie"}
     ]
 }

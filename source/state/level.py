@@ -108,10 +108,10 @@ class Level(tool.State):
     def convertZombieInPool(self, newZombie):     
         if newZombie == c.NORMAL_ZOMBIE:
             return c.DUCKY_TUBE_ZOMBIE        
-        # elif newZombie == c.CONEHEAD_ZOMBIE:
-        #     return c.CONEHEAD_DUCKY_TUBE_ZOMBIE
-        # elif newZombie == c.BUCKETHEAD_ZOMBIE:
-        #     return c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE
+        elif newZombie == c.CONEHEAD_ZOMBIE:
+            return c.CONEHEAD_DUCKY_TUBE_ZOMBIE
+        elif newZombie == c.BUCKETHEAD_ZOMBIE:
+            return c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE
         else:
             return newZombie
 
@@ -148,7 +148,7 @@ class Level(tool.State):
             if (self.bar_type != c.CHOOSEBAR_STATIC):
                 volume += 2
 
-            if inevitableZombieDict and (str(wave) in inevitableZombieDict.keys()):
+            if inevitableZombieDict and (str(wave) in inevitableZombieDict):
                 for newZombie in inevitableZombieDict[str(wave)]:
                     zombieList.append(newZombie)
                     volume -= self.createZombieInfo[newZombie][0]
@@ -162,11 +162,9 @@ class Level(tool.State):
                     # 有泳池的第四波设定上生成水生僵尸
                     if survivalRounds == 0 and wave == 4:
                         newZombie = self.convertZombieInPool(newZombie)
-                        # 等完成以后加入路障等的判断
                     elif survivalRounds > 0 or wave > 4:
                         if randint(1, 4) == 1:  # 1/4概率水上
                             newZombie = self.convertZombieInPool(newZombie)
-                            # 等完成以后加入路障等的判断
                 if self.createZombieInfo[newZombie][0] <= volume:
                     zombieList.append(newZombie)
                     volume -= self.createZombieInfo[newZombie][0]
@@ -686,6 +684,10 @@ class Level(tool.State):
             self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.DUCKY_TUBE_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.CONEHEAD_DUCKY_TUBE_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)

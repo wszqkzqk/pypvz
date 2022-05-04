@@ -97,22 +97,72 @@ class Zombie(pg.sprite.Sprite):
         if self.checkToDie(self.losthead_walk_frames):
             return
 
-        if self.helmetHealth <= 0 and self.helmet:
-            self.changeFrames(self.walk_frames)
-            self.helmet = False
-        if self.helmetType2Health <= 0 and self.helmetType2:
-            self.changeFrames(self.walk_frames)
-            self.helmetType2 = False
-            if self.name == c.NEWSPAPER_ZOMBIE:
-                self.speed = 2.5
-
+        # 能游泳的僵尸
         if self.canSwim:
+            # 在水池范围内
+            # 在右侧岸左
             if self.rect.right <= c.MAP_POOL_FRONT_X:
-                if not self.swimming:
-                    self.changeFrames(self.swim_frames)
-                    self.swimming = True
-                # 待写带有盔甲的水生僵尸丢盔甲的判断
-
+                # 在左侧岸右，左侧岸位置为预估
+                if self.rect.x >= c.MAP_POOL_OFFSET_X:
+                    # 还未进入游泳状态
+                    if not self.swimming:
+                        self.swimming = True
+                        self.changeFrames(self.swim_frames)
+                        # 同样没有兼容双防具
+                        if self.helmet:
+                            if self.helmetHealth <= 0:
+                                self.helmet = False
+                            else:
+                                self.changeFrames(self.helmet_swim_frames)
+                        if self.helmetType2:
+                            if self.helmetType2Health <= 0:
+                                self.helmetType2 = False
+                            else:
+                                self.changeFrames(self.helmet_swim_frames)
+                    # 已经进入游泳状态
+                    else:
+                        if self.helmet:
+                            if self.helmetHealth <= 0:
+                                self.changeFrames(self.swim_frames)
+                                self.helmet = False
+                        if self.helmetType2:
+                            if self.helmetType2Health <= 0:
+                                self.changeFrames(self.swim_frames)
+                                self.helmetType2 = False
+                # 水生僵尸已经接近家门口并且上岸
+                else:
+                    if self.swimming:
+                        self.changeFrames(self.walk_frames)
+                        self.swimming = False
+                    # 同样没有兼容双防具
+                    if self.helmet:
+                        if self.helmetHealth <= 0:
+                            self.helmet = False
+                        else:
+                            self.changeFrames(self.helmet_walk_frames)
+                    if self.helmetType2:
+                        if self.helmetType2Health <= 0:
+                            self.helmetType2 = False
+                        else:
+                            self.changeFrames(self.helmet_walk_frames)
+            # 尚未进入水池
+            else:
+                if self.helmetHealth <= 0 and self.helmet:
+                    self.changeFrames(self.walk_frames)
+                    self.helmet = False
+                if self.helmetType2Health <= 0 and self.helmetType2:
+                    self.changeFrames(self.walk_frames)
+                    self.helmetType2 = False
+        # 不能游泳的一般僵尸
+        else:
+            if self.helmetHealth <= 0 and self.helmet:
+                self.changeFrames(self.walk_frames)
+                self.helmet = False
+            if self.helmetType2Health <= 0 and self.helmetType2:
+                self.changeFrames(self.walk_frames)
+                self.helmetType2 = False
+                if self.name == c.NEWSPAPER_ZOMBIE:
+                    self.speed = 2.5
         if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
             self.walk_timer = self.current_time
             if self.is_hypno:
@@ -316,9 +366,21 @@ class Zombie(pg.sprite.Sprite):
 
         if self.canSwim:
             if self.rect.right <= c.MAP_POOL_FRONT_X:
-                self.changeFrames(self.swim_frames)
                 self.swimming = True
-                # 待写带有盔甲的水生僵尸丢盔甲的判断
+                self.changeFrames(self.swim_frames)
+                # 同样没有兼容双防具
+                if self.helmet:
+                    if self.helmetHealth <= 0:
+                        self.changeFrames(self.swim_frames)
+                        self.helmet = False
+                    else:
+                        self.changeFrames(self.helmet_swim_frames)
+                if self.helmetType2:
+                    if self.helmetType2Health <= 0:
+                        self.changeFrames(self.swim_frames)
+                        self.helmetType2 = False
+                    else:
+                        self.changeFrames(self.helmet_swim_frames)
 
     def setAttack(self, prey, is_plant=True):
         self.prey = prey  # prey can be plant or other zombies
@@ -621,3 +683,78 @@ class DuckyTubeZombie(Zombie):
             self.loadFrames(frame_list[i], name)
 
         self.frames = self.walk_frames
+
+class ConeHeadDuckyTubeZombie(Zombie):
+    def __init__(self, x, y, head_group):
+        Zombie.__init__(self, x, y, c.CONEHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmetHealth=c.CONEHEAD_HEALTH ,canSwim=True)
+        
+    def loadImages(self):
+        self.helmet_walk_frames = []
+        self.walk_frames = []
+        self.helmet_swim_frames = []
+        self.swim_frames = []
+        self.helmet_attack_frames = []
+        self.attack_frames = []
+        self.losthead_walk_frames = []
+        self.losthead_attack_frames = []
+        self.die_frames = []
+        self.boomdie_frames = []
+
+        helmet_walk_name = self.name
+        helmet_swim_name = self.name + 'Swim'
+        helmet_attack_name = self.name + 'Attack'
+        walk_name = c.DUCKY_TUBE_ZOMBIE
+        swim_name = c.DUCKY_TUBE_ZOMBIE + 'Swim'
+        attack_name = c.DUCKY_TUBE_ZOMBIE + 'Attack'
+        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
+        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
+        die_name = c.DUCKY_TUBE_ZOMBIE + 'Die'
+        boomdie_name = c.BOOMDIE
+
+        frame_list = [self.helmet_walk_frames, self.helmet_swim_frames, self.helmet_attack_frames, self.walk_frames, self.swim_frames, self.attack_frames, self.losthead_walk_frames,
+                      self.losthead_attack_frames, self.die_frames, self.boomdie_frames]
+        name_list = [helmet_walk_name, helmet_swim_name, helmet_attack_name, walk_name, swim_name, attack_name, losthead_walk_name,
+                     losthead_attack_name, die_name, boomdie_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name)
+
+        self.frames = self.helmet_walk_frames
+
+
+class BucketHeadDuckyTubeZombie(Zombie):
+    def __init__(self, x, y, head_group):
+        Zombie.__init__(self, x, y, c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmetHealth=c.BUCKETHEAD_HEALTH ,canSwim=True)
+        
+    def loadImages(self):
+        self.helmet_walk_frames = []
+        self.walk_frames = []
+        self.helmet_swim_frames = []
+        self.swim_frames = []
+        self.helmet_attack_frames = []
+        self.attack_frames = []
+        self.losthead_walk_frames = []
+        self.losthead_attack_frames = []
+        self.die_frames = []
+        self.boomdie_frames = []
+
+        helmet_walk_name = self.name
+        helmet_swim_name = self.name + 'Swim'
+        helmet_attack_name = self.name + 'Attack'
+        walk_name = c.DUCKY_TUBE_ZOMBIE
+        swim_name = c.DUCKY_TUBE_ZOMBIE + 'Swim'
+        attack_name = c.DUCKY_TUBE_ZOMBIE + 'Attack'
+        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
+        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
+        die_name = c.DUCKY_TUBE_ZOMBIE + 'Die'
+        boomdie_name = c.BOOMDIE
+
+        frame_list = [self.helmet_walk_frames, self.helmet_swim_frames, self.helmet_attack_frames, self.walk_frames, self.swim_frames, self.attack_frames, self.losthead_walk_frames,
+                      self.losthead_attack_frames, self.die_frames, self.boomdie_frames]
+        name_list = [helmet_walk_name, helmet_swim_name, helmet_attack_name, walk_name, swim_name, attack_name, losthead_walk_name,
+                     losthead_attack_name, die_name, boomdie_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name)
+
+        self.frames = self.helmet_walk_frames
