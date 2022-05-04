@@ -103,19 +103,6 @@ class Level(tool.State):
             self.bullet_groups.append(pg.sprite.Group())
 
 
-    # 将僵尸转化为水上变种的函数
-    # 普通僵尸、路障僵尸、铁桶僵尸有水上变种
-    def convertZombieInPool(self, newZombie):     
-        if newZombie == c.NORMAL_ZOMBIE:
-            return c.DUCKY_TUBE_ZOMBIE        
-        elif newZombie == c.CONEHEAD_ZOMBIE:
-            return c.CONEHEAD_DUCKY_TUBE_ZOMBIE
-        elif newZombie == c.BUCKETHEAD_ZOMBIE:
-            return c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE
-        else:
-            return newZombie
-
-
     # 按照规则生成每一波僵尸
     # 可以考虑将波刷新和一波中的僵尸生成分开
     # useableZombie是指可用的僵尸种类的元组
@@ -159,12 +146,14 @@ class Level(tool.State):
                 newZombie = choices(useableZombies, weights)[0]
                 # 普通僵尸、路障僵尸、铁桶僵尸有概率生成水中变种
                 if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
-                    # 有泳池的第四波设定上生成水生僵尸
+                    # 有泳池第一轮的第四波设定上生成水生僵尸
                     if survivalRounds == 0 and wave == 4:
-                        newZombie = self.convertZombieInPool(newZombie)
+                        if newZombie in self.convertZombieInPool:
+                            newZombie = self.convertZombieInPool[newZombie]
                     elif survivalRounds > 0 or wave > 4:
-                        if randint(1, 4) == 1:  # 1/4概率水上
-                            newZombie = self.convertZombieInPool(newZombie)
+                        if randint(1, 3) == 1:  # 1/3概率水上，暂时人为设定
+                            if newZombie in self.convertZombieInPool:
+                                newZombie = self.convertZombieInPool[newZombie]
                 if self.createZombieInfo[newZombie][0] <= volume:
                     zombieList.append(newZombie)
                     volume -= self.createZombieInfo[newZombie][0]
@@ -338,6 +327,10 @@ class Level(tool.State):
                         c.CONEHEAD_DUCKY_TUBE_ZOMBIE:(2, 0),    # 作为变种，不主动生成
                         c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:(4, 0),  # 作为变种，不主动生成
                         }
+            # 将僵尸与水上变种对应
+            self.convertZombieInPool = {c.NORMAL_ZOMBIE:c.DUCKY_TUBE_ZOMBIE,
+                                        c.CONEHEAD_ZOMBIE:c.CONEHEAD_DUCKY_TUBE_ZOMBIE,
+                                        c.BUCKETHEAD_ZOMBIE:c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE}
 
             # 暂时没有生存模式，所以 survivalRounds = 0
             if c.INEVITABLE_ZOMBIE_DICT in self.map_data.keys():
