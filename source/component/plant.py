@@ -651,12 +651,12 @@ class PotatoMine(Plant):
 
 
 class Squash(Plant):
-    def __init__(self, x, y, mapObjSet):
+    def __init__(self, x, y, mapPlantsSet):
         Plant.__init__(self, x, y, c.SQUASH, c.PLANT_HEALTH, None)
         self.orig_pos = (x, y)
         self.aim_timer = 0
         self.squashing = False
-        self.mapObjSet = mapObjSet
+        self.mapPlantsSet = mapPlantsSet
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -707,7 +707,7 @@ class Squash(Plant):
                     if self.canAttack(zombie):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
                 self.health = 0 # 避免僵尸在原位啃食
-                self.mapObjSet.remove(c.SQUASH)
+                self.mapPlantsSet.remove(c.SQUASH)
                 self.kill()
         elif self.aim_timer == 0:
             self.aim_timer = self.current_time
