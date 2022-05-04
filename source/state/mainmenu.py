@@ -13,7 +13,7 @@ class Menu(tool.State):
         self.persist = persist
         self.game_info = persist
         self.setupBackground()
-        self.setupOption()
+        self.setupAdventure()
 
     def setupBackground(self):
         frame_rect = (80, 0, 800, 600)
@@ -26,19 +26,19 @@ class Menu(tool.State):
         self.bg_rect.x = 0
         self.bg_rect.y = 0
         
-    def setupOption(self):
+    def setupAdventure(self):
         # 冒险模式
-        self.option_frames = []
+        self.adventure_frames = []
         frame_names = (c.OPTION_ADVENTURE + '_0', c.OPTION_ADVENTURE + '_1')
         frame_rect = (0, 0, 330, 144)
         
         for name in frame_names:
-            self.option_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1))
-        self.option_frame_index = 0
-        self.option_image = self.option_frames[self.option_frame_index]
-        self.option_rect = self.option_image.get_rect()
-        self.option_rect.x = 400
-        self.option_rect.y = 60
+            self.adventure_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1))
+        self.adventure_frame_index = 0
+        self.adventure_image = self.adventure_frames[self.adventure_frame_index]
+        self.adventure_rect = self.adventure_image.get_rect()
+        self.adventure_rect.x = 400
+        self.adventure_rect.y = 60
         self.adventure_highlight_time = 0
         
         # 退出按钮
@@ -67,13 +67,13 @@ class Menu(tool.State):
         self.littleGame_rect.y = 175
         self.littleGame_highlight_time = 0
 
-        self.option_start = 0
-        self.option_timer = 0
-        self.option_clicked = False
-    
+        self.adventure_start = 0
+        self.adventure_timer = 0
+        self.adventure_clicked = False
+
     def inAreaAdventure(self, x, y):
-        if (x >= self.option_rect.x and x <= self.option_rect.right and
-            y >= self.option_rect.y and y <= self.option_rect.bottom):
+        if (x >= self.adventure_rect.x and x <= self.adventure_rect.right and
+            y >= self.adventure_rect.y and y <= self.adventure_rect.bottom):
             return True
         else:
             return False
@@ -105,8 +105,8 @@ class Menu(tool.State):
     def checkAdventureClick(self, mouse_pos):
         x, y = mouse_pos
         if self.inAreaAdventure(x, y):
-            self.option_clicked = True
-            self.option_timer = self.option_start = self.current_time
+            self.adventure_clicked = True
+            self.adventure_timer = self.adventure_start = self.current_time
             self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
         return False
     
@@ -130,15 +130,15 @@ class Menu(tool.State):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time
         
         # 没有选到选项时，检查有没有点到选项
-        if not self.option_clicked:
+        if not self.adventure_clicked:
             # 先检查选项高亮预览
             x, y = pg.mouse.get_pos()
             self.checkHilight(x, y)
             if (self.current_time - self.adventure_highlight_time) < 80:
-                self.option_frame_index = 1
+                self.adventure_frame_index = 1
             else:
-                self.option_frame_index = 0
-            self.option_image = self.option_frames[self.option_frame_index]
+                self.adventure_frame_index = 0
+            self.adventure_image = self.adventure_frames[self.adventure_frame_index]
             if (self.current_time - self.exit_highlight_time) < 80:
                 self.exit_frame_index = 1
             else:
@@ -156,17 +156,17 @@ class Menu(tool.State):
                 self.checkLittleGameClick(mouse_pos)
         else:
             # 点到后播放动画
-            if(self.current_time - self.option_timer) > 150:
-                self.option_frame_index += 1
-                if self.option_frame_index >= 2:
-                    self.option_frame_index = 0
-                self.option_timer = self.current_time
-                self.option_image = self.option_frames[self.option_frame_index]
-            if(self.current_time - self.option_start) > 1300:
+            if(self.current_time - self.adventure_timer) > 150:
+                self.adventure_frame_index += 1
+                if self.adventure_frame_index >= 2:
+                    self.adventure_frame_index = 0
+                self.adventure_timer = self.current_time
+                self.adventure_image = self.adventure_frames[self.adventure_frame_index]
+            if(self.current_time - self.adventure_start) > 1300:
                 self.done = True
                 
 
         surface.blit(self.bg_image, self.bg_rect)
-        surface.blit(self.option_image, self.option_rect)
+        surface.blit(self.adventure_image, self.adventure_rect)
         surface.blit(self.exit_image, self.exit_rect)
         surface.blit(self.littleGame_image, self.littleGame_rect)
