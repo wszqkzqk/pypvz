@@ -142,7 +142,10 @@ class Level(tool.State):
                 if volume < 0:
                     print('警告：第{}波中手动设置的僵尸级别总数超过上限！'.format(wave))
 
-            while (volume > 0) and (len(zombieList) < 50):
+            # 防止因为僵尸最小等级过大，使得总容量无法完全利用，造成死循环的检查机制
+            minCost = self.createZombieInfo[min(useableZombies, key=lambda x:self.createZombieInfo[x][0])][0]
+            
+            while (volume >= minCost) and (len(zombieList) < 50):
                 newZombie = choices(useableZombies, weights)[0]
                 # 普通僵尸、路障僵尸、铁桶僵尸有概率生成水中变种
                 if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
@@ -158,6 +161,7 @@ class Level(tool.State):
                     zombieList.append(newZombie)
                     volume -= self.createZombieInfo[newZombie][0]
             waves.append(zombieList)
+            print(wave, zombieList, len(zombieList))
 
         self.waves = waves
 
@@ -322,7 +326,7 @@ class Level(tool.State):
                         c.CONEHEAD_ZOMBIE:(2, 4000),
                         c.BUCKETHEAD_ZOMBIE:(4, 3000),
                         c.NEWSPAPER_ZOMBIE:(2, 1000),
-                        c.FOOTBALL_ZOMBIE:(2, 2000),
+                        c.FOOTBALL_ZOMBIE:(7, 2000),
                         c.DUCKY_TUBE_ZOMBIE:(1, 0),  # 作为变种，不主动生成
                         c.CONEHEAD_DUCKY_TUBE_ZOMBIE:(2, 0),    # 作为变种，不主动生成
                         c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:(4, 0),  # 作为变种，不主动生成
