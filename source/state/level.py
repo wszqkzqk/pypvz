@@ -749,6 +749,8 @@ class Level(tool.State):
             new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y])
         elif self.plant_name == c.STARFRUIT:
             new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self)
+        elif self.plant_name == c.COFFEEBEAN:
+            new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x])
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()

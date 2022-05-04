@@ -949,7 +949,7 @@ class IceShroom(Plant):
 
 class HypnoShroom(Plant):
     def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.HYPNOSHROOM, 1, None)
+        Plant.__init__(self, x, y, c.HYPNOSHROOM, c.PLANT_HEALTH, None)
         self.can_sleep = True
         self.animate_interval = 200
 
@@ -1167,3 +1167,20 @@ class StarFruit(Plant):
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.y - 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_UP, self.level))
             self.shoot_timer = self.current_time
 
+
+class CoffeeBean(Plant):
+    def __init__(self, x, y, plant_group, mapContent):
+        Plant.__init__(self, x, y, c.COFFEEBEAN, c.PLANT_HEALTH, None)
+        self.plant_group = plant_group
+        self.mapContent = mapContent
+
+    def idling(self):
+        if (self.frame_index + 1) == self.frame_num:
+            self.mapContent[c.MAP_SLEEP] = True
+            for plant in self.plant_group:
+                if plant.can_sleep:
+                    if plant.state == c.SLEEP:
+                        plant.setIdle()
+            self.mapContent[c.MAP_PLANT].remove(self.name)
+            self.kill()
+            

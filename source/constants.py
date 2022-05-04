@@ -203,6 +203,7 @@ REDWALLNUTBOWLING = 'RedWallNutBowling'
 LILYPAD = 'LilyPad'
 TORCHWOOD = 'TorchWood'
 STARFRUIT = 'StarFruit'
+COFFEEBEAN = 'CoffeeBean'
 
 # 植物生命值
 PLANT_HEALTH = 300
@@ -245,6 +246,7 @@ CARD_REDWALLNUT = 'card_redwallnut'
 CARD_LILYPAD = 'card_lilypad'
 CARD_TORCHWOOD = 'card_torchwood'
 CARD_STARFRUIT = 'card_starfruit'
+CARD_COFFEEBEAN = 'card_coffeebean'
 
 # 子弹信息
 # 子弹类型

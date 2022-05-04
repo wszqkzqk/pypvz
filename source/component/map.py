@@ -43,19 +43,27 @@ class Map():
     def isAvailable(self, map_x, map_y, plantName):
         if self.map[map_y][map_x][c.MAP_PLOT_TYPE] == c.MAP_GRASS:  # 草地
             # 首先需要判断植物是否是水生植物，水生植物不能种植在陆地上
+            if plantName == c.COFFEEBEAN:
+                if self.map[map_y][map_x][c.MAP_SLEEP] and (plantName not in self.map[map_y][map_x][c.MAP_PLANT]):
+                    return True
+                else:
+                    return False
             if plantName not in {c.LILYPAD, '海蘑菇（未实现）', '缠绕水草（未实现）'}: # 这里的集合也可以换成存储在某一文件中的常数的表达
                 if not self.map[map_y][map_x][c.MAP_PLANT]: # 没有植物肯定可以种植
                     return True
                 elif ((self.map[map_y][map_x][c.MAP_PLANT] | {'花盆（未实现）', '南瓜头（未实现）'} == {'花盆（未实现）', '南瓜头（未实现）'})
                     and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
                     return True
-                elif plantName == '咖啡豆（未实现）' and self.map[map_y][map_x][c.MAP_SLEEP]:
-                    return True
                 else:
                     return False
             else:
                 return False
         elif self.map[map_y][map_x][c.MAP_PLOT_TYPE] == c.MAP_TILE: # 屋顶
+            if plantName == c.COFFEEBEAN:
+                if self.map[map_y][map_x][c.MAP_SLEEP] and (plantName not in self.map[map_y][map_x][c.MAP_PLANT]):
+                    return True
+                else:
+                    return False
             # 首先需要判断植物是否是水生植物，水生植物不能种植在陆地上
             if plantName not in {c.LILYPAD, '海蘑菇（未实现）', '缠绕水草（未实现）'}: # 这里的集合也可以换成存储在某一文件中的常数的表达
                 if '花盆（未实现）' in self.map[map_y][map_x][c.MAP_PLANT]:
@@ -67,13 +75,16 @@ class Map():
                             return True
                 elif plantName == '花盆（未实现）': # 这一格本来没有花盆而且新来的植物是花盆，可以种
                     return True
-                elif plantName == '咖啡豆（未实现）' and self.map[map_y][map_x][c.MAP_SLEEP]:
-                    return True
                 else:
                     return False
             else:
                 return False
         elif self.map[map_y][map_x][c.MAP_PLOT_TYPE] == c.MAP_WATER:   # 水里
+            if plantName == c.COFFEEBEAN:
+                if self.map[map_y][map_x][c.MAP_SLEEP] and (plantName not in self.map[map_y][map_x][c.MAP_PLANT]):
+                    return True
+                else:
+                    return False
             if plantName in {c.LILYPAD, '海蘑菇（未实现）', '缠绕水草（未实现）'}:   # 是水生植物
                 if not self.map[map_y][map_x][c.MAP_PLANT]: # 只有无植物时才能在水里种植水生植物
                     return True
