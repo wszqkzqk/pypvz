@@ -161,7 +161,7 @@ class Level(tool.State):
                     zombieList.append(newZombie)
                     volume -= self.createZombieInfo[newZombie][0]
             waves.append(zombieList)
-            print(wave, zombieList, len(zombieList))
+            #print(wave, zombieList, len(zombieList))
 
         self.waves = waves
 
