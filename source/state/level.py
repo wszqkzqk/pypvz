@@ -833,6 +833,8 @@ class Level(tool.State):
                 if zombie.state != c.WALK:
                     if not self.refreshZombieAttack:
                         continue
+                if zombie.canSwim and (not zombie.swimming):
+                    continue
                 plant = pg.sprite.spritecollideany(zombie, self.plant_groups[i], collided_func)
                 if plant:
                     if plant.name == c.WALLNUTBOWLING:

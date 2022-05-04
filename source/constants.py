@@ -142,7 +142,7 @@ MAP_ROOF_OFFSET_X = 35  # 暂时还不清楚数据
 MAP_ROOF_OFFSET_Y = 105 # 暂时还不清楚数据
 
 # 泳池前端陆地部分
-MAP_POOL_FRONT_X = 770
+MAP_POOL_FRONT_X = SCREEN_WIDTH - 15
 
 # 植物选择菜单栏、传送带菜单栏等类型设定
 CHOOSEBAR_TYPE = 'choosebar_type'

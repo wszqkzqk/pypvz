@@ -24,6 +24,8 @@ class Zombie(pg.sprite.Sprite):
         self.damage = damage
         self.dead = False
         self.lostHead = False
+        self.canSwim = canSwim
+        self.swimming = False
         self.helmet = (self.helmetHealth > 0)
         self.helmetType2 = (self.helmetType2Health > 0)
         self.head_group = head_group
@@ -103,6 +105,13 @@ class Zombie(pg.sprite.Sprite):
             self.helmetType2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
                 self.speed = 2.5
+
+        if self.canSwim:
+            if self.rect.right <= c.MAP_POOL_FRONT_X:
+                if not self.swimming:
+                    self.changeFrames(self.swim_frames)
+                    self.swimming = True
+                # 待写带有盔甲的水生僵尸丢盔甲的判断
 
         if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
             self.walk_timer = self.current_time
@@ -304,6 +313,12 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.losthead_walk_frames)
         else:
             self.changeFrames(self.walk_frames)
+
+        if self.canSwim:
+            if self.rect.right <= c.MAP_POOL_FRONT_X:
+                self.changeFrames(self.swim_frames)
+                self.swimming = True
+                # 待写带有盔甲的水生僵尸丢盔甲的判断
 
     def setAttack(self, prey, is_plant=True):
         self.prey = prey  # prey can be plant or other zombies
