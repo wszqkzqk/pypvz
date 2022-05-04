@@ -642,7 +642,7 @@ class Level(tool.State):
             # 情况复杂：分水路和陆路，不能简单实现，需要另外加判断
             # 0, 1, 4, 5路为陆路，2, 3路为水路
             if self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
-                if name in {c.DUCKY_TUBE_ZOMBIE}:  # 水生僵尸集合
+                if name in {c.DUCKY_TUBE_ZOMBIE, c.CONEHEAD_DUCKY_TUBE_ZOMBIE, c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE}:  # 水生僵尸集合
                     map_y = randint(2, 3)
                 elif name == '这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）':
                     map_y = randint(0, 5)
