@@ -1,4 +1,5 @@
 import pygame as pg
+import os
 from .. import tool
 from .. import constants as c
 from . import level
@@ -108,6 +109,9 @@ class Menu(tool.State):
             self.adventure_clicked = True
             self.adventure_timer = self.adventure_start = self.current_time
             self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
+            # 播放进入音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "evillaugh.ogg")).play()
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "lose.ogg")).play()
         return False
     
     # 点击到按钮，修改转态的done属性
@@ -125,6 +129,8 @@ class Menu(tool.State):
             # 确实小游戏还是用的level
             # 因为目前暂时没有生存模式和解谜模式，所以暂时设置为这样
             self.persist[c.GAME_MODE] = c.MODE_LITTLEGAME
+            # 播放点击音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
 
     def update(self, surface, current_time, mouse_pos, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time

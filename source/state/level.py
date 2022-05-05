@@ -73,10 +73,6 @@ class Level(tool.State):
             elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL}:
                 self.bgm = 'poolLevel.opus'
 
-        pg.mixer.music.stop()
-        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", self.bgm))
-        pg.mixer.music.play(-1, 0)
-
     def setupBackground(self):
         img_index = self.map_data[c.BACKGROUND_TYPE]
         self.background_type = img_index
@@ -195,7 +191,7 @@ class Level(tool.State):
                 self.numZombie = len(self.waveZombies)
                 # 第一波刚刚刷出来的时候播放音效
                 if self.waveNum == 1:
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieComing.ogg"))
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieComing.ogg")).play()
                 return
         else:
             if ((current_time - self.waveTime >= 45000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 25000)):
@@ -204,7 +200,7 @@ class Level(tool.State):
                 self.waveZombies = self.waves[self.waveNum - 1]
                 self.numZombie = len(self.waveZombies)
                 # 一大波时播放音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "hugeWaveApproching.ogg"))
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "hugeWaveApproching.ogg")).play()
                 return
             elif ((current_time - self.waveTime >= 43000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 23000)):
                 self.showHugeWaveApprochingTime = current_time
@@ -282,13 +278,26 @@ class Level(tool.State):
         self.state = c.CHOOSE
         self.panel = menubar.Panel(menubar.cards_to_choose, self.map_data[c.INIT_SUN_NAME])
 
+        # 播放选卡音乐
+        pg.mixer.music.stop()
+        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "chooseYourSeeds.opus"))
+        pg.mixer.music.play(-1, 0)
+
     def choose(self, mouse_pos, mouse_click):
         if mouse_pos and mouse_click[0]:
             self.panel.checkCardClick(mouse_pos)
             if self.panel.checkStartButtonClick(mouse_pos):
                 self.initPlay(self.panel.getSelectedCards())
+            # 播放点击音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "tap.ogg")).play()
 
     def initPlay(self, card_list):
+
+        # 播放bgm
+        pg.mixer.music.stop()
+        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", self.bgm))
+        pg.mixer.music.play(-1, 0)
+
         self.state = c.PLAY
         if self.bar_type == c.CHOOSEBAR_STATIC:
             self.menubar = menubar.MenuBar(card_list, self.map_data[c.INIT_SUN_NAME])
@@ -521,12 +530,16 @@ class Level(tool.State):
                     self.showLittleMenu = False
                     # 继续播放音乐
                     pg.mixer.music.unpause()
+                    # 播放点击音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
                 elif self.checkRestartClick(mouse_pos):
                     self.done = True
                     self.next = c.LEVEL
                     pg.mixer.music.stop()
                     pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", self.bgm))
                     pg.mixer.music.play(-1, 0)
+                    # 播放点击音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
                 elif self.checkMainMenuClick(mouse_pos):
                     self.done = True
                     self.next = c.MAIN_MENU
@@ -535,6 +548,8 @@ class Level(tool.State):
                     pg.mixer.music.stop()
                     pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
                     pg.mixer.music.play(-1, 0)
+                    # 播放点击音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
             return
 
         if (c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
@@ -592,7 +607,7 @@ class Level(tool.State):
                     self.menubar.increaseSunValue(sun.sun_value)
                     clickedSun = True
                     # 播放收集阳光的音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "collectSun.ogg"))
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "collectSun.ogg")).play()
 
         # 拖动植物或者铲子
         if not self.drag_plant and mouse_pos and mouse_click[0] and not clickedSun:
@@ -601,7 +616,7 @@ class Level(tool.State):
                 self.setupMouseImage(result[0], result[1])
                 clickedCardsOrMap = True
                 # 播放音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "clickCard.ogg"))
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "clickCard.ogg")).play()
         elif self.drag_plant:
             if mouse_click[1]:
                 self.removeMouseImage()
@@ -622,12 +637,14 @@ class Level(tool.State):
             if self.checkLittleMenuClick(mouse_pos):
                 # 暂停 显示菜单
                 self.showLittleMenu = True
+                # 播放点击音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
             elif self.checkShovelClick(mouse_pos):
                 self.drag_shovel = not self.drag_shovel
                 if not self.drag_shovel:
                     self.removeMouseImagePlus()
                 # 播放点击铲子的音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shovel.ogg"))
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shovel.ogg")).play()
             elif self.drag_shovel:
                 # 移出这地方的植物
                 self.shovelRemovePlant(mouse_pos)
@@ -786,7 +803,7 @@ class Level(tool.State):
         self.removeMouseImage()
 
         # 播放种植音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg"))
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg")).play()
 
     def setupHintImage(self):
         pos = self.canSeedPlant(self.plant_name)
@@ -889,6 +906,8 @@ class Level(tool.State):
                             # 注意：以上语句为通用处理，以后加入了铁门僵尸需要单独设置直接冲撞就直接杀死
                             # 可以给坚果保龄球设置attacked属性，如果attacked就秒杀（setDamage的攻击类型此时设置为COMMMON）铁门
                             plant.changeDirection(i)
+                            # 播放撞击音效
+                            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bowlingimpact.ogg")).play()
                     elif plant.name == c.REDWALLNUTBOWLING:
                         if plant.state == c.IDLE:
                             plant.setAttack()
@@ -952,7 +971,7 @@ class Level(tool.State):
 
     def freezeZombies(self, plant):
         # 播放冻结音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "freeze.ogg"))
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "freeze.ogg")).play()
 
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
@@ -997,7 +1016,7 @@ class Level(tool.State):
                             zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
         else:
             # 用铲子移除植物时播放音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg"))
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg")).play()
 
         # 避免僵尸在用铲子移除植物后还在原位啃食
         plant.health = 0
@@ -1131,12 +1150,13 @@ class Level(tool.State):
             self.next = c.GAME_VICTORY
             self.done = True
             # 播放胜利音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "win.ogg"))
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "win.ogg")).play()
         elif self.checkLose():
             self.next = c.GAME_LOSE
             self.done = True
             # 播放失败音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "lose.ogg"))
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "lose.ogg")).play()
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "scream.ogg")).play()
 
     def drawMouseShow(self, surface):
         if self.hint_plant:

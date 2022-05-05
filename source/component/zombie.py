@@ -1,4 +1,5 @@
 import pygame as pg
+import os
 from random import randint
 from .. import tool
 from .. import constants as c
@@ -279,7 +280,7 @@ class Zombie(pg.sprite.Sprite):
 
     def setIceSlow(self):
         # 在转入冰冻减速状态时播放冰冻音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "freeze.ogg"))
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "freeze.ogg")).play()
 
         # when get a ice bullet damage, slow the attack or walk speed of the zombie
         self.ice_slow_timer = self.current_time
@@ -420,7 +421,7 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.attack_frames)
 
         # 播放啃咬音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieAttack.ogg"))
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieAttack.ogg")).play()
 
     def setDie(self):
         self.state = c.DIE

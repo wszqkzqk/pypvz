@@ -73,11 +73,11 @@ python main.py
 ``` cmd
 git clone https://github.com/wszqkzqk/pypvz.git
 cd pypvz
-nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --windows-disable-console main.py
+ nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-disable-console main.py
 ```
 
 * 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径
-* 由于仅复制了`opus`的解码器，故要求所有背景音乐都要以opus编码
+* 由于仅复制了`opus`与`vorbis`的解码器，故要求所有背景音乐都要以opus或vorbis编码
 
 可执行文件生成路径为`./out/main.exe`
 
@@ -150,6 +150,7 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
     * 吹走
 * 增加部分音效
   * 如爆炸、打击等
+  * 自0.6.9已实现部分
 
 ## 截屏
 

@@ -1,5 +1,6 @@
 import random
 import pygame as pg
+import os
 from .. import tool
 from .. import constants as c
 
@@ -31,7 +32,7 @@ class Car(pg.sprite.Sprite):
         if self.state == c.IDLE:
             self.state = c.WALK
             # 播放音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "carWalking.ogg"))
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "carWalking.ogg")).play()
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -112,9 +113,9 @@ class Bullet(pg.sprite.Sprite):
 
         # 播放子弹爆炸音效
         if self.name == c.BULLET_FIREBALL:
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "firepea.ogg"))
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "firepea.ogg")).play()
         else:
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bulletExplode.ogg"))
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bulletExplode.ogg")).play()
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -501,6 +502,8 @@ class CherryBomb(Plant):
                 self.bomb_timer = self.current_time
             elif (self.current_time - self.bomb_timer) > 500:
                 self.health = 0
+                # 播放爆炸音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
         else:
             if (self.current_time - self.animate_timer) > 100:
                 self.frame_index += 1
@@ -564,6 +567,8 @@ class Chomper(Plant):
 
     def attacking(self):
         if self.frame_index == (self.frame_num - 3):
+            # 播放吞的音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bigchomp.ogg")).play()
             self.zombie_group.remove(self.attack_zombie)
         if (self.frame_index + 1) == self.frame_num:
             self.setDigest()
@@ -658,6 +663,8 @@ class PotatoMine(Plant):
             self.changeFrames(self.explode_frames)
         elif (self.current_time - self.bomb_timer) > 500:
             self.health = 0
+            # 播放音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "potatomine.ogg")).play()
 
 
 class Squash(Plant):
@@ -709,6 +716,8 @@ class Squash(Plant):
         self.state = c.ATTACK
         # 攻击状态下生命值无敌
         self.health = float('inf')
+        # 锁定目标时播放音效
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "squashHmm.ogg")).play()
 
     def attacking(self):
         if self.squashing:
@@ -792,6 +801,8 @@ class Jalapeno(Plant):
                 self.frame_index += 1
                 if self.frame_index >= self.frame_num:
                     self.health = 0
+                    # 播放爆炸音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
                     return
                 self.animate_timer = self.current_time
         else:
@@ -1110,6 +1121,8 @@ class RedWallNutBowling(Plant):
             self.changeFrames(self.explode_frames)
         elif (self.current_time - self.explode_timer) > 500:
             self.health = 0
+            # 播放爆炸音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
 
     def animation(self):
         if (self.current_time - self.animate_timer) > self.animate_interval:
@@ -1197,6 +1210,8 @@ class CoffeeBean(Plant):
                         plant.state = c.IDLE
                         plant.setIdle()
                         plant.changeFrames(plant.idle_frames)
+            # 播放唤醒音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "mushroomWakeup.ogg")).play()
             self.mapContent[c.MAP_PLANT].remove(self.name)
             self.kill()
             
