@@ -145,8 +145,7 @@ class Zombie(pg.sprite.Sprite):
                             self.helmetType2 = False
                         else:
                             self.changeFrames(self.helmet_walk_frames)
-            # 尚未进入水池，或被魅惑的僵尸已经走出水池
-            else:
+            elif self.is_hypno and self.rect.right > c.MAP_POOL_FRONT_X + 55:   # 常数拟合暂时缺乏检验
                 if self.swimming:
                     self.changeFrames(self.walk_frames)
                 if self.helmet:
@@ -162,6 +161,14 @@ class Zombie(pg.sprite.Sprite):
                     elif self.swimming: # 游泳状态需要改为步行
                         self.changeFrames(self.helmet_walk_frames)
                 self.swimming = False
+            # 尚未进入水池
+            else:
+                if self.helmetHealth <= 0 and self.helmet:
+                    self.changeFrames(self.walk_frames)
+                    self.helmet = False
+                if self.helmetType2Health <= 0 and self.helmetType2:
+                    self.changeFrames(self.walk_frames)
+                    self.helmetType2 = False
         # 不能游泳的一般僵尸
         else:
             if self.helmetHealth <= 0 and self.helmet:
