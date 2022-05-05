@@ -68,7 +68,7 @@ python main.py
   - 对于`mp3`编码，需要添加`libmpg123-0.dll`
   - 对于`vorbis`编码，需要添加`libogg-0.dll`，`libvorbis-0.dll`和`libvorbisfile-3.dll`
   - 对于`opus`编码，需要添加`libogg-0.dll`，`libopus-0.dll`和`libopusfile-0.dll`
-- 以添加`opus`编码的背景音乐支持为例，编译需执行以下命令：
+- 以添加`opus`和`vorbis`编码的背景音乐支持为例，编译需执行以下命令：
 
 ``` cmd
 git clone https://github.com/wszqkzqk/pypvz.git
