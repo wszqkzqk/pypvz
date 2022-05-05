@@ -145,14 +145,31 @@ class Zombie(pg.sprite.Sprite):
                             self.helmetType2 = False
                         else:
                             self.changeFrames(self.helmet_walk_frames)
-            # 尚未进入水池
+            # 尚未进入水池，或被魅惑的僵尸已经走出水池
             else:
-                if self.helmetHealth <= 0 and self.helmet:
-                    self.changeFrames(self.walk_frames)
-                    self.helmet = False
-                if self.helmetType2Health <= 0 and self.helmetType2:
-                    self.changeFrames(self.walk_frames)
-                    self.helmetType2 = False
+                if self.swimming:
+                    self.changeFrames(self.swim_frames)
+                    if self.helmet:
+                        if self.helmetHealth <= 0:
+                            self.changeFrames(self.swim_frames)
+                            self.helmet = False
+                        else:
+                            self.changeFrames(self.helmet_walk_frames)
+                    if self.helmetType2:
+                        if self.helmetType2Health <= 0:
+                            self.changeFrames(self.swim_frames)
+                            self.helmetType2 = False
+                        else:
+                            self.changeFrames(self.helmet_walk_frames)
+                else:
+                    if self.helmet:
+                        if self.helmetHealth <= 0:
+                            self.changeFrames(self.swim_frames)
+                            self.helmet = False
+                    if self.helmetType2:
+                        if self.helmetType2Health <= 0:
+                            self.changeFrames(self.swim_frames)
+                            self.helmetType2 = False
         # 不能游泳的一般僵尸
         else:
             if self.helmetHealth <= 0 and self.helmet:
