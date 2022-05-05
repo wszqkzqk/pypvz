@@ -1,4 +1,5 @@
 import pygame as pg
+from random import randint
 from .. import tool
 from .. import constants as c
 
@@ -221,8 +222,11 @@ class Zombie(pg.sprite.Sprite):
             if self.checkToDie(self.losthead_attack_frames):
                 return
 
-        if (self.current_time - self.freeze_timer) > c.FREEZE_TIME:
+        if (self.current_time - self.freeze_timer) >= c.MIN_FREEZE_TIME + randint(0, 2000):
             self.setWalk()
+            # 注意寒冰菇解冻后还有减速
+            self.ice_slow_timer = self.freeze_timer + 10000 # 每次冰冻冻结 + 减速时间为20 s，而减速有10 s计时，故这里+10 s
+            self.ice_slow_ratio = 2
 
     def setLostHead(self):
         self.losthead_timer = self.current_time
@@ -274,6 +278,9 @@ class Zombie(pg.sprite.Sprite):
         return self.ice_slow_ratio  # 攻击速度只取决于冰冻状态
 
     def setIceSlow(self):
+        # 在转入冰冻减速状态时播放冰冻音效
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "freeze.ogg"))
+
         # when get a ice bullet damage, slow the attack or walk speed of the zombie
         self.ice_slow_timer = self.current_time
         self.ice_slow_ratio = 2
@@ -411,6 +418,9 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.losthead_attack_frames)
         else:
             self.changeFrames(self.attack_frames)
+
+        # 播放啃咬音效
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieAttack.ogg"))
 
     def setDie(self):
         self.state = c.DIE

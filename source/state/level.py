@@ -193,6 +193,9 @@ class Level(tool.State):
                 self.waveTime = current_time
                 self.waveZombies = self.waves[self.waveNum - 1]
                 self.numZombie = len(self.waveZombies)
+                # 第一波刚刚刷出来的时候播放音效
+                if self.waveNum == 1:
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieComing.ogg"))
                 return
         else:
             if ((current_time - self.waveTime >= 45000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 25000)):
@@ -200,6 +203,8 @@ class Level(tool.State):
                 self.waveTime = current_time
                 self.waveZombies = self.waves[self.waveNum - 1]
                 self.numZombie = len(self.waveZombies)
+                # 一大波时播放音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "hugeWaveApproching.ogg"))
                 return
             elif ((current_time - self.waveTime >= 43000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 23000)):
                 self.showHugeWaveApprochingTime = current_time
@@ -214,7 +219,6 @@ class Level(tool.State):
             else:
                 if current_time - 23000 < self.waveTime:    # 判断剩余时间是否有2000 ms
                     self.waveTime = current_time - 23000    # 即倒计时2000 ms
-
 
 
     # 旧机制，目前仅用于调试
@@ -587,6 +591,8 @@ class Level(tool.State):
                 if sun.checkCollision(mouse_pos[0], mouse_pos[1]):
                     self.menubar.increaseSunValue(sun.sun_value)
                     clickedSun = True
+                    # 播放收集阳光的音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "collectSun.ogg"))
 
         # 拖动植物或者铲子
         if not self.drag_plant and mouse_pos and mouse_click[0] and not clickedSun:
@@ -594,6 +600,8 @@ class Level(tool.State):
             if result:
                 self.setupMouseImage(result[0], result[1])
                 clickedCardsOrMap = True
+                # 播放音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "clickCard.ogg"))
         elif self.drag_plant:
             if mouse_click[1]:
                 self.removeMouseImage()
@@ -618,6 +626,8 @@ class Level(tool.State):
                 self.drag_shovel = not self.drag_shovel
                 if not self.drag_shovel:
                     self.removeMouseImagePlus()
+                # 播放点击铲子的音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shovel.ogg"))
             elif self.drag_shovel:
                 # 移出这地方的植物
                 self.shovelRemovePlant(mouse_pos)
@@ -774,6 +784,9 @@ class Level(tool.State):
         if self.bar_type != c.CHOSSEBAR_BOWLING:
                 self.map.addMapPlant(map_x, map_y, self.plant_name, sleep=mushroomSleep)
         self.removeMouseImage()
+
+        # 播放种植音效
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg"))
 
     def setupHintImage(self):
         pos = self.canSeedPlant(self.plant_name)
@@ -938,6 +951,9 @@ class Level(tool.State):
                         zombie.setBoomDie()
 
     def freezeZombies(self, plant):
+        # 播放冻结音效
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "freeze.ogg"))
+
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
                 if zombie.rect.left <= c.SCREEN_WIDTH:
@@ -979,6 +995,9 @@ class Level(tool.State):
                         if ((abs(zombie.rect.centerx - x) <= plant.explode_y_range) or
                         ((zombie.rect.right - (x-plant.explode_x_range) > 20) or (zombie.rect.right - (x-plant.explode_x_range))/zombie.rect.width > 0.2, ((x+plant.explode_x_range) - zombie.rect.left > 20) or ((x+plant.explode_x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
                             zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
+        else:
+            # 用铲子移除植物时播放音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg"))
 
         # 避免僵尸在用铲子移除植物后还在原位啃食
         plant.health = 0
@@ -1111,9 +1130,13 @@ class Level(tool.State):
                 self.game_info[c.LEVEL_NUM] += 1
             self.next = c.GAME_VICTORY
             self.done = True
+            # 播放胜利音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "win.ogg"))
         elif self.checkLose():
             self.next = c.GAME_LOSE
             self.done = True
+            # 播放失败音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "lose.ogg"))
 
     def drawMouseShow(self, surface):
         if self.hint_plant:

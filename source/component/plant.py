@@ -30,6 +30,8 @@ class Car(pg.sprite.Sprite):
     def setWalk(self):
         if self.state == c.IDLE:
             self.state = c.WALK
+            # 播放音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "carWalking.ogg"))
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -107,6 +109,12 @@ class Bullet(pg.sprite.Sprite):
         self.explode_timer = self.current_time
         self.frames = self.explode_frames
         self.image = self.frames[self.frame_index]
+
+        # 播放子弹爆炸音效
+        if self.name == c.BULLET_FIREBALL:
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "firepea.ogg"))
+        else:
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bulletExplode.ogg"))
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
