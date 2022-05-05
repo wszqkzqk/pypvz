@@ -148,7 +148,7 @@ nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-d
     * 火焰爆炸
       * 火爆辣椒
         * 已实现
-    * 非灰烬类爆炸（在本项目中可以考虑与一般爆炸合并）
+    * 非灰烬类爆炸
       * 土豆雷
         * 已实现
   * 从地面刺伤
