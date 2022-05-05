@@ -31,6 +31,8 @@
         "ConeheadDukyTubeZombieSwim":{"x":55, "width":105},
         "BucketheadDukyTubeZombie":{"x":55, "width":105},
         "BucketheadDukyTubeZombieAttack":{"x":55, "width":105},
-        "BucketheadDukyTubeZombieSwim":{"x":55, "width":105}
+        "BucketheadDukyTubeZombieSwim":{"x":55, "width":105},
+        "ScreenDoorZombie":{"x":41, "width":100},
+        "ScreenDoorZombieAttack":{"x":41, "width":100}
     }
 }

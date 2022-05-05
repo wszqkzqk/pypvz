@@ -330,6 +330,7 @@ class Level(tool.State):
                         c.DUCKY_TUBE_ZOMBIE:(1, 0),  # 作为变种，不主动生成
                         c.CONEHEAD_DUCKY_TUBE_ZOMBIE:(2, 0),    # 作为变种，不主动生成
                         c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:(4, 0),  # 作为变种，不主动生成
+                        c.SCREEN_DOOR_ZOMBIE:(4, 3500),
                         }
             # 将僵尸与水上变种对应
             self.convertZombieInPool = {c.NORMAL_ZOMBIE:c.DUCKY_TUBE_ZOMBIE,
@@ -685,6 +686,8 @@ class Level(tool.State):
             self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.SCREEN_DOOR_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)

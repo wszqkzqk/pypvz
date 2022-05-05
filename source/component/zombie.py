@@ -774,3 +774,39 @@ class BucketHeadDuckyTubeZombie(Zombie):
             self.loadFrames(frame_list[i], name)
 
         self.frames = self.helmet_walk_frames
+
+
+class ScreenDoorZombie(Zombie):
+    def __init__(self, x, y, head_group):
+        Zombie.__init__(self, x, y, c.SCREEN_DOOR_ZOMBIE, head_group, helmetType2Health=c.SCREEN_DOOR_HEALTH)
+
+    def loadImages(self):
+        self.helmet_walk_frames = []
+        self.helmet_attack_frames = []
+        self.walk_frames = []
+        self.attack_frames = []
+        self.losthead_walk_frames = []
+        self.losthead_attack_frames = []
+        self.die_frames = []
+        self.boomdie_frames = []
+
+        helmet_walk_name = self.name
+        helmet_attack_name = self.name + 'Attack'
+        walk_name = c.NORMAL_ZOMBIE
+        attack_name = c.NORMAL_ZOMBIE + 'Attack'
+        losthead_walk_name = c.NORMAL_ZOMBIE + 'LostHead'
+        losthead_attack_name = c.NORMAL_ZOMBIE + 'LostHeadAttack'
+        die_name = c.NORMAL_ZOMBIE + 'Die'
+        boomdie_name = c.BOOMDIE
+
+        frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
+                      self.walk_frames, self.attack_frames, self.losthead_walk_frames,
+                      self.losthead_attack_frames, self.die_frames, self.boomdie_frames]
+        name_list = [helmet_walk_name, helmet_attack_name,
+                     walk_name, attack_name, losthead_walk_name,
+                     losthead_attack_name, die_name, boomdie_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name)
+
+        self.frames = self.helmet_walk_frames
