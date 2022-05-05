@@ -256,6 +256,7 @@ BULLET_PEA = 'PeaNormal'
 BULLET_PEA_ICE = 'PeaIce'
 BULLET_FIREBALL = 'Fireball'
 BULLET_MUSHROOM = 'BulletMushRoom'
+BULLET_SEASHROOM = 'BulletSeaShroom'
 # 子弹伤害
 BULLET_DAMAGE_NORMAL = 20
 BULLET_DAMAGE_FIREBALL_BODY = 27 # 这是火球本体的伤害，注意不是40，本体(27) + 溅射(13)才是40

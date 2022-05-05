@@ -78,6 +78,8 @@ class Bullet(pg.sprite.Sprite):
             explode_name = 'BulletMushRoomExplode'
         elif self.name == c.BULLET_PEA_ICE:
             explode_name = 'PeaIceExplode'
+        elif self.name == c.BULLET_SEASHROOM:
+            explode_name = 'BulletSeaShroomExplode'
         else:
             explode_name = 'PeaNormalExplode'
 
@@ -1214,8 +1216,8 @@ class SeaShroom(Plant):
 
     def attacking(self):
         if (self.current_time - self.shoot_timer) > 1400:
-            self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 10, self.rect.y + 10,
-                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
+            self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 50, self.rect.y + 50,
+                                         c.BULLET_SEASHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
 
     def canAttack(self, zombie):
