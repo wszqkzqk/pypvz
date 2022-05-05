@@ -1190,3 +1190,36 @@ class CoffeeBean(Plant):
             self.mapContent[c.MAP_PLANT].remove(self.name)
             self.kill()
             
+
+class SeaShroom(Plant):
+    def __init__(self, x, y, bullet_group):
+        Plant.__init__(self, x, y, c.SEASHROOM, c.PLANT_HEALTH, bullet_group)
+        self.can_sleep = True
+        self.shoot_timer = 0
+
+    def loadImages(self, name, scale):
+        self.idle_frames = []
+        self.sleep_frames = []
+
+        idle_name = name
+        sleep_name = name + 'Sleep'
+
+        frame_list = [self.idle_frames, self.sleep_frames]
+        name_list = [idle_name, sleep_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name, 1)
+
+        self.frames = self.idle_frames
+
+    def attacking(self):
+        if (self.current_time - self.shoot_timer) > 1400:
+            self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 10, self.rect.y + 10,
+                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
+            self.shoot_timer = self.current_time
+
+    def canAttack(self, zombie):
+        if (self.rect.x <= zombie.rect.right and
+                (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+            return True
+        return False
