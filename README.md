@@ -146,8 +146,6 @@ nuitka --mingw --standalone --onefile --show-progress --show-memory --output-dir
       * 坚果保龄球撞击
       * 巨型坚果保龄球撞击
     * 吹走
-* 更改僵尸生命值机制
-  * 对防具的破损状态予以展示
 * 增加部分音效
   * 如爆炸、打击等
 
