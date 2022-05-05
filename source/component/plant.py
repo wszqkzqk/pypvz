@@ -660,11 +660,11 @@ class PotatoMine(Plant):
     def attacking(self):
         if self.bomb_timer == 0:
             self.bomb_timer = self.current_time
+            # 播放音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "potatomine.ogg")).play()
             self.changeFrames(self.explode_frames)
         elif (self.current_time - self.bomb_timer) > 500:
             self.health = 0
-            # 播放音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "potatomine.ogg")).play()
 
 
 class Squash(Plant):
