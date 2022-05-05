@@ -500,10 +500,10 @@ class CherryBomb(Plant):
         if self.start_boom:
             if self.bomb_timer == 0:
                 self.bomb_timer = self.current_time
-            elif (self.current_time - self.bomb_timer) > 500:
-                self.health = 0
                 # 播放爆炸音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
+            elif (self.current_time - self.bomb_timer) > 500:
+                self.health = 0
         else:
             if (self.current_time - self.animate_timer) > 100:
                 self.frame_index += 1
@@ -798,11 +798,12 @@ class Jalapeno(Plant):
     def animation(self):
         if self.start_explode:
             if (self.current_time - self.animate_timer) > 100:
+                if self.frame_index == 1:
+                    # 播放爆炸音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
                 self.frame_index += 1
                 if self.frame_index >= self.frame_num:
                     self.health = 0
-                    # 播放爆炸音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
                     return
                 self.animate_timer = self.current_time
         else:
@@ -1119,10 +1120,10 @@ class RedWallNutBowling(Plant):
         if self.explode_timer == 0:
             self.explode_timer = self.current_time
             self.changeFrames(self.explode_frames)
-        elif (self.current_time - self.explode_timer) > 500:
-            self.health = 0
             # 播放爆炸音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
+        elif (self.current_time - self.explode_timer) > 500:
+            self.health = 0
 
     def animation(self):
         if (self.current_time - self.animate_timer) > self.animate_interval:

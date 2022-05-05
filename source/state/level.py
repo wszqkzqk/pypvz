@@ -176,12 +176,14 @@ class Level(tool.State):
                         self.waveTime = current_time
                         self.waveZombies = self.waves[self.waveNum - 1]
                         self.numZombie = len(self.waveZombies)
+                        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieComing.ogg")).play()
                 else:
                     if (current_time - self.waveTime >= 6000):
                         self.waveNum += 1
                         self.waveTime = current_time
                         self.waveZombies = self.waves[self.waveNum - 1]
                         self.numZombie = len(self.waveZombies)
+                        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieComing.ogg")).play()
             return
         if (self.waveNum % 10 != 9):
             if ((current_time - self.waveTime >= 25000 + randint(0, 6000)) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 12500 + randint(0, 3000))):
@@ -189,10 +191,8 @@ class Level(tool.State):
                 self.waveTime = current_time
                 self.waveZombies = self.waves[self.waveNum - 1]
                 self.numZombie = len(self.waveZombies)
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieVoice.ogg")).play()
                 # 第一波刚刚刷出来的时候播放音效
-                if self.waveNum == 1:
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieComing.ogg")).play()
-                return
         else:
             if ((current_time - self.waveTime >= 45000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 25000)):
                 self.waveNum += 1
@@ -791,7 +791,8 @@ class Level(tool.State):
             mushroomSleep = False
         self.plant_groups[map_y].add(new_plant)
         # 种植植物后应当刷新僵尸的攻击对象
-        self.refreshZombieAttack = True
+        # 这里用植物名称代替布尔值，保存更多信息
+        self.refreshZombieAttack = new_plant.name
         if self.bar_type == c.CHOOSEBAR_STATIC:
             self.menubar.decreaseSunValue(self.select_plant.sun_cost)
             self.menubar.setCardFrozenTime(self.plant_name)
@@ -894,7 +895,9 @@ class Level(tool.State):
             hypo_zombies = []
             for zombie in self.zombie_groups[i]:
                 if zombie.state != c.WALK:
-                    if not self.refreshZombieAttack:
+                    if zombie.state != c.ATTACK:
+                        continue
+                    if (((zombie.prey.name not in {c.LILYPAD, "花盆（未实现）"}) and (self.refreshZombieAttack != "南瓜头（未实现）")) or (not self.refreshZombieAttack)):
                         continue
                 if zombie.canSwim and (not zombie.swimming):
                     continue
