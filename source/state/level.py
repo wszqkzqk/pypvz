@@ -840,11 +840,12 @@ class Level(tool.State):
             rect = frame_list[0].get_rect()
             width, height = rect.w, rect.h
 
-        if (plant_name == c.POTATOMINE or plant_name == c.SQUASH or
-            plant_name == c.SPIKEWEED or plant_name == c.JALAPENO or
-            plant_name == c.SCAREDYSHROOM or plant_name == c.SUNSHROOM or
-            plant_name == c.ICESHROOM or plant_name == c.HYPNOSHROOM or
-            plant_name == c.WALLNUTBOWLING or plant_name == c.REDWALLNUTBOWLING):
+        if (plant_name in { c.POTATOMINE, c.SPIKEWEED,
+                            c.JALAPENO, c.SCAREDYSHROOM,
+                            c.SUNSHROOM, c.ICESHROOM,
+                            c.HYPNOSHROOM, c.SQUASH,
+                            c.WALLNUTBOWLING, c.REDWALLNUTBOWLING,
+                            }):
             color = c.WHITE
         else:
             color = c.BLACK
@@ -997,7 +998,7 @@ class Level(tool.State):
         if not shovel:
             # 触发植物死亡音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
-            if (plant.name == c.CHERRYBOMB or plant.name == c.REDWALLNUTBOWLING):
+            if plant.name in {c.CHERRYBOMB, c.REDWALLNUTBOWLING}:
                 self.boomZombies(plant.rect.centerx, map_y, plant.explode_y_range,
                                 plant.explode_x_range)
             elif plant.name == c.JALAPENO:
