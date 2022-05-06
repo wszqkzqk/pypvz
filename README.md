@@ -50,6 +50,7 @@ python main.py
   * 小游戏模式：
     * 1：传送带模式
     * 2：坚果保龄球模式
+* 可以通过修改`source/constants.py`中的`GAME_RATE`来调节游戏速度倍率
 * **注意：目前单文件发布版本不支持自定义调整关卡**
 
 ## Windows单文件封装
