@@ -5,7 +5,8 @@
     "spawn_zombies":"list",
     "zombie_list":[
         {"time":0, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":0, "map_y":1, "name":"NewspaperZombie"},
         {"time":0, "map_y":2, "name":"ConeheadDuckyTubeZombie"},
-        {"time":60000, "map_y":2, "name":"Zombie"}
+        {"time":80000, "map_y":2, "name":"ConeheadDuckyTubeZombie"}
     ]
 }

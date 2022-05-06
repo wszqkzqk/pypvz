@@ -105,7 +105,7 @@ class Zombie(pg.sprite.Sprite):
             # 在右侧岸左
             if self.rect.right <= c.MAP_POOL_FRONT_X:
                 # 在左侧岸右，左侧岸位置为预估
-                if self.rect.x >= c.MAP_POOL_OFFSET_X:
+                if self.rect.right - 25 >= c.MAP_POOL_OFFSET_X:
                     # 还未进入游泳状态
                     if not self.swimming:
                         self.swimming = True
@@ -183,6 +183,8 @@ class Zombie(pg.sprite.Sprite):
                 self.helmetType2 = False
                 if self.name == c.NEWSPAPER_ZOMBIE:
                     self.speed = 2.5
+                    # 触发报纸僵尸暴走音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperZombieAngry.ogg")).play()
         if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
             self.walk_timer = self.current_time
             if self.is_hypno:

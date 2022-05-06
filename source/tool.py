@@ -34,7 +34,7 @@ class Control():
         self.screen = pg.display.get_surface()
         self.done = False
         self.clock = pg.time.Clock()    # 创建一个对象来帮助跟踪时间
-        self.fps = 30
+        self.fps = 50 * c.GAME_RATE
         self.keys = pg.key.get_pressed()
         self.mouse_pos = None
         self.mouse_click = [False, False]  # value:[left mouse click, right mouse click]
@@ -89,7 +89,7 @@ class Control():
             elif event.type == pg.MOUSEBUTTONDOWN:
                 self.mouse_pos = pg.mouse.get_pos()
                 self.mouse_click[0], _, self.mouse_click[1] = pg.mouse.get_pressed()
-                print('pos:', self.mouse_pos, ' mouse:', self.mouse_click)
+                print('pos:', self.mouse_pos)
 
 
     def run(self):

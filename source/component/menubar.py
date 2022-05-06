@@ -361,6 +361,8 @@ class Panel():
         if delete_card:
             self.selected_cards.remove(delete_card)
             self.selected_num -= 1
+            # 播放点击音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "tap.ogg")).play()
 
         if self.selected_num >= c.CARD_MAX_NUM:
             return
@@ -369,6 +371,8 @@ class Panel():
             if card.checkMouseClick(mouse_pos):
                 if card.canSelect():
                     self.addCard(card)
+                    # 播放点击音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "tap.ogg")).play()
                 break
 
     def addCard(self, card):

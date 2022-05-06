@@ -288,8 +288,6 @@ class Level(tool.State):
             self.panel.checkCardClick(mouse_pos)
             if self.panel.checkStartButtonClick(mouse_pos):
                 self.initPlay(self.panel.getSelectedCards())
-            # 播放点击音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "tap.ogg")).play()
 
     def initPlay(self, card_list):
 

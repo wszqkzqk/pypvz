@@ -141,7 +141,8 @@ class StarBullet(Bullet):
                 self.rect.x += 7
                 self.rect.y += 7
             elif self.direction == c.STAR_UPWARD:
-                self.rect.y -= 10
+                # 实际上不知道为什么向上飞的看起来要快一些，所以拟合的时候把速度调小了一点
+                self.rect.y -= 9
             elif self.direction == c.STAR_DOWNWARD:
                 self.rect.y += 10
             else:
@@ -412,7 +413,7 @@ class SnowPeaShooter(Plant):
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
             # 播放冰子弹音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "snowPeaSparkles")).play()
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "snowPeaSparkles.ogg")).play()
 
 
 class WallNut(Plant):
@@ -1150,10 +1151,12 @@ class StarFruit(Plant):
             if (self.rect.x >= zombie.rect.x) and (self.map_y == zombieMapY):  # 对于同行且在杨桃后的僵尸
                 return True
             # 斜向上，理想直线方程为：f(zombie.rect.x) = -0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10
-            elif -100 <= (zombie.rect.y - (-0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10)) <= 70 and (zombie.rect.left <= c.SCREEN_WIDTH):
+            # 注意实际上为射线
+            elif -100 <= (zombie.rect.y - (-0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10)) <= 70 and (zombie.rect.left <= c.SCREEN_WIDTH) and (zombie.rect.x >= self.rect.x):
                 return True
             # 斜向下，理想直线方程为：f(zombie.rect.x) = zombie.rect.x + self.rect.y - self.rect.right - 15
-            elif abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 70 and (zombie.rect.left <= c.SCREEN_WIDTH):
+            # 注意实际上为射线
+            elif abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 70 and (zombie.rect.left <= c.SCREEN_WIDTH) and (zombie.rect.x >= self.rect.x):
                 return True
             elif zombie.rect.left <= self.rect.x <= zombie.rect.right:
                 return True
