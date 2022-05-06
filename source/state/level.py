@@ -1018,7 +1018,7 @@ class Level(tool.State):
                     if ((abs(zombie.rect.centerx - x) <= plant.explode_x_range) or
                     ((zombie.rect.right - (x-plant.explode_x_range) > 20) or (zombie.rect.right - (x-plant.explode_x_range))/zombie.rect.width > 0.2, ((x+plant.explode_x_range) - zombie.rect.left > 20) or ((x+plant.explode_x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
-            else:
+            elif plant.name != c.WALLNUTBOWLING:
                 # 触发植物死亡音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
         else:
