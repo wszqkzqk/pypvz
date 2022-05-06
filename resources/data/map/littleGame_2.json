@@ -3,7 +3,7 @@
     "choosebar_type":2,
     "shovel":0,
     "spawn_zombies":"auto",
-    "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie"],
+    "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie", "NewspaperZombie"],
     "num_flags":4,
     "inevitable_zombie_list":{"20":["BucketheadZombie"]},
     "card_pool":[
