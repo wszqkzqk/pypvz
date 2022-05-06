@@ -996,8 +996,6 @@ class Level(tool.State):
             self.map.map[map_y][map_x][c.MAP_SLEEP] = False
         # 用铲子铲不用触发植物功能
         if not shovel:
-            # 触发植物死亡音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
             if plant.name in {c.CHERRYBOMB, c.REDWALLNUTBOWLING}:
                 self.boomZombies(plant.rect.centerx, map_y, plant.explode_y_range,
                                 plant.explode_x_range)
@@ -1013,13 +1011,13 @@ class Level(tool.State):
                 self.zombie_groups[map_y].remove(zombie)
                 self.hypno_zombie_groups[map_y].add(zombie)
             elif (plant.name == c.POTATOMINE and not plant.is_init):    # 土豆雷不是灰烬植物，不能用Boom
-                for i in range(self.map_y_len):
-                    if abs(i - map_y) > plant.explode_y_range:
-                        continue
-                    for zombie in self.zombie_groups[i]:
-                        if ((abs(zombie.rect.centerx - x) <= plant.explode_y_range) or
-                        ((zombie.rect.right - (x-plant.explode_x_range) > 20) or (zombie.rect.right - (x-plant.explode_x_range))/zombie.rect.width > 0.2, ((x+plant.explode_x_range) - zombie.rect.left > 20) or ((x+plant.explode_x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
-                            zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
+                for zombie in self.zombie_groups[map_y]:
+                    if ((abs(zombie.rect.centerx - x) <= plant.explode_y_range) or
+                    ((zombie.rect.right - (x-plant.explode_x_range) > 20) or (zombie.rect.right - (x-plant.explode_x_range))/zombie.rect.width > 0.2, ((x+plant.explode_x_range) - zombie.rect.left > 20) or ((x+plant.explode_x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
+                        zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
+            else:
+                # 触发植物死亡音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
         else:
             # 用铲子移除植物时播放音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg")).play()
