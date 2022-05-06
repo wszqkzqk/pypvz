@@ -1,4 +1,4 @@
-import random
+from random import randint
 import pygame as pg
 import os
 from .. import tool
@@ -973,7 +973,7 @@ class WallNutBowling(Plant):
         self.animate_interval = 200
         self.move_timer = 0
         self.move_interval = 70
-        self.vel_x = random.randint(12, 15)
+        self.vel_x = randint(12, 15)
         self.vel_y = 0
         self.disable_hit_y = -1
 
@@ -1022,7 +1022,7 @@ class WallNutBowling(Plant):
             elif self.map_y == (c.GRID_Y_LEN - 1):
                 direc = -1
             else:
-                if random.randint(0, 1) == 0:
+                if randint(0, 1) == 0:
                     direc = 1
                 else:
                     direc = -1
@@ -1057,7 +1057,7 @@ class RedWallNutBowling(Plant):
         self.animate_interval = 200
         self.move_timer = 0
         self.move_interval = 70
-        self.vel_x = random.randint(12, 15)
+        self.vel_x = randint(12, 15)
 
     def loadImages(self, name, scale):
         self.idle_frames = []
