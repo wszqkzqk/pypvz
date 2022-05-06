@@ -593,7 +593,7 @@ class PotatoMine(Plant):
         self.is_init = True
         self.init_timer = 0
         self.bomb_timer = 0
-        self.explode_x_range = c.GRID_X_SIZE * 0.6
+        self.explode_x_range = c.GRID_X_SIZE
 
     def loadImages(self, name, scale):
         self.init_frames = []
@@ -622,7 +622,7 @@ class PotatoMine(Plant):
 
     def canAttack(self, zombie):
         if (not self.is_init and (not zombie.lostHead) and
-                (abs(zombie.rect.x - self.rect.x) <= self.explode_x_range*(5/6))):
+                (abs(zombie.rect.x - self.rect.x) <= self.explode_x_range*0.8)):
             return True
         return False
 
