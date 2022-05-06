@@ -716,8 +716,6 @@ class Squash(Plant):
         self.state = c.ATTACK
         # 攻击状态下生命值无敌
         self.health = float('inf')
-        # 锁定目标时播放音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "squashHmm.ogg")).play()
 
     def attacking(self):
         if self.squashing:
@@ -729,6 +727,8 @@ class Squash(Plant):
                 self.mapPlantsSet.remove(c.SQUASH)
                 self.kill()
         elif self.aim_timer == 0:
+            # 锁定目标时播放音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "squashHmm.ogg")).play()
             self.aim_timer = self.current_time
             self.changeFrames(self.aim_frames)
         elif (self.current_time - self.aim_timer) > 1000:
