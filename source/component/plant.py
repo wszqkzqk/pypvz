@@ -668,15 +668,9 @@ class Squash(Plant):
             return True
         # 攻击状态
         elif (self.state == c.ATTACK):
-            # 僵尸在倭瓜右侧
-            if zombie.rect.x >= self.rect.x:
-                # 重叠20个像素或15%判断为可以攻击
-                if (self.rect.right - zombie.rect.left >= 20) or (self.rect.right - zombie.rect.left >= 0.15*zombie.rect.width):
-                    return True
-            # 僵尸在倭瓜右侧
-            else:
-                if (zombie.rect.right - self.rect.left >= 20) or (zombie.rect.right - self.rect.left >= 0.15*zombie.rect.width):
-                    return True
+            # 碰撞检测
+            if pg.sprite.collide_circle_ratio(0.7)(zombie, self):
+                return True
         return False
 
     def setAttack(self, zombie, zombie_group):

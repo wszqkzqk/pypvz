@@ -5,6 +5,14 @@
     "spawn_zombies":"list",
     "zombie_list":[
         {"time":0, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":1000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":2000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":3100, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":4500, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":5000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":6000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":7000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":8000, "map_y":4, "name":"ScreenDoorZombie"},
         {"time":0, "map_y":1, "name":"NewspaperZombie"},
         {"time":0, "map_y":2, "name":"ConeheadDuckyTubeZombie"},
         {"time":80000, "map_y":2, "name":"ConeheadDuckyTubeZombie"}
