@@ -995,6 +995,8 @@ class Level(tool.State):
             self.map.map[map_y][map_x][c.MAP_SLEEP] = False
         # 用铲子铲不用触发植物功能
         if not shovel:
+            # 触发植物死亡音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
             if (plant.name == c.CHERRYBOMB or plant.name == c.REDWALLNUTBOWLING):
                 self.boomZombies(plant.rect.centerx, map_y, plant.explode_y_range,
                                 plant.explode_x_range)

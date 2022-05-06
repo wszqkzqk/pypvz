@@ -83,6 +83,8 @@ class Bullet(pg.sprite.Sprite):
             explode_name = 'PeaIceExplode'
         elif self.name == c.BULLET_SEASHROOM:
             explode_name = 'BulletSeaShroomExplode'
+        elif self.name == c.BULLET_STAR:
+            explode_name = 'StarBulletExplode'
         else:
             explode_name = 'PeaNormalExplode'
 
@@ -123,49 +125,11 @@ class Bullet(pg.sprite.Sprite):
 # 杨桃的子弹
 class StarBullet(Bullet):
     def __init__(self, x, start_y, damage, direction, level):    # direction指星星飞行方向
-        pg.sprite.Sprite.__init__(self)
+        Bullet.__init__(self, x, start_y, start_y, c.BULLET_STAR, damage)
 
-        self.name = c.BULLET_STAR
         self.level = level
-        self.frames = []
-        self.effect = False
-        self.frame_index = 0
-        self.load_images()
-        self.image = self.frames[self.frame_index]
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = start_y
         _, self.map_y = self.level.map.getMapIndex(self.rect.x, self.rect.centery)
         self.direction = direction
-        self.damage = damage
-        self.state = c.FLY
-        self.current_time = 0
-        self.passedTorchWood = None
-
-    def loadFrames(self, frames, name):
-        frame_list = tool.GFX[name]
-        if name in tool.PLANT_RECT:
-            data = tool.PLANT_RECT[name]
-            x, y, width, height = data['x'], data['y'], data['width'], data['height']
-        else:
-            x, y = 0, 0
-            rect = frame_list[0].get_rect()
-            width, height = rect.w, rect.h
-
-        for frame in frame_list:
-            frames.append(tool.get_image(frame, x, y, width, height))
-
-    def load_images(self):
-        self.fly_frames = []
-        self.explode_frames = []
-
-        fly_name = self.name
-        explode_name = 'StarBulletExplode'
-
-        self.loadFrames(self.fly_frames, fly_name)
-        self.loadFrames(self.explode_frames, explode_name)
-
-        self.frames = self.fly_frames
 
     def update(self, game_info):
         self.current_time = game_info[c.CURRENT_TIME]
@@ -189,15 +153,6 @@ class StarBullet(Bullet):
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
                 self.kill()
-
-    def setExplode(self):
-        self.state = c.EXPLODE
-        self.explode_timer = self.current_time
-        self.frames = self.explode_frames
-        self.image = self.frames[self.frame_index]
-
-    def draw(self, surface):
-        surface.blit(self.image, self.rect)
 
     # 这里用的是坚果保龄球的代码改一下，实现子弹换行
     def handleMapYPosition(self):
@@ -390,6 +345,8 @@ class PeaShooter(Plant):
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
+            # 播放发射音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
 
 
 class RepeaterPea(Plant):
@@ -406,10 +363,14 @@ class RepeaterPea(Plant):
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
+            # 播放发射音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
         elif self.firstShot and (self.current_time - self.shoot_timer) > 100:
             self.firstShot = False
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
+            # 播放发射音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
 
 
 class ThreePeaShooter(Plant):
@@ -434,6 +395,8 @@ class ThreePeaShooter(Plant):
                 self.bullet_groups[tmp_y].add(Bullet(self.rect.right  - 15, self.rect.y, dest_y,
                                                      c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
+            # 播放发射音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
 
 
 class SnowPeaShooter(Plant):
@@ -446,6 +409,10 @@ class SnowPeaShooter(Plant):
             self.bullet_group.add(Bullet(self.rect.right  - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, effect=c.BULLET_EFFECT_ICE))
             self.shoot_timer = self.current_time
+            # 播放发射音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
+            # 播放冰子弹音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "snowPeaSparkles")).play()
 
 
 class WallNut(Plant):
@@ -608,6 +575,8 @@ class PuffShroom(Plant):
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 10, self.rect.y + 10,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
+            # 播放音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
 
     def canAttack(self, zombie):
         if (self.rect.x <= zombie.rect.right and
@@ -771,6 +740,8 @@ class Spikeweed(Plant):
             for zombie in self.zombie_group:
                 if self.canAttack(zombie):
                     zombie.setDamage(20, damageType=c.ZOMBIE_COMMON_DAMAGE)
+            # 播放攻击音效，同子弹打击
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bulletExplode.ogg")).play()
 
 
 class Jalapeno(Plant):
@@ -865,6 +836,8 @@ class ScaredyShroom(Plant):
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y + 40, self.rect.y + 40,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
+            # 播放音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
 
 
 class SunShroom(Plant):
@@ -901,7 +874,8 @@ class SunShroom(Plant):
             elif (self.current_time - self.change_timer) > 100000:
                 self.changeFrames(self.big_frames)
                 self.is_big = True
-
+                # 播放长大音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantGrow.ogg")).play()
         if self.sun_timer == 0:
             self.sun_timer = self.current_time - (c.FLOWER_SUN_INTERVAL - 6000)
         elif (self.current_time - self.sun_timer) > c.FLOWER_SUN_INTERVAL:
@@ -1194,6 +1168,8 @@ class StarFruit(Plant):
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.bottom - 20, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN, self.level))
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.y - 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_UP, self.level))
             self.shoot_timer = self.current_time
+            # 播放发射音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
 
 
 class CoffeeBean(Plant):
@@ -1243,6 +1219,8 @@ class SeaShroom(Plant):
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 50, self.rect.y + 50,
                                          c.BULLET_SEASHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
+            # 播放发射音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
 
     def canAttack(self, zombie):
         if (self.rect.x <= zombie.rect.right and

@@ -110,6 +110,8 @@ class Zombie(pg.sprite.Sprite):
                     if not self.swimming:
                         self.swimming = True
                         self.changeFrames(self.swim_frames)
+                        # 播放入水音效
+                        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieEnteringWater.ogg")).play()
                         # 同样没有兼容双防具
                         if self.helmet:
                             if self.helmetHealth <= 0:
@@ -451,6 +453,8 @@ class Zombie(pg.sprite.Sprite):
     def setHypno(self):
         self.is_hypno = True
         self.setWalk()
+        # 播放魅惑音效
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "hypnoed.ogg")).play()
 
 
 class ZombieHead(Zombie):
