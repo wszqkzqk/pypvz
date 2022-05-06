@@ -56,7 +56,9 @@ class Level(tool.State):
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
         self.hasShovel = self.map_data[c.SHOVEL]
 
-        # 同时播放音乐
+        # 同时指定音乐
+        # 缺省音乐为进入的音乐，方便发现错误
+        self.bgm = 'intro.opus'
         if c.CHOOSEBAR_TYPE in self.map_data:  # 指定了choosebar_type的传送带关
             if self.map_data[c.CHOOSEBAR_TYPE] == c.CHOSSEBAR_BOWLING:   # 坚果保龄球
                 self.bgm = 'bowling.opus'
@@ -72,6 +74,9 @@ class Level(tool.State):
             # 泳池
             elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL}:
                 self.bgm = 'poolLevel.opus'
+            # 浓雾
+            elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_FOG}:
+                self.bgm = 'fogLevel.opus'
 
     def setupBackground(self):
         img_index = self.map_data[c.BACKGROUND_TYPE]
