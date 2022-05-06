@@ -592,7 +592,6 @@ class PotatoMine(Plant):
         self.is_init = True
         self.init_timer = 0
         self.bomb_timer = 0
-        self.explode_y_range = 0
         self.explode_x_range = c.GRID_X_SIZE
 
     def loadImages(self, name, scale):
