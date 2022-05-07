@@ -1272,7 +1272,7 @@ class TangleKlep(Plant):
         name_list = [idle_name, splash_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name, 1)
 
         self.frames = self.idle_frames
 
