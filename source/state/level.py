@@ -1015,8 +1015,9 @@ class Level(tool.State):
                 self.hypno_zombie_groups[map_y].add(zombie)
             elif (plant.name == c.POTATOMINE and not plant.is_init):    # 土豆雷不是灰烬植物，不能用Boom
                 for zombie in self.zombie_groups[map_y]:
+                    # 双判断：发生碰撞或在攻击范围内
                     if ((pg.sprite.collide_circle_ratio(0.6)(zombie, plant)) or
-                    (abs(zombie.rect.centerx - x) <= plant.explode_x_range)):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
+                    (abs(zombie.rect.centerx - x) <= plant.explode_x_range)):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
             elif plant.name != c.WALLNUTBOWLING:
                 # 触发植物死亡音效

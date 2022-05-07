@@ -621,7 +621,7 @@ class PotatoMine(Plant):
                 self.is_init = False
 
     def canAttack(self, zombie):
-        if (pg.sprite.collide_circle_ratio(0.6)(zombie, self) and
+        if (pg.sprite.collide_circle_ratio(0.55)(zombie, self) and
             (not self.is_init) and (not zombie.lostHead)):
             return True
         return False
