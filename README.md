@@ -81,7 +81,7 @@ nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-d
 
 * 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径
 * 由于仅复制了`opus`与`vorbis`的解码器，故要求所有背景音乐都要以opus或vorbis编码
-* `--windows-product-version=`所跟内容格式必须为`x.x.x.x`
+* `--windows-product-version=`表示版本号信息，所跟内容格式必须为`x.x.x.x`
 
 可执行文件生成路径为`./out/main.exe`
 
