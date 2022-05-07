@@ -1253,3 +1253,45 @@ class TallNut(Plant):
         elif not self.cracked2 and self.health <= c.TALLNUT_CRACKED2_HEALTH:
             self.changeFrames(self.cracked2_frames)
             self.cracked2 = True
+
+
+class TangleKlep(Plant):
+    def __init__(self, x, y):
+        Plant.__init__(self, x, y, c.TANGLEKLEP, c.PLANT_HEALTH, None)
+        self.load_images()
+        self.splashing = False
+
+    def load_images(self):
+        self.idle_frames = []
+        self.splash_frames = []
+
+        idle_name = self.name
+        splash_name = self.name + 'Splash'
+
+        frame_list = [self.idle_frames, self.splash_frames]
+        name_list = [idle_name, splash_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+
+        self.frames = self.idle_frames
+
+    def canAttack(self, zombie):
+        if pg.sprite.collide_circle_ratio(0.7)(zombie, self):
+            return True
+        return False
+    
+    def setAttack(self, zombie, zombie_group):
+        self.attack_zombie = zombie
+        self.zombie_group = zombie_group
+        self.state = c.ATTACK
+
+    def attacking(self):
+        if not self.splashing:
+            self.splashing = True
+            self.changeFrames(self.splash_frames)
+            self.zombie_group.remove(self.attack_zombie)
+            self.attack_zombie.kill()
+        # 这里必须用elif排除尚未进入splash阶段，以免误触
+        elif (self.frame_index + 1) >= self.frame_num:
+            self.health = 0

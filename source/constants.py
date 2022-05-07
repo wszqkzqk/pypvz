@@ -206,6 +206,7 @@ STARFRUIT = 'StarFruit'
 COFFEEBEAN = 'CoffeeBean'
 SEASHROOM = 'SeaShroom'
 TALLNUT = 'TallNut'
+TANGLEKLEP = 'TangleKlep'
 
 # 植物生命值
 PLANT_HEALTH = 300
@@ -254,6 +255,7 @@ CARD_STARFRUIT = 'card_starfruit'
 CARD_COFFEEBEAN = 'card_coffeebean'
 CARD_SEASHROOM = 'card_seashroom'
 CARD_TALLNUT = 'card_tallnut'
+CARD_TANGLEKLEP = 'card_tangleklep'
 
 # 子弹信息
 # 子弹类型

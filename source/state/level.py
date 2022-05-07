@@ -788,6 +788,8 @@ class Level(tool.State):
             new_plant = plant.SeaShroom(x, y, self.bullet_groups[map_y])
         elif self.plant_name == c.TALLNUT:
             new_plant = plant.TallNut(x, y)
+        elif self.plant_name == c.TANGLEKLEP:
+            new_plant = plant.TangleKlep(x, y)
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()
@@ -1105,8 +1107,12 @@ class Level(tool.State):
                 plant.setAttack()
             elif (plant.state == c.ATTACK and not can_attack):
                 plant.setIdle()
-        elif(plant.name == c.WALLNUTBOWLING or
-             plant.name == c.REDWALLNUTBOWLING):
+        elif plant.name == c.TANGLEKLEP:
+            for zombie in self.zombie_groups[i]:
+                if plant.canAttack(zombie):
+                    plant.setAttack(zombie, self.zombie_groups[i])
+                    break
+        elif plant.name in {c.WALLNUTBOWLING, c.REDWALLNUTBOWLING}:
             pass
         else:
             can_attack = False
