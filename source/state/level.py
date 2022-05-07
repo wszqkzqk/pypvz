@@ -786,6 +786,8 @@ class Level(tool.State):
             new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x])
         elif self.plant_name == c.SEASHROOM:
             new_plant = plant.SeaShroom(x, y, self.bullet_groups[map_y])
+        elif self.plant_name == c.TALLNUT:
+            new_plant = plant.TallNut(x, y)
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()
