@@ -68,7 +68,7 @@ plantInfo = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (c.TANGLEKLEP,
                 c.CARD_TANGLEKLEP,
                 325,
-                7500),
+                30000),
             (c.THREEPEASHOOTER,
                 c.CARD_THREEPEASHOOTER,
                 325,
