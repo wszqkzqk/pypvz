@@ -184,6 +184,7 @@ def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.
     return graphics
 
 # 从文件加载矩形碰撞范围
+# 用于消除文件边框影响
 def loadZombieImageRect():
     file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'zombie.json')
     f = open(file_path)

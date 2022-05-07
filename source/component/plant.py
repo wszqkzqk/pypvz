@@ -188,6 +188,8 @@ class Plant(pg.sprite.Sprite):
         self.hit_timer = 0
         # 被铲子指向时间
         self.highlightTime = 0
+        # 是否能被越过
+        self.skipable = True
 
     def loadFrames(self, frames, name, scale, color=c.BLACK):
         frame_list = tool.GFX[name]
@@ -1223,3 +1225,31 @@ class SeaShroom(Plant):
                 (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
+
+
+class TallNut(Plant):
+    def __init__(self, x, y):
+        Plant.__init__(self, x, y, c.TALLNUT, c.TALLNUT_HEALTH, None)
+        self.load_images()
+        self.cracked1 = False
+        self.cracked2 = False
+        # 高坚果不能被撑杆跳僵尸和海豚骑士僵尸跳过，虽然目前还没有引入撑杆跳僵尸和海豚骑士僵尸
+        self.skipable = False
+
+    def load_images(self):
+        self.cracked1_frames = []
+        self.cracked2_frames = []
+
+        cracked1_frames_name = self.name + '_cracked1'
+        cracked2_frames_name = self.name + '_cracked2'
+
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name, 1)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
+
+    def idling(self):
+        if not self.cracked1 and self.health <= c.TALLNUT_CRACKED1_HEALTH:
+            self.changeFrames(self.cracked1_frames)
+            self.cracked1 = True
+        elif not self.cracked2 and self.health <= c.TALLNUT_CRACKED2_HEALTH:
+            self.changeFrames(self.cracked2_frames)
+            self.cracked2 = True
