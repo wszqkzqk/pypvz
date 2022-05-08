@@ -156,6 +156,7 @@ nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-d
   * 从地面刺伤
     * 已实现
   * 缠绕与拖拽
+    * 自0.7.5.0已实现
   * 吞噬
     * 已实现
   * 特殊

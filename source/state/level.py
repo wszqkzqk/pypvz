@@ -1023,7 +1023,7 @@ class Level(tool.State):
                     if ((pg.sprite.collide_circle_ratio(0.6)(zombie, plant)) or
                     (abs(zombie.rect.centerx - x) <= plant.explode_x_range)):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
-            elif plant.name != c.WALLNUTBOWLING:
+            elif plant.name not in {c.WALLNUTBOWLING, c.TANGLEKLEP}:
                 # 触发植物死亡音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
         else:
