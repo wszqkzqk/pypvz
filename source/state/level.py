@@ -169,9 +169,21 @@ class Level(tool.State):
 
     # 僵尸的刷新机制
     def refreshWaves(self, current_time, survivalRounds=0):
+        # 最后一波或者大于最后一波
+        # 如果在夜晚按需从墓碑生成僵尸
+        # 否则直接return
         if self.waveNum >= self.map_data[c.NUM_FLAGS] * 10:
+            if self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_NIGHT:
+                if not self.graveZombieCreated:
+                    if current_time - self.waveTime > 1500:
+                        for item in self.graveSet:
+                            itemX, itemY = self.map.getMapGridPos(*item)
+                            self.zombie_groups[item[1]].add(zombie.NormalZombie(itemX, itemY, self.head_group))
+                        self.graveZombieCreated = True
             return
-        if (self.waveNum == 0):    # 还未开始出现僵尸
+
+        # 还未开始出现僵尸
+        if (self.waveNum == 0):
             if (self.waveTime == 0):    # 表明刚刚开始游戏
                 self.waveTime = current_time
             else:
@@ -197,7 +209,6 @@ class Level(tool.State):
                 self.waveZombies = self.waves[self.waveNum - 1]
                 self.numZombie = len(self.waveZombies)
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieVoice.ogg")).play()
-                # 第一波刚刚刷出来的时候播放音效
         else:
             if ((current_time - self.waveTime >= 45000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 25000)):
                 self.waveNum += 1
@@ -209,6 +220,7 @@ class Level(tool.State):
                 return
             elif ((current_time - self.waveTime >= 43000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 23000)):
                 self.showHugeWaveApprochingTime = current_time
+        
         numZombies = 0
         for i in range(self.map_y_len):
             numZombies += len(self.zombie_groups[i])
@@ -400,17 +412,18 @@ class Level(tool.State):
                 graveVolume = 11
             else:
                 graveVolume = 0
-            graveSet = set()
-            while len(graveSet) < graveVolume:
+            self.graveSet = set()
+            while len(self.graveSet) < graveVolume:
                 mapX = randint(4, 8)    # 注意是从0开始编号
                 mapY = randint(0, 4)
-                graveSet.add((mapX, mapY))
-            if graveSet:
-                for i in graveSet:
+                self.graveSet.add((mapX, mapY))
+            if self.graveSet:
+                for i in self.graveSet:
                     mapX, mapY = i
                     posX, posY = self.map.getMapGridPos(mapX, mapY)
                     self.plant_groups[mapY].add(plant.Grave(posX, posY))
                     self.map.map[mapY][mapX][c.MAP_PLANT].add(c.GRAVE)
+            self.graveZombieCreated = False
 
 
     # 小菜单
@@ -1085,6 +1098,10 @@ class Level(tool.State):
                     if ((pg.sprite.collide_circle_ratio(0.6)(zombie, targetPlant)) or
                     (abs(zombie.rect.centerx - x) <= targetPlant.explode_x_range)):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
+            # 对于墓碑：移除存储在墓碑集合中的坐标
+            # 注意这里是在描述墓碑而非墓碑吞噬者
+            elif targetPlant.name == c.GRAVE:
+                self.graveSet.remove((map_x, map_y))
             elif targetPlant.name not in {c.WALLNUTBOWLING, c.TANGLEKLEP}:
                 # 触发植物死亡音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
