@@ -148,6 +148,7 @@ nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-d
       * 樱桃炸弹、爆炸坚果与玉米加农炮炮弹
         * 已实现
       * 毁灭菇
+        * 自0.7.6.0已实现
     * 火焰爆炸
       * 火爆辣椒
         * 已实现
