@@ -1310,7 +1310,7 @@ class TangleKlep(Plant):
 # 坑形态的毁灭菇同地刺一样不可以被啃食
 # 爆炸时杀死同一格的所有植物
 class DoomShroom(Plant):
-    def __init__(self, x, y, plant_group, mapContent):
+    def __init__(self, x, y, mapContent):
         Plant.__init__(self, x, y, c.DOOMSHROOM, c.PLANT_HEALTH, None)
         self.can_sleep = True
         self.mapContent = mapContent
@@ -1322,7 +1322,6 @@ class DoomShroom(Plant):
             self.explode_y_range = 2
         self.explode_x_range = c.GRID_X_SIZE * 2.5
         self.start_boom = False
-        self.plant_group = plant_group
         self.originalX = x
         self.originalY = y
 

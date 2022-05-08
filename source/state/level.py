@@ -793,7 +793,7 @@ class Level(tool.State):
         elif self.plant_name == c.TANGLEKLEP:
             new_plant = plant.TangleKlep(x, y)
         elif self.plant_name == c.DOOMSHROOM:
-            new_plant = plant.DoomShroom(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x])
+            new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x])
 
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
