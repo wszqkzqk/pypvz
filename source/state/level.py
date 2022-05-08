@@ -927,8 +927,8 @@ class Level(tool.State):
                             break
                         elif plant.name in {c.LILYPAD, "花盆（未实现）"}:
                             attackableBackupPlant.append(plant)
-                        # 注意要剔除掉两个“假植物”
-                        elif plant.name not in {c.HOLE, c.ICE_FROZEN_PLOT}:
+                        # 注意要剔除掉两个“假植物”，以及不能被啃的地刺
+                        elif plant.name not in {c.HOLE, c.ICE_FROZEN_PLOT, c.SPIKEWEED}:
                             attackableCommonPlants.append(plant)
                 else:
                     if attackableCommonPlants:
@@ -964,8 +964,6 @@ class Level(tool.State):
                     elif targetPlant.name == c.REDWALLNUTBOWLING:
                         if targetPlant.state == c.IDLE:
                             targetPlant.setAttack()
-                    elif targetPlant.name in {c.SPIKEWEED}:
-                        continue
                     else:
                         zombie.setAttack(targetPlant)
 
