@@ -123,9 +123,6 @@ MAP_GRASS = 'grass'
 MAP_WATER = 'water'
 MAP_TILE = 'tile'  # 指屋顶上的瓦片
 MAP_UNAVAILABLE = 'unavailable' # 指完全不能种植物的地方，包括无草皮的荒地和坚果保龄球等红线右侧
-# 特殊的：冰车冰路（自动消除、辣椒消除）、毁灭菇坑（自动消除），由于这些只能在关卡中产生而不能初始化产生，所以只有区域类型没有初始状态
-MAP_FROZEN = 'frozen'
-MAP_HOLE = 'hole'
 # 地图单元格状态
 MAP_STATE_EMPTY = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_GRASS}  # 由于同一格显然不可能种两个相同的植物，所以用集合
 MAP_STATE_WATER = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_WATER}
@@ -207,6 +204,9 @@ COFFEEBEAN = 'CoffeeBean'
 SEASHROOM = 'SeaShroom'
 TALLNUT = 'TallNut'
 TANGLEKLEP = 'TangleKlep'
+DOOMSHROOM = 'DoomShroom'
+ICE_FROZEN_PLOT = 'IceFrozenPlot'
+HOLE = 'Hole'
 
 # 植物生命值
 PLANT_HEALTH = 300
@@ -256,6 +256,7 @@ CARD_COFFEEBEAN = 'card_coffeebean'
 CARD_SEASHROOM = 'card_seashroom'
 CARD_TALLNUT = 'card_tallnut'
 CARD_TANGLEKLEP = 'card_tangleklep'
+CARD_DOOMSHROOM = 'card_doomshroom'
 
 # 子弹信息
 # 子弹类型
@@ -343,3 +344,6 @@ SLEEP = 'sleep'
 # 关卡状态
 CHOOSE = 'choose'
 PLAY = 'play'
+
+# 无穷大常量
+INF = float('inf')

@@ -783,13 +783,16 @@ class Level(tool.State):
         elif self.plant_name == c.STARFRUIT:
             new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self)
         elif self.plant_name == c.COFFEEBEAN:
-            new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x])
+            new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x], self.map, map_x)
         elif self.plant_name == c.SEASHROOM:
             new_plant = plant.SeaShroom(x, y, self.bullet_groups[map_y])
         elif self.plant_name == c.TALLNUT:
             new_plant = plant.TallNut(x, y)
         elif self.plant_name == c.TANGLEKLEP:
             new_plant = plant.TangleKlep(x, y)
+        elif self.plant_name == c.DOOMSHROOM:
+            new_plant = plant.DoomShroom(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x])
+
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
             new_plant.setSleep()
@@ -882,16 +885,19 @@ class Level(tool.State):
                 else:
                     collided_func = pg.sprite.collide_circle_ratio(0.7)
                 if bullet.state == c.FLY:
-                    zombie = pg.sprite.spritecollideany(bullet, self.zombie_groups[i], collided_func)
-                    if zombie and zombie.state != c.DIE:
-                        # 这里生效代表已经发生了碰撞
-                        zombie.setDamage(bullet.damage, effect=bullet.effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
-                        bullet.setExplode()
-                        # 火球有溅射伤害
-                        if bullet.name == c.BULLET_FIREBALL:
-                            for rangeZombie in self.zombie_groups[i]:
-                                if abs(rangeZombie.rect.x - bullet.rect.x) <= (c.GRID_X_SIZE // 2):
-                                    rangeZombie.setDamage(c.BULLET_DAMAGE_FIREBALL_RANGE, effect=False, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+                    # 利用循环而非内建精灵组碰撞判断函数，处理更加灵活，可排除已死亡僵尸
+                    for zombie in self.zombie_groups[i]:
+                        if collided_func(zombie, bullet):
+                            if zombie.state != c.DIE:
+                                zombie.setDamage(bullet.damage, effect=bullet.effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+                                bullet.setExplode()
+                                # 火球有溅射伤害
+                                if bullet.name == c.BULLET_FIREBALL:
+                                    for rangeZombie in self.zombie_groups[i]:
+                                        if abs(rangeZombie.rect.x - bullet.rect.x) <= (c.GRID_X_SIZE // 2):
+                                            rangeZombie.setDamage(c.BULLET_DAMAGE_FIREBALL_RANGE, effect=False, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+                                break
+                        
 
     def checkZombieCollisions(self):
         if self.bar_type == c.CHOSSEBAR_BOWLING:
@@ -909,36 +915,59 @@ class Level(tool.State):
                         continue
                 if zombie.canSwim and (not zombie.swimming):
                     continue
-                plant = pg.sprite.spritecollideany(zombie, self.plant_groups[i], collided_func)
-                if plant:
-                    if plant.name == c.WALLNUTBOWLING:
-                        if plant.canHit(i):
-                            zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
-                            # 注意：以上语句为通用处理，以后加入了铁门僵尸需要单独设置直接冲撞就直接杀死
-                            # 可以给坚果保龄球设置attacked属性，如果attacked就秒杀（setDamage的攻击类型此时设置为COMMMON）铁门
-                            plant.changeDirection(i)
-                            # 播放撞击音效
-                            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bowlingimpact.ogg")).play()
-                    elif plant.name == c.REDWALLNUTBOWLING:
-                        if plant.state == c.IDLE:
-                            plant.setAttack()
-                    elif plant.name == c.SPIKEWEED:
-                        continue
-                    # 在睡莲、花盆上有植物时应当优先攻击其上的植物
-                    elif plant.name in {c.LILYPAD, '花盆（未实现）'}:
-                        map_x, map_y = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
+                
+                # 以下代码为了实现各个功能，极其凌乱，尚未优化性能
+                attackableCommonPlants = []
+                attackableBackupPlant = []
+                # 利用更加精细的循环判断啃咬优先顺序
+                for plant in self.plant_groups[i]:
+                    if collided_func(plant, zombie):
+                        if plant.name in {"南瓜头（未实现）"}:
+                            targetPlant = plant
+                            break
+                        elif plant.name in {c.LILYPAD, "花盆（未实现）"}:
+                            attackableBackupPlant.append(plant)
+                        # 注意要剔除掉两个“假植物”
+                        elif plant.name not in {c.HOLE, c.ICE_FROZEN_PLOT}:
+                            attackableCommonPlants.append(plant)
+                else:
+                    if attackableCommonPlants:
+                        # 默认为列表中最后一个
+                        targetPlant = attackableCommonPlants[-1]
+                    elif attackableBackupPlant:
+                        targetPlant = attackableBackupPlant[-1]
+                        map_x, map_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.bottom)
                         if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
-                            # 这里暂时没有南瓜头优先攻击逻辑，这整个模块都没有对南瓜头的设计
                             for actualTargetPlant in self.plant_groups[i]:
                                 # 检测同一格的其他植物
                                 if self.map.getMapIndex(actualTargetPlant.rect.centerx, actualTargetPlant.rect.bottom) == (map_x, map_y):
-                                    if actualTargetPlant.name != plant.name:
-                                        zombie.setAttack(actualTargetPlant)
+                                    if actualTargetPlant.name in {"南瓜头（未实现）"}:
+                                        targetPlant = actualTargetPlant
                                         break
-                        else:
-                            zombie.setAttack(plant)
+                                    elif actualTargetPlant.name not in {c.LILYPAD, "花盆（未实现）"}:
+                                        attackableCommonPlants.append(actualTargetPlant)
+                            else:
+                                if attackableCommonPlants:
+                                    targetPlant = attackableCommonPlants[-1]
                     else:
-                        zombie.setAttack(plant)
+                        targetPlant = None
+
+                if targetPlant:
+                    if targetPlant.name == c.WALLNUTBOWLING:
+                        if targetPlant.canHit(i):
+                            zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
+                            # 注意：以上语句为通用处理，以后加入了铁门僵尸需要单独设置直接冲撞就直接杀死
+                            # 可以给坚果保龄球设置attacked属性，如果attacked就秒杀（setDamage的攻击类型此时设置为COMMMON）铁门
+                            targetPlant.changeDirection(i)
+                            # 播放撞击音效
+                            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bowlingimpact.ogg")).play()
+                    elif targetPlant.name == c.REDWALLNUTBOWLING:
+                        if targetPlant.state == c.IDLE:
+                            targetPlant.setAttack()
+                    elif targetPlant.name in {c.SPIKEWEED}:
+                        continue
+                    else:
+                        zombie.setAttack(targetPlant)
 
             for hypno_zombie in self.hypno_zombie_groups[i]:
                 if hypno_zombie.health <= 0:
@@ -990,49 +1019,63 @@ class Level(tool.State):
                     zombie.setFreeze(plant.trap_frames[0])
                     zombie.setDamage(20, damageType=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
 
-    def killPlant(self, plant, shovel=False):
-        x, y = plant.getPosition()
+    def killPlant(self, targetPlant, shovel=False):
+        x, y = targetPlant.getPosition()
         map_x, map_y = self.map.getMapIndex(x, y)
-        if self.bar_type != c.CHOSSEBAR_BOWLING:
-            try:    # 避免炸弹等本身就不在集合里面的问题
-                self.map.removeMapPlant(map_x, map_y, plant.name)
-            except KeyError:
-                pass
-        # 将睡眠植物移除后更新睡眠状态
-        if plant.state == c.SLEEP:
-            self.map.map[map_y][map_x][c.MAP_SLEEP] = False
+
         # 用铲子铲不用触发植物功能
         if not shovel:
-            if plant.name in {c.CHERRYBOMB, c.REDWALLNUTBOWLING}:
-                self.boomZombies(plant.rect.centerx, map_y, plant.explode_y_range,
-                                plant.explode_x_range)
-            elif plant.name == c.JALAPENO:
-                self.boomZombies(plant.rect.centerx, map_y, plant.explode_y_range,
-                                plant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
-            elif plant.name == c.ICESHROOM and plant.state != c.SLEEP:
+            if targetPlant.name in {c.CHERRYBOMB, c.REDWALLNUTBOWLING}:
+                self.boomZombies(targetPlant.rect.centerx, map_y, targetPlant.explode_y_range,
+                                targetPlant.explode_x_range)
+            elif (targetPlant.name == c.DOOMSHROOM) and (targetPlant.state != c.SLEEP):
+                x, y = targetPlant.originalX, targetPlant.originalY
+                map_x, map_y = self.map.getMapIndex(x, y)
+                self.boomZombies(targetPlant.rect.centerx, map_y, targetPlant.explode_y_range,
+                                targetPlant.explode_x_range)
+                for i in self.plant_groups[map_y]:
+                    checkMapX, _ = self.map.getMapIndex(i.rect.centerx, i.rect.bottom)
+                    if map_x == checkMapX:
+                        i.health = 0
+                self.plant_groups[map_y].add(plant.Hole(x, y, self.map.map[map_y][map_x][c.MAP_PLOT_TYPE]))
+                self.map.map[map_y][map_x][c.MAP_PLANT].add(c.HOLE)
+            elif targetPlant.name == c.JALAPENO:
+                self.boomZombies(targetPlant.rect.centerx, map_y, targetPlant.explode_y_range,
+                                targetPlant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
+            elif targetPlant.name == c.ICESHROOM and targetPlant.state != c.SLEEP:
                 self.freezeZombies(plant)
-            elif plant.name == c.HYPNOSHROOM and plant.state != c.SLEEP:
-                zombie = plant.kill_zombie
+            elif targetPlant.name == c.HYPNOSHROOM and targetPlant.state != c.SLEEP:
+                zombie = targetPlant.kill_zombie
                 zombie.setHypno()
                 _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
                 self.zombie_groups[map_y].remove(zombie)
                 self.hypno_zombie_groups[map_y].add(zombie)
-            elif (plant.name == c.POTATOMINE and not plant.is_init):    # 土豆雷不是灰烬植物，不能用Boom
+            elif (targetPlant.name == c.POTATOMINE and not targetPlant.is_init):    # 土豆雷不是灰烬植物，不能用Boom
                 for zombie in self.zombie_groups[map_y]:
                     # 双判断：发生碰撞或在攻击范围内
-                    if ((pg.sprite.collide_circle_ratio(0.6)(zombie, plant)) or
-                    (abs(zombie.rect.centerx - x) <= plant.explode_x_range)):
+                    if ((pg.sprite.collide_circle_ratio(0.6)(zombie, targetPlant)) or
+                    (abs(zombie.rect.centerx - x) <= targetPlant.explode_x_range)):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
-            elif plant.name not in {c.WALLNUTBOWLING, c.TANGLEKLEP}:
+            elif targetPlant.name not in {c.WALLNUTBOWLING, c.TANGLEKLEP}:
                 # 触发植物死亡音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
         else:
             # 用铲子移除植物时播放音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg")).play()
 
+        # 整理地图信息
+        if self.bar_type != c.CHOSSEBAR_BOWLING:
+            try:    # 避免炸弹等本身就不在集合里面的问题
+                self.map.removeMapPlant(map_x, map_y, targetPlant.name)
+            except KeyError:
+                pass
+        # 将睡眠植物移除后更新睡眠状态
+        if targetPlant.state == c.SLEEP:
+            self.map.map[map_y][map_x][c.MAP_SLEEP] = False
+
         # 避免僵尸在用铲子移除植物后还在原位啃食
-        plant.health = 0
-        plant.kill()
+        targetPlant.health = 0
+        targetPlant.kill()
 
     def checkPlant(self, plant, i):
         zombie_len = len(self.zombie_groups[i])

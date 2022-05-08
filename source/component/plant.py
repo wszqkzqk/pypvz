@@ -446,7 +446,7 @@ class WallNut(Plant):
 
 class CherryBomb(Plant):
     def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.CHERRYBOMB, c.WALLNUT_HEALTH, None)
+        Plant.__init__(self, x, y, c.CHERRYBOMB, c.INF, None)
         self.state = c.ATTACK
         self.start_boom = False
         self.bomb_timer = 0
@@ -680,7 +680,7 @@ class Squash(Plant):
         self.zombie_group = zombie_group
         self.state = c.ATTACK
         # 攻击状态下生命值无敌
-        self.health = float('inf')
+        self.health = c.INF
 
     def attacking(self):
         if self.squashing:
@@ -742,7 +742,7 @@ class Spikeweed(Plant):
 
 class Jalapeno(Plant):
     def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.JALAPENO, c.PLANT_HEALTH, None)
+        Plant.__init__(self, x, y, c.JALAPENO, c.INF, None)
         self.orig_pos = (x, y)
         self.state = c.ATTACK
         self.start_explode = False
@@ -1171,20 +1171,26 @@ class StarFruit(Plant):
 
 
 class CoffeeBean(Plant):
-    def __init__(self, x, y, plant_group, mapContent):
+    def __init__(self, x, y, plant_group, mapContent, map, map_x):
         Plant.__init__(self, x, y, c.COFFEEBEAN, c.PLANT_HEALTH, None)
         self.plant_group = plant_group
         self.mapContent = mapContent
+        self.map = map
+        self.map_x = map_x
 
     def idling(self):
         if (self.frame_index + 1) == self.frame_num:
             self.mapContent[c.MAP_SLEEP] = False
+            # 注意：这里有bug —— 未判断本行的睡眠蘑菇是否在这一格
             for plant in self.plant_group:
                 if plant.can_sleep:
                     if plant.state == c.SLEEP:
-                        plant.state = c.IDLE
-                        plant.setIdle()
-                        plant.changeFrames(plant.idle_frames)
+                        plantMapX, _ = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
+                        print(plantMapX, self.map_x)
+                        if plantMapX == self.map_x:
+                            plant.state = c.IDLE
+                            plant.setIdle()
+                            plant.changeFrames(plant.idle_frames)
             # 播放唤醒音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "mushroomWakeup.ogg")).play()
             self.mapContent[c.MAP_PLANT].remove(self.name)
@@ -1296,4 +1302,136 @@ class TangleKlep(Plant):
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "tangleKelpDrag.ogg")).play()
         # 这里必须用elif排除尚未进入splash阶段，以免误触
         elif (self.frame_index + 1) >= self.frame_num:
+            self.health = 0
+
+
+# 毁灭菇的处理办法：
+# 爆炸后留下的坑看作另一种形态的毁灭菇
+# 当存在这种形态的毁灭菇时不可以种植物
+# 坑形态的毁灭菇存在时不可种植物
+# 坑形态的毁灭菇同地刺一样不可以被啃食
+# 爆炸时杀死同一格的所有植物
+class DoomShroom(Plant):
+    def __init__(self, x, y, plant_group, mapContent):
+        Plant.__init__(self, x, y, c.DOOMSHROOM, c.PLANT_HEALTH, None)
+        self.can_sleep = True
+        self.mapContent = mapContent
+        self.bomb_timer = 0
+        # 不同场景由于格子的长不同，范围有变化
+        if mapContent[c.MAP_PLOT_TYPE] == c.MAP_GRASS:
+            self.explode_y_range = 2
+        else:
+            self.explode_y_range = 2
+        self.explode_x_range = c.GRID_X_SIZE * 2.5
+        self.start_boom = False
+        self.plant_group = plant_group
+        self.originalX = x
+        self.originalY = y
+
+    def loadImages(self, name, scale):
+        self.idle_frames = []
+        self.sleep_frames = []
+        self.boom_frames = []
+
+        idle_name = name
+        sleep_name = name + 'Sleep'
+        boom_name = name + 'Boom'
+
+        frame_list = [self.idle_frames, self.sleep_frames, self.boom_frames]
+        name_list = [idle_name, sleep_name, boom_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name, 1)
+
+        self.frames = self.idle_frames
+
+    def setBoom(self):
+        self.changeFrames(self.boom_frames)
+        self.start_boom = True
+
+    def animation(self):
+        # 发生了爆炸
+        if self.start_boom:
+            if self.frame_index == 1:
+                self.rect.x -= 80
+                self.rect.y += 30
+                # 播放爆炸音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "doomshroom.ogg")).play()
+            if (self.current_time - self.animate_timer) > self.animate_interval:
+                self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                self.health = 0
+                self.frame_index = self.frame_num - 1
+                self.mapContent[c.MAP_PLANT].add(c.HOLE)
+        # 睡觉状态
+        elif self.state == c.SLEEP:
+            if (self.current_time - self.animate_timer) > self.animate_interval:
+                self.frame_index += 1
+                if self.frame_index >= self.frame_num:
+                    self.frame_index = 0
+                self.animate_timer = self.current_time
+        # 正常状态
+        else:
+            self.health = c.INF
+            if (self.current_time - self.animate_timer) > 100:
+                    self.frame_index += 1
+                    if self.frame_index >= self.frame_num:
+                        self.setBoom()
+                        return
+                    self.animate_timer = self.current_time
+        self.image = self.frames[self.frame_index]
+
+# 用于描述毁灭菇的坑
+class Hole(Plant):
+    def __init__(self, x, y, plotType):
+        # 指定区域类型这一句必须放在前面，否则加载图片判断将会失败
+        self.plotType = plotType
+        Plant.__init__(self, x, y, c.HOLE, c.INF, None)
+        self.timer = 0
+        self.shallow = False
+
+    def loadImages(self, name, scale):
+        self.idle_frames = []
+        self.idle2_frames = []
+        self.water_frames = []
+        self.water2_frames = []
+        self.roof_frames = []
+        self.roof2_frames = []
+
+        idle_name = name
+        idle2_name = name + 'Shallow'
+        water_name = name + 'Water'
+        water2_name = name + 'WaterShallow'
+        roof_name = name + 'Roof'
+        roof2_name = name + 'RoofShallow'
+
+        frame_list = [  self.idle_frames, self.idle2_frames,
+                        self.water_frames, self.water2_frames,
+                        self.roof_frames, self.roof2_frames]
+        name_list = [   idle_name, idle2_name,
+                        water_name, water2_name,
+                        roof_name, roof2_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name, 1)
+        
+        if self.plotType == c.MAP_TILE:
+            self.frames = self.roof_frames
+        elif self.plotType == c.MAP_WATER:
+            self.frames = self.water_frames
+        else:
+            self.frames = self.idle_frames
+
+    def idling(self):
+        if self.timer == 0:
+            self.timer = self.current_time
+        elif (not self.shallow) and (self.current_time - self.timer >= 90000):
+            if self.plotType == c.MAP_TILE:
+                self.frames = self.roof2_frames
+            elif self.plotType == c.MAP_WATER:
+                self.frames = self.water2_frames
+            else:
+                self.frames = self.idle2_frames
+            self.shallow = True
+        elif self.current_time - self.timer >= 180000:
             self.health = 0

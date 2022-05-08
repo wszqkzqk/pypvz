@@ -168,7 +168,7 @@ class Menu(tool.State):
                     self.adventure_frame_index = 0
                 self.adventure_timer = self.current_time
                 self.adventure_image = self.adventure_frames[self.adventure_frame_index]
-            if(self.current_time - self.adventure_start) > 1300:
+            if(self.current_time - self.adventure_start) > 3200:
                 self.done = True
                 
 

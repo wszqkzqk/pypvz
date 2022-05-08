@@ -42,6 +42,8 @@ class Map():
     # 注意咖啡豆生效后需要同时将植物的睡眠状态和格子的睡眠记录改变
     def isAvailable(self, map_x, map_y, plantName):
         # 咖啡豆的判别最为特殊
+        if (c.HOLE in self.map[map_y][map_x][c.MAP_PLANT]) or (c.ICE_FROZEN_PLOT in self.map[map_y][map_x][c.MAP_PLANT]):
+            return False
         if plantName == c.COFFEEBEAN:
             if self.map[map_y][map_x][c.MAP_SLEEP] and (plantName not in self.map[map_y][map_x][c.MAP_PLANT]):
                 return True
