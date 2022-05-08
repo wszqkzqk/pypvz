@@ -491,6 +491,8 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
+                if i.name in {c.HOLE, c.ICE_FROZEN_PLOT}:
+                    continue
                 # 优先移除花盆、睡莲上的植物而非花盆、睡莲本身
                 if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
                     if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
@@ -1233,6 +1235,8 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
+                if i.name in {c.HOLE, c.ICE_FROZEN_PLOT}:
+                    continue
                 # 优先选中睡莲、花盆上的植物
                 if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
                     if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:

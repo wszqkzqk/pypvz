@@ -1181,12 +1181,10 @@ class CoffeeBean(Plant):
     def idling(self):
         if (self.frame_index + 1) == self.frame_num:
             self.mapContent[c.MAP_SLEEP] = False
-            # 注意：这里有bug —— 未判断本行的睡眠蘑菇是否在这一格
             for plant in self.plant_group:
                 if plant.can_sleep:
                     if plant.state == c.SLEEP:
                         plantMapX, _ = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
-                        print(plantMapX, self.map_x)
                         if plantMapX == self.map_x:
                             plant.state = c.IDLE
                             plant.setIdle()
