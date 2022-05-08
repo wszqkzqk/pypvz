@@ -857,6 +857,8 @@ class Level(tool.State):
             new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x])
         elif self.plant_name == c.GRAVEBUSTER:
             new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
+            # 播放吞噬音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "gravebusterchomp.ogg")).play()
 
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
