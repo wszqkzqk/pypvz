@@ -385,6 +385,33 @@ class Level(tool.State):
         self.setupHugeWaveApprochingImage()
         self.showHugeWaveApprochingTime = -2000 # 防止设置为0时刚刚打开游戏就已经启动红字
 
+        if self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_NIGHT:
+            if c.GRADE_GRAVES in self.map_data:
+                gradeGraves = self.map_data[c.GRADE_GRAVES]
+            # 缺省为少量墓碑
+            else:
+                gradeGraves = c.GRADE1_GRAVES
+            
+            if gradeGraves == c.GRADE1_GRAVES:
+                graveVolume = 4
+            elif gradeGraves == c.GRADE2_GRAVES:
+                graveVolume = 7
+            elif gradeGraves >= c.GRADE3_GRAVES:
+                graveVolume = 11
+            else:
+                graveVolume = 0
+            graveSet = set()
+            while len(graveSet) < graveVolume:
+                mapX = randint(4, 8)    # 注意是从0开始编号
+                mapY = randint(0, 4)
+                graveSet.add((mapX, mapY))
+            if graveSet:
+                for i in graveSet:
+                    mapX, mapY = i
+                    posX, posY = self.map.getMapGridPos(mapX, mapY)
+                    self.plant_groups[mapY].add(plant.Grave(posX, posY))
+                    self.map.map[mapY][mapX][c.MAP_PLANT].add(c.GRAVE)
+
 
     # 小菜单
     def setupLittleMenu(self):
@@ -491,7 +518,7 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
-                if i.name in {c.HOLE, c.ICE_FROZEN_PLOT}:
+                if i.name in {c.HOLE, c.ICE_FROZEN_PLOT, c.GRAVE}:
                     continue
                 # 优先移除花盆、睡莲上的植物而非花盆、睡莲本身
                 if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
@@ -794,6 +821,8 @@ class Level(tool.State):
             new_plant = plant.TangleKlep(x, y)
         elif self.plant_name == c.DOOMSHROOM:
             new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x])
+        elif self.plant_name == c.GRAVEBUSTER:
+            new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
 
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
@@ -930,7 +959,7 @@ class Level(tool.State):
                         elif plant.name in {c.LILYPAD, "花盆（未实现）"}:
                             attackableBackupPlant.append(plant)
                         # 注意要剔除掉两个“假植物”，以及不能被啃的地刺
-                        elif plant.name not in {c.HOLE, c.ICE_FROZEN_PLOT, c.SPIKEWEED}:
+                        elif plant.name not in {c.HOLE, c.ICE_FROZEN_PLOT, c.GRAVE, c.SPIKEWEED}:
                             attackableCommonPlants.append(plant)
                 else:
                     if attackableCommonPlants:
@@ -1043,7 +1072,7 @@ class Level(tool.State):
                 self.boomZombies(targetPlant.rect.centerx, map_y, targetPlant.explode_y_range,
                                 targetPlant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
             elif targetPlant.name == c.ICESHROOM and targetPlant.state != c.SLEEP:
-                self.freezeZombies(plant)
+                self.freezeZombies(targetPlant)
             elif targetPlant.name == c.HYPNOSHROOM and targetPlant.state != c.SLEEP:
                 zombie = targetPlant.kill_zombie
                 zombie.setHypno()
@@ -1235,7 +1264,7 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
-                if i.name in {c.HOLE, c.ICE_FROZEN_PLOT}:
+                if i.name in {c.HOLE, c.ICE_FROZEN_PLOT, c.GRAVE}:
                     continue
                 # 优先选中睡莲、花盆上的植物
                 if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:

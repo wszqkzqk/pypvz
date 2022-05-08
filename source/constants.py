@@ -104,6 +104,13 @@ BACKGROUND_WALLNUTBOWLING = 6
 BACKGROUND_SINGLE = 7
 BACKGROUND_TRIPLE = 8
 
+# 夜晚地图的墓碑数量等级
+GRADE_GRAVES = 'grade_graves'
+GRADE0_GRAVES = 0   # 无墓碑
+GRADE1_GRAVES = 1   # 少量墓碑
+GRADE2_GRAVES = 2   # 中等数量墓碑
+GRADE3_GRAVES = 3   # 大量墓碑
+
 # 僵尸生成方式
 SPAWN_ZOMBIES = 'spawn_zombies'
 SPAWN_ZOMBIES_AUTO = 'auto'
@@ -207,6 +214,9 @@ TANGLEKLEP = 'TangleKlep'
 DOOMSHROOM = 'DoomShroom'
 ICE_FROZEN_PLOT = 'IceFrozenPlot'
 HOLE = 'Hole'
+GRAVE = 'Grave'
+GRAVEBUSTER = 'GraveBuster'
+
 
 # 植物生命值
 PLANT_HEALTH = 300
@@ -257,6 +267,7 @@ CARD_SEASHROOM = 'card_seashroom'
 CARD_TALLNUT = 'card_tallnut'
 CARD_TANGLEKLEP = 'card_tangleklep'
 CARD_DOOMSHROOM = 'card_doomshroom'
+CARD_GRAVEBUSTER = 'card_gravebuster'
 
 # 子弹信息
 # 子弹类型

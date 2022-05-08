@@ -923,6 +923,8 @@ class IceShroom(Plant):
                     return
                 self.animate_timer = self.current_time
         else:
+            if self.state != c.SLEEP:
+                self.health = c.INF
             if (self.current_time - self.animate_timer) > 100:
                 self.frame_index += 1
                 if self.frame_index >= self.frame_num:
@@ -1432,3 +1434,43 @@ class Hole(Plant):
             self.shallow = True
         elif self.current_time - self.timer >= 180000:
             self.health = 0
+
+
+class Grave(Plant):
+    def __init__(self, x, y):
+        Plant.__init__(self, x, y, c.GRAVE, c.INF, None)
+        self.frame_index = randint(0, self.frame_num - 1)
+        self.image = self.frames[self.frame_index]
+
+    def animation(self):
+        pass
+
+
+class GraveBuster(Plant):
+    def __init__(self, x, y, plant_group, map, map_x):
+        Plant.__init__(self, x, y, c.GRAVEBUSTER, c.PLANT_HEALTH, None)
+        self.map = map
+        self.map_x = map_x
+        self.plant_group = plant_group
+        self.animate_interval = 100
+
+    def animation(self):
+        if (self.current_time - self.animate_timer) > self.animate_interval:
+            self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                self.frame_index = self.frame_num - 1
+                for item in self.plant_group:
+                    if item.name == c.GRAVE:
+                        itemMapX, _ = self.map.getMapIndex(item.rect.centerx, item.rect.bottom)
+                        if itemMapX == self.map_x:
+                            item.health = 0
+                            self.health = 0
+            self.animate_timer = self.current_time
+
+        self.image = self.frames[self.frame_index]
+        if  (self.current_time - self.highlightTime < 200):
+            self.image.set_alpha(150)
+        elif ((self.current_time - self.hit_timer) < 200):
+            self.image.set_alpha(192)
+        else:
+            self.image.set_alpha(255)

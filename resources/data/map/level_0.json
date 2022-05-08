@@ -1,5 +1,5 @@
 {
-    "background_type":2,
+    "background_type":1,
     "init_sun_value":5000,
     "shovel":1,
     "spawn_zombies":"list",
