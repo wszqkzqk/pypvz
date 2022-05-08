@@ -166,6 +166,10 @@ class Level(tool.State):
 
         self.waves = waves
 
+        # 针对有泳池的关卡
+        # 表示尚未生成最后一波中从水里冒出来的僵尸
+        self.createdZombieFromPool = False
+
 
     # 僵尸的刷新机制
     def refreshWaves(self, current_time, survivalRounds=0):
@@ -180,6 +184,23 @@ class Level(tool.State):
                             itemX, itemY = self.map.getMapGridPos(*item)
                             self.zombie_groups[item[1]].add(zombie.NormalZombie(itemX, itemY, self.head_group))
                         self.graveZombieCreated = True
+            elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
+                if not self.createdZombieFromPool:
+                    if current_time - self.waveTime > 1500:
+                        for i in range(3):
+                            # 水中倒数四列内可以在此时产生僵尸。共产生3个
+                            mapX, mapY = randint(5, 8), randint(2, 3)
+                            itemX, itemY = self.map.getMapGridPos(mapX, mapY)
+                            # 用随机数指定产生的僵尸类型
+                            # 带有权重
+                            zombieType = randint(1, 6)
+                            if zombieType == 1:
+                                self.zombie_groups[mapY].add(zombie.BucketHeadDuckyTubeZombie(itemX, itemY, self.head_group))
+                            elif zombieType <= 3:
+                                self.zombie_groups[mapY].add(zombie.ConeHeadDuckyTubeZombie(itemX, itemY, self.head_group))
+                            else:
+                                self.zombie_groups[mapY].add(zombie.DuckyTubeZombie(itemX, itemY, self.head_group))
+                        self.createdZombieFromPool = True
             return
 
         # 还未开始出现僵尸
