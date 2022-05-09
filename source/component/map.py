@@ -61,8 +61,8 @@ class Map():
             if plantName not in {c.LILYPAD, c.SEASHROOM, c.TANGLEKLEP}: # 这里的集合也可以换成存储在某一文件中的常数的表达
                 if not self.map[map_y][map_x][c.MAP_PLANT]: # 没有植物肯定可以种植
                     return True
-                elif ((self.map[map_y][map_x][c.MAP_PLANT] | {'花盆（未实现）', '南瓜头（未实现）'} == {'花盆（未实现）', '南瓜头（未实现）'})
-                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                elif (all((i in {'花盆（未实现）', '南瓜头（未实现）'}) for i in self.map[map_y][map_x][c.MAP_PLANT])
+                and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
                     return True
                 else:
                     return False
@@ -72,8 +72,8 @@ class Map():
             # 首先需要判断植物是否是水生植物，水生植物不能种植在陆地上
             if plantName not in {c.LILYPAD, c.SEASHROOM, c.TANGLEKLEP}: # 这里的集合也可以换成存储在某一文件中的常数的表达
                 if '花盆（未实现）' in self.map[map_y][map_x][c.MAP_PLANT]:
-                    if ((self.map[map_y][map_x][c.MAP_PLANT] | {'花盆（未实现）', '南瓜头（未实现）'} == {'花盆（未实现）', '南瓜头（未实现）'})
-                        and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                    if (all((i in {'花盆（未实现）', '南瓜头（未实现）'}) for i in self.map[map_y][map_x][c.MAP_PLANT])
+                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
                         if plantName in {c.SPIKEWEED}: # 不能在花盆上种植的植物
                             return False
                         else:
@@ -92,8 +92,8 @@ class Map():
                     return False
             else:   # 非水生植物，依赖睡莲
                 if c.LILYPAD in self.map[map_y][map_x][c.MAP_PLANT]:
-                    if ((self.map[map_y][map_x][c.MAP_PLANT] | {c.LILYPAD, '南瓜头（未实现）'} == {c.LILYPAD, '南瓜头（未实现）'})
-                        and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                    if (all((i in {c.LILYPAD, '南瓜头（未实现）'}) for i in self.map[map_y][map_x][c.MAP_PLANT])
+                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
                         if plantName in {c.SPIKEWEED, c.POTATOMINE,'花盆（未实现）'}: # 不能在睡莲上种植的植物
                             return False
                         else:

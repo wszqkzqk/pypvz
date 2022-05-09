@@ -178,6 +178,44 @@ class Level(tool.State):
         # 否则直接return
         if self.waveNum >= self.map_data[c.NUM_FLAGS] * 10:
             if self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_NIGHT:
+                # 生长墓碑
+                if not self.graveInLevelAdded:
+                    if current_time - self.waveTime > 100:
+                        # 墓碑最多有12个
+                        if len(self.graveSet) < 12:
+                            unoccupied = []
+                            occupied = []
+                            # 遍历能生成墓碑的区域
+                            for mapY in range(0, 4):
+                                for mapX in range(4, 8):
+                                    # 为空、为毁灭菇坑、为冰道时看作未被植物占据
+                                    if ((not self.map.map[mapY][mapX][c.MAP_PLANT]) or
+                                        (all((i in {c.HOLE, c.ICE_FROZEN_PLOT}) for i in self.map.map[mapY][mapX][c.MAP_PLANT]))):
+                                        unoccupied.append((mapX, mapY))
+                                    # 已有墓碑的格子不应该放到任何列表中
+                                    elif c.GRAVE not in self.map.map[mapY][mapX][c.MAP_PLANT]:
+                                        occupied.append((mapX, mapY))
+                            if unoccupied:
+                                target = unoccupied[randint(0, len(unoccupied) - 1)]
+                                mapX, mapY = target
+                                posX, posY = self.map.getMapGridPos(mapX, mapY)
+                                self.plant_groups[mapY].add(plant.Grave(posX, posY))
+                                self.map.map[mapY][mapX][c.MAP_PLANT].add(c.GRAVE)
+                                self.graveSet.add((mapX, mapY))
+                            elif occupied:
+                                target = occupied[randint(0, len(occupied) - 1)]
+                                mapX, mapY = target
+                                posX, posY = self.map.getMapGridPos(mapX, mapY)
+                                for i in self.plant_groups[mapY]:
+                                    checkMapX, _ = self.map.getMapIndex(i.rect.centerx, i.rect.bottom)
+                                    if mapX == checkMapX:
+                                        if i.name not in {c.HOLE, c.ICE_FROZEN_PLOT}:
+                                            i.health = 0
+                                self.plant_groups[mapY].add(plant.Grave(posX, posY))
+                                self.map.map[mapY][mapX][c.MAP_PLANT].add(c.GRAVE)
+                                self.graveSet.add((mapX, mapY))
+                            self.graveInLevelAdded = True
+                # 从墓碑中生成僵尸
                 if not self.graveZombieCreated:
                     if current_time - self.waveTime > 1500:
                         for item in self.graveSet:
@@ -445,6 +483,7 @@ class Level(tool.State):
                     self.plant_groups[mapY].add(plant.Grave(posX, posY))
                     self.map.map[mapY][mapX][c.MAP_PLANT].add(c.GRAVE)
             self.graveZombieCreated = False
+            self.graveInLevelAdded = False
 
 
     # 小菜单

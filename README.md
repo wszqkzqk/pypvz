@@ -126,7 +126,6 @@ nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-d
         * 已实现
       * 星星
         * 已实现
-        * 与原版有所区别，设定为能直接伤害铁门、报纸后面的僵尸
       * 尖刺
     * 特殊子弹实体——非普通伤害或有特殊效果
       * 冰豌豆（减速）

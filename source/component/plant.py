@@ -840,7 +840,7 @@ class SunShroom(Plant):
     def __init__(self, x, y, sun_group):
         Plant.__init__(self, x, y, c.SUNSHROOM, c.PLANT_HEALTH, None)
         self.can_sleep = True
-        self.animate_interval = 200
+        self.animate_interval = 140
         self.sun_timer = 0
         self.sun_group = sun_group
         self.is_big = False
