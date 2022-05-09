@@ -1149,7 +1149,7 @@ class Level(tool.State):
             elif targetPlant.name == c.ICESHROOM and targetPlant.state != c.SLEEP:
                 self.freezeZombies(targetPlant)
             elif targetPlant.name == c.HYPNOSHROOM and targetPlant.state != c.SLEEP:
-                zombie = targetPlant.kill_zombie
+                zombie = targetPlant.zombie_to_hypno
                 zombie.setHypno()
                 _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
                 self.zombie_groups[map_y].remove(zombie)

@@ -1,5 +1,5 @@
 # 冒险模式起始关卡
-START_LEVEL_NUM = 1
+START_LEVEL_NUM = 0
 # 小游戏模式起始关卡
 START_LITTLE_GAME_NUM = 1
 
@@ -216,6 +216,7 @@ ICE_FROZEN_PLOT = 'IceFrozenPlot'
 HOLE = 'Hole'
 GRAVE = 'Grave'
 GRAVEBUSTER = 'GraveBuster'
+FUMESHROOM = 'FumeShroom'
 
 
 # 植物生命值
@@ -268,6 +269,7 @@ CARD_TALLNUT = 'card_tallnut'
 CARD_TANGLEKLEP = 'card_tangleklep'
 CARD_DOOMSHROOM = 'card_doomshroom'
 CARD_GRAVEBUSTER = 'card_gravebuster'
+CARD_FUMESHROOM = 'card_fumeshroom'
 
 # 子弹信息
 # 子弹类型

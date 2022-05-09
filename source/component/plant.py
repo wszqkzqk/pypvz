@@ -278,8 +278,8 @@ class Plant(pg.sprite.Sprite):
         if not zombie.lostHead:
             self.health -= damage
         self.hit_timer = self.current_time
-        if (self.health == 0) or (self.name == c.HYPNOSHROOM and self.state != c.SLEEP):    # 魅惑菇触发同样会消失
-            self.kill_zombie = zombie
+        if (self.name == c.HYPNOSHROOM) and (self.state != c.SLEEP) and (zombie.name not in {"投石车僵尸（未实现）"}):
+            self.zombie_to_hypno = zombie
 
     def getPosition(self):
         return self.rect.centerx, self.rect.bottom
@@ -344,7 +344,7 @@ class PeaShooter(Plant):
         self.shoot_timer = 0
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 1400:
+        if (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
@@ -361,7 +361,7 @@ class RepeaterPea(Plant):
         self.firstShot = False
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer > 1400):
+        if (self.current_time - self.shoot_timer >= 1400):
             self.firstShot = True
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
@@ -385,7 +385,7 @@ class ThreePeaShooter(Plant):
         self.background_type = background_type
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 1400:
+        if (self.current_time - self.shoot_timer) >= 1400:
             offset_y = 9  # modify bullet in the same y position with bullets of other plants
             for i in range(3):
                 tmp_y = self.map_y + (i - 1)
@@ -408,7 +408,7 @@ class SnowPeaShooter(Plant):
         self.shoot_timer = 0
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 1400:
+        if (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right  - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, effect=c.BULLET_EFFECT_ICE))
             self.shoot_timer = self.current_time
@@ -574,7 +574,7 @@ class PuffShroom(Plant):
         self.frames = self.idle_frames
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 1400:
+        if (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 10, self.rect.y + 10,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
@@ -731,7 +731,7 @@ class Spikeweed(Plant):
         self.state = c.ATTACK
 
     def attacking(self):
-        if (self.current_time - self.attack_timer) > 700:
+        if (self.current_time - self.attack_timer) >= 700:
             self.attack_timer = self.current_time
             for zombie in self.zombie_group:
                 if self.canAttack(zombie):
@@ -828,7 +828,7 @@ class ScaredyShroom(Plant):
         self.changeFrames(self.idle_frames)
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 1400:
+        if (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y + 40, self.rect.y + 40,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
@@ -945,6 +945,7 @@ class HypnoShroom(Plant):
         Plant.__init__(self, x, y, c.HYPNOSHROOM, c.PLANT_HEALTH, None)
         self.can_sleep = True
         self.animate_interval = 80
+        self.zombie_to_hypno = None
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -962,8 +963,7 @@ class HypnoShroom(Plant):
         self.frames = self.idle_frames
     
     def idling(self):
-        # 现在没有投石车僵尸，所以暂时这样处理
-        if self.health < c.PLANT_HEALTH:
+        if self.health < c.PLANT_HEALTH and self.zombie_to_hypno:
             self.health = 0
 
 
@@ -1161,7 +1161,7 @@ class StarFruit(Plant):
         return False
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 1400:
+        if (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(StarBullet(self.rect.left - 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h - 15, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD, self.level))
@@ -1219,7 +1219,7 @@ class SeaShroom(Plant):
         self.frames = self.idle_frames
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) > 1400:
+        if (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 50, self.rect.y + 50,
                                          c.BULLET_SEASHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
@@ -1474,3 +1474,32 @@ class GraveBuster(Plant):
             self.image.set_alpha(192)
         else:
             self.image.set_alpha(255)
+
+class FumeShroom(Plant):
+    def __init__(self, x, y, bullet_group):
+        Plant.__init__(self, x, y, c.FUMESHROOM, c.PLANT_HEALTH, bullet_group)
+        self.can_sleep = True
+        self.shoot_timer = 0
+
+    def loadImages(self, name, scale):
+        self.idle_frames = []
+        self.sleep_frames = []
+        self.attack_frames = []
+
+        idle_name = name
+        sleep_name = name + 'Sleep'
+        attack_name = name + 'Attack'
+
+        frame_list = [self.idle_frames, self.sleep_frames, self.attack_frames]
+        name_list = [idle_name, sleep_name, attack_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+
+        self.frames = self.idle_frames
+
+    def canAttack(self, zombie):
+        if (self.rect.x <= zombie.rect.right and
+                (self.rect.x + c.GRID_X_SIZE * 4.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+            return True
+        return False
