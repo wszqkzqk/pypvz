@@ -6,7 +6,7 @@ from .. import constants as c
 
 
 class Zombie(pg.sprite.Sprite):
-    def __init__(self, x, y, name, head_group=None, helmetHealth=0, helmetType2Health=0, bodyHealth=c.NORMAL_HEALTH + c.LOSTHEAD_HEALTH, damage=c.ZOMBIE_ATTACK_DAMAGE, canSwim=False):
+    def __init__(self, x, y, name, head_group=None, helmetHealth=0, helmetType2Health=0, bodyHealth=c.NORMAL_HEALTH, lostHeadHealth=c.LOSTHEAD_HEALTH, damage=c.ZOMBIE_ATTACK_DAMAGE, canSwim=False):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -22,7 +22,8 @@ class Zombie(pg.sprite.Sprite):
 
         self.helmetHealth = helmetHealth
         self.helmetType2Health = helmetType2Health
-        self.health = bodyHealth
+        self.health = bodyHealth + lostHeadHealth
+        self.lostHeadHealth = lostHeadHealth
         self.damage = damage
         self.dead = False
         self.lostHead = False
@@ -83,7 +84,7 @@ class Zombie(pg.sprite.Sprite):
         if self.health <= 0:
             self.setDie()
             return True
-        elif self.health <= c.LOSTHEAD_HEALTH:
+        elif self.health <= self.lostHeadHealth:
             if not self.lostHead:
                 self.changeFrames(framesKind)
                 self.setLostHead()
@@ -848,7 +849,7 @@ class ScreenDoorZombie(Zombie):
 
 class PoleVaultingZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.POLE_VAULTING_ZOMBIE, head_group=head_group)
+        Zombie.__init__(self, x, y, c.POLE_VAULTING_ZOMBIE, head_group=head_group, bodyHealth=c.POLE_VAULTING_HEALTH, lostHeadHealth=c.POLE_VAULTING_LOSTHEAD_HEALTH)
         self.speed = 1.88
         self.jumped = False
         self.jumping = False
@@ -900,11 +901,12 @@ class PoleVaultingZombie(Zombie):
 
         if (self.current_time - self.animate_timer) > (self.animate_interval * self.getTimeRatio()):
             self.frame_index += 1
-            if self.jumping and (not self.jumped):
-                if self.successfullyJumped:
-                    self.rect.x -= 5
-                else:
-                    self.rect.x -= 1
+            if self.state == c.WALK:
+                if self.jumping and (not self.jumped):
+                    if self.successfullyJumped:
+                        self.rect.x -= 5
+                    else:
+                        self.rect.x -= 1
             if self.frame_index >= self.frame_num:
                 if self.state == c.DIE:
                     self.kill()
