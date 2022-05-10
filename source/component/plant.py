@@ -237,8 +237,6 @@ class Plant(pg.sprite.Sprite):
         self.hit_timer = 0
         # 被铲子指向时间
         self.highlightTime = 0
-        # 是否能被越过
-        self.skipable = True
 
     def loadFrames(self, frames, name, scale, color=c.BLACK):
         frame_list = tool.GFX[name]
@@ -1362,8 +1360,6 @@ class TallNut(Plant):
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
-        # 高坚果不能被撑杆跳僵尸和海豚骑士僵尸跳过，虽然目前还没有引入撑杆跳僵尸和海豚骑士僵尸
-        self.skipable = False
 
     def load_images(self):
         self.cracked1_frames = []

@@ -418,6 +418,7 @@ class Level(tool.State):
                         c.CONEHEAD_DUCKY_TUBE_ZOMBIE:(2, 0),    # 作为变种，不主动生成
                         c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:(4, 0),  # 作为变种，不主动生成
                         c.SCREEN_DOOR_ZOMBIE:(4, 3500),
+                        c.POLE_VAULTING_ZOMBIE:(2, 2000),
                         }
             # 将僵尸与水上变种对应
             self.convertZombieInPool = {c.NORMAL_ZOMBIE:c.DUCKY_TUBE_ZOMBIE,
@@ -1067,8 +1068,12 @@ class Level(tool.State):
 
                 if targetPlant:
                     # 撑杆跳的特殊情况
-                    if zombie.name == c.POLE_VAULTING_ZOMBIE and (not zombie.jumped):
-                        zombie.setJump()
+                    if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
+                        map_x, map_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.bottom)
+                        if c.TALLNUT in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                            zombie.setJump(False)
+                        else:
+                            zombie.setJump(True)
                         continue
 
                     if targetPlant.name == c.WALLNUTBOWLING:

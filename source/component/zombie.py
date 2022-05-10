@@ -851,6 +851,7 @@ class PoleVaultingZombie(Zombie):
         Zombie.__init__(self, x, y, c.POLE_VAULTING_ZOMBIE, head_group=head_group)
         self.speed = 1.88
         self.jumped = False
+        self.jumping = False
 
     def loadImages(self):
         self.walk_frames = []
@@ -859,29 +860,62 @@ class PoleVaultingZombie(Zombie):
         self.losthead_attack_frames = []
         self.die_frames = []
         self.boomdie_frames = []
-        self.walk_after_jump_frames = []
+        self.walk_before_jump_frames = []
         self.jump_frames = []
 
-        walk_name = self.name
+        walk_name = self.name + 'WalkAfterJump'
         attack_name = self.name + 'Attack'
         losthead_walk_name = self.name + 'LostHead'
         losthead_attack_name = self.name + 'LostHeadAttack'
         die_name = self.name + 'Die'
         boomdie_name = c.BOOMDIE
-        walk_after_jump_name = self.name + 'WalkAfterJump'
+        walk_before_jump_name = self.name
         jump_name = self.name + 'Jump'
 
         frame_list = [self.walk_frames, self.attack_frames, self.losthead_walk_frames,
                       self.losthead_attack_frames, self.die_frames, self.boomdie_frames,
-                      self.walk_after_jump_frames, self.jump_frames]
+                      self.walk_before_jump_frames, self.jump_frames]
         name_list = [walk_name, attack_name, losthead_walk_name,
                      losthead_attack_name, die_name, boomdie_name,
-                     walk_after_jump_name, jump_name]
+                     walk_before_jump_name, jump_name]
 
         for i, name in enumerate(name_list):
             self.loadFrames(frame_list[i], name)
 
-        self.frames = self.walk_frames
+        self.frames = self.walk_before_jump_frames
 
-    def setJump(self):
-        self.changeFrames(self.jump_frames)
+    def setJump(self, successfullyJumped):
+        if not self.jumping:
+            self.jumping = True
+            self.changeFrames(self.jump_frames)
+            self.successfullyJumped = successfullyJumped
+
+    def animation(self):
+        if self.state == c.FREEZE:
+            self.image.set_alpha(192)
+            return
+
+        if (self.current_time - self.animate_timer) > (self.animate_interval * self.getTimeRatio()):
+            self.frame_index += 1
+            if self.jumping and (not self.jumped):
+                self.rect.x -= 5
+            if self.frame_index >= self.frame_num:
+                if self.state == c.DIE:
+                    self.kill()
+                    return
+                self.frame_index = 0
+                if self.jumping and (not self.jumped):
+                    self.changeFrames(self.walk_frames)
+                    if self.successfullyJumped:
+                        self.rect.x -= c.GRID_X_SIZE * 1.3
+                    self.jumped = True
+                    self.speed = 1.04
+            self.animate_timer = self.current_time
+
+        self.image = self.frames[self.frame_index]
+        if self.is_hypno:
+            self.image = pg.transform.flip(self.image, True, False)
+        if (self.current_time - self.hit_timer) >= 200:
+            self.image.set_alpha(255)
+        else:
+            self.image.set_alpha(192)
