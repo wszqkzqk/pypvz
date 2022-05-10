@@ -311,7 +311,7 @@ class Level(tool.State):
         self.cars = []
         for i in range(self.map_y_len):
             _, y = self.map.getMapGridPos(0, i)
-            self.cars.append(plant.Car(-25, y+20, i))
+            self.cars.append(plant.Car(-40, y+20, i))
     
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
@@ -820,6 +820,9 @@ class Level(tool.State):
             self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.SCREEN_DOOR_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.POLE_VAULTING_ZOMBIE:
+            # 撑杆跳生成位置不同
+            self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + randint(70, 80) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)
@@ -1063,6 +1066,11 @@ class Level(tool.State):
                         targetPlant = None
 
                 if targetPlant:
+                    # 撑杆跳的特殊情况
+                    if zombie.name == c.POLE_VAULTING_ZOMBIE and (not zombie.jumped):
+                        zombie.setJump()
+                        continue
+
                     if targetPlant.name == c.WALLNUTBOWLING:
                         if targetPlant.canHit(i):
                             zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
@@ -1096,9 +1104,9 @@ class Level(tool.State):
     def checkCarCollisions(self):
         for car in self.cars:
             for zombie in self.zombie_groups[car.map_y]:
-                if zombie and zombie.state != c.DIE and (not zombie.lostHead) and zombie.rect.x <= 0:
+                if zombie and zombie.state != c.DIE and (not zombie.lostHead) and zombie.rect.centerx <= 0:
                     car.setWalk()
-                if zombie.rect.x <= car.rect.x:
+                if zombie.rect.centerx <= car.rect.x:
                     zombie.health = 0
                     zombie.kill()
             if car.dead:
@@ -1307,7 +1315,7 @@ class Level(tool.State):
     def checkLose(self):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.rect.right < -10 and (not zombie.lostHead):
+                if zombie.rect.right < -20 and (not zombie.lostHead) and zombie.state != c.DIE:
                     return True
         return False
 

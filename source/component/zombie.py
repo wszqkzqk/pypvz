@@ -138,17 +138,25 @@ class Zombie(pg.sprite.Sprite):
                     if self.swimming:
                         self.changeFrames(self.walk_frames)
                         self.swimming = False
-                    # 同样没有兼容双防具
+                        # 同样没有兼容双防具
+                        if self.helmet:
+                            if self.helmetHealth <= 0:
+                                self.helmet = False
+                            else:
+                                self.changeFrames(self.helmet_walk_frames)
+                        if self.helmetType2:
+                            if self.helmetType2Health <= 0:
+                                self.helmetType2 = False
+                            else:
+                                self.changeFrames(self.helmet_walk_frames)
                     if self.helmet:
                         if self.helmetHealth <= 0:
                             self.helmet = False
-                        else:
-                            self.changeFrames(self.helmet_walk_frames)
+                            self.changeFrames(self.walk_frames)
                     if self.helmetType2:
                         if self.helmetType2Health <= 0:
                             self.helmetType2 = False
-                        else:
-                            self.changeFrames(self.helmet_walk_frames)
+                            self.changeFrames(self.walk_frames)
             elif self.is_hypno and self.rect.right > c.MAP_POOL_FRONT_X + 55:   # 常数拟合暂时缺乏检验
                 if self.swimming:
                     self.changeFrames(self.walk_frames)
@@ -836,3 +844,44 @@ class ScreenDoorZombie(Zombie):
             self.loadFrames(frame_list[i], name)
 
         self.frames = self.helmet_walk_frames
+
+
+class PoleVaultingZombie(Zombie):
+    def __init__(self, x, y, head_group):
+        Zombie.__init__(self, x, y, c.POLE_VAULTING_ZOMBIE, head_group=head_group)
+        self.speed = 1.88
+        self.jumped = False
+
+    def loadImages(self):
+        self.walk_frames = []
+        self.attack_frames = []
+        self.losthead_walk_frames = []
+        self.losthead_attack_frames = []
+        self.die_frames = []
+        self.boomdie_frames = []
+        self.walk_after_jump_frames = []
+        self.jump_frames = []
+
+        walk_name = self.name
+        attack_name = self.name + 'Attack'
+        losthead_walk_name = self.name + 'LostHead'
+        losthead_attack_name = self.name + 'LostHeadAttack'
+        die_name = self.name + 'Die'
+        boomdie_name = c.BOOMDIE
+        walk_after_jump_name = self.name + 'WalkAfterJump'
+        jump_name = self.name + 'Jump'
+
+        frame_list = [self.walk_frames, self.attack_frames, self.losthead_walk_frames,
+                      self.losthead_attack_frames, self.die_frames, self.boomdie_frames,
+                      self.walk_after_jump_frames, self.jump_frames]
+        name_list = [walk_name, attack_name, losthead_walk_name,
+                     losthead_attack_name, die_name, boomdie_name,
+                     walk_after_jump_name, jump_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name)
+
+        self.frames = self.walk_frames
+
+    def setJump(self):
+        self.changeFrames(self.jump_frames)

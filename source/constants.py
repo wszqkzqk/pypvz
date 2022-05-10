@@ -311,6 +311,7 @@ DUCKY_TUBE_ZOMBIE = 'DuckyTubeZombie'
 CONEHEAD_DUCKY_TUBE_ZOMBIE = 'ConeheadDuckyTubeZombie'
 BUCKETHEAD_DUCKY_TUBE_ZOMBIE = 'BucketheadDuckyTubeZombie'
 SCREEN_DOOR_ZOMBIE = 'ScreenDoorZombie'
+POLE_VAULTING_ZOMBIE = 'PoleVaultingZombie'
 
 BOOMDIE = 'BoomDie'
 
@@ -326,6 +327,7 @@ ZOMBIE_WALLNUT_BOWLING_DANMAGE = 'wallnutBowlingDamage' # 坚果保龄球冲撞�
 # 有关本体
 LOSTHEAD_HEALTH = 70
 NORMAL_HEALTH = 200 # 普通僵尸生命值
+POLE_VAULTING_HEALTH = 333
 # 有关一类防具
 CONEHEAD_HEALTH = 370
 BUCKETHEAD_HEALTH = 1100
