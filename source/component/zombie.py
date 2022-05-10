@@ -248,7 +248,6 @@ class Zombie(pg.sprite.Sprite):
     def setLostHead(self):
         self.losthead_timer = self.current_time
         self.lostHead = True
-        self.speed = 0.5
         self.animate_interval = self.lostHead_animate_interval
         if self.head_group is not None:
             self.head_group.add(ZombieHead(self.rect.centerx, self.rect.bottom))
