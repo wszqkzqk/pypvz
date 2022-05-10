@@ -122,6 +122,52 @@ class Bullet(pg.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
+# 大喷菇的烟雾
+# 仅有动画效果，不参与攻击运算
+class Fume(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.name = c.FUME
+        self.timer = 0
+        self.frame_index = 0
+        self.load_images()
+        self.frame_num = len(self.frames)
+        self.image = self.frames[self.frame_index]
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def load_images(self):
+        self.fly_frames = []
+
+        fly_name = self.name
+
+        self.loadFrames(self.fly_frames, fly_name)
+
+        self.frames = self.fly_frames
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+    def update(self, game_info):
+        self.current_time = game_info[c.CURRENT_TIME]
+        if self.current_time - self.timer >= 140:
+            self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                self.frame_index = self.frame_num - 1
+                self.kill()
+            self.timer = self.current_time
+        self.image = self.frames[self.frame_index]
+
+    def loadFrames(self, frames, name):
+        frame_list = tool.GFX[name]
+        x, y = 0, 0
+        rect = frame_list[0].get_rect()
+        width, height = rect.w, rect.h
+
+        for frame in frame_list:
+            frames.append(tool.get_image(frame, x, y, width, height))
+
 # 杨桃的子弹
 class StarBullet(Bullet):
     def __init__(self, x, start_y, damage, direction, level):    # direction指星星飞行方向
@@ -616,7 +662,7 @@ class PuffShroom(Plant):
 
     def canAttack(self, zombie):
         if (self.rect.x <= zombie.rect.right and
-                (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+                (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -1171,15 +1217,17 @@ class TorchWood(Plant):
 
     def idling(self):
         for i in self.bullet_group:
-            if i.passedTorchWood != self.rect.x:
-                if -10 <= i.rect.x - self.rect.x <= 20:
-                    if i.name == c.BULLET_PEA:
+            if i.name == c.BULLET_PEA:
+                if i.passedTorchWood != self.rect.x:
+                    if -10 <= i.rect.x - self.rect.x <= 20:
                         self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
-                                            c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, effect=c.BULLET_EFFECT_UNICE, passedTorchWood=self.rect.x))
+                                                c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, effect=c.BULLET_EFFECT_UNICE, passedTorchWood=self.rect.x))
                         i.kill()
-                    elif i.name == c.BULLET_PEA_ICE:
+            elif i.name == c.BULLET_PEA_ICE:
+                if i.passedTorchWood != self.rect.x:
+                    if -10 <= i.rect.x - self.rect.x <= 20:
                         self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
-                                            c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False, passedTorchWood=self.rect.x))
+                                                c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False, passedTorchWood=self.rect.x))
                         i.kill()
 
 class StarFruit(Plant):
@@ -1298,7 +1346,7 @@ class SeaShroom(Plant):
 
     def canAttack(self, zombie):
         if (self.rect.x <= zombie.rect.right and
-                (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+                (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -1551,10 +1599,12 @@ class GraveBuster(Plant):
             self.image.set_alpha(255)
 
 class FumeShroom(Plant):
-    def __init__(self, x, y, bullet_group):
+    def __init__(self, x, y, bullet_group, zombie_group):
         Plant.__init__(self, x, y, c.FUMESHROOM, c.PLANT_HEALTH, bullet_group)
         self.can_sleep = True
         self.shoot_timer = 0
+        self.showAttackFrames = True
+        self.zombie_group = zombie_group
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -1569,21 +1619,55 @@ class FumeShroom(Plant):
         name_list = [idle_name, sleep_name, attack_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name, 1, c.BLACK)
 
         self.frames = self.idle_frames
 
     def canAttack(self, zombie):
         if (self.rect.x <= zombie.rect.right and
-                (self.rect.x + c.GRID_X_SIZE * 4.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+                (self.rect.x + c.GRID_X_SIZE * 5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 
     def setAttack(self):
         self.state = c.ATTACK
-        self.changeFrames(self.attack_frames)
         if self.shoot_timer != 0:
             self.shoot_timer = self.current_time - 700
 
     def attacking(self):
-        ''
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif self.current_time - self.shoot_timer >= 1200:
+            if self.showAttackFrames:
+                self.showAttackFrames = False
+                self.changeFrames(self.attack_frames)
+        
+        if self.current_time - self.shoot_timer >= 1400:
+            self.bullet_group.add(Fume(self.rect.right - 35, self.rect.y))
+            # 烟雾只是个动画，实际伤害由本身完成
+            for targetZombie in self.zombie_group:
+                if self.canAttack(targetZombie):
+                    targetZombie.setDamage(c.BULLET_DAMAGE_NORMAL, damageType=c.ZOMBIE_RANGE_DAMAGE)
+            self.shoot_timer = self.current_time
+            self.showAttackFrames = True
+            # 播放发射音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "fume.ogg")).play()
+        
+    def animation(self):
+        if (self.current_time - self.animate_timer) > self.animate_interval:
+            self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                if self.frames == self.attack_frames:
+                    self.changeFrames(self.idle_frames)
+                else:
+                    self.frame_index = 0
+            self.animate_timer = self.current_time
+
+        self.image = self.frames[self.frame_index]
+        if  (self.current_time - self.highlightTime < 200):
+            self.image.set_alpha(150)
+        elif ((self.current_time - self.hit_timer) < 200):
+            self.image.set_alpha(192)
+        else:
+            self.image.set_alpha(255)
+

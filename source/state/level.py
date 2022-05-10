@@ -898,6 +898,8 @@ class Level(tool.State):
             new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
             # 播放吞噬音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "gravebusterchomp.ogg")).play()
+        elif self.plant_name == c.FUMESHROOM:
+            new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
 
 
         if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
@@ -986,7 +988,9 @@ class Level(tool.State):
     def checkBulletCollisions(self):
         for i in range(self.map_y_len):
             for bullet in self.bullet_groups[i]:
-                if bullet.name == c.BULLET_STAR:
+                if bullet.name == c.FUME:
+                    continue
+                elif bullet.name == c.BULLET_STAR:
                     collided_func = pg.sprite.collide_circle_ratio(1)
                 else:
                     collided_func = pg.sprite.collide_circle_ratio(0.7)

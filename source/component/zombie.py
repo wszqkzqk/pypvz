@@ -360,6 +360,14 @@ class Zombie(pg.sprite.Sprite):
                         self.health -= damage   # 注意范围伤害中这里还有一个攻击
                         self.health += self.helmetType2Health
                         self.helmetType2Health = 0
+                else:
+                    if self.helmet:
+                        self.helmetHealth -= damage
+                        if self.helmetHealth <= 0:
+                            self.health += self.helmetHealth
+                            self.helmetHealth = 0   # 注意合并后清零
+                    else:
+                        self.health -= damage
             elif self.helmet:   # 不存在二类防具，但是存在一类防具
                 self.helmetHealth -= damage
                 if self.helmetHealth <= 0:
