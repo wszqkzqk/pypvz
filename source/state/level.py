@@ -1248,12 +1248,11 @@ class Level(tool.State):
                 plant.setIdle()
         elif plant.name == c.STARFRUIT:
             can_attack = False
-            if (plant.state == c.IDLE):
-                for zombie_group in self.zombie_groups: # 遍历循环所有僵尸
-                    for zombie in zombie_group:
-                        if plant.canAttack(zombie):
-                            can_attack = True
-                            break
+            for zombie_group in self.zombie_groups: # 遍历循环所有僵尸
+                for zombie in zombie_group:
+                    if plant.canAttack(zombie):
+                        can_attack = True
+                        break
             if plant.state == c.IDLE and can_attack:
                 plant.setAttack()
             elif (plant.state == c.ATTACK and not can_attack):
@@ -1267,14 +1266,14 @@ class Level(tool.State):
             pass
         else:
             can_attack = False
-            if (plant.state == c.IDLE and zombie_len > 0):
+            if (zombie_len > 0):
                 for zombie in self.zombie_groups[i]:
                     if plant.canAttack(zombie):
                         can_attack = True
                         break
             if plant.state == c.IDLE and can_attack:
                 plant.setAttack()
-            elif (plant.state == c.ATTACK and not can_attack):
+            elif (plant.state == c.ATTACK and (not can_attack)):
                 plant.setIdle()
 
     def checkPlants(self):

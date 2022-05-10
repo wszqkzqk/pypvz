@@ -157,7 +157,10 @@ class StarBullet(Bullet):
 
     # 这里用的是坚果保龄球的代码改一下，实现子弹换行
     def handleMapYPosition(self):
-        _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery +20)
+        if self.direction == c.STAR_UPWARD:
+            _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery + 40)
+        else:
+            _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery + 20)
         # _, map_y2 = self.level.map.getMapIndex(self.rect.x, self.rect.bottom +20)
         if (self.map_y != map_y1) and (0 <= map_y1 <= self.level.map_y_len-1):    # 换行
             self.level.bullet_groups[self.map_y].remove(self)
@@ -344,13 +347,19 @@ class PeaShooter(Plant):
         self.shoot_timer = 0
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) >= 1400:
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
 
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
 
 class RepeaterPea(Plant):
     def __init__(self, x, y, bullet_group):
@@ -361,7 +370,9 @@ class RepeaterPea(Plant):
         self.firstShot = False
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer >= 1400):
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif (self.current_time - self.shoot_timer >= 1400):
             self.firstShot = True
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
@@ -375,6 +386,10 @@ class RepeaterPea(Plant):
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
 
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
 
 class ThreePeaShooter(Plant):
     def __init__(self, x, y, bullet_groups, map_y, background_type):
@@ -385,12 +400,18 @@ class ThreePeaShooter(Plant):
         self.background_type = background_type
 
     def attacking(self):
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
         if (self.current_time - self.shoot_timer) >= 1400:
             offset_y = 9  # modify bullet in the same y position with bullets of other plants
             for i in range(3):
                 tmp_y = self.map_y + (i - 1)
-                if tmp_y < 0 or tmp_y >= c.GRID_Y_LEN:
-                    continue
+                if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
+                    if tmp_y < 0 or tmp_y >= c.GRID_POOL_Y_LEN:
+                        continue
+                else:
+                    if tmp_y < 0 or tmp_y >= c.GRID_Y_LEN:
+                        continue
                 if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG, c.BACKGROUND_ROOF, c.BACKGROUND_ROOFNIGHT}:
                     dest_y = self.rect.y + (i - 1) * c.GRID_POOL_Y_SIZE + offset_y
                 else:
@@ -401,6 +422,10 @@ class ThreePeaShooter(Plant):
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
 
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
 
 class SnowPeaShooter(Plant):
     def __init__(self, x, y, bullet_group):
@@ -408,7 +433,9 @@ class SnowPeaShooter(Plant):
         self.shoot_timer = 0
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) >= 1400:
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right  - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, effect=c.BULLET_EFFECT_ICE))
             self.shoot_timer = self.current_time
@@ -417,6 +444,10 @@ class SnowPeaShooter(Plant):
             # 播放冰子弹音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "snowPeaSparkles.ogg")).play()
 
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
 
 class WallNut(Plant):
     def __init__(self, x, y):
@@ -574,7 +605,9 @@ class PuffShroom(Plant):
         self.frames = self.idle_frames
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) >= 1400:
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 10, self.rect.y + 10,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
@@ -586,6 +619,11 @@ class PuffShroom(Plant):
                 (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
+
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
 
 
 class PotatoMine(Plant):
@@ -729,9 +767,13 @@ class Spikeweed(Plant):
         self.zombie_group = zombie_group
         self.animate_interval = 35
         self.state = c.ATTACK
+        if self.hit_timer != 0:
+            self.hit_timer = self.current_time - 500
 
     def attacking(self):
-        if (self.current_time - self.attack_timer) >= 700:
+        if self.hit_timer == 0:
+            self.hit_timer = self.current_time - 500
+        elif (self.current_time - self.attack_timer) >= 700:
             self.attack_timer = self.current_time
             for zombie in self.zombie_group:
                 if self.canAttack(zombie):
@@ -822,13 +864,17 @@ class ScaredyShroom(Plant):
     def setAttack(self):
         self.state = c.ATTACK
         self.changeFrames(self.idle_frames)
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
 
     def setIdle(self):
         self.state = c.IDLE
         self.changeFrames(self.idle_frames)
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) >= 1400:
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y + 40, self.rect.y + 40,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
@@ -1161,7 +1207,9 @@ class StarFruit(Plant):
         return False
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) >= 1400:
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(StarBullet(self.rect.left - 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h - 15, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD, self.level))
@@ -1170,6 +1218,11 @@ class StarFruit(Plant):
             self.shoot_timer = self.current_time
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
+
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
 
 
 class CoffeeBean(Plant):
@@ -1180,21 +1233,36 @@ class CoffeeBean(Plant):
         self.map = map
         self.map_x = map_x
 
-    def idling(self):
-        if (self.frame_index + 1) == self.frame_num:
-            self.mapContent[c.MAP_SLEEP] = False
-            for plant in self.plant_group:
-                if plant.can_sleep:
-                    if plant.state == c.SLEEP:
-                        plantMapX, _ = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
-                        if plantMapX == self.map_x:
-                            plant.state = c.IDLE
-                            plant.setIdle()
-                            plant.changeFrames(plant.idle_frames)
-            # 播放唤醒音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "mushroomWakeup.ogg")).play()
-            self.mapContent[c.MAP_PLANT].remove(self.name)
-            self.kill()
+    def animation(self):
+        if (self.current_time - self.animate_timer) > self.animate_interval:
+            self.frame_index += 1
+            
+            if self.frame_index >= self.frame_num:
+                self.mapContent[c.MAP_SLEEP] = False
+                for plant in self.plant_group:
+                    if plant.can_sleep:
+                        if plant.state == c.SLEEP:
+                            plantMapX, _ = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
+                            if plantMapX == self.map_x:
+                                plant.state = c.IDLE
+                                plant.setIdle()
+                                plant.changeFrames(plant.idle_frames)
+                # 播放唤醒音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "mushroomWakeup.ogg")).play()
+                self.mapContent[c.MAP_PLANT].remove(self.name)
+                self.kill()
+                self.frame_index = self.frame_num - 1
+            
+            self.animate_timer = self.current_time
+
+        self.image = self.frames[self.frame_index]
+        if  (self.current_time - self.highlightTime < 200):
+            self.image.set_alpha(150)
+        elif ((self.current_time - self.hit_timer) < 200):
+            self.image.set_alpha(192)
+        else:
+            self.image.set_alpha(255)
+
             
 
 class SeaShroom(Plant):
@@ -1219,7 +1287,9 @@ class SeaShroom(Plant):
         self.frames = self.idle_frames
 
     def attacking(self):
-        if (self.current_time - self.shoot_timer) >= 1400:
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 50, self.rect.y + 50,
                                          c.BULLET_SEASHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
             self.shoot_timer = self.current_time
@@ -1231,6 +1301,11 @@ class SeaShroom(Plant):
                 (self.rect.x + c.GRID_X_SIZE * 3.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
+
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
 
 
 class TallNut(Plant):
@@ -1503,3 +1578,12 @@ class FumeShroom(Plant):
                 (self.rect.x + c.GRID_X_SIZE * 4.5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
+
+    def setAttack(self):
+        self.state = c.ATTACK
+        self.changeFrames(self.attack_frames)
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
+
+    def attacking(self):
+        ''

@@ -90,7 +90,6 @@ nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-d
 ## 已知bug
 
 以下问题囿于个人目前的能力与精力，没有修复：
-* 植物刚刚种植会立刻攻击，而非像原版一样有间歇时间
 * 冷冻的僵尸未用蓝色滤镜标识
   * 这个想不到很好的实现方法，可能会想一种替代方案
 * 魅惑的僵尸未用红色滤镜标识
