@@ -884,11 +884,14 @@ class PoleVaultingZombie(Zombie):
 
         self.frames = self.walk_before_jump_frames
 
-    def setJump(self, successfullyJumped):
+    def setJump(self, successfullyJumped, jumpX):
         if not self.jumping:
             self.jumping = True
             self.changeFrames(self.jump_frames)
             self.successfullyJumped = successfullyJumped
+            self.jumpX = jumpX
+            # 播放跳跃音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "polevaultjump.ogg")).play()
 
     def animation(self):
         if self.state == c.FREEZE:
@@ -898,7 +901,10 @@ class PoleVaultingZombie(Zombie):
         if (self.current_time - self.animate_timer) > (self.animate_interval * self.getTimeRatio()):
             self.frame_index += 1
             if self.jumping and (not self.jumped):
-                self.rect.x -= 5
+                if self.successfullyJumped:
+                    self.rect.x -= 5
+                else:
+                    self.rect.x -= 1
             if self.frame_index >= self.frame_num:
                 if self.state == c.DIE:
                     self.kill()
@@ -907,7 +913,7 @@ class PoleVaultingZombie(Zombie):
                 if self.jumping and (not self.jumped):
                     self.changeFrames(self.walk_frames)
                     if self.successfullyJumped:
-                        self.rect.x -= c.GRID_X_SIZE * 1.3
+                        self.rect.centerx = self.jumpX
                     self.jumped = True
                     self.speed = 1.04
             self.animate_timer = self.current_time

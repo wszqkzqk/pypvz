@@ -1070,10 +1070,11 @@ class Level(tool.State):
                     # 撑杆跳的特殊情况
                     if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
                         map_x, map_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.bottom)
+                        jumpX = targetPlant.rect.x - c.GRID_X_SIZE * 0.7
                         if c.TALLNUT in self.map.map[map_y][map_x][c.MAP_PLANT]:
-                            zombie.setJump(False)
+                            zombie.setJump(False, jumpX)
                         else:
-                            zombie.setJump(True)
+                            zombie.setJump(True, jumpX)
                         continue
 
                     if targetPlant.name == c.WALLNUTBOWLING:
@@ -1279,7 +1280,7 @@ class Level(tool.State):
                 if plant.canAttack(zombie):
                     plant.setAttack(zombie, self.zombie_groups[i])
                     break
-        elif plant.name in {c.WALLNUTBOWLING, c.REDWALLNUTBOWLING}:
+        elif plant.name in {c.WALLNUTBOWLING, c.REDWALLNUTBOWLING, c.WALLNUT, c.TALLNUT}:
             pass
         else:
             can_attack = False

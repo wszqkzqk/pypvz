@@ -511,10 +511,10 @@ class WallNut(Plant):
         self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
 
     def idling(self):
-        if not self.cracked1 and self.health <= c.WALLNUT_CRACKED1_HEALTH:
+        if (not self.cracked1) and self.health <= c.WALLNUT_CRACKED1_HEALTH:
             self.changeFrames(self.cracked1_frames)
             self.cracked1 = True
-        elif not self.cracked2 and self.health <= c.WALLNUT_CRACKED2_HEALTH:
+        elif (not self.cracked2) and self.health <= c.WALLNUT_CRACKED2_HEALTH:
             self.changeFrames(self.cracked2_frames)
             self.cracked2 = True
 
