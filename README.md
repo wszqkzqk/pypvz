@@ -139,6 +139,7 @@ nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-d
       * 卷心菜（2倍伤害）
     * 烟雾
       * 线形范围烟雾
+        * 自0.7.10.0起已实现
       * 圆形范围烟雾
     * 碾压
       * 倭瓜
