@@ -1046,10 +1046,10 @@ class Level(tool.State):
                             attackableCommonPlants.append(plant)
                 else:
                     if attackableCommonPlants:
-                        # 默认为列表中最后一个
-                        targetPlant = attackableCommonPlants[-1]
+                        # 默认为最右侧的一个植物
+                        targetPlant = max(attackableCommonPlants, key=lambda i: i.rect.x)
                     elif attackableBackupPlant:
-                        targetPlant = attackableBackupPlant[-1]
+                        targetPlant = max(attackableBackupPlant, key=lambda i: i.rect.x)
                         map_x, map_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.bottom)
                         if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
                             for actualTargetPlant in self.plant_groups[i]:
