@@ -1406,8 +1406,9 @@ class TangleKlep(Plant):
         self.frames = self.idle_frames
 
     def canAttack(self, zombie):
-        if pg.sprite.collide_circle_ratio(0.7)(zombie, self):
-            return True
+        if zombie.state != c.DIE and (not zombie.lostHead):
+            if pg.sprite.collide_circle_ratio(0.7)(zombie, self):
+                return True
         return False
     
     def setAttack(self, zombie, zombie_group):
