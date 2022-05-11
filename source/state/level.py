@@ -994,10 +994,11 @@ class Level(tool.State):
             for bullet in self.bullet_groups[i]:
                 if bullet.name == c.FUME:
                     continue
-                elif bullet.name == c.BULLET_STAR:
-                    collided_func = pg.sprite.collide_circle_ratio(1)
-                else:
-                    collided_func = pg.sprite.collide_circle_ratio(0.7)
+                # elif bullet.name == c.BULLET_STAR:
+                #     collided_func = pg.sprite.collide_circle_ratio(1)
+                # else:
+                #    collided_func = pg.sprite.collide_circle_ratio(0.7)
+                collided_func = pg.sprite.collide_mask
                 if bullet.state == c.FLY:
                     # 利用循环而非内建精灵组碰撞判断函数，处理更加灵活，可排除已死亡僵尸
                     for zombie in self.zombie_groups[i]:
@@ -1014,14 +1015,18 @@ class Level(tool.State):
                         
 
     def checkZombieCollisions(self):
-        if self.bar_type == c.CHOSSEBAR_BOWLING:
-            ratio = 0.6
-        else:
-            ratio = 0.5
-        collided_func = pg.sprite.collide_circle_ratio(ratio)
+        # if self.bar_type == c.CHOSSEBAR_BOWLING:
+        #     ratio = 0.6
+        # else:
+        #     ratio = 0.5
+        # collided_func = pg.sprite.collide_circle_ratio(ratio)
         for i in range(self.map_y_len):
             hypo_zombies = []
             for zombie in self.zombie_groups[i]:
+                if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
+                    collided_func = pg.sprite.collide_rect_ratio(0.6)
+                else:
+                    collided_func = pg.sprite.collide_mask
                 if zombie.state != c.WALK:
                     if zombie.state != c.ATTACK:
                         continue
@@ -1050,7 +1055,7 @@ class Level(tool.State):
                         targetPlant = max(attackableCommonPlants, key=lambda i: i.rect.x)
                     elif attackableBackupPlant:
                         targetPlant = max(attackableBackupPlant, key=lambda i: i.rect.x)
-                        map_x, map_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.bottom)
+                        map_x, map_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.centery)
                         if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
                             for actualTargetPlant in self.plant_groups[i]:
                                 # 检测同一格的其他植物
@@ -1069,12 +1074,19 @@ class Level(tool.State):
                 if targetPlant:
                     # 撑杆跳的特殊情况
                     if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
-                        map_x, map_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.bottom)
-                        jumpX = targetPlant.rect.x - c.GRID_X_SIZE * 0.7
-                        if c.TALLNUT in self.map.map[map_y][map_x][c.MAP_PLANT]:
-                            zombie.setJump(False, jumpX)
+                        if not zombie.jumping:
+                            zombie.jumpMap_x, zombie.jumpMap_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.centery)
+                            zombie.jumpMap_x, zombie.jumpMap_y = min(c.GRID_X_LEN, zombie.jumpMap_x), min(self.map_y_len, zombie.jumpMap_y)
+                            jumpX = targetPlant.rect.x - c.GRID_X_SIZE * 0.6
+                            if c.TALLNUT in self.map.map[zombie.jumpMap_y][zombie.jumpMap_x][c.MAP_PLANT]:
+                                zombie.setJump(False, jumpX)
+                            else:
+                                zombie.setJump(True, jumpX)
                         else:
-                            zombie.setJump(True, jumpX)
+                            if c.TALLNUT in self.map.map[zombie.jumpMap_y][zombie.jumpMap_x][c.MAP_PLANT]:
+                                zombie.setJump(False, zombie.jumpX)
+                            else:
+                                zombie.setJump(True, zombie.jumpX)
                         continue
 
                     if targetPlant.name == c.WALLNUTBOWLING:
@@ -1175,7 +1187,7 @@ class Level(tool.State):
             elif (targetPlant.name == c.POTATOMINE and not targetPlant.is_init):    # 土豆雷不是灰烬植物，不能用Boom
                 for zombie in self.zombie_groups[map_y]:
                     # 双判断：发生碰撞或在攻击范围内
-                    if ((pg.sprite.collide_circle_ratio(0.6)(zombie, targetPlant)) or
+                    if ((pg.sprite.collide_mask(zombie, targetPlant)) or
                     (abs(zombie.rect.centerx - x) <= targetPlant.explode_x_range)):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
             # 对于墓碑：移除存储在墓碑集合中的坐标
@@ -1202,7 +1214,14 @@ class Level(tool.State):
 
     def checkPlant(self, plant, i):
         zombie_len = len(self.zombie_groups[i])
-        if plant.name == c.THREEPEASHOOTER:
+        # 没有攻击状态的植物
+        if plant.name in {  c.WALLNUTBOWLING, c.REDWALLNUTBOWLING,
+                            c.WALLNUT, c.TALLNUT,
+                            c.TORCHWOOD, c.SUNFLOWER,
+                            c.SUNSHROOM, c.COFFEEBEAN,
+                            c.GRAVEBUSTER, c.LILYPAD}:
+            pass
+        elif plant.name == c.THREEPEASHOOTER:
             if plant.state == c.IDLE:
                 if zombie_len > 0:
                     plant.setAttack()
@@ -1277,8 +1296,6 @@ class Level(tool.State):
                 if plant.canAttack(zombie):
                     plant.setAttack(zombie, self.zombie_groups[i])
                     break
-        elif plant.name in {c.WALLNUTBOWLING, c.REDWALLNUTBOWLING, c.WALLNUT, c.TALLNUT}:
-            pass
         else:
             can_attack = False
             if (zombie_len > 0):

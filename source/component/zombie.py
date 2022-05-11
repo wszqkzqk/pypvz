@@ -16,6 +16,7 @@ class Zombie(pg.sprite.Sprite):
         self.frame_num = len(self.frames)
 
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.bottom = y
@@ -261,6 +262,7 @@ class Zombie(pg.sprite.Sprite):
         bottom = self.rect.bottom
         centerx = self.rect.centerx
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.bottom = bottom
         self.rect.centerx = centerx
@@ -282,6 +284,7 @@ class Zombie(pg.sprite.Sprite):
         self.image = self.frames[self.frame_index]
         if self.is_hypno:
             self.image = pg.transform.flip(self.image, True, False)
+        self.mask = pg.mask.from_surface(self.image)
         if (self.current_time - self.hit_timer) >= 200:
             self.image.set_alpha(255)
         else:
@@ -669,8 +672,8 @@ class FootballZombie(Zombie):
         self.animate_interval = 50
         self.walk_animate_interval = 50
         self.attack_animate_interval = 60
-        self.lostHead_animate_interval = 50
-        self.die_animate_interval = 50
+        self.lostHead_animate_interval = 180
+        self.die_animate_interval = 150
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -922,6 +925,7 @@ class PoleVaultingZombie(Zombie):
         self.image = self.frames[self.frame_index]
         if self.is_hypno:
             self.image = pg.transform.flip(self.image, True, False)
+        self.mask = pg.mask.from_surface(self.image)
         if (self.current_time - self.hit_timer) >= 200:
             self.image.set_alpha(255)
         else:

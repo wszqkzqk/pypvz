@@ -12,6 +12,7 @@ class Car(pg.sprite.Sprite):
         rect = tool.GFX[c.CAR].get_rect()
         width, height = rect.w, rect.h
         self.image = tool.get_image(tool.GFX[c.CAR], 0, 0, width, height)
+        self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.bottom = y
@@ -46,7 +47,9 @@ class Bullet(pg.sprite.Sprite):
         self.frames = []
         self.frame_index = 0
         self.load_images()
+        self.frame_num = len(self.frames)
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = start_y
@@ -57,6 +60,8 @@ class Bullet(pg.sprite.Sprite):
         self.effect = effect
         self.state = c.FLY
         self.current_time = 0
+        self.animate_timer = 0
+        self.animate_interval = 70
         self.passedTorchWood = passedTorchWood  # 记录最近通过的火炬树横坐标，如果没有缺省为None
 
     def loadFrames(self, frames, name):
@@ -106,12 +111,20 @@ class Bullet(pg.sprite.Sprite):
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
                 self.kill()
+        if self.current_time - self.animate_timer >= self.animate_interval:
+            self.frame_index += 1
+            self.animate_timer = self.current_time
+            if self.frame_index >= self.frame_num:
+                self.frame_index = 0
+            self.image = self.frames[self.frame_index]
 
     def setExplode(self):
         self.state = c.EXPLODE
         self.explode_timer = self.current_time
         self.frames = self.explode_frames
-        self.image = self.frames[self.frame_index]
+        self.frame_num = len(self.frames)
+        self.image = self.frames[0]
+        self.mask = pg.mask.from_surface(self.image)
 
         # 播放子弹爆炸音效
         if self.name == c.BULLET_FIREBALL:
@@ -133,6 +146,7 @@ class Fume(pg.sprite.Sprite):
         self.load_images()
         self.frame_num = len(self.frames)
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -223,6 +237,7 @@ class Plant(pg.sprite.Sprite):
         self.loadImages(name, scale)
         self.frame_num = len(self.frames)
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.bottom = y
@@ -263,6 +278,7 @@ class Plant(pg.sprite.Sprite):
         bottom = self.rect.bottom
         x = self.rect.x
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.bottom = bottom
         self.rect.x = x
@@ -297,6 +313,7 @@ class Plant(pg.sprite.Sprite):
             self.animate_timer = self.current_time
 
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         if  (self.current_time - self.highlightTime < 200):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
@@ -536,6 +553,7 @@ class CherryBomb(Plant):
         old_rect = self.rect
         image = tool.get_image(frame, 0, 0, width, height, c.BLACK, 1)
         self.image = image
+        self.mask = pg.mask.from_surface(self.image)
         self.rect = image.get_rect()
         self.rect.centerx = old_rect.centerx
         self.rect.centery = old_rect.centery
@@ -558,6 +576,7 @@ class CherryBomb(Plant):
                 self.animate_timer = self.current_time
 
             self.image = self.frames[self.frame_index]
+            self.mask = pg.mask.from_surface(self.image)
 
 
 class Chomper(Plant):
@@ -590,9 +609,11 @@ class Chomper(Plant):
         self.frames = self.idle_frames
 
     def canAttack(self, zombie):
-        if (self.state == c.IDLE and zombie.state != c.DIGEST and
-                self.rect.x <= zombie.rect.right and (not zombie.lostHead) and
-                (self.rect.right + c.GRID_X_SIZE >= zombie.rect.x)):
+        if (zombie.name in {c.POLE_VAULTING_ZOMBIE}) and (not zombie.jumped):
+            return False
+        elif (self.state == c.IDLE and zombie.state != c.DIGEST and
+                self.rect.x <= zombie.rect.right - 10 and (not zombie.lostHead) and
+                (self.rect.x + c.GRID_X_SIZE*2.6 >= zombie.rect.centerx)):
             return True
         return False
 
@@ -707,7 +728,7 @@ class PotatoMine(Plant):
     def canAttack(self, zombie):
         if (self.name == c.POLE_VAULTING_ZOMBIE and (not self.jumped)):
             return False
-        elif (pg.sprite.collide_circle_ratio(0.55)(zombie, self) and
+        elif (pg.sprite.collide_mask(zombie, self) and
             (not self.is_init) and (not zombie.lostHead)):
             return True
         return False
@@ -755,7 +776,7 @@ class Squash(Plant):
         # 攻击状态
         elif (self.state == c.ATTACK):
             # 碰撞检测
-            if pg.sprite.collide_circle_ratio(0.7)(zombie, self):
+            if pg.sprite.collide_mask(zombie, self):
                 return True
         return False
 
@@ -805,6 +826,7 @@ class Spikeweed(Plant):
 
     def canAttack(self, zombie):
         # 地刺能不能扎的判据：僵尸中心与地刺中心的距离或僵尸包括了地刺中心和右端（平衡得到合理的攻击范围,"僵尸包括了地刺中心和右端"是为以后巨人做准备）
+        # 暂时不能用碰撞判断，平衡性不好
         if ((-45 <= zombie.rect.x - self.rect.x <= 30) or (zombie.rect.left <= self.rect.x <= zombie.rect.right and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
             return True
         return False
@@ -869,6 +891,7 @@ class Jalapeno(Plant):
                     return
                 self.animate_timer = self.current_time
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
 
     def getPosition(self):
         return self.orig_pos
@@ -1027,6 +1050,7 @@ class IceShroom(Plant):
                         return
                 self.animate_timer = self.current_time
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
 
     def getPosition(self):
         return self.orig_pos
@@ -1137,6 +1161,7 @@ class WallNutBowling(Plant):
 
         image = self.frames[self.frame_index]
         self.image = pg.transform.rotate(image, self.rotate_degree)
+        self.mask = pg.mask.from_surface(self.image)
         # must keep the center postion of image when rotate
         self.rect = self.image.get_rect(center=self.init_rect.center)
 
@@ -1201,6 +1226,7 @@ class RedWallNutBowling(Plant):
             self.image = pg.transform.rotate(image, self.rotate_degree)
         else:
             self.image = image
+        self.mask = pg.mask.from_surface(self.image)
         # must keep the center postion of image when rotate
         self.rect = self.image.get_rect(center=self.init_rect.center)
 
@@ -1218,16 +1244,16 @@ class TorchWood(Plant):
     def idling(self):
         for i in self.bullet_group:
             if i.name == c.BULLET_PEA:
-                if i.passedTorchWood != self.rect.x:
-                    if -10 <= i.rect.x - self.rect.x <= 20:
+                if i.passedTorchWood != self.rect.centerx:
+                    if abs(i.rect.centerx - self.rect.centerx) <= 20:
                         self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
-                                                c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, effect=c.BULLET_EFFECT_UNICE, passedTorchWood=self.rect.x))
+                                                c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, effect=c.BULLET_EFFECT_UNICE, passedTorchWood=self.rect.centerx))
                         i.kill()
             elif i.name == c.BULLET_PEA_ICE:
-                if i.passedTorchWood != self.rect.x:
-                    if -10 <= i.rect.x - self.rect.x <= 20:
+                if i.passedTorchWood != self.rect.centerx:
+                    if abs(i.rect.centerx - self.rect.centerx) <= 20:
                         self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
-                                                c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False, passedTorchWood=self.rect.x))
+                                                c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False, passedTorchWood=self.rect.centerx))
                         i.kill()
 
 class StarFruit(Plant):
@@ -1304,6 +1330,7 @@ class CoffeeBean(Plant):
             self.animate_timer = self.current_time
 
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         if  (self.current_time - self.highlightTime < 200):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
@@ -1501,6 +1528,7 @@ class DoomShroom(Plant):
                         return
                     self.animate_timer = self.current_time
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
 
 # 用于描述毁灭菇的坑
 class Hole(Plant):
@@ -1563,6 +1591,7 @@ class Grave(Plant):
         Plant.__init__(self, x, y, c.GRAVE, c.INF, None)
         self.frame_index = randint(0, self.frame_num - 1)
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
 
     def animation(self):
         pass
@@ -1590,6 +1619,7 @@ class GraveBuster(Plant):
             self.animate_timer = self.current_time
 
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         if  (self.current_time - self.highlightTime < 200):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
@@ -1663,6 +1693,7 @@ class FumeShroom(Plant):
             self.animate_timer = self.current_time
 
         self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
         if  (self.current_time - self.highlightTime < 200):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
