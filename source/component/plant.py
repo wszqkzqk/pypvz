@@ -728,7 +728,8 @@ class PotatoMine(Plant):
     def canAttack(self, zombie):
         if (self.name == c.POLE_VAULTING_ZOMBIE and (not self.jumped)):
             return False
-        elif (pg.sprite.collide_mask(zombie, self) and
+        # 这里碰撞应当比碰撞一般更容易，就设置成圆形或矩形模式，不宜采用mask
+        elif (pg.sprite.collide_circle_ratio(0.7)(zombie, self) and
             (not self.is_init) and (not zombie.lostHead)):
             return True
         return False
