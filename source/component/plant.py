@@ -612,7 +612,7 @@ class Chomper(Plant):
         if (zombie.name in {c.POLE_VAULTING_ZOMBIE}) and (not zombie.jumped):
             return False
         elif (self.state == c.IDLE and zombie.state != c.DIGEST and
-                self.rect.x <= zombie.rect.right - 10 and (not zombie.lostHead) and
+                self.rect.x <= zombie.rect.centerx and (not zombie.lostHead) and
                 (self.rect.x + c.GRID_X_SIZE*2.6 >= zombie.rect.centerx)):
             return True
         return False
