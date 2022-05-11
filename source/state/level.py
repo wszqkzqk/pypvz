@@ -220,7 +220,11 @@ class Level(tool.State):
                     if current_time - self.waveTime > 1500:
                         for item in self.graveSet:
                             itemX, itemY = self.map.getMapGridPos(*item)
-                            self.zombie_groups[item[1]].add(zombie.NormalZombie(itemX, itemY, self.head_group))
+                            # 目前设定：2/3概率普通僵尸，1/3概率路障僵尸
+                            if randint(0, 2):
+                                self.zombie_groups[item[1]].add(zombie.NormalZombie(itemX, itemY, self.head_group))
+                            else:
+                                self.zombie_groups[item[1]].add(zombie.ConeHeadZombie(itemX, itemY, self.head_group))
                         self.graveZombieCreated = True
             elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
                 if not self.createdZombieFromPool:
