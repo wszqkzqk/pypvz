@@ -1122,7 +1122,7 @@ class Level(tool.State):
     def checkCarCollisions(self):
         for car in self.cars:
             for zombie in self.zombie_groups[car.map_y]:
-                if zombie and zombie.state != c.DIE and (not zombie.lostHead) and zombie.rect.centerx <= 0:
+                if zombie and zombie.state != c.DIE and (not zombie.lostHead) and (zombie.rect.centerx <= 0):
                     car.setWalk()
                 if zombie.rect.centerx <= car.rect.x:
                     zombie.health = 0

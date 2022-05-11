@@ -165,7 +165,7 @@ class Fume(pg.sprite.Sprite):
 
     def update(self, game_info):
         self.current_time = game_info[c.CURRENT_TIME]
-        if self.current_time - self.timer >= 140:
+        if self.current_time - self.timer >= 100:
             self.frame_index += 1
             if self.frame_index >= self.frame_num:
                 self.frame_index = self.frame_num - 1
@@ -1668,7 +1668,7 @@ class FumeShroom(Plant):
     def attacking(self):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
-        elif self.current_time - self.shoot_timer >= 1200:
+        elif self.current_time - self.shoot_timer >= 1100:
             if self.showAttackFrames:
                 self.showAttackFrames = False
                 self.changeFrames(self.attack_frames)
