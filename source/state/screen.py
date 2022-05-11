@@ -51,7 +51,7 @@ class GameLoseScreen(Screen):
         Screen.__init__(self)
     
     def getImageName(self):
-        return c.GAME_LOOSE_IMAGE
+        return c.GAME_LOSE_IMAGE
     
     def set_next_state(self):
-        return c.MAIN_MENU
+        return c.LEVEL

@@ -84,7 +84,7 @@ LEVEL = 'level'
 # 界面图片文件名
 MAIN_MENU_IMAGE = 'MainMenu'
 OPTION_ADVENTURE = 'Adventure'
-GAME_LOOSE_IMAGE = 'GameLoose'
+GAME_LOSE_IMAGE = 'GameLose'
 GAME_VICTORY_IMAGE = 'GameVictory'
 
 # 地图相关内容
