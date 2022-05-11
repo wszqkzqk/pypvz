@@ -361,7 +361,7 @@ class Panel():
     def setupCards(self, card_list):
         self.card_list = []
         x = c.PANEL_X_START - c.PANEL_X_INTERNAL
-        y = c.PANEL_Y_START + 43 - c.PANEL_Y_INTERNAL
+        y = c.PANEL_Y_START + 38 - c.PANEL_Y_INTERNAL
         for i, index in enumerate(card_list):
             if i % 8 == 0:
                 x = c.PANEL_X_START - c.PANEL_X_INTERNAL
