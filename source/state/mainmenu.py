@@ -157,9 +157,9 @@ class Menu(tool.State):
             self.littleGame_image = self.littleGame_frames[self.littleGame_frame_index]
 
             if mouse_pos:
-                self.checkAdventureClick(mouse_pos)
                 self.checkExitClick(mouse_pos)
                 self.checkLittleGameClick(mouse_pos)
+                self.checkAdventureClick(mouse_pos)
         else:
             # 点到后播放动画
             if(self.current_time - self.adventure_timer) > 150:

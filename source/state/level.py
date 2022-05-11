@@ -349,6 +349,8 @@ class Level(tool.State):
             self.initPlay(card_pool)
             if self.bar_type == c.CHOSSEBAR_BOWLING:
                 self.initBowlingMap()
+        
+        self.setupLittleMenu()
 
     def initChoose(self):
         self.state = c.CHOOSE
@@ -360,10 +362,18 @@ class Level(tool.State):
         pg.mixer.music.play(-1, 0)
 
     def choose(self, mouse_pos, mouse_click):
-        if mouse_pos and mouse_click[0]:
+        # 如果暂停
+        if self.showLittleMenu:
+            self.pauseAndCheckLittleMenuOptions(mouse_pos, mouse_click)
+            return
+
+        elif mouse_pos and mouse_click[0]:
             self.panel.checkCardClick(mouse_pos)
             if self.panel.checkStartButtonClick(mouse_pos):
                 self.initPlay(self.panel.getSelectedCards())
+            elif self.checkLittleMenuClick(mouse_pos):
+                self.showLittleMenu = True
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
 
     def initPlay(self, card_list):
 
@@ -450,8 +460,6 @@ class Level(tool.State):
             self.shovel_rect.x = self.shovel_box_rect.x = self.shovel_positon[0]
             self.shovel_rect.y = self.shovel_box_rect.y = self.shovel_positon[1] 
 
-        self.setupLittleMenu()
-
         self.setupLevelProgressBarImage()
         
         self.setupHugeWaveApprochingImage()
@@ -519,6 +527,37 @@ class Level(tool.State):
         self.mainMenu_button_rect = self.mainMenu_button.get_rect()
         self.mainMenu_button_rect.x = 299
         self.mainMenu_button_rect.y = 372
+
+    def pauseAndCheckLittleMenuOptions(self, mouse_pos, mouse_click):
+        # 设置暂停状态
+        self.pause = True
+        # 暂停播放音乐
+        pg.mixer.music.pause()
+        if mouse_click[0]:
+            if self.checkReturnClick(mouse_pos):
+                # 终止暂停，停止显示菜单
+                self.pause = False
+                self.showLittleMenu = False
+                # 继续播放音乐
+                pg.mixer.music.unpause()
+                # 播放点击音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+            elif self.checkRestartClick(mouse_pos):
+                self.done = True
+                self.next = c.LEVEL
+                # 播放点击音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+            elif self.checkMainMenuClick(mouse_pos):
+                self.done = True
+                self.next = c.MAIN_MENU
+                #self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:c.START_LEVEL_NUM} # 应该不能用c.LEVEL_NUM:c.START_LEVEL_NUM
+                self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:self.persist[c.LEVEL_NUM], c.LITTLEGAME_NUM:self.persist[c.LITTLEGAME_NUM]}
+                pg.mixer.music.stop()
+                pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
+                pg.mixer.music.play(-1, 0)
+                # 播放点击音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+
 
     # 一大波僵尸来袭图片显示
     def setupHugeWaveApprochingImage(self):
@@ -625,37 +664,7 @@ class Level(tool.State):
 
         # 如果暂停
         if self.showLittleMenu:
-            # 设置暂停状态
-            self.pause = True
-            # 暂停播放音乐
-            pg.mixer.music.pause()
-            if mouse_click[0]:
-                if self.checkReturnClick(mouse_pos):
-                    # 终止暂停，停止显示菜单
-                    self.pause = False
-                    self.showLittleMenu = False
-                    # 继续播放音乐
-                    pg.mixer.music.unpause()
-                    # 播放点击音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
-                elif self.checkRestartClick(mouse_pos):
-                    self.done = True
-                    self.next = c.LEVEL
-                    pg.mixer.music.stop()
-                    pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", self.bgm))
-                    pg.mixer.music.play(-1, 0)
-                    # 播放点击音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
-                elif self.checkMainMenuClick(mouse_pos):
-                    self.done = True
-                    self.next = c.MAIN_MENU
-                    #self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:c.START_LEVEL_NUM} # 应该不能用c.LEVEL_NUM:c.START_LEVEL_NUM
-                    self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:self.persist[c.LEVEL_NUM], c.LITTLEGAME_NUM:self.persist[c.LITTLEGAME_NUM]}
-                    pg.mixer.music.stop()
-                    pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
-                    pg.mixer.music.play(-1, 0)
-                    # 播放点击音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+            self.pauseAndCheckLittleMenuOptions(mouse_pos, mouse_click)
             return
 
         if (c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
@@ -1425,6 +1434,13 @@ class Level(tool.State):
         surface.blit(self.level, (0,0), self.viewport)
         if self.state == c.CHOOSE:
             self.panel.draw(surface)
+            # 画小菜单
+            surface.blit(self.little_menu, self.little_menu_rect)
+            if self.showLittleMenu:
+                surface.blit(self.big_menu, self.big_menu_rect)
+                surface.blit(self.return_button, self.return_button_rect)
+                surface.blit(self.restart_button, self.restart_button_rect)
+                surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
         # 以后可能需要插入一个预备的状态（预览显示僵尸、返回战场）
         elif self.state == c.PLAY:
             if self.hasShovel:
