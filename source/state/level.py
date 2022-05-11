@@ -408,18 +408,18 @@ class Level(tool.State):
             self.numZombie = 0
             # 新的僵尸生成机制：级别——权重生成
             self.createZombieInfo = {# 生成僵尸:(级别, 权重)
-                        c.NORMAL_ZOMBIE:(1, 4000),
-                        c.FLAG_ZOMBIE:(1, 0),
-                        c.CONEHEAD_ZOMBIE:(2, 4000),
-                        c.BUCKETHEAD_ZOMBIE:(4, 3000),
-                        c.NEWSPAPER_ZOMBIE:(2, 1000),
-                        c.FOOTBALL_ZOMBIE:(7, 2000),
-                        c.DUCKY_TUBE_ZOMBIE:(1, 0),  # 作为变种，不主动生成
-                        c.CONEHEAD_DUCKY_TUBE_ZOMBIE:(2, 0),    # 作为变种，不主动生成
-                        c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:(4, 0),  # 作为变种，不主动生成
-                        c.SCREEN_DOOR_ZOMBIE:(4, 3500),
-                        c.POLE_VAULTING_ZOMBIE:(2, 2000),
-                        }
+                c.NORMAL_ZOMBIE:(1, 4000),
+                c.FLAG_ZOMBIE:(1, 0),
+                c.CONEHEAD_ZOMBIE:(2, 4000),
+                c.BUCKETHEAD_ZOMBIE:(4, 3000),
+                c.NEWSPAPER_ZOMBIE:(2, 1000),
+                c.FOOTBALL_ZOMBIE:(7, 2000),
+                c.DUCKY_TUBE_ZOMBIE:(1, 0),  # 作为变种，不主动生成
+                c.CONEHEAD_DUCKY_TUBE_ZOMBIE:(2, 0),    # 作为变种，不主动生成
+                c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:(4, 0),  # 作为变种，不主动生成
+                c.SCREEN_DOOR_ZOMBIE:(4, 3500),
+                c.POLE_VAULTING_ZOMBIE:(2, 2000),
+                }
             # 将僵尸与水上变种对应
             self.convertZombieInPool = {c.NORMAL_ZOMBIE:c.DUCKY_TUBE_ZOMBIE,
                                         c.CONEHEAD_ZOMBIE:c.CONEHEAD_DUCKY_TUBE_ZOMBIE,
@@ -1191,10 +1191,7 @@ class Level(tool.State):
 
         # 整理地图信息
         if self.bar_type != c.CHOSSEBAR_BOWLING:
-            try:    # 避免炸弹等本身就不在集合里面的问题
-                self.map.removeMapPlant(map_x, map_y, targetPlant.name)
-            except KeyError:
-                pass
+            self.map.removeMapPlant(map_x, map_y, targetPlant.name)
         # 将睡眠植物移除后更新睡眠状态
         if targetPlant.state == c.SLEEP:
             self.map.map[map_y][map_x][c.MAP_SLEEP] = False

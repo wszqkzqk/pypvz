@@ -144,7 +144,7 @@ class Map():
         self.map[map_y][map_x][c.MAP_SLEEP] = sleep
     
     def removeMapPlant(self, map_x, map_y, plantName):
-        self.map[map_y][map_x][c.MAP_PLANT].remove(plantName)
+        self.map[map_y][map_x][c.MAP_PLANT].discard(plantName)
 
     def getRandomMapIndex(self):
         map_x = random.randint(0, self.width-1)
