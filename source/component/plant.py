@@ -1432,6 +1432,7 @@ class TangleKlep(Plant):
 
     def canAttack(self, zombie):
         if zombie.state != c.DIE and (not zombie.lostHead):
+            # 这里碰撞应当比碰撞一般更容易，就设置成圆形或矩形模式，不宜采用mask
             if pg.sprite.collide_circle_ratio(0.7)(zombie, self):
                 return True
         return False
