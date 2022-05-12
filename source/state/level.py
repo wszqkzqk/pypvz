@@ -399,8 +399,9 @@ class Level(tool.State):
         self.hint_image = None
         self.hint_plant = False
 
+        # 用种下植物的名称与位置元组判断是否需要刷新僵尸的攻击对象
         # 种植植物后应当刷新僵尸的攻击对象，当然，默认初始时不用刷新
-        self.refreshZombieAttack = False
+        self.newPlantAndPositon = None
 
         # 0:白天 1:夜晚 2:泳池 3:浓雾 4:屋顶 5:月夜 6:坚果保龄球
         # 还准备加入    7:单行草皮 8:三行草皮 但是目前没有找到图（
@@ -927,7 +928,7 @@ class Level(tool.State):
         self.plant_groups[map_y].add(new_plant)
         # 种植植物后应当刷新僵尸的攻击对象
         # 这里用植物名称代替布尔值，保存更多信息
-        self.refreshZombieAttack = new_plant.name
+        self.newPlantAndPositon = (new_plant.name, (map_x, map_y))
         if self.bar_type == c.CHOOSEBAR_STATIC:
             self.menubar.decreaseSunValue(self.select_plant.sun_cost)
             self.menubar.setCardFrozenTime(self.plant_name)
@@ -1041,10 +1042,23 @@ class Level(tool.State):
                 else:
                     collided_func = pg.sprite.collide_mask
                 if zombie.state != c.WALK:
+                    # 非啃咬时不用刷新
                     if zombie.state != c.ATTACK:
                         continue
-                    if (((zombie.prey.name not in {c.LILYPAD, "花盆（未实现）"}) and (self.refreshZombieAttack != "南瓜头（未实现）")) or (not self.refreshZombieAttack)):
+                    # 没有新的植物种下时不用刷新
+                    elif not self.newPlantAndPositon:
                         continue
+                    else:
+                        # 被攻击对象是植物时才可能刷新
+                        if zombie.prey_is_plant:
+                            # 新植物种在被攻击植物同一格时才可能刷新
+                            # 如果被攻击植物是睡莲和花盆，同一格种了植物必然刷新
+                            mapX, mapY = self.map.getMapIndex(zombie.prey.rect.centerx, zombie.prey.rect.centery)
+                            if ((mapX, mapY) == self.newPlantAndPositon[1] and
+                            (zombie.prey.name not in {c.LILYPAD, "花盆（未实现）"})):
+                                # 如果被攻击植物不是睡莲和花盆，同一格种了南瓜头才刷新
+                                if self.newPlantAndPositon[0] != "南瓜头（未实现）":
+                                    continue
                 if zombie.canSwim and (not zombie.swimming):
                     continue
                 
@@ -1130,7 +1144,7 @@ class Level(tool.State):
                         hypno_zombie.setAttack(zombie, False)
 
         else:
-            self.refreshZombieAttack = False    # 生效后需要解除刷新设置
+            self.newPlantAndPositon = None    # 生效后需要解除刷新设置
 
     def checkCarCollisions(self):
         for car in self.cars:
