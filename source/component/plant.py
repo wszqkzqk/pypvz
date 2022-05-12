@@ -106,7 +106,7 @@ class Bullet(pg.sprite.Sprite):
                 if self.y_vel * (self.dest_y - self.rect.y) < 0:
                     self.rect.y = self.dest_y
             self.rect.x += self.x_vel
-            if self.rect.x > c.SCREEN_WIDTH:
+            if self.rect.x >= c.SCREEN_WIDTH + 40:
                 self.kill()
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
@@ -1606,6 +1606,9 @@ class GraveBuster(Plant):
         self.map_x = map_x
         self.plant_group = plant_group
         self.animate_interval = 100
+        # 播放吞噬音效
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "gravebusterchomp.ogg")).play()
+
 
     def animation(self):
         if (self.current_time - self.animate_timer) > self.animate_interval:

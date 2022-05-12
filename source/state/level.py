@@ -304,7 +304,7 @@ class Level(tool.State):
 
         self.zombie_list = []
         for data in self.map_data[c.ZOMBIE_LIST]:
-            if 'map_y' in data.keys():
+            if 'map_y' in data:
                 self.zombie_list.append((data['time'], data['name'], data['map_y']))
             else:
                 self.zombie_list.append((data['time'], data['name']))
@@ -413,7 +413,7 @@ class Level(tool.State):
 
         self.removeMouseImage()
         self.setupGroups()
-        if (c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+        if (c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
             self.setupZombies()
         else:
             # 僵尸波数数据及僵尸生成数据
@@ -441,7 +441,7 @@ class Level(tool.State):
                                         c.BUCKETHEAD_ZOMBIE:c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE}
 
             # 暂时没有生存模式，所以 survivalRounds = 0
-            if c.INEVITABLE_ZOMBIE_DICT in self.map_data.keys():
+            if c.INEVITABLE_ZOMBIE_DICT in self.map_data:
                 self.createWaves(   useableZombies=self.map_data[c.INCLUDED_ZOMBIES],
                                     numFlags=self.map_data[c.NUM_FLAGS],
                                     survivalRounds=0,
@@ -672,7 +672,7 @@ class Level(tool.State):
             self.pauseAndCheckLittleMenuOptions(mouse_pos, mouse_click)
             return
 
-        if (c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+        if (c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
             # 旧僵尸生成方式
             if self.zombie_start_time == 0:
                 self.zombie_start_time = self.current_time
@@ -805,7 +805,7 @@ class Level(tool.State):
             else:
                 map_y = randint(0, 4)
 
-        if not ((c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
+        if not ((c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
             # 旗帜波出生点右移
             if self.waveNum % 10:
                 hugeWaveMove = 0
@@ -914,8 +914,6 @@ class Level(tool.State):
             new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x])
         elif self.plant_name == c.GRAVEBUSTER:
             new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
-            # 播放吞噬音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "gravebusterchomp.ogg")).play()
         elif self.plant_name == c.FUMESHROOM:
             new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
 
@@ -1347,7 +1345,7 @@ class Level(tool.State):
                     self.killPlant(plant)
 
     def checkVictory(self):
-        if (c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+        if (c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
             if len(self.zombie_list) > 0:
                 return False
             for i in range(self.map_y_len):
@@ -1495,7 +1493,7 @@ class Level(tool.State):
                 surface.blit(self.restart_button, self.restart_button_rect)
                 surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
 
-            if not ((c.ZOMBIE_LIST in self.map_data.keys()) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
+            if not ((c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
                 self.showLevelProgress(surface)
                 if self.current_time - self.showHugeWaveApprochingTime <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
