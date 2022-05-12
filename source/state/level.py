@@ -1023,7 +1023,7 @@ class Level(tool.State):
                                 if bullet.name == c.BULLET_FIREBALL:
                                     for rangeZombie in self.zombie_groups[i]:
                                         if abs(rangeZombie.rect.x - bullet.rect.x) <= (c.GRID_X_SIZE // 2):
-                                            rangeZombie.setDamage(c.BULLET_DAMAGE_FIREBALL_RANGE, effect=False, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+                                            rangeZombie.setDamage(c.BULLET_DAMAGE_FIREBALL_RANGE, effect=None, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
                                 break
                         
 
@@ -1143,7 +1143,7 @@ class Level(tool.State):
             if car.dead:
                 self.cars.remove(car)
 
-    def boomZombies(self, x, map_y, y_range, x_range, effect=False):
+    def boomZombies(self, x, map_y, y_range, x_range, effect=None):
         for i in range(self.map_y_len):
             if abs(i - map_y) > y_range:
                 continue

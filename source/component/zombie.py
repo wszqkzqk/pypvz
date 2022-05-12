@@ -310,7 +310,7 @@ class Zombie(pg.sprite.Sprite):
             if (self.current_time - self.ice_slow_timer) > c.ICE_SLOW_TIME:
                 self.ice_slow_ratio = 1
 
-    def setDamage(self, damage, effect=False, damageType=c.ZOMBIE_COMMON_DAMAGE):
+    def setDamage(self, damage, effect=None, damageType=c.ZOMBIE_COMMON_DAMAGE):
         # 冰冻减速效果
         if effect == c.BULLET_EFFECT_ICE:
             if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速

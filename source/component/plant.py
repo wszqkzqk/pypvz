@@ -40,7 +40,7 @@ class Car(pg.sprite.Sprite):
 
 # 豌豆及孢子类普通子弹
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, x, start_y, dest_y, name, damage, effect=False, passedTorchWood=None):
+    def __init__(self, x, start_y, dest_y, name, damage, effect=None, passedTorchWood=None):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -412,7 +412,7 @@ class PeaShooter(Plant):
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
@@ -436,14 +436,14 @@ class RepeaterPea(Plant):
         elif (self.current_time - self.shoot_timer >= 1400):
             self.firstShot = True
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
         elif self.firstShot and (self.current_time - self.shoot_timer) > 100:
             self.firstShot = False
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
 
@@ -478,7 +478,7 @@ class ThreePeaShooter(Plant):
                 else:
                     dest_y = self.rect.y + (i - 1) * c.GRID_Y_SIZE + offset_y
                 self.bullet_groups[tmp_y].add(Bullet(self.rect.right  - 15, self.rect.y, dest_y,
-                                                     c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False))
+                                                     c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
@@ -674,7 +674,7 @@ class PuffShroom(Plant):
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 10, self.rect.y + 10,
-                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
+                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
@@ -946,7 +946,7 @@ class ScaredyShroom(Plant):
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y + 40, self.rect.y + 40,
-                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
+                                         c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
@@ -1254,7 +1254,7 @@ class TorchWood(Plant):
                 if i.passedTorchWood != self.rect.centerx:
                     if abs(i.rect.centerx - self.rect.centerx) <= 20:
                         self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
-                                                c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=False, passedTorchWood=self.rect.centerx))
+                                                c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None, passedTorchWood=self.rect.centerx))
                         i.kill()
 
 class StarFruit(Plant):
@@ -1367,7 +1367,7 @@ class SeaShroom(Plant):
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right, self.rect.y + 50, self.rect.y + 50,
-                                         c.BULLET_SEASHROOM, c.BULLET_DAMAGE_NORMAL, effect=False))
+                                         c.BULLET_SEASHROOM, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
