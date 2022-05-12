@@ -1046,19 +1046,22 @@ class Level(tool.State):
                     if zombie.state != c.ATTACK:
                         continue
                     # 没有新的植物种下时不用刷新
-                    elif not self.newPlantAndPositon:
+                    if not self.newPlantAndPositon:
                         continue
-                    else:
-                        # 被攻击对象是植物时才可能刷新
-                        if zombie.prey_is_plant:
-                            # 新植物种在被攻击植物同一格时才可能刷新
+                    # 被攻击对象是植物时才可能刷新
+                    if zombie.prey_is_plant:
+                        # 新植物种在被攻击植物同一格时才可能刷新
+                        mapX, mapY = self.map.getMapIndex(zombie.prey.rect.centerx, zombie.prey.rect.centery)
+                        if (mapX, mapY) == self.newPlantAndPositon[1]:
                             # 如果被攻击植物是睡莲和花盆，同一格种了植物必然刷新
-                            mapX, mapY = self.map.getMapIndex(zombie.prey.rect.centerx, zombie.prey.rect.centery)
-                            if ((mapX, mapY) == self.newPlantAndPositon[1] and
-                            (zombie.prey.name not in {c.LILYPAD, "花盆（未实现）"})):
-                                # 如果被攻击植物不是睡莲和花盆，同一格种了南瓜头才刷新
-                                if self.newPlantAndPositon[0] != "南瓜头（未实现）":
-                                    continue
+                            # 如果被攻击植物不是睡莲和花盆，同一格种了南瓜头才刷新
+                            if ((zombie.prey.name not in {c.LILYPAD, "花盆（未实现）"})
+                            and (self.newPlantAndPositon[0] != "南瓜头（未实现）")):
+                                continue
+                        else:
+                            continue
+                    else:
+                        continue
                 if zombie.canSwim and (not zombie.swimming):
                     continue
                 
