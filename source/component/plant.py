@@ -206,7 +206,7 @@ class StarBullet(Bullet):
             else:
                 self.rect.x -= 10
             self.handleMapYPosition()
-            if ((self.rect.x > c.SCREEN_WIDTH) or (self.rect.x < -20)
+            if ((self.rect.x > c.SCREEN_WIDTH + 40) or (self.rect.x < -20)
                 or (self.rect.y > c.SCREEN_HEIGHT) or (self.rect.y < 0)):
                 self.kill()
         elif self.state == c.EXPLODE:
