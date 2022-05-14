@@ -848,7 +848,7 @@ class Spikeweed(Plant):
                 if self.canAttack(zombie):
                     # 有车的僵尸
                     if zombie.name in {c.ZOMBONI}:
-                        zombie.health = 0
+                        zombie.health = zombie.lostHeadHealth
                         killSelf = True
                     else:
                         zombie.setDamage(20, damageType=c.ZOMBIE_COMMON_DAMAGE)

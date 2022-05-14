@@ -988,7 +988,7 @@ class Zomboni(Zombie):
         elif self.health <= c.ZOMBONI_DAMAGED1_HEALTH:
             self.changeFrames(self.walk_damaged1_frames)
 
-        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
+        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()) and (not self.lostHead):
             self.walk_timer = self.current_time
             if self.is_hypno:
                 self.rect.x += 1
