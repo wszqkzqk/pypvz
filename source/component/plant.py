@@ -780,6 +780,16 @@ class Squash(Plant):
             return True
         # 攻击状态
         elif (self.state == c.ATTACK):
+            # 位置检测
+            # 僵尸在倭瓜右侧
+            if zombie.rect.x >= self.rect.x:
+                # 重叠15%判断为可以攻击
+                if (self.rect.right - zombie.rect.left >= 0.15*zombie.rect.width):
+                    return True
+            # 僵尸在倭瓜右侧
+            else:
+                if (zombie.rect.right - self.rect.left >= 0.15*zombie.rect.width):
+                    return True
             # 碰撞检测
             if pg.sprite.collide_mask(zombie, self):
                 return True
