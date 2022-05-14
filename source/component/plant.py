@@ -1724,3 +1724,5 @@ class IceFrozenPlot(Plant):
             self.timer = self.current_time
         elif self.current_time - self.timer >= 30000:
             self.health = 0
+
+

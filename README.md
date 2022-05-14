@@ -21,8 +21,8 @@
 
 ## 环境要求
 
-* `Python` >= 3.7 
-* `Python-Pygame` >= 1.9
+* `Python` >= 3.7，最好使用最新版
+* `Python-Pygame` >= 1.9，最好使用最新版
 
 ## 开始游戏
 
@@ -59,8 +59,8 @@ python main.py
 ## Windows单文件封装
 
 编译依赖：
-- `Python` >= 3.7
-- `Python-Pygame` >= 1.9
+- `Python` >= 3.7，最好使用最新版
+- `Python-Pygame` >= 1.9，最好使用最新版
 - `Nuitka`
 - `MinGW-w64`（或其他C编译器）
 - `ccache`
