@@ -1011,4 +1011,12 @@ class Zomboni(Zombie):
                     self.plant_group.add(self.IceFrozenPlot(x, y))
                     self.map.map[mapY][mapX][c.MAP_PLANT].add(c.ICE_FROZEN_PLOT)
 
-            self.speed = max(0.6, 1.5 - (c.GRID_X_LEN - mapX)*0.225)
+            self.speed = max(0.6, 1.5 - (c.GRID_X_LEN + 1 - mapX)*0.225)
+
+    def setDie(self):
+        self.state = c.DIE
+        self.animate_interval = self.die_animate_interval
+        self.changeFrames(self.die_frames)
+        # 播放冰车爆炸音效
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zomboniExplosion.ogg")).play()
+
