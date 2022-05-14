@@ -771,7 +771,8 @@ class Level(tool.State):
                 self.shovelRemovePlant(mouse_pos)
 
         for car in self.cars:
-            car.update(self.game_info)
+            if car:
+                car.update(self.game_info)
 
         self.menubar.update(self.current_time)
 
@@ -1154,15 +1155,16 @@ class Level(tool.State):
             self.newPlantAndPositon = None    # 生效后需要解除刷新设置
 
     def checkCarCollisions(self):
-        for car in self.cars:
-            for zombie in self.zombie_groups[car.map_y]:
-                if zombie and zombie.state != c.DIE and (not zombie.lostHead) and (zombie.rect.centerx <= 0):
-                    car.setWalk()
-                if zombie.rect.centerx <= car.rect.x:
-                    zombie.health = 0
-                    zombie.kill()
-            if car.dead:
-                self.cars.remove(car)
+        for i in range(len(self.cars)):
+            if self.cars[i]:
+                for zombie in self.zombie_groups[i]:
+                    if zombie and zombie.state != c.DIE and (not zombie.lostHead) and (zombie.rect.centerx <= 0):
+                        self.cars[i].setWalk()
+                    if zombie.rect.centerx <= self.cars[i].rect.x:
+                        zombie.health = 0
+                        zombie.kill()
+                if self.cars[i].dead:
+                    self.cars[i] = None
 
     def boomZombies(self, x, map_y, y_range, x_range, effect=None):
         for i in range(self.map_y_len):
@@ -1217,11 +1219,12 @@ class Level(tool.State):
             elif targetPlant.name == c.ICESHROOM and targetPlant.state != c.SLEEP:
                 self.freezeZombies(targetPlant)
             elif targetPlant.name == c.HYPNOSHROOM and targetPlant.state != c.SLEEP:
-                zombie = targetPlant.zombie_to_hypno
-                zombie.setHypno()
-                _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
-                self.zombie_groups[map_y].remove(zombie)
-                self.hypno_zombie_groups[map_y].add(zombie)
+                if targetPlant.zombie_to_hypno:
+                    zombie = targetPlant.zombie_to_hypno
+                    zombie.setHypno()
+                    _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
+                    self.zombie_groups[map_y].remove(zombie)
+                    self.hypno_zombie_groups[map_y].add(zombie)
             elif (targetPlant.name == c.POTATOMINE and not targetPlant.is_init):    # 土豆雷不是灰烬植物，不能用Boom
                 for zombie in self.zombie_groups[map_y]:
                     # 双判断：发生碰撞或在攻击范围内
@@ -1488,14 +1491,14 @@ class Level(tool.State):
             surface.blit(self.little_menu, self.little_menu_rect)
 
             self.menubar.draw(surface)
-            for car in self.cars:
-                car.draw(surface)
             for i in range(self.map_y_len):
                 self.plant_groups[i].draw(surface)
                 self.zombie_groups[i].draw(surface)
                 self.hypno_zombie_groups[i].draw(surface)
                 self.bullet_groups[i].draw(surface)
                 self.drawZombieFreezeTrap(i, surface)
+                if self.cars[i]:
+                    self.cars[i].draw(surface)
             self.head_group.draw(surface)
             self.sun_group.draw(surface)
 

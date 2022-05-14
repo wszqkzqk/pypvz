@@ -17,6 +17,6 @@
         {"time":0, "map_y":0, "name":"PoleVaultingZombie"},
         {"time":6000, "map_y":0, "name":"FootballZombie"},
         {"time":0, "map_y":2, "name":"ConeheadDuckyTubeZombie"},
-        {"time":80000, "map_y":2, "name":"ConeheadDuckyTubeZombie"}
+        {"time":90000, "map_y":2, "name":"ConeheadDuckyTubeZombie"}
     ]
 }

@@ -1001,7 +1001,7 @@ class Zomboni(Zombie):
                 if ((plant.name not in {c.SPIKEWEED})
                 and (self.rect.centerx <= plant.rect.right <= self.rect.right)):
                     # 扣除生命值为可能的最大有限生命值
-                    plant.setDamage(8000, self)
+                    plant.health -= 8000
 
             # 造冰
             mapX, mapY = self.map.getMapIndex(self.rect.right - 20, self.rect.bottom)

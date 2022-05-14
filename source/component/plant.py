@@ -340,7 +340,9 @@ class Plant(pg.sprite.Sprite):
         if not zombie.lostHead:
             self.health -= damage
         self.hit_timer = self.current_time
-        if (self.name == c.HYPNOSHROOM) and (self.state != c.SLEEP) and (zombie.name not in {"投石车僵尸（未实现）"}):
+        if ((self.name == c.HYPNOSHROOM) and
+        (self.state != c.SLEEP) and
+        (zombie.name not in {c.ZOMBONI, "投石车僵尸（未实现）", "加刚特尔（未实现）"})):
             self.zombie_to_hypno = zombie
 
     def getPosition(self):
@@ -1254,13 +1256,13 @@ class TorchWood(Plant):
             if i.name == c.BULLET_PEA:
                 if i.passedTorchWood != self.rect.centerx:
                     if abs(i.rect.centerx - self.rect.centerx) <= 20:
-                        self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
+                        self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
                                                 c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, effect=c.BULLET_EFFECT_UNICE, passedTorchWood=self.rect.centerx))
                         i.kill()
             elif i.name == c.BULLET_PEA_ICE:
                 if i.passedTorchWood != self.rect.centerx:
                     if abs(i.rect.centerx - self.rect.centerx) <= 20:
-                        self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.rect.y,
+                        self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
                                                 c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None, passedTorchWood=self.rect.centerx))
                         i.kill()
 
