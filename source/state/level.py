@@ -1251,12 +1251,18 @@ class Level(tool.State):
 
     def checkPlant(self, plant, i):
         zombie_len = len(self.zombie_groups[i])
-        # 没有攻击状态的植物
-        if plant.name in {  c.WALLNUTBOWLING, c.REDWALLNUTBOWLING,
+        # 不用检查攻击状况的情况
+        if plant.name in {  # 单独指定攻击状态的植物
+                            c.WALLNUTBOWLING, c.REDWALLNUTBOWLING,
+                            # 没有攻击状态的植物
                             c.WALLNUT, c.TALLNUT,
                             c.TORCHWOOD, c.SUNFLOWER,
                             c.SUNSHROOM, c.COFFEEBEAN,
-                            c.GRAVEBUSTER, c.LILYPAD}:
+                            c.GRAVEBUSTER, c.LILYPAD,
+                            c.HYPNOSHROOM,
+                            # 非植物类
+                            c.HOLE, c.GRAVE,
+                            c.ICE_FROZEN_PLOT}:
             pass
         elif plant.name == c.THREEPEASHOOTER:
             if plant.state == c.IDLE:

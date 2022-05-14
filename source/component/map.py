@@ -52,9 +52,7 @@ class Map():
                 return True
             else:
                 return False
-        if ((c.HOLE in self.map[map_y][map_x][c.MAP_PLANT]) or
-            (c.ICE_FROZEN_PLOT in self.map[map_y][map_x][c.MAP_PLANT]) or
-            (c.GRAVE in self.map[map_y][map_x][c.MAP_PLANT])):
+        if any((i in {c.HOLE, c.ICE_FROZEN_PLOT, c.GRAVE}) for i in self.map[map_y][map_x][c.MAP_PLANT]):
             return False
         if self.map[map_y][map_x][c.MAP_PLOT_TYPE] == c.MAP_GRASS:  # 草地
             # 首先需要判断植物是否是水生植物，水生植物不能种植在陆地上
