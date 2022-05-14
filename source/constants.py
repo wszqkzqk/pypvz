@@ -1,7 +1,7 @@
 # 冒险模式起始关卡
-START_LEVEL_NUM = 0
+START_LEVEL_NUM = 1
 # 小游戏模式起始关卡
-START_LITTLE_GAME_NUM = 0
+START_LITTLE_GAME_NUM = 1
 
 # 窗口标题
 ORIGINAL_CAPTION = 'pypvz'
