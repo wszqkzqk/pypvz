@@ -1232,7 +1232,9 @@ class Level(tool.State):
             # 注意这里是在描述墓碑而非墓碑吞噬者
             elif targetPlant.name == c.GRAVE:
                 self.graveSet.remove((map_x, map_y))
-            elif targetPlant.name not in {c.WALLNUTBOWLING, c.TANGLEKLEP}:
+            elif targetPlant.name not in {  c.WALLNUTBOWLING, c.TANGLEKLEP,
+                                            c.ICE_FROZEN_PLOT, c.HOLE,
+                                            c.GRAVE}:
                 # 触发植物死亡音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
         else:
