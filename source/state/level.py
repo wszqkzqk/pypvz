@@ -1084,6 +1084,10 @@ class Level(tool.State):
                         elif plant.name in {c.LILYPAD, "花盆（未实现）"}:
                             attackableBackupPlant.append(plant)
                         # 注意要剔除掉两个“假植物”，以及不能被啃的地刺
+                        elif plant.name == c.SQUASH:
+                            # 跳起后不得被啃食
+                            if not plant.squashing:
+                                attackableCommonPlants.append(plant)
                         elif plant.name not in {c.HOLE, c.ICE_FROZEN_PLOT, c.GRAVE, c.SPIKEWEED}:
                             attackableCommonPlants.append(plant)
                 else:
@@ -1280,7 +1284,7 @@ class Level(tool.State):
                 for zombie in self.zombie_groups[i]:
                     # 双判断：发生碰撞或在攻击范围内
                     if ((pg.sprite.collide_mask(zombie, targetPlant)) or
-                    (abs(zombie.rect.centerx - x) <= targetPlant.explode_x_range)):
+                    (abs(zombie.rect.centerx - targetPlant.rect.centerx) <= targetPlant.explode_x_range)):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
                 targetPlant.boomed = True
         elif targetPlant.name == c.SQUASH:

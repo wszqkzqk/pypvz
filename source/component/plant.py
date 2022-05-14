@@ -801,6 +801,8 @@ class Squash(Plant):
                 self.health = 0 # 避免僵尸在原位啃食
                 self.mapPlantsSet.remove(c.SQUASH)
                 self.kill()
+                # 播放碾压音效
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "squashing.ogg")).play()
         elif self.aim_timer == 0:
             # 锁定目标时播放音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "squashHmm.ogg")).play()
