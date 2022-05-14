@@ -1716,3 +1716,10 @@ class FumeShroom(Plant):
 class IceFrozenPlot(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.ICE_FROZEN_PLOT, c.INF, None)
+        self.timer = 0
+
+    def idling(self):
+        if self.timer == 0:
+            self.timer = self.current_time
+        elif self.current_time - self.timer >= 30000:
+            self.health = 0

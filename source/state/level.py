@@ -1208,6 +1208,10 @@ class Level(tool.State):
             elif targetPlant.name == c.JALAPENO:
                 self.boomZombies(targetPlant.rect.centerx, map_y, targetPlant.explode_y_range,
                                 targetPlant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
+                # 消除冰道
+                for i in self.plant_groups[map_y]:
+                    if i.name == c.ICE_FROZEN_PLOT:
+                        i.health = 0
             elif targetPlant.name == c.ICESHROOM and targetPlant.state != c.SLEEP:
                 self.freezeZombies(targetPlant)
             elif targetPlant.name == c.HYPNOSHROOM and targetPlant.state != c.SLEEP:
