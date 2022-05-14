@@ -1201,7 +1201,6 @@ class Level(tool.State):
                 if targetPlant.zombie_to_hypno:
                     zombie = targetPlant.zombie_to_hypno
                     zombie.setHypno()
-                    _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
                     self.zombie_groups[map_y].remove(zombie)
                     self.hypno_zombie_groups[map_y].add(zombie)
             # 对于墓碑：移除存储在墓碑集合中的坐标
@@ -1210,8 +1209,10 @@ class Level(tool.State):
                 self.graveSet.remove((map_x, map_y))
             elif ((targetPlant.name in {    c.DOOMSHROOM, c.ICESHROOM,
                                             c.POTATOMINE, })
-                and (self.boomed)):
-                pass
+                and (targetPlant.boomed)):
+                # 毁灭菇的情况：爆炸时为了防止蘑菇云被坑掩盖没有加入坑，这里毁灭菇死亡（即爆炸动画结束）后再加入
+                if targetPlant.name == c.DOOMSHROOM:
+                    self.plant_groups[map_y].add(plant.Hole(targetPlant.originalX, targetPlant.originalY, self.map.map[map_y][map_x][c.MAP_PLOT_TYPE]))
             elif targetPlant.name not in {  c.WALLNUTBOWLING, c.TANGLEKLEP,
                                             c.ICE_FROZEN_PLOT, c.HOLE,
                                             c.GRAVE, c.JALAPENO,
@@ -1348,7 +1349,7 @@ class Level(tool.State):
                         checkMapX, _ = self.map.getMapIndex(item.rect.centerx, item.rect.bottom)
                         if map_x == checkMapX:
                             item.health = 0
-                    self.plant_groups[map_y].add(plant.Hole(x, y, self.map.map[map_y][map_x][c.MAP_PLOT_TYPE]))
+                    # 为了防止坑显示在蘑菇云前面，这里先不生成坑，仅填位置
                     self.map.map[map_y][map_x][c.MAP_PLANT].add(c.HOLE)
                 elif targetPlant.name == c.JALAPENO:
                     self.boomZombies(targetPlant.rect.centerx, i, targetPlant.explode_y_range,
