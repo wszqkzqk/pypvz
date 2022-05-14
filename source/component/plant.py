@@ -842,9 +842,18 @@ class Spikeweed(Plant):
             self.hit_timer = self.current_time - 500
         elif (self.current_time - self.attack_timer) >= 700:
             self.attack_timer = self.current_time
+            # 最后再来判断攻击是否要杀死自己
+            killSelf = False
             for zombie in self.zombie_group:
                 if self.canAttack(zombie):
-                    zombie.setDamage(20, damageType=c.ZOMBIE_COMMON_DAMAGE)
+                    # 有车的僵尸
+                    if zombie.name in {c.ZOMBONI}:
+                        zombie.health = 0
+                        killSelf = True
+                    else:
+                        zombie.setDamage(20, damageType=c.ZOMBIE_COMMON_DAMAGE)
+            if killSelf:
+                self.health = 0
             # 播放攻击音效，同子弹打击
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bulletExplode.ogg")).play()
 
@@ -1704,3 +1713,6 @@ class FumeShroom(Plant):
         else:
             self.image.set_alpha(255)
 
+class IceFrozenPlot(Plant):
+    def __init__(self, x, y):
+        Plant.__init__(self, x, y, c.ICE_FROZEN_PLOT, c.INF, None)

@@ -4,7 +4,7 @@
     "shovel":1,
     "spawn_zombies":"list",
     "zombie_list":[
-        {"time":0, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":0, "map_y":5, "name":"Zomboni"},
         {"time":1000, "map_y":4, "name":"ScreenDoorZombie"},
         {"time":2000, "map_y":4, "name":"ScreenDoorZombie"},
         {"time":3100, "map_y":4, "name":"ScreenDoorZombie"},

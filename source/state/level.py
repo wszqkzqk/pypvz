@@ -838,6 +838,8 @@ class Level(tool.State):
         elif name == c.POLE_VAULTING_ZOMBIE:
             # 撑杆跳生成位置不同
             self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + randint(70, 80) + hugeWaveMove, y, self.head_group))
+        elif name == c.ZOMBONI:
+            self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + randint(0, 20) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)
@@ -1035,6 +1037,8 @@ class Level(tool.State):
         for i in range(self.map_y_len):
             hypo_zombies = []
             for zombie in self.zombie_groups[i]:
+                if zombie.name == c.ZOMBONI:
+                    continue
                 if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
                     collided_func = pg.sprite.collide_rect_ratio(0.6)
                 else:
@@ -1104,7 +1108,7 @@ class Level(tool.State):
                     if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
                         if not zombie.jumping:
                             zombie.jumpMap_x, zombie.jumpMap_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.centery)
-                            zombie.jumpMap_x, zombie.jumpMap_y = min(c.GRID_X_LEN, zombie.jumpMap_x), min(self.map_y_len, zombie.jumpMap_y)
+                            zombie.jumpMap_x, zombie.jumpMap_y = min(c.GRID_X_LEN - 1, zombie.jumpMap_x), min(self.map_y_len - 1, zombie.jumpMap_y)
                             jumpX = targetPlant.rect.x - c.GRID_X_SIZE * 0.6
                             if c.TALLNUT in self.map.map[zombie.jumpMap_y][zombie.jumpMap_x][c.MAP_PLANT]:
                                 zombie.setJump(False, jumpX)

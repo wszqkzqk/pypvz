@@ -930,3 +930,82 @@ class PoleVaultingZombie(Zombie):
             self.image.set_alpha(255)
         else:
             self.image.set_alpha(192)
+
+
+# 注意：冰车僵尸移动变速
+class Zomboni(Zombie):
+    def __init__(self, x, y, plant_group, map, IceFrozenPlot):
+        Zombie.__init__(self, x, y, c.ZOMBONI, bodyHealth=c.ZOMBONI_HEALTH)
+        self.plant_group = plant_group
+        self.map = map
+        self.IceFrozenPlot = IceFrozenPlot
+
+    def loadImages(self):
+        self.walk_frames = []
+        self.walk_damaged1_frames = []
+        self.walk_damaged2_frames = []
+        self.losthead_walk_frames = []
+        self.die_frames = []
+        self.boomdie_frames = []
+
+        walk_name = self.name
+        walk_damaged1_name = self.name + 'Damaged1'
+        walk_damaged2_name = self.name + 'Damaged2'
+        losthead_walk_name = self.name + 'Damaged2'
+        die_name = self.name + 'Die'
+        boomdie_name = self.name + 'BoomDie'
+
+        frame_list = [  self.walk_frames, self.walk_damaged1_frames,
+                        self.walk_damaged2_frames, self.losthead_walk_frames,
+                        self.die_frames, self.boomdie_frames]
+        name_list = [   walk_name, walk_damaged1_name,
+                        walk_damaged2_name, losthead_walk_name,
+                        die_name, boomdie_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name)
+
+        self.frames = self.walk_frames
+
+    def updateIceSlow(self):
+        # 冰车僵尸不可冰冻
+        self.ice_slow_ratio = 1
+
+    def freezing(self):
+        # 冰车僵尸不可冰冻
+        pass
+
+    def walking(self):
+        if self.checkToDie(self.losthead_walk_frames):
+            return
+
+        if self.health <= c.ZOMBONI_DAMAGED2_HEALTH:
+            self.changeFrames(self.walk_damaged2_frames)
+        elif self.health <= c.ZOMBONI_DAMAGED1_HEALTH:
+            self.changeFrames(self.walk_damaged1_frames)
+
+        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
+            self.walk_timer = self.current_time
+            if self.is_hypno:
+                self.rect.x += 1
+            else:
+                self.rect.x -= 1
+
+            # 行进时碾压
+            for plant in self.plant_group:
+                # 地刺和地刺王不用检验
+                if ((plant.name not in {c.SPIKEWEED})
+                and (self.rect.centerx <= plant.rect.right <= self.rect.right)):
+                    # 扣除生命值为可能的最大有限生命值
+                    plant.setDamage(8000, self)
+
+            # 造冰
+            mapX, mapY = self.map.getMapIndex(self.rect.right, self.rect.bottom)
+            if 0 <= mapX < c.GRID_X_LEN:
+                if c.ICE_FROZEN_PLOT not in self.map.map[mapY][mapX]:
+                    x, y = self.map.getMapGridPos(mapX, mapY)
+                    self.plant_group.add(self.IceFrozenPlot(x, y))
+
+    
+    def handleState(self):
+        self.walking()
