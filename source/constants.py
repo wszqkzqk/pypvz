@@ -1,7 +1,7 @@
 # 冒险模式起始关卡
-START_LEVEL_NUM = 1
+START_LEVEL_NUM = 0
 # 小游戏模式起始关卡
-START_LITTLE_GAME_NUM = 1
+START_LITTLE_GAME_NUM = 0
 
 # 窗口标题
 ORIGINAL_CAPTION = 'pypvz'
@@ -349,7 +349,7 @@ ZOMBIE_ATTACK_DAMAGE = 50
 ZOMBIE_WALK_INTERVAL = 60  # 僵尸步行间隔
 
 # 僵尸生成位置
-ZOMBIE_START_X = SCREEN_WIDTH + 40  # 场宽度不一样，用于拟合
+ZOMBIE_START_X = SCREEN_WIDTH + 50  # 场宽度不一样，用于拟合
 
 # 状态类型
 IDLE = 'idle'

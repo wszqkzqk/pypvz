@@ -840,6 +840,7 @@ class Level(tool.State):
             # 撑杆跳生成位置不同
             self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + randint(70, 80) + hugeWaveMove, y, self.head_group))
         elif name == c.ZOMBONI:
+            # 冰车僵尸生成位置不同
             self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + randint(55, 65) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
 
     # 能否种植物的判断：

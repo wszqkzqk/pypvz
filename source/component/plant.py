@@ -24,7 +24,7 @@ class Car(pg.sprite.Sprite):
         self.current_time = game_info[c.CURRENT_TIME]
         if self.state == c.WALK:
             self.rect.x += 4
-        if self.rect.x > c.SCREEN_WIDTH + 40:
+        if self.rect.x > c.SCREEN_WIDTH + 60:
             self.dead = True
 
     def setWalk(self):
@@ -104,7 +104,7 @@ class Bullet(pg.sprite.Sprite):
                 if self.y_vel * (self.dest_y - self.rect.y) < 0:
                     self.rect.y = self.dest_y
             self.rect.x += self.x_vel
-            if self.rect.x >= c.SCREEN_WIDTH + 40:
+            if self.rect.x >= c.SCREEN_WIDTH + 60:
                 self.kill()
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
@@ -206,7 +206,7 @@ class StarBullet(Bullet):
             else:
                 self.rect.x -= 10
             self.handleMapYPosition()
-            if ((self.rect.x > c.SCREEN_WIDTH + 40) or (self.rect.x < -20)
+            if ((self.rect.x > c.SCREEN_WIDTH + 60) or (self.rect.x < -40)
                 or (self.rect.y > c.SCREEN_HEIGHT) or (self.rect.y < 0)):
                 self.kill()
         elif self.state == c.EXPLODE:

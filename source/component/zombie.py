@@ -941,6 +941,8 @@ class Zomboni(Zombie):
         self.IceFrozenPlot = IceFrozenPlot
         self.die_animate_interval = 100
         self.boomDie_animate_interval = 150
+        # 播放冰车生成音效
+        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zomboni.ogg")).play()
 
     def loadImages(self):
         self.walk_frames = []
