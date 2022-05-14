@@ -939,6 +939,8 @@ class Zomboni(Zombie):
         self.plant_group = plant_group
         self.map = map
         self.IceFrozenPlot = IceFrozenPlot
+        self.die_animate_interval = 100
+        self.boomDie_animate_interval = 150
 
     def loadImages(self):
         self.walk_frames = []
@@ -1000,12 +1002,9 @@ class Zomboni(Zombie):
                     plant.setDamage(8000, self)
 
             # 造冰
-            mapX, mapY = self.map.getMapIndex(self.rect.right, self.rect.bottom)
+            mapX, mapY = self.map.getMapIndex(self.rect.right - 20, self.rect.bottom)
             if 0 <= mapX < c.GRID_X_LEN:
                 if c.ICE_FROZEN_PLOT not in self.map.map[mapY][mapX]:
                     x, y = self.map.getMapGridPos(mapX, mapY)
                     self.plant_group.add(self.IceFrozenPlot(x, y))
-
-    
-    def handleState(self):
-        self.walking()
+                    self.map.map[mapY][mapX][c.MAP_PLANT].add(c.ICE_FROZEN_PLOT)
