@@ -1713,6 +1713,7 @@ class FumeShroom(Plant):
         else:
             self.image.set_alpha(255)
 
+
 class IceFrozenPlot(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.ICE_FROZEN_PLOT, c.INF, None)

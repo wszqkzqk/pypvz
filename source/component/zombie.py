@@ -1008,3 +1008,5 @@ class Zomboni(Zombie):
                     x, y = self.map.getMapGridPos(mapX, mapY)
                     self.plant_group.add(self.IceFrozenPlot(x, y))
                     self.map.map[mapY][mapX][c.MAP_PLANT].add(c.ICE_FROZEN_PLOT)
+
+            self.speed = max(0.6, 1.5 - (c.GRID_X_LEN - mapX)*0.225)
