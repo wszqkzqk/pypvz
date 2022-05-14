@@ -975,8 +975,7 @@ class Zomboni(Zombie):
         # 冰车僵尸不可冰冻
         self.ice_slow_ratio = 1
 
-    def freezing(self):
-        # 冰车僵尸不可冰冻
+    def setFreeze(self, ice_trap_image):
         pass
 
     def walking(self):

@@ -942,6 +942,8 @@ class Level(tool.State):
                 self.map.addMapPlant(map_x, map_y, self.plant_name, sleep=mushroomSleep)
         self.removeMouseImage()
 
+        # print(self.newPlantAndPositon)
+
         # 播放种植音效
         pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg")).play()
 
@@ -1195,49 +1197,25 @@ class Level(tool.State):
 
         # 用铲子铲不用触发植物功能
         if not shovel:
-            if targetPlant.name in {c.CHERRYBOMB, c.REDWALLNUTBOWLING}:
-                self.boomZombies(targetPlant.rect.centerx, map_y, targetPlant.explode_y_range,
-                                targetPlant.explode_x_range)
-            elif (targetPlant.name == c.DOOMSHROOM) and (targetPlant.state != c.SLEEP):
-                x, y = targetPlant.originalX, targetPlant.originalY
-                map_x, map_y = self.map.getMapIndex(x, y)
-                self.boomZombies(targetPlant.rect.centerx, map_y, targetPlant.explode_y_range,
-                                targetPlant.explode_x_range)
-                for i in self.plant_groups[map_y]:
-                    checkMapX, _ = self.map.getMapIndex(i.rect.centerx, i.rect.bottom)
-                    if map_x == checkMapX:
-                        i.health = 0
-                self.plant_groups[map_y].add(plant.Hole(x, y, self.map.map[map_y][map_x][c.MAP_PLOT_TYPE]))
-                self.map.map[map_y][map_x][c.MAP_PLANT].add(c.HOLE)
-            elif targetPlant.name == c.JALAPENO:
-                self.boomZombies(targetPlant.rect.centerx, map_y, targetPlant.explode_y_range,
-                                targetPlant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
-                # 消除冰道
-                for i in self.plant_groups[map_y]:
-                    if i.name == c.ICE_FROZEN_PLOT:
-                        i.health = 0
-            elif targetPlant.name == c.ICESHROOM and targetPlant.state != c.SLEEP:
-                self.freezeZombies(targetPlant)
-            elif targetPlant.name == c.HYPNOSHROOM and targetPlant.state != c.SLEEP:
+            if targetPlant.name == c.HYPNOSHROOM and targetPlant.state != c.SLEEP:
                 if targetPlant.zombie_to_hypno:
                     zombie = targetPlant.zombie_to_hypno
                     zombie.setHypno()
                     _, map_y = self.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
                     self.zombie_groups[map_y].remove(zombie)
                     self.hypno_zombie_groups[map_y].add(zombie)
-            elif (targetPlant.name == c.POTATOMINE and not targetPlant.is_init):    # 土豆雷不是灰烬植物，不能用Boom
-                for zombie in self.zombie_groups[map_y]:
-                    # 双判断：发生碰撞或在攻击范围内
-                    if ((pg.sprite.collide_mask(zombie, targetPlant)) or
-                    (abs(zombie.rect.centerx - x) <= targetPlant.explode_x_range)):
-                        zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
             # 对于墓碑：移除存储在墓碑集合中的坐标
             # 注意这里是在描述墓碑而非墓碑吞噬者
             elif targetPlant.name == c.GRAVE:
                 self.graveSet.remove((map_x, map_y))
+            elif ((targetPlant.name in {    c.DOOMSHROOM, c.ICESHROOM,
+                                            c.POTATOMINE, })
+                and (self.boomed)):
+                pass
             elif targetPlant.name not in {  c.WALLNUTBOWLING, c.TANGLEKLEP,
                                             c.ICE_FROZEN_PLOT, c.HOLE,
-                                            c.GRAVE}:
+                                            c.GRAVE, c.JALAPENO,
+                                            c.REDWALLNUTBOWLING, c.CHERRYBOMB,}:
                 # 触发植物死亡音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
         else:
@@ -1255,11 +1233,11 @@ class Level(tool.State):
         targetPlant.health = 0
         targetPlant.kill()
 
-    def checkPlant(self, plant, i):
+    def checkPlant(self, targetPlant, i):
         zombie_len = len(self.zombie_groups[i])
         # 不用检查攻击状况的情况
-        if plant.name in {  # 单独指定攻击状态的植物
-                            c.WALLNUTBOWLING, c.REDWALLNUTBOWLING,
+        if targetPlant.name in {  # 单独指定攻击状态的植物
+                            c.WALLNUTBOWLING,
                             # 没有攻击状态的植物
                             c.WALLNUT, c.TALLNUT,
                             c.TORCHWOOD, c.SUNFLOWER,
@@ -1270,15 +1248,15 @@ class Level(tool.State):
                             c.HOLE, c.GRAVE,
                             c.ICE_FROZEN_PLOT}:
             pass
-        elif plant.name == c.THREEPEASHOOTER:
-            if plant.state == c.IDLE:
+        elif targetPlant.name == c.THREEPEASHOOTER:
+            if targetPlant.state == c.IDLE:
                 if zombie_len > 0:
-                    plant.setAttack()
+                    targetPlant.setAttack()
                 elif (i-1) >= 0 and len(self.zombie_groups[i-1]) > 0:
-                    plant.setAttack()
+                    targetPlant.setAttack()
                 elif (i+1) < self.map_y_len and len(self.zombie_groups[i+1]) > 0:
-                    plant.setAttack()
-            elif plant.state == c.ATTACK:
+                    targetPlant.setAttack()
+            elif targetPlant.state == c.ATTACK:
                 if zombie_len > 0:
                     pass
                 elif (i-1) >= 0 and len(self.zombie_groups[i-1]) > 0:
@@ -1286,76 +1264,115 @@ class Level(tool.State):
                 elif (i+1) < self.map_y_len and len(self.zombie_groups[i+1]) > 0:
                     pass
                 else:
-                    plant.setIdle()
-        elif plant.name == c.CHOMPER:
+                    targetPlant.setIdle()
+        elif targetPlant.name == c.CHOMPER:
             for zombie in self.zombie_groups[i]:
-                if plant.canAttack(zombie):
-                    plant.setAttack(zombie, self.zombie_groups[i])
+                if targetPlant.canAttack(zombie):
+                    targetPlant.setAttack(zombie, self.zombie_groups[i])
                     break
-        elif plant.name == c.POTATOMINE:
+        elif targetPlant.name == c.POTATOMINE:
             for zombie in self.zombie_groups[i]:
-                if plant.canAttack(zombie):
-                    plant.setAttack()
+                if targetPlant.canAttack(zombie):
+                    targetPlant.setAttack()
                     break
-        elif plant.name == c.SQUASH:
+            if targetPlant.start_boom and (not targetPlant.boomed):
+                for zombie in self.zombie_groups[i]:
+                    # 双判断：发生碰撞或在攻击范围内
+                    if ((pg.sprite.collide_mask(zombie, targetPlant)) or
+                    (abs(zombie.rect.centerx - x) <= targetPlant.explode_x_range)):
+                        zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
+                targetPlant.boomed = True
+        elif targetPlant.name == c.SQUASH:
             for zombie in self.zombie_groups[i]:
-                if plant.canAttack(zombie):
-                    plant.setAttack(zombie, self.zombie_groups[i])
+                if targetPlant.canAttack(zombie):
+                    targetPlant.setAttack(zombie, self.zombie_groups[i])
                     break
-        elif plant.name == c.SPIKEWEED:
+        elif targetPlant.name == c.SPIKEWEED:
             can_attack = False
             for zombie in self.zombie_groups[i]:
-                if plant.canAttack(zombie):
+                if targetPlant.canAttack(zombie):
                     can_attack = True
                     break
-            if plant.state == c.IDLE and can_attack:
-                plant.setAttack(self.zombie_groups[i])
-            elif plant.state == c.ATTACK and not can_attack:
-                plant.setIdle()
-        elif plant.name == c.SCAREDYSHROOM:
+            if targetPlant.state == c.IDLE and can_attack:
+                targetPlant.setAttack(self.zombie_groups[i])
+            elif targetPlant.state == c.ATTACK and not can_attack:
+                targetPlant.setIdle()
+        elif targetPlant.name == c.SCAREDYSHROOM:
             need_cry = False
             can_attack = False
             for zombie in self.zombie_groups[i]:
-                if plant.needCry(zombie):
+                if targetPlant.needCry(zombie):
                     need_cry = True
                     break
-                elif plant.canAttack(zombie):
+                elif targetPlant.canAttack(zombie):
                     can_attack = True
             if need_cry:
-                if plant.state != c.CRY:
-                    plant.setCry()
+                if targetPlant.state != c.CRY:
+                    targetPlant.setCry()
             elif can_attack:
-                if plant.state != c.ATTACK:
-                    plant.setAttack()
-            elif plant.state != c.IDLE:
-                plant.setIdle()
-        elif plant.name == c.STARFRUIT:
+                if targetPlant.state != c.ATTACK:
+                    targetPlant.setAttack()
+            elif targetPlant.state != c.IDLE:
+                targetPlant.setIdle()
+        elif targetPlant.name == c.STARFRUIT:
             can_attack = False
             for zombie_group in self.zombie_groups: # 遍历循环所有僵尸
                 for zombie in zombie_group:
-                    if plant.canAttack(zombie):
+                    if targetPlant.canAttack(zombie):
                         can_attack = True
                         break
-            if plant.state == c.IDLE and can_attack:
-                plant.setAttack()
-            elif (plant.state == c.ATTACK and not can_attack):
-                plant.setIdle()
-        elif plant.name == c.TANGLEKLEP:
+            if targetPlant.state == c.IDLE and can_attack:
+                targetPlant.setAttack()
+            elif (targetPlant.state == c.ATTACK and not can_attack):
+                targetPlant.setIdle()
+        elif targetPlant.name == c.TANGLEKLEP:
             for zombie in self.zombie_groups[i]:
-                if plant.canAttack(zombie):
-                    plant.setAttack(zombie, self.zombie_groups[i])
+                if targetPlant.canAttack(zombie):
+                    targetPlant.setAttack(zombie, self.zombie_groups[i])
                     break
+        # 灰烬植物与寒冰菇
+        elif targetPlant.name in {  c.REDWALLNUTBOWLING, c.CHERRYBOMB,
+                                    c.JALAPENO, c.DOOMSHROOM,
+                                    c.ICESHROOM,}:
+            if targetPlant.start_boom and (not targetPlant.boomed):
+                # 这样分成两层是因为场上灰烬植物肯定少，一个一个判断代价高，先笼统判断灰烬即可
+                if targetPlant.name in {c.REDWALLNUTBOWLING, c.CHERRYBOMB}:
+                    self.boomZombies(targetPlant.rect.centerx, i, targetPlant.explode_y_range,
+                                    targetPlant.explode_x_range)
+                elif (targetPlant.name == c.DOOMSHROOM):
+                    x, y = targetPlant.originalX, targetPlant.originalY
+                    map_x, map_y = self.map.getMapIndex(x, y)
+                    self.boomZombies(targetPlant.rect.centerx, i, targetPlant.explode_y_range,
+                                    targetPlant.explode_x_range)
+                    for item in self.plant_groups[map_y]:
+                        checkMapX, _ = self.map.getMapIndex(item.rect.centerx, item.rect.bottom)
+                        if map_x == checkMapX:
+                            item.health = 0
+                    self.plant_groups[map_y].add(plant.Hole(x, y, self.map.map[map_y][map_x][c.MAP_PLOT_TYPE]))
+                    self.map.map[map_y][map_x][c.MAP_PLANT].add(c.HOLE)
+                elif targetPlant.name == c.JALAPENO:
+                    self.boomZombies(targetPlant.rect.centerx, i, targetPlant.explode_y_range,
+                                    targetPlant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
+                    # 消除冰道
+                    for item in self.plant_groups[i]:
+                        if item.name == c.ICE_FROZEN_PLOT:
+                            item.health = 0
+                elif targetPlant.name == c.ICESHROOM:
+                        self.freezeZombies(targetPlant)
+                targetPlant.boomed = True
+            else:
+                pass
         else:
             can_attack = False
             if (zombie_len > 0):
                 for zombie in self.zombie_groups[i]:
-                    if plant.canAttack(zombie):
+                    if targetPlant.canAttack(zombie):
                         can_attack = True
                         break
-            if plant.state == c.IDLE and can_attack:
-                plant.setAttack()
-            elif (plant.state == c.ATTACK and (not can_attack)):
-                plant.setIdle()
+            if targetPlant.state == c.IDLE and can_attack:
+                targetPlant.setAttack()
+            elif (targetPlant.state == c.ATTACK and (not can_attack)):
+                targetPlant.setIdle()
 
     def checkPlants(self):
         for i in range(self.map_y_len):

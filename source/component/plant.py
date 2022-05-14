@@ -541,6 +541,7 @@ class CherryBomb(Plant):
         Plant.__init__(self, x, y, c.CHERRYBOMB, c.INF, None)
         self.state = c.ATTACK
         self.start_boom = False
+        self.boomed = False
         self.bomb_timer = 0
         self.explode_y_range = 1
         self.explode_x_range = c.GRID_X_SIZE * 1.5
@@ -699,6 +700,8 @@ class PotatoMine(Plant):
         self.init_timer = 0
         self.bomb_timer = 0
         self.explode_x_range = c.GRID_X_SIZE / 2
+        self.start_boom = False
+        self.boomed = False
 
     def loadImages(self, name, scale):
         self.init_frames = []
@@ -740,6 +743,7 @@ class PotatoMine(Plant):
             # 播放音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "potatomine.ogg")).play()
             self.changeFrames(self.explode_frames)
+            self.start_boom = True
         elif (self.current_time - self.bomb_timer) > 500:
             self.health = 0
 
@@ -865,7 +869,8 @@ class Jalapeno(Plant):
         Plant.__init__(self, x, y, c.JALAPENO, c.INF, None)
         self.orig_pos = (x, y)
         self.state = c.ATTACK
-        self.start_explode = False
+        self.start_boom = False
+        self.boomed = False
         self.explode_y_range = 0
         self.explode_x_range = 500
 
@@ -880,10 +885,10 @@ class Jalapeno(Plant):
         self.changeFrames(self.explode_frames)
         self.animate_timer = self.current_time
         self.rect.x = c.MAP_OFFSET_X
-        self.start_explode = True
+        self.start_boom = True
 
     def animation(self):
-        if self.start_explode:
+        if self.start_boom:
             if (self.current_time - self.animate_timer) > 100:
                 if self.frame_index == 1:
                     # 播放爆炸音效
@@ -1010,7 +1015,8 @@ class IceShroom(Plant):
         Plant.__init__(self, x, y, c.ICESHROOM, c.PLANT_HEALTH, None)
         self.can_sleep = True
         self.orig_pos = (x, y)
-        self.start_freeze = False
+        self.start_boom = False
+        self.boomed = False
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -1037,10 +1043,10 @@ class IceShroom(Plant):
         self.animate_timer = self.current_time
         self.rect.x = c.MAP_OFFSET_X
         self.rect.y = c.MAP_OFFSET_Y
-        self.start_freeze = True
+        self.start_boom = True
 
     def animation(self):
-        if self.start_freeze:
+        if self.start_boom:
             if (self.current_time - self.animate_timer) > 500:
                 self.frame_index += 1
                 if self.frame_index >= self.frame_num:
@@ -1189,6 +1195,8 @@ class RedWallNutBowling(Plant):
         self.move_timer = 0
         self.move_interval = 70
         self.vel_x = randint(12, 15)
+        self.start_boom = False
+        self.boomed = False
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -1217,6 +1225,7 @@ class RedWallNutBowling(Plant):
 
     def attacking(self):
         if self.explode_timer == 0:
+            self.start_boom = True
             self.explode_timer = self.current_time
             self.changeFrames(self.explode_frames)
             # 播放爆炸音效
@@ -1484,6 +1493,7 @@ class DoomShroom(Plant):
             self.explode_y_range = 2
         self.explode_x_range = c.GRID_X_SIZE * 2.5
         self.start_boom = False
+        self.boomed = False
         self.originalX = x
         self.originalY = y
 
