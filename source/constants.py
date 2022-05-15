@@ -123,10 +123,8 @@ BACKGROUND_DAY_LIKE_BACKGROUNDS = { BACKGROUND_DAY, BACKGROUND_SINGLE,
 
 # 夜晚地图的墓碑数量等级
 GRADE_GRAVES = 'grade_graves'
-GRADE0_GRAVES = 0   # 无墓碑
-GRADE1_GRAVES = 1   # 少量墓碑
-GRADE2_GRAVES = 2   # 中等数量墓碑
-GRADE3_GRAVES = 3   # 大量墓碑
+# 不同墓碑等级对应的信息
+GRAVES_GRADE_INFO = (0, 4, 7, 11)
 
 # 僵尸生成方式
 SPAWN_ZOMBIES = 'spawn_zombies'

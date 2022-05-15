@@ -473,20 +473,15 @@ class Level(tool.State):
         self.showHugeWaveApprochingTime = -2000 # 防止设置为0时刚刚打开游戏就已经启动红字
 
         if self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_NIGHT:
+            # 判断墓碑数量等级
+            # 0为无墓碑，1为少量墓碑，2为中等量墓碑，3为大量墓碑
             if c.GRADE_GRAVES in self.map_data:
                 gradeGraves = self.map_data[c.GRADE_GRAVES]
             # 缺省为少量墓碑
             else:
-                gradeGraves = c.GRADE1_GRAVES
+                gradeGraves = 1
             
-            if gradeGraves == c.GRADE1_GRAVES:
-                graveVolume = 4
-            elif gradeGraves == c.GRADE2_GRAVES:
-                graveVolume = 7
-            elif gradeGraves >= c.GRADE3_GRAVES:
-                graveVolume = 11
-            else:
-                graveVolume = 0
+            graveVolume = c.GRAVES_GRADE_INFO[gradeGraves]
             self.graveSet = set()
             while len(self.graveSet) < graveVolume:
                 mapX = randint(4, 8)    # 注意是从0开始编号
