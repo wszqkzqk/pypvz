@@ -117,7 +117,7 @@ class Level(tool.State):
         # 权重值
         weights = []
         for zombie in useableZombies:
-            weights.append(self.createZombieInfo[zombie][1])
+            weights.append(c.CREATE_ZOMBIE_DICT[zombie][1])
 
         # 按照原版pvz设计的僵尸容量函数，是从无尽解析的，但是普通关卡也可以遵循
         for wave in range(1, 10 * numFlags + 1):
@@ -130,7 +130,7 @@ class Level(tool.State):
                 volume = int(volume*2.5)
                 # 先生成旗帜僵尸
                 zombieList.append(c.FLAG_ZOMBIE)
-                volume -= self.createZombieInfo[c.FLAG_ZOMBIE][0]
+                volume -= c.CREATE_ZOMBIE_DICT[c.FLAG_ZOMBIE][0]
 
             # 传送带模式应当增大僵尸容量
             if (self.bar_type != c.CHOOSEBAR_STATIC):
@@ -139,12 +139,12 @@ class Level(tool.State):
             if inevitableZombieDict and (str(wave) in inevitableZombieDict):
                 for newZombie in inevitableZombieDict[str(wave)]:
                     zombieList.append(newZombie)
-                    volume -= self.createZombieInfo[newZombie][0]
+                    volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
                 if volume < 0:
                     print('警告：第{}波中手动设置的僵尸级别总数超过上限！'.format(wave))
 
             # 防止因为僵尸最小等级过大，使得总容量无法完全利用，造成死循环的检查机制
-            minCost = self.createZombieInfo[min(useableZombies, key=lambda x:self.createZombieInfo[x][0])][0]
+            minCost = c.CREATE_ZOMBIE_DICT[min(useableZombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
             
             while (volume >= minCost) and (len(zombieList) < 50):
                 newZombie = choices(useableZombies, weights)[0]
@@ -152,15 +152,15 @@ class Level(tool.State):
                 if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
                     # 有泳池第一轮的第四波设定上生成水生僵尸
                     if survivalRounds == 0 and wave == 4:
-                        if newZombie in self.convertZombieInPool:
-                            newZombie = self.convertZombieInPool[newZombie]
+                        if newZombie in c.CONVERT_ZOMBIE_IN_POOL:
+                            newZombie = c.CONVERT_ZOMBIE_IN_POOL[newZombie]
                     elif survivalRounds > 0 or wave > 4:
                         if randint(1, 3) == 1:  # 1/3概率水上，暂时人为设定
-                            if newZombie in self.convertZombieInPool:
-                                newZombie = self.convertZombieInPool[newZombie]
-                if self.createZombieInfo[newZombie][0] <= volume:
+                            if newZombie in c.CONVERT_ZOMBIE_IN_POOL:
+                                newZombie = c.CONVERT_ZOMBIE_IN_POOL[newZombie]
+                if c.CREATE_ZOMBIE_DICT[newZombie][0] <= volume:
                     zombieList.append(newZombie)
-                    volume -= self.createZombieInfo[newZombie][0]
+                    volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
             waves.append(zombieList)
             #print(wave, zombieList, len(zombieList))
 
@@ -422,25 +422,6 @@ class Level(tool.State):
             self.waveTime = 0
             self.waveZombies = []
             self.numZombie = 0
-            # 新的僵尸生成机制：级别——权重生成
-            self.createZombieInfo = {# 生成僵尸:(级别, 权重)
-                c.NORMAL_ZOMBIE:(1, 4000),
-                c.FLAG_ZOMBIE:(1, 0),
-                c.CONEHEAD_ZOMBIE:(2, 4000),
-                c.BUCKETHEAD_ZOMBIE:(4, 3000),
-                c.NEWSPAPER_ZOMBIE:(2, 1000),
-                c.FOOTBALL_ZOMBIE:(7, 2000),
-                c.DUCKY_TUBE_ZOMBIE:(1, 0),  # 作为变种，不主动生成
-                c.CONEHEAD_DUCKY_TUBE_ZOMBIE:(2, 0),    # 作为变种，不主动生成
-                c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:(4, 0),  # 作为变种，不主动生成
-                c.SCREEN_DOOR_ZOMBIE:(4, 3500),
-                c.POLE_VAULTING_ZOMBIE:(2, 2000),
-                c.ZOMBONI:(7, 2000),
-                }
-            # 将僵尸与水上变种对应
-            self.convertZombieInPool = {c.NORMAL_ZOMBIE:c.DUCKY_TUBE_ZOMBIE,
-                                        c.CONEHEAD_ZOMBIE:c.CONEHEAD_DUCKY_TUBE_ZOMBIE,
-                                        c.BUCKETHEAD_ZOMBIE:c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE}
 
             # 暂时没有生存模式，所以 survivalRounds = 0
             if c.INEVITABLE_ZOMBIE_DICT in self.map_data:

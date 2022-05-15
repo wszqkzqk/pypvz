@@ -135,7 +135,6 @@ NUM_FLAGS = 'num_flags'
 INEVITABLE_ZOMBIE_DICT = 'inevitable_zombie_list'
 SURVIVAL_ROUNDS = 'survival_rounds'
 
-
 # 地图单元格属性
 MAP_PLANT = 'plantnames'
 MAP_SLEEP = 'sleep' # 有没有休眠的蘑菇，作是否能种植咖啡豆的判断
@@ -385,12 +384,6 @@ ZOMBONI = 'Zomboni'
 
 BOOMDIE = 'BoomDie'
 
-# 僵尸集体属性
-# 水上僵尸集合
-WATER_ZOMBIE = {    DUCKY_TUBE_ZOMBIE, CONEHEAD_DUCKY_TUBE_ZOMBIE,
-                    BUCKETHEAD_DUCKY_TUBE_ZOMBIE,
-                    }
-
 # 对僵尸的攻击类型设置
 ZOMBIE_DEAFULT_DAMAGE = 'helmet2First'
 ZOMBIE_HELMET_2_FIRST = 'helmet2First'  # 优先攻击二类防具
@@ -425,6 +418,31 @@ ZOMBIE_WALK_INTERVAL = 60  # 僵尸步行间隔
 
 # 僵尸生成位置
 ZOMBIE_START_X = SCREEN_WIDTH + 50  # 场宽度不一样，用于拟合
+
+# 僵尸集体属性
+# 僵尸生成信息字典：包含生成僵尸名称、僵尸级别、生成权重
+CREATE_ZOMBIE_DICT = {  # 生成僵尸:(级别, 权重)
+                        NORMAL_ZOMBIE:(1, 4000),
+                        FLAG_ZOMBIE:(1, 0),
+                        CONEHEAD_ZOMBIE:(2, 4000),
+                        BUCKETHEAD_ZOMBIE:(4, 3000),
+                        NEWSPAPER_ZOMBIE:(2, 1000),
+                        FOOTBALL_ZOMBIE:(7, 2000),
+                        DUCKY_TUBE_ZOMBIE:(1, 0),  # 作为变种，不主动生成
+                        CONEHEAD_DUCKY_TUBE_ZOMBIE:(2, 0),    # 作为变种，不主动生成
+                        BUCKETHEAD_DUCKY_TUBE_ZOMBIE:(4, 0),  # 作为变种，不主动生成
+                        SCREEN_DOOR_ZOMBIE:(4, 3500),
+                        POLE_VAULTING_ZOMBIE:(2, 2000),
+                        ZOMBONI:(7, 2000),
+                        }
+# 记录陆生僵尸的水生变种
+CONVERT_ZOMBIE_IN_POOL = {  NORMAL_ZOMBIE:DUCKY_TUBE_ZOMBIE,
+                            CONEHEAD_ZOMBIE:CONEHEAD_DUCKY_TUBE_ZOMBIE,
+                            BUCKETHEAD_ZOMBIE:BUCKETHEAD_DUCKY_TUBE_ZOMBIE}
+# 水上僵尸集合
+WATER_ZOMBIE = {    DUCKY_TUBE_ZOMBIE, CONEHEAD_DUCKY_TUBE_ZOMBIE,
+                    BUCKETHEAD_DUCKY_TUBE_ZOMBIE,
+                    }
 
 # 状态类型
 IDLE = 'idle'
