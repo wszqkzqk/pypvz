@@ -18,7 +18,7 @@ class Zombie(pg.sprite.Sprite):
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.rect.centerx = x
+        self.rect.x = x
         self.rect.bottom = y
 
         self.helmetHealth = helmetHealth

@@ -3,6 +3,9 @@ START_LEVEL_NUM = 1
 # 小游戏模式起始关卡
 START_LITTLE_GAME_NUM = 1
 
+# 游戏速度倍率（调试用）
+GAME_RATE = 1
+
 # 窗口标题
 ORIGINAL_CAPTION = 'pypvz'
 
@@ -32,9 +35,6 @@ GRID_ROOF_X_LEN = GRID_X_LEN
 GRID_ROOF_Y_LEN = GRID_Y_LEN
 GRID_ROOF_X_SIZE = GRID_X_SIZE
 GRID_ROOF_Y_SIZE = 85
-
-# 游戏速度倍率（调试用）
-GAME_RATE = 1
 
 # 颜色
 WHITE        = (255, 255, 255)
@@ -441,7 +441,7 @@ ZOMBIE_ATTACK_DAMAGE = 50
 ZOMBIE_WALK_INTERVAL = 60  # 僵尸步行间隔
 
 # 僵尸生成位置
-ZOMBIE_START_X = SCREEN_WIDTH + 50  # 场宽度不一样，用于拟合
+ZOMBIE_START_X = SCREEN_WIDTH + 30  # 场宽度不一样，用于拟合
 
 
 # 僵尸集体属性集合
@@ -463,9 +463,10 @@ CREATE_ZOMBIE_DICT = {  # 生成僵尸:(级别, 权重)
 
 # 记录陆生僵尸的水生变种
 CONVERT_ZOMBIE_IN_POOL = {
-                NORMAL_ZOMBIE:          DUCKY_TUBE_ZOMBIE,
-                CONEHEAD_ZOMBIE:        CONEHEAD_DUCKY_TUBE_ZOMBIE,
-                BUCKETHEAD_ZOMBIE:      BUCKETHEAD_DUCKY_TUBE_ZOMBIE}
+                NORMAL_ZOMBIE:      DUCKY_TUBE_ZOMBIE,
+                CONEHEAD_ZOMBIE:    CONEHEAD_DUCKY_TUBE_ZOMBIE,
+                BUCKETHEAD_ZOMBIE:  BUCKETHEAD_DUCKY_TUBE_ZOMBIE
+                }
 
 # 水上僵尸集合
 WATER_ZOMBIE = {
