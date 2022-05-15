@@ -1365,8 +1365,6 @@ class Level(tool.State):
                 elif targetPlant.name == c.ICESHROOM:
                         self.freezeZombies(targetPlant)
                 targetPlant.boomed = True
-            else:
-                pass
         else:
             can_attack = False
             if (zombie_len > 0):
