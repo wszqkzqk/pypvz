@@ -1009,10 +1009,6 @@ class Level(tool.State):
             for bullet in self.bullet_groups[i]:
                 if bullet.name == c.FUME:
                     continue
-                # elif bullet.name == c.BULLET_STAR:
-                #     collided_func = pg.sprite.collide_circle_ratio(1)
-                # else:
-                #    collided_func = pg.sprite.collide_circle_ratio(0.7)
                 collided_func = pg.sprite.collide_mask
                 if bullet.state == c.FLY:
                     # 利用循环而非内建精灵组碰撞判断函数，处理更加灵活，可排除已死亡僵尸
@@ -1030,11 +1026,6 @@ class Level(tool.State):
                         
 
     def checkZombieCollisions(self):
-        # if self.bar_type == c.CHOSSEBAR_BOWLING:
-        #     ratio = 0.6
-        # else:
-        #     ratio = 0.5
-        # collided_func = pg.sprite.collide_circle_ratio(ratio)
         for i in range(self.map_y_len):
             hypo_zombies = []
             for zombie in self.zombie_groups[i]:
@@ -1087,11 +1078,7 @@ class Level(tool.State):
                             attackableCommonPlants.append(plant)
                         # 在某些状态下忽略啃食碰撞但某些状况下不能忽略的情形
                         elif plant.name in c.SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING:
-                            if plant.name == c.SQUASH:
-                                if not plant.squashing:
-                                    attackableCommonPlants.append(plant) 
-                            else:
-                                if not plant.start_boom:
+                            if not plant.start_boom:
                                     attackableCommonPlants.append(plant)
                 else:
                     if attackableCommonPlants:

@@ -636,7 +636,7 @@ class Chomper(Plant):
         if self.frame_index == (self.frame_num - 3):
             # 播放吞的音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bigchomp.ogg")).play()
-            self.zombie_group.remove(self.attack_zombie)
+            self.attack_zombie.kill()
         if (self.frame_index + 1) == self.frame_num:
             self.setDigest()
 
@@ -645,7 +645,6 @@ class Chomper(Plant):
             self.digest_timer = self.current_time
         elif (self.current_time - self.digest_timer) > self.digest_interval:
             self.digest_timer = 0
-            self.attack_zombie.kill()
             self.setIdle()
 
 
@@ -753,7 +752,7 @@ class Squash(Plant):
         Plant.__init__(self, x, y, c.SQUASH, c.PLANT_HEALTH, None)
         self.orig_pos = (x, y)
         self.aim_timer = 0
-        self.squashing = False
+        self.start_boom = False # 和灰烬等植物统一变量名，在这里表示倭瓜是否跳起
         self.mapPlantsSet = mapPlantsSet
 
     def loadImages(self, name, scale):
@@ -792,7 +791,7 @@ class Squash(Plant):
         self.health = c.INF
 
     def attacking(self):
-        if self.squashing:
+        if self.start_boom:
             if (self.frame_index + 1) == self.frame_num:
                 for zombie in self.zombie_group:
                     if self.canAttack(zombie):
@@ -810,7 +809,7 @@ class Squash(Plant):
         elif (self.current_time - self.aim_timer) > 1000:
             self.changeFrames(self.attack_frames)
             self.rect.centerx = self.attack_zombie.rect.centerx
-            self.squashing = True
+            self.start_boom = True
             self.animate_interval = 300
 
     def getPosition(self):
