@@ -390,9 +390,9 @@ class Zombie(pg.sprite.Sprite):
             self.health -= damage   # 无视任何防具
         elif damageType == c.ZOMBIE_WALLNUT_BOWLING_DANMAGE:
             # 逻辑：对防具的多余伤害不传递
-            # 以后增设铁门后可能需要设置侧面冲撞特殊性
             if self.helmetType2:
-                self.helmetType2Health -= damage
+                # 对二类防具伤害较一般情况低，拟合铁门需要砸3次的设定
+                self.helmetType2Health -= int(damage * 0.8)
             elif self.helmet:   # 不存在二类防具，但是存在一类防具
                 self.helmetHealth -= damage
             else:   # 没有防具
