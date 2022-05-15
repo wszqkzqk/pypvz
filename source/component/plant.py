@@ -1465,7 +1465,6 @@ class TangleKlep(Plant):
         if not self.splashing:
             self.splashing = True
             self.changeFrames(self.splash_frames)
-            self.zombie_group.remove(self.attack_zombie)
             self.attack_zombie.kill()
             # 播放拖拽音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "tangleKelpDrag.ogg")).play()
