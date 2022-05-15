@@ -52,6 +52,7 @@ class Map():
                 return True
             else:
                 return False
+        # 被非植物障碍占据的格子对于一般植物不可种植
         if any((i in c.NON_PLANT_OBJECTS) for i in self.map[map_y][map_x][c.MAP_PLANT]):
             return False
         if self.map[map_y][map_x][c.MAP_PLOT_TYPE] == c.MAP_GRASS:  # 草地
@@ -104,7 +105,6 @@ class Map():
             return False
     
     def getMapIndex(self, x, y):
-        # 引入新地图后需要增加这里的内容
         if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
             x -= c.MAP_POOL_OFFSET_X
             y -= c.MAP_POOL_OFFSET_Y
