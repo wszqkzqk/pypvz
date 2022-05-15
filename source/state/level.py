@@ -896,7 +896,11 @@ class Level(tool.State):
         elif self.plant_name == c.TANGLEKLEP:
             new_plant = plant.TangleKlep(x, y)
         elif self.plant_name == c.DOOMSHROOM:
-            new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x])
+            if ((self.map_data[c.BACKGROUND_TYPE] in c.ON_ROOF_BACKGROUNDS) or
+            (self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS)):
+                new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
+            else:
+                new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2)
         elif self.plant_name == c.GRAVEBUSTER:
             new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
         elif self.plant_name == c.FUMESHROOM:

@@ -1500,17 +1500,13 @@ class TangleKlep(Plant):
 # 坑形态的毁灭菇同地刺一样不可以被啃食
 # 爆炸时杀死同一格的所有植物
 class DoomShroom(Plant):
-    def __init__(self, x, y, mapContent):
+    def __init__(self, x, y, mapPlantsSet, explode_y_range):
         Plant.__init__(self, x, y, c.DOOMSHROOM, c.PLANT_HEALTH, None)
         self.can_sleep = True
-        self.mapContent = mapContent
+        self.mapPlantSet = mapPlantsSet
         self.bomb_timer = 0
-        # 不同场景由于格子的长不同，范围有变化
-        if mapContent[c.MAP_PLOT_TYPE] == c.MAP_GRASS:
-            self.explode_y_range = 2
-        else:
-            self.explode_y_range = 3
-        self.explode_x_range = c.GRID_X_SIZE * 2.5
+        self.explode_y_range = explode_y_range
+        self.explode_x_range = 250
         self.start_boom = False
         self.boomed = False
         self.originalX = x
@@ -1550,7 +1546,7 @@ class DoomShroom(Plant):
             if self.frame_index >= self.frame_num:
                 self.health = 0
                 self.frame_index = self.frame_num - 1
-                self.mapContent[c.MAP_PLANT].add(c.HOLE)
+                self.mapPlantSet.add(c.HOLE)
         # 睡觉状态
         elif self.state == c.SLEEP:
             if (self.current_time - self.animate_timer) > self.animate_interval:

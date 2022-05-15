@@ -35,7 +35,7 @@ class Map():
             map_y < 0 or map_y >= self.height):
             return False
         return True
-    
+
     # 判断位置是否可用
     # 暂时没有写紫卡植物的判断方法
     # 由于紫卡植物需要移除以前的植物，所以可用另外定义一个函数
