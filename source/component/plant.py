@@ -312,7 +312,7 @@ class Plant(pg.sprite.Sprite):
 
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
-        if  (self.current_time - self.highlightTime < 200):
+        if  (self.current_time - self.highlightTime < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -576,8 +576,15 @@ class CherryBomb(Plant):
                     return
                 self.animate_timer = self.current_time
 
-            self.image = self.frames[self.frame_index]
-            self.mask = pg.mask.from_surface(self.image)
+        self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
+
+        if  (self.current_time - self.highlightTime < 100):
+            self.image.set_alpha(150)
+        elif ((self.current_time - self.hit_timer) < 200):
+            self.image.set_alpha(192)
+        else:
+            self.image.set_alpha(255)
 
 
 class Chomper(Plant):
@@ -908,6 +915,13 @@ class Jalapeno(Plant):
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
 
+        if  (self.current_time - self.highlightTime < 100):
+            self.image.set_alpha(150)
+        elif ((self.current_time - self.hit_timer) < 200):
+            self.image.set_alpha(192)
+        else:
+            self.image.set_alpha(255)
+
     def getPosition(self):
         return self.orig_pos
 
@@ -1067,6 +1081,13 @@ class IceShroom(Plant):
                 self.animate_timer = self.current_time
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
+
+        if  (self.current_time - self.highlightTime < 100):
+            self.image.set_alpha(150)
+        elif ((self.current_time - self.hit_timer) < 200):
+            self.image.set_alpha(192)
+        else:
+            self.image.set_alpha(255)
 
     def getPosition(self):
         return self.orig_pos
@@ -1349,7 +1370,7 @@ class CoffeeBean(Plant):
 
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
-        if  (self.current_time - self.highlightTime < 200):
+        if  (self.current_time - self.highlightTime < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -1488,7 +1509,7 @@ class DoomShroom(Plant):
         if mapContent[c.MAP_PLOT_TYPE] == c.MAP_GRASS:
             self.explode_y_range = 2
         else:
-            self.explode_y_range = 2
+            self.explode_y_range = 3
         self.explode_x_range = c.GRID_X_SIZE * 2.5
         self.start_boom = False
         self.boomed = False
@@ -1548,6 +1569,13 @@ class DoomShroom(Plant):
                     self.animate_timer = self.current_time
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
+
+        if  (self.current_time - self.highlightTime < 100):
+            self.image.set_alpha(150)
+        elif ((self.current_time - self.hit_timer) < 200):
+            self.image.set_alpha(192)
+        else:
+            self.image.set_alpha(255)
 
 # 用于描述毁灭菇的坑
 class Hole(Plant):
@@ -1642,7 +1670,8 @@ class GraveBuster(Plant):
 
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
-        if  (self.current_time - self.highlightTime < 200):
+
+        if  (self.current_time - self.highlightTime < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -1716,7 +1745,8 @@ class FumeShroom(Plant):
 
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
-        if  (self.current_time - self.highlightTime < 200):
+
+        if  (self.current_time - self.highlightTime < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)

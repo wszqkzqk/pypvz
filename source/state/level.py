@@ -616,6 +616,9 @@ class Level(tool.State):
                 y >= i.rect.y and y <= i.rect.bottom):
                 if i.name in c.NON_PLANT_OBJECTS:
                     continue
+                if i.name in c.SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING:
+                    if i.start_boom:
+                        continue
                 # 优先移除花盆、睡莲上的植物而非花盆、睡莲本身
                 if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
                     if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
@@ -1316,7 +1319,7 @@ class Level(tool.State):
                         if item.name == c.ICE_FROZEN_PLOT:
                             item.health = 0
                 elif targetPlant.name == c.ICESHROOM:
-                        self.freezeZombies(targetPlant)
+                    self.freezeZombies(targetPlant)
                 targetPlant.boomed = True
         else:
             can_attack = False
@@ -1345,14 +1348,13 @@ class Level(tool.State):
             for i in range(self.map_y_len):
                 if len(self.zombie_groups[i]) > 0:
                     return False
-            return True
         else:
             if self.waveNum < self.map_data[c.NUM_FLAGS] * 10:
                 return False
             for i in range(self.map_y_len):
                 if len(self.zombie_groups[i]) > 0:
                     return False
-            return True
+        return True
     
     def checkLose(self):
         for i in range(self.map_y_len):
@@ -1398,6 +1400,9 @@ class Level(tool.State):
                 y >= i.rect.y and y <= i.rect.bottom):
                 if i.name in c.NON_PLANT_OBJECTS:
                     continue
+                if i.name in c.SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING:
+                    if i.start_boom:
+                        continue
                 # 优先选中睡莲、花盆上的植物
                 if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
                     if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
