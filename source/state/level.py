@@ -149,7 +149,7 @@ class Level(tool.State):
             while (volume >= minCost) and (len(zombieList) < 50):
                 newZombie = choices(useableZombies, weights)[0]
                 # 普通僵尸、路障僵尸、铁桶僵尸有概率生成水中变种
-                if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
+                if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
                     # 有泳池第一轮的第四波设定上生成水生僵尸
                     if survivalRounds == 0 and wave == 4:
                         if newZombie in self.convertZombieInPool:
@@ -226,7 +226,7 @@ class Level(tool.State):
                             else:
                                 self.zombie_groups[item[1]].add(zombie.ConeHeadZombie(itemX, itemY, self.head_group))
                         self.graveZombieCreated = True
-            elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
+            elif self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS:
                 if not self.createdZombieFromPool:
                     if current_time - self.waveTime > 1500:
                         for i in range(3):
@@ -637,7 +637,7 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
-                if i.name in {c.HOLE, c.ICE_FROZEN_PLOT, c.GRAVE}:
+                if i.name in c.NON_PLANT_OBJECTS:
                     continue
                 # 优先移除花盆、睡莲上的植物而非花盆、睡莲本身
                 if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:
@@ -791,8 +791,8 @@ class Level(tool.State):
         if map_y == None:
             # 情况复杂：分水路和陆路，不能简单实现，需要另外加判断
             # 0, 1, 4, 5路为陆路，2, 3路为水路
-            if self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
-                if name in {c.DUCKY_TUBE_ZOMBIE, c.CONEHEAD_DUCKY_TUBE_ZOMBIE, c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE}:  # 水生僵尸集合
+            if self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS:
+                if name in c.WATER_ZOMBIE:  # 水生僵尸集合
                     map_y = randint(2, 3)
                 elif name == '这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）':
                     map_y = randint(0, 5)
@@ -923,7 +923,7 @@ class Level(tool.State):
             new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
 
 
-        if new_plant.can_sleep and self.background_type in {c.BACKGROUND_DAY, c.BACKGROUND_POOL, c.BACKGROUND_ROOF, c.BACKGROUND_WALLNUTBOWLING, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
+        if new_plant.can_sleep and self.background_type in c.DAYTIME_BACKGROUNDS:
             new_plant.setSleep()
             mushroomSleep = True
         else:
@@ -981,12 +981,7 @@ class Level(tool.State):
             rect = frame_list[0].get_rect()
             width, height = rect.w, rect.h
 
-        if (plant_name in { c.POTATOMINE, c.SPIKEWEED,
-                            c.JALAPENO, c.SCAREDYSHROOM,
-                            c.SUNSHROOM, c.ICESHROOM,
-                            c.HYPNOSHROOM, c.SQUASH,
-                            c.WALLNUTBOWLING, c.REDWALLNUTBOWLING,
-                            }):
+        if (plant_name in c.PLANT_COLOR_KEY_WHITE):
             color = c.WHITE
         else:
             color = c.BLACK
@@ -1087,27 +1082,10 @@ class Level(tool.State):
                             attackableBackupPlant.append(plant)
                         # 一般植物情形
                         # 同时也忽略了不可啃食对象
-                        elif plant.name not in {# 不可啃食对象
-                                                # 非植物对象
-                                                c.HOLE, c.ICE_FROZEN_PLOT,
-                                                c.GRAVE,
-                                                # 对一般僵尸无条件不可啃食植物：地刺
-                                                c.SPIKEWEED,
-                                                # 对一般僵尸有条件不可啃食植物：跳起的倭瓜、释放效果后的爆炸类植物
-                                                # 这类在后面还需要判断
-                                                c.SQUASH, c.ICESHROOM,
-                                                c.REDWALLNUTBOWLING, c.CHERRYBOMB,
-                                                c.JALAPENO, c.DOOMSHROOM,
-                                                c.POTATOMINE
-                                                }:
+                        elif plant.name not in c.CAN_SKIP_ZOMBIE_COLLISION_CHECK:
                             attackableCommonPlants.append(plant)
                         # 在某些状态下忽略啃食碰撞但某些状况下不能忽略的情形
-                        elif plant.name in {# 注意爆炸坚果的触发也是啃食类碰撞，因此这里不能省略
-                                            c.SQUASH, c.ICESHROOM,
-                                            c.REDWALLNUTBOWLING, c.CHERRYBOMB,
-                                            c.JALAPENO, c.DOOMSHROOM,
-                                            c.POTATOMINE,
-                                            }:
+                        elif plant.name in c.SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING:
                             if plant.name == c.SQUASH:
                                 if not plant.squashing:
                                     attackableCommonPlants.append(plant) 
@@ -1125,7 +1103,7 @@ class Level(tool.State):
                             for actualTargetPlant in self.plant_groups[i]:
                                 # 检测同一格的其他植物
                                 if self.map.getMapIndex(actualTargetPlant.rect.centerx, actualTargetPlant.rect.bottom) == (map_x, map_y):
-                                    if actualTargetPlant.name in {"南瓜头（未实现）"}:
+                                    if actualTargetPlant.name == "南瓜头（未实现）":
                                         targetPlant = actualTargetPlant
                                         break
                                     elif actualTargetPlant.name not in {c.LILYPAD, "花盆（未实现）"}:
@@ -1241,10 +1219,7 @@ class Level(tool.State):
                 # 毁灭菇的情况：爆炸时为了防止蘑菇云被坑掩盖没有加入坑，这里毁灭菇死亡（即爆炸动画结束）后再加入
                 if targetPlant.name == c.DOOMSHROOM:
                     self.plant_groups[map_y].add(plant.Hole(targetPlant.originalX, targetPlant.originalY, self.map.map[map_y][map_x][c.MAP_PLOT_TYPE]))
-            elif targetPlant.name not in {  c.WALLNUTBOWLING, c.TANGLEKLEP,
-                                            c.ICE_FROZEN_PLOT, c.HOLE,
-                                            c.GRAVE, c.JALAPENO,
-                                            c.REDWALLNUTBOWLING, c.CHERRYBOMB,}:
+            elif targetPlant.name not in c.PLANT_DIE_SOUND_EXCEPTIONS:
                 # 触发植物死亡音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
         else:
@@ -1265,17 +1240,7 @@ class Level(tool.State):
     def checkPlant(self, targetPlant, i):
         zombie_len = len(self.zombie_groups[i])
         # 不用检查攻击状况的情况
-        if targetPlant.name in {  # 单独指定攻击状态的植物
-                            c.WALLNUTBOWLING,
-                            # 没有攻击状态的植物
-                            c.WALLNUT, c.TALLNUT,
-                            c.TORCHWOOD, c.SUNFLOWER,
-                            c.SUNSHROOM, c.COFFEEBEAN,
-                            c.GRAVEBUSTER, c.LILYPAD,
-                            c.HYPNOSHROOM,
-                            # 非植物类
-                            c.HOLE, c.GRAVE,
-                            c.ICE_FROZEN_PLOT}:
+        if targetPlant.name in c.PLANT_NON_CHECK_ATTACK_STATE:
             pass
         elif targetPlant.name == c.THREEPEASHOOTER:
             if targetPlant.state == c.IDLE:
@@ -1360,9 +1325,7 @@ class Level(tool.State):
                     targetPlant.setAttack(zombie, self.zombie_groups[i])
                     break
         # 灰烬植物与寒冰菇
-        elif targetPlant.name in {  c.REDWALLNUTBOWLING, c.CHERRYBOMB,
-                                    c.JALAPENO, c.DOOMSHROOM,
-                                    c.ICESHROOM,}:
+        elif targetPlant.name in c.ASH_PLANTS_AND_ICESHROOM:
             if targetPlant.start_boom and (not targetPlant.boomed):
                 # 这样分成两层是因为场上灰烬植物肯定少，一个一个判断代价高，先笼统判断灰烬即可
                 if targetPlant.name in {c.REDWALLNUTBOWLING, c.CHERRYBOMB}:
@@ -1467,7 +1430,7 @@ class Level(tool.State):
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
-                if i.name in {c.HOLE, c.ICE_FROZEN_PLOT, c.GRAVE}:
+                if i.name in c.NON_PLANT_OBJECTS:
                     continue
                 # 优先选中睡莲、花盆上的植物
                 if len(self.map.map[map_y][map_x][c.MAP_PLANT]) >= 2:

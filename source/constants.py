@@ -104,6 +104,19 @@ BACKGROUND_WALLNUTBOWLING = 6
 BACKGROUND_SINGLE = 7
 BACKGROUND_TRIPLE = 8
 
+# 地图类型集合
+# 白天场地
+DAYTIME_BACKGROUNDS = { BACKGROUND_DAY, BACKGROUND_POOL,
+                        BACKGROUND_ROOF, BACKGROUND_WALLNUTBOWLING,
+                        BACKGROUND_SINGLE, BACKGROUND_TRIPLE,
+                        }
+# 带有泳池的场地
+POOL_EQUIPPED_BACKGROUNDS = {   BACKGROUND_POOL, BACKGROUND_FOG,
+                                }
+# 屋顶上的场地
+ON_ROOF_BACKGROUNDS = { BACKGROUND_ROOF, BACKGROUND_ROOFNIGHT,
+                        }
+
 # 夜晚地图的墓碑数量等级
 GRADE_GRAVES = 'grade_graves'
 GRADE0_GRAVES = 0   # 无墓碑
@@ -218,6 +231,60 @@ GRAVE = 'Grave'
 GRAVEBUSTER = 'GraveBuster'
 FUMESHROOM = 'FumeShroom'
 
+# 植物集体属性
+# 在生效时不用与僵尸进行碰撞检测的对象
+SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING = {# 注意爆炸坚果的触发也是啃食类碰撞，因此这里不能省略
+                                            SQUASH, ICESHROOM,
+                                            REDWALLNUTBOWLING, CHERRYBOMB,
+                                            JALAPENO, DOOMSHROOM,
+                                            POTATOMINE,
+                                            }
+# 非植物对象
+NON_PLANT_OBJECTS = {   HOLE, ICE_FROZEN_PLOT,
+                        GRAVE,
+                        }
+# 所有可能不用与僵尸进行碰撞检测的对象
+CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 生效时不检测的植物
+                                    SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING |
+                                    # 非植物对象
+                                    NON_PLANT_OBJECTS |
+                                    # 地刺类
+                                    {SPIKEWEED, }
+                                    )
+# 死亡时不触发音效的对象
+PLANT_DIE_SOUND_EXCEPTIONS = {  WALLNUTBOWLING, TANGLEKLEP,
+                                ICE_FROZEN_PLOT, HOLE,
+                                GRAVE, JALAPENO,
+                                REDWALLNUTBOWLING, CHERRYBOMB,
+                                }
+# color_key为白色的对象
+PLANT_COLOR_KEY_WHITE = {   POTATOMINE, SPIKEWEED,
+                            JALAPENO, SCAREDYSHROOM,
+                            SUNSHROOM, ICESHROOM,
+                            HYPNOSHROOM, SQUASH,
+                            WALLNUTBOWLING, REDWALLNUTBOWLING,
+                            }
+# 直接水生植物
+WATER_PLANTS = {    LILYPAD, SEASHROOM,
+                    TANGLEKLEP,
+                    }
+# 不用使用通用方法检验攻击状态的植物
+PLANT_NON_CHECK_ATTACK_STATE = ({   # 单独指定攻击状态的植物
+                                    WALLNUTBOWLING,
+                                    # 没有攻击状态的植物
+                                    WALLNUT, TALLNUT,
+                                    TORCHWOOD, SUNFLOWER,
+                                    SUNSHROOM, COFFEEBEAN,
+                                    GRAVEBUSTER, LILYPAD,
+                                    HYPNOSHROOM,
+                                    } |
+                                    # 非植物类
+                                    NON_PLANT_OBJECTS
+                                    )
+# 范围爆炸植物，即灰烬植物与寒冰菇
+ASH_PLANTS_AND_ICESHROOM = {    REDWALLNUTBOWLING, CHERRYBOMB,
+                                JALAPENO, DOOMSHROOM,
+                                ICESHROOM,}
 
 # 植物生命值
 PLANT_HEALTH = 300
@@ -315,6 +382,12 @@ POLE_VAULTING_ZOMBIE = 'PoleVaultingZombie'
 ZOMBONI = 'Zomboni'
 
 BOOMDIE = 'BoomDie'
+
+# 僵尸集体属性
+# 水上僵尸集合
+WATER_ZOMBIE = {    DUCKY_TUBE_ZOMBIE, CONEHEAD_DUCKY_TUBE_ZOMBIE,
+                    BUCKETHEAD_DUCKY_TUBE_ZOMBIE,
+                    }
 
 # 对僵尸的攻击类型设置
 ZOMBIE_DEAFULT_DAMAGE = 'helmet2First'

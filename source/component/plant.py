@@ -467,7 +467,7 @@ class ThreePeaShooter(Plant):
             offset_y = 9  # modify bullet in the same y position with bullets of other plants
             for i in range(3):
                 tmp_y = self.map_y + (i - 1)
-                if self.background_type in {c.BACKGROUND_POOL, c.BACKGROUND_FOG}:
+                if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
                     if tmp_y < 0 or tmp_y >= c.GRID_POOL_Y_LEN:
                         continue
                 else:
