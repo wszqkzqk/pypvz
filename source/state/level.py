@@ -1072,24 +1072,48 @@ class Level(tool.State):
                 if zombie.canSwim and (not zombie.swimming):
                     continue
                 
-                # 以下代码为了实现各个功能，极其凌乱，尚未优化性能
+                # 以下代码为了实现各个功能，较为凌乱
                 attackableCommonPlants = []
                 attackableBackupPlant = []
                 # 利用更加精细的循环判断啃咬优先顺序
                 for plant in self.plant_groups[i]:
                     if collided_func(plant, zombie):
-                        if plant.name in {"南瓜头（未实现）"}:
+                        # 优先攻击南瓜头
+                        if plant.name == "南瓜头（未实现）":
                             targetPlant = plant
                             break
+                        # 衬底植物情形
                         elif plant.name in {c.LILYPAD, "花盆（未实现）"}:
                             attackableBackupPlant.append(plant)
-                        # 注意要剔除掉两个“假植物”，以及不能被啃的地刺
-                        elif plant.name == c.SQUASH:
-                            # 跳起后不得被啃食
-                            if not plant.squashing:
-                                attackableCommonPlants.append(plant)
-                        elif plant.name not in {c.HOLE, c.ICE_FROZEN_PLOT, c.GRAVE, c.SPIKEWEED}:
+                        # 一般植物情形
+                        # 同时也忽略了不可啃食对象
+                        elif plant.name not in {# 不可啃食对象
+                                                # 非植物对象
+                                                c.HOLE, c.ICE_FROZEN_PLOT,
+                                                c.GRAVE,
+                                                # 对一般僵尸无条件不可啃食植物：地刺
+                                                c.SPIKEWEED,
+                                                # 对一般僵尸有条件不可啃食植物：跳起的倭瓜、释放效果后的爆炸类植物
+                                                # 这类在后面还需要判断
+                                                c.SQUASH, c.ICESHROOM,
+                                                c.REDWALLNUTBOWLING, c.CHERRYBOMB,
+                                                c.JALAPENO, c.DOOMSHROOM,
+                                                c.POTATOMINE
+                                                }:
                             attackableCommonPlants.append(plant)
+                        # 在某些状态下忽略啃食碰撞但某些状况下不能忽略的情形
+                        elif plant.name in {# 注意爆炸坚果的触发也是啃食类碰撞，因此这里不能省略
+                                            c.SQUASH, c.ICESHROOM,
+                                            c.REDWALLNUTBOWLING, c.CHERRYBOMB,
+                                            c.JALAPENO, c.DOOMSHROOM,
+                                            c.POTATOMINE,
+                                            }:
+                            if plant.name == c.SQUASH:
+                                if not plant.squashing:
+                                    attackableCommonPlants.append(plant) 
+                            else:
+                                if not plant.start_boom:
+                                    attackableCommonPlants.append(plant)
                 else:
                     if attackableCommonPlants:
                         # 默认为最右侧的一个植物
