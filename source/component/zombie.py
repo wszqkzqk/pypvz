@@ -930,6 +930,26 @@ class PoleVaultingZombie(Zombie):
             self.image.set_alpha(255)
         else:
             self.image.set_alpha(192)
+    
+    def setWalk(self):
+        self.state = c.WALK
+        self.animate_interval = self.walk_animate_interval
+        if self.jumped:
+            self.changeFrames(self.walk_frames)
+        
+    def setFreeze(self, ice_trap_image):
+        # 起跳但是没有落地时不设置冰冻
+        if (self.jumping and (not self.jumped)):
+            self.ice_slow_timer = self.current_time
+            self.ice_slow_ratio = 2
+        else:
+            self.freeze_timer = self.current_time
+            self.old_state = self.state
+            self.state = c.FREEZE
+            self.ice_trap_image = ice_trap_image
+            self.ice_trap_rect = ice_trap_image.get_rect()
+            self.ice_trap_rect.centerx = self.rect.centerx
+            self.ice_trap_rect.bottom = self.rect.bottom
 
 
 # 注意：冰车僵尸移动变速
