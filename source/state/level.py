@@ -1162,9 +1162,8 @@ class Level(tool.State):
 
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.rect.left <= c.SCREEN_WIDTH:
-                    zombie.setFreeze(plant.trap_frames[0])
-                    zombie.setDamage(20, damageType=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
+                zombie.setFreeze(plant.trap_frames[0])
+                zombie.setDamage(20, damageType=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
 
     def killPlant(self, targetPlant, shovel=False):
         x, y = targetPlant.getPosition()
