@@ -66,16 +66,16 @@ class Level(tool.State):
                 self.bgm = 'battle.opus'
         else:   # 一般选卡关，非传送带
             # 白天类
-            if self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_DAY, c.BACKGROUND_SINGLE, c.BACKGROUND_TRIPLE}:
+            if self.map_data[c.BACKGROUND_TYPE] in c.BACKGROUND_DAY_LIKE_BACKGROUNDS:
                 self.bgm = 'dayLevel.opus'
             # 夜晚
-            elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_NIGHT}:
+            elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_NIGHT:
                 self.bgm = 'nightLevel.opus'
             # 泳池
-            elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_POOL}:
+            elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_POOL:
                 self.bgm = 'poolLevel.opus'
             # 浓雾
-            elif self.map_data[c.BACKGROUND_TYPE] in {c.BACKGROUND_FOG}:
+            elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_FOG:
                 self.bgm = 'fogLevel.opus'
 
     def setupBackground(self):
@@ -185,12 +185,14 @@ class Level(tool.State):
                         if len(self.graveSet) < 12:
                             unoccupied = []
                             occupied = []
+                            # 毁灭菇坑与冰道应当特殊化
+                            exceptionObjects = {c.HOLE, c.ICE_FROZEN_PLOT}
                             # 遍历能生成墓碑的区域
                             for mapY in range(0, 4):
                                 for mapX in range(4, 8):
                                     # 为空、为毁灭菇坑、为冰道时看作未被植物占据
                                     if ((not self.map.map[mapY][mapX][c.MAP_PLANT]) or
-                                        (all((i in {c.HOLE, c.ICE_FROZEN_PLOT}) for i in self.map.map[mapY][mapX][c.MAP_PLANT]))):
+                                        (all((i in exceptionObjects) for i in self.map.map[mapY][mapX][c.MAP_PLANT]))):
                                         unoccupied.append((mapX, mapY))
                                     # 已有墓碑的格子不应该放到任何列表中
                                     elif c.GRAVE not in self.map.map[mapY][mapX][c.MAP_PLANT]:
@@ -209,7 +211,8 @@ class Level(tool.State):
                                 for i in self.plant_groups[mapY]:
                                     checkMapX, _ = self.map.getMapIndex(i.rect.centerx, i.rect.bottom)
                                     if mapX == checkMapX:
-                                        if i.name not in {c.HOLE, c.ICE_FROZEN_PLOT}:
+                                        # 不能杀死毁灭菇坑和冰道
+                                        if i.name not in exceptionObjects:
                                             i.health = 0
                                 self.plant_groups[mapY].add(plant.Grave(posX, posY))
                                 self.map.map[mapY][mapX][c.MAP_PLANT].add(c.GRAVE)
@@ -403,9 +406,7 @@ class Level(tool.State):
         # 种植植物后应当刷新僵尸的攻击对象，当然，默认初始时不用刷新
         self.newPlantAndPositon = None
 
-        # 0:白天 1:夜晚 2:泳池 3:浓雾 4:屋顶 5:月夜 6:坚果保龄球
-        # 还准备加入    7:单行草皮 8:三行草皮 但是目前没有找到图（
-        if self.background_type in {0, 2, 4, 7, 8} and self.bar_type == c.CHOOSEBAR_STATIC:
+        if self.background_type in c.DAYTIME_BACKGROUNDS and self.bar_type == c.CHOOSEBAR_STATIC:
             self.produce_sun = True
         else:
             self.produce_sun = False
