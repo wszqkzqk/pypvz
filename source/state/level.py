@@ -1052,7 +1052,7 @@ class Level(tool.State):
                         # 同时也忽略了不可啃食对象
                         elif plant.name not in c.CAN_SKIP_ZOMBIE_COLLISION_CHECK:
                             attackableCommonPlants.append(plant)
-                        # 在某些状态下忽略啃食碰撞但某些状况下不能忽略的情形
+                        # 在生效状态下忽略啃食碰撞但其他状况下不能忽略的情形
                         elif plant.name in c.SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING:
                             if not plant.start_boom:
                                     attackableCommonPlants.append(plant)
@@ -1098,9 +1098,11 @@ class Level(tool.State):
 
                     if targetPlant.name == c.WALLNUTBOWLING:
                         if targetPlant.canHit(i):
-                            zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
-                            # 注意：以上语句为通用处理，以后加入了铁门僵尸需要单独设置直接冲撞就直接杀死
-                            # 可以给坚果保龄球设置attacked属性，如果attacked就秒杀（setDamage的攻击类型此时设置为COMMMON）铁门
+                            # targetPlant.vel_y不为0，有纵向速度，表明已经发生过碰撞，对铁门秒杀（这里实现为忽略二类防具攻击）
+                            if targetPlant.vel_y and zombie.name == c.SCREEN_DOOR_ZOMBIE:
+                                zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_COMMON_DAMAGE)
+                            else:
+                                zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
                             targetPlant.changeDirection(i)
                             # 播放撞击音效
                             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bowlingimpact.ogg")).play()

@@ -1154,17 +1154,16 @@ class WallNutBowling(Plant):
     def changeDirection(self, map_y):
         if self.vel_y == 0:
             if self.map_y == 0:
-                direc = 1
-            elif self.map_y == (c.GRID_Y_LEN - 1):
-                direc = -1
+                self.vel_y = self.vel_x
+            elif self.map_y == (c.GRID_Y_LEN - 1):  # 坚果保龄球显然没有泳池的6行情形
+                self.vel_y = -self.vel_x
             else:
-                if randint(0, 1) == 0:
-                    direc = 1
+                if randint(0, 1):
+                    self.vel_y = self.vel_x
                 else:
-                    direc = -1
-            self.vel_y = self.vel_x * direc
+                    self.vel_y = -self.vel_x
         else:
-            self.vel_y = - self.vel_y
+            self.vel_y = -self.vel_y
 
         self.disable_hit_y = map_y
 
