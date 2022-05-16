@@ -19,6 +19,12 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
+# 选卡数量
+# 最大数量
+CARD_MAX_NUM = 10   # 这里以后可以增加解锁功能，从最初的6格逐渐解锁到10格
+# 最小数量
+CARD_LIST_NUM = CARD_MAX_NUM
+
 # 方格数据
 # 一般
 GRID_X_LEN = 9
@@ -186,8 +192,6 @@ PANEL_X_START = 22
 PANEL_Y_INTERNAL = 69
 PANEL_X_INTERNAL = 53
 BAR_CARD_X_INTERNAL = 51
-CARD_MAX_NUM = 10   # 这里以后可以增加解锁功能，从最初的6格逐渐解锁到10格
-CARD_LIST_NUM = CARD_MAX_NUM
 
 # 所选植物信息索引
 PLANT_NAME_INDEX = 0
@@ -308,7 +312,8 @@ PLANT_NON_CHECK_ATTACK_STATE = (    # 这里运用了集合运算
 ASH_PLANTS_AND_ICESHROOM = {
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 JALAPENO, DOOMSHROOM,
-                ICESHROOM,}
+                ICESHROOM,
+                }
 
 
 # 植物生命值

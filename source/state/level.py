@@ -10,7 +10,7 @@ from ..component import map, plant, zombie, menubar
 class Level(tool.State):
     def __init__(self):
         tool.State.__init__(self)
-    
+
     def startup(self, current_time, persist):
         self.game_info = persist
         self.persist = self.game_info
@@ -22,7 +22,7 @@ class Level(tool.State):
 
         # 默认显然不用显示菜单
         self.showLittleMenu = False
-        
+
         # 导入地图参数
         self.loadMap()
         self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
@@ -145,7 +145,7 @@ class Level(tool.State):
 
             # 防止因为僵尸最小等级过大，使得总容量无法完全利用，造成死循环的检查机制
             minCost = c.CREATE_ZOMBIE_DICT[min(useableZombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
-            
+
             while (volume >= minCost) and (len(zombieList) < 50):
                 newZombie = choices(useableZombies, weights)[0]
                 # 普通僵尸、路障僵尸、铁桶僵尸有概率生成水中变种
@@ -286,7 +286,7 @@ class Level(tool.State):
                 return
             elif ((current_time - self.waveTime >= 43000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 23000)):
                 self.showHugeWaveApprochingTime = current_time
-        
+
         numZombies = 0
         for i in range(self.map_y_len):
             numZombies += len(self.zombie_groups[i])
@@ -319,7 +319,7 @@ class Level(tool.State):
         for i in range(self.map_y_len):
             _, y = self.map.getMapGridPos(0, i)
             self.cars.append(plant.Car(-40, y+20, i))
-    
+
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = self.pvzTime(current_time)
@@ -356,7 +356,7 @@ class Level(tool.State):
             self.initPlay(card_pool)
             if self.bar_type == c.CHOSSEBAR_BOWLING:
                 self.initBowlingMap()
-        
+
         self.setupLittleMenu()
 
     def initChoose(self):
@@ -394,7 +394,7 @@ class Level(tool.State):
             self.menubar = menubar.MenuBar(card_list, self.map_data[c.INIT_SUN_NAME])
         else:
             self.menubar = menubar.MoveBar(card_list)
-        
+
         # 是否拖住植物或者铲子
         self.drag_plant = False
         self.drag_shovel = False
@@ -449,7 +449,7 @@ class Level(tool.State):
             self.shovel_rect.y = self.shovel_box_rect.y = self.shovel_positon[1] 
 
         self.setupLevelProgressBarImage()
-        
+
         self.setupHugeWaveApprochingImage()
         self.showHugeWaveApprochingTime = -2000 # 防止设置为0时刚刚打开游戏就已经启动红字
 
@@ -461,7 +461,7 @@ class Level(tool.State):
             # 缺省为少量墓碑
             else:
                 gradeGraves = 1
-            
+
             graveVolume = c.GRAVES_GRADE_INFO[gradeGraves]
             self.graveSet = set()
             while len(self.graveSet) < graveVolume:
@@ -631,7 +631,7 @@ class Level(tool.State):
                 # 使用后默认铲子复原
                 self.drag_shovel = not self.drag_shovel
                 self.removeMouseImagePlus()
-                return 
+                return
 
     # 检查小铲子的位置有没有被点击
     # 方便放回去
@@ -818,8 +818,8 @@ class Level(tool.State):
         elif name == c.SCREEN_DOOR_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.POLE_VAULTING_ZOMBIE:
-            # 撑杆跳生成位置不同
-            self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + randint(70, 80) + hugeWaveMove, y, self.head_group))
+            # 本来撑杆跳生成位置不同，对齐左端可认为修正了一部分（看作移动了70），只需要相对修改即可
+            self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + randint(0, 10) + hugeWaveMove, y, self.head_group))
         elif name == c.ZOMBONI:
             # 冰车僵尸生成位置不同
             self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + randint(0, 10) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
@@ -830,7 +830,7 @@ class Level(tool.State):
     def canSeedPlant(self, plantName):
         x, y = pg.mouse.get_pos()
         return self.map.checkPlantToSeed(x, y, plantName)
-        
+
     # 种植物
     def addPlant(self):
         pos = self.canSeedPlant(self.plant_name)
@@ -1006,7 +1006,7 @@ class Level(tool.State):
                                         if abs(rangeZombie.rect.x - bullet.rect.x) <= (c.GRID_X_SIZE // 2):
                                             rangeZombie.setDamage(c.BULLET_DAMAGE_FIREBALL_RANGE, effect=None, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
                                 break
-                        
+
 
     def checkZombieCollisions(self):
         for i in range(self.map_y_len):
@@ -1358,7 +1358,7 @@ class Level(tool.State):
                 if len(self.zombie_groups[i]) > 0:
                     return False
         return True
-    
+
     def checkLose(self):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
@@ -1390,7 +1390,7 @@ class Level(tool.State):
         self.mouse_rect.centerx = x
         self.mouse_rect.centery = y
         surface.blit(self.mouse_image, self.mouse_rect)
-    
+
     def drawMouseShowPlus(self, surface):   # 拖动铲子时的显示
         x, y = pg.mouse.get_pos()
         self.shovel_rect.centerx = x
@@ -1445,7 +1445,7 @@ class Level(tool.State):
             else:
                 self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3  # 常数是猜的
             surface.blit(self.level_progress_flag, self.level_progress_flag_rect)
-        
+
         # 画僵尸头
         surface.blit(self.level_progress_zombie_head_image, self.level_progress_zombie_head_image_rect)
 
@@ -1485,7 +1485,7 @@ class Level(tool.State):
 
             if self.drag_plant:
                 self.drawMouseShow(surface)
-            
+
             if self.hasShovel and self.drag_shovel:
                 self.drawMouseShowPlus(surface)
 
