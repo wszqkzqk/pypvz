@@ -959,7 +959,7 @@ class Zomboni(Zombie):
         self.plant_group = plant_group
         self.map = map
         self.IceFrozenPlot = IceFrozenPlot
-        self.die_animate_interval = 100
+        self.die_animate_interval = 70
         self.boomDie_animate_interval = 150
         # 播放冰车生成音效
         pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zomboni.ogg")).play()
@@ -1023,7 +1023,7 @@ class Zomboni(Zombie):
                     plant.health -= 8000
 
             # 造冰
-            mapX, mapY = self.map.getMapIndex(self.rect.right - 20, self.rect.bottom)
+            mapX, mapY = self.map.getMapIndex(self.rect.right - 40, self.rect.bottom)
             if 0 <= mapX < c.GRID_X_LEN:
                 if c.ICE_FROZEN_PLOT not in self.map.map[mapY][mapX]:
                     x, y = self.map.getMapGridPos(mapX, mapY)

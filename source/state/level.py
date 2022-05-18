@@ -1143,7 +1143,7 @@ class Level(tool.State):
                         self.cars[i].setWalk()
                     if zombie.rect.centerx <= self.cars[i].rect.x:
                         zombie.health = 0
-                        zombie.kill()
+                        # zombie.kill()
                 if self.cars[i].dead:
                     self.cars[i] = None
 
