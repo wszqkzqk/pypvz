@@ -41,7 +41,7 @@ jobs:
       - name: "Upload binaries"
         uses: actions/upload-artifact@v2
         with:
-          name: Current(Compiled by MSVC)
+          name: artifact
           path: ./out
       
   release:
@@ -56,6 +56,6 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          tag: all
-          artifacts: C:/_/artifacts/*.exe
+          tag: Current(Compiled by MSVC)
+          artifacts: C:/_/artifacts/*/*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
