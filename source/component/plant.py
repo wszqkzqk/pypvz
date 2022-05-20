@@ -320,7 +320,7 @@ class Plant(pg.sprite.Sprite):
             self.image.set_alpha(255)
 
     def canAttack(self, zombie):
-        if (self.state != c.SLEEP and zombie.state != c.DIE and (not zombie.lostHead) and
+        if (self.state != c.SLEEP and zombie.state != c.DIE and
                 self.rect.x <= zombie.rect.right and zombie.rect.left <= c.SCREEN_WIDTH):
                 return True
         return False
@@ -595,6 +595,7 @@ class Chomper(Plant):
         self.digest_interval = 15000
         self.attack_zombie = None
         self.zombie_group = None
+        self.shouldDiggest = False
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -621,7 +622,7 @@ class Chomper(Plant):
             return False
         elif (self.state == c.IDLE and zombie.state != c.DIGEST and
                 self.rect.x <= zombie.rect.centerx and (not zombie.lostHead) and
-                (self.rect.x + c.GRID_X_SIZE*2.6 >= zombie.rect.centerx)):
+                (self.rect.x + c.GRID_X_SIZE*2.7 >= zombie.rect.centerx)):
             return True
         return False
 
@@ -643,9 +644,15 @@ class Chomper(Plant):
         if self.frame_index == (self.frame_num - 3):
             # 播放吞的音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bigchomp.ogg")).play()
+            if self.attack_zombie.alive():
+                self.shouldDiggest = True
             self.attack_zombie.kill()
         if (self.frame_index + 1) == self.frame_num:
-            self.setDigest()
+            if self.shouldDiggest:
+                self.setDigest()
+                self.shouldDiggest = False
+            else:
+                self.setIdle()
 
     def digest(self):
         if self.digest_timer == 0:
