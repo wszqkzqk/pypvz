@@ -576,8 +576,8 @@ class CherryBomb(Plant):
                     return
                 self.animate_timer = self.current_time
 
-        self.image = self.frames[self.frame_index]
-        self.mask = pg.mask.from_surface(self.image)
+            self.image = self.frames[self.frame_index]
+            self.mask = pg.mask.from_surface(self.image)
 
         if  (self.current_time - self.highlightTime < 100):
             self.image.set_alpha(150)
@@ -735,7 +735,7 @@ class PotatoMine(Plant):
                 self.is_init = False
 
     def canAttack(self, zombie):
-        if (self.name == c.POLE_VAULTING_ZOMBIE and (not self.jumped)):
+        if (zombie.name == c.POLE_VAULTING_ZOMBIE and (not zombie.jumped)):
             return False
         # 这里碰撞应当比碰撞一般更容易，就设置成圆形或矩形模式，不宜采用mask
         elif (pg.sprite.collide_circle_ratio(0.7)(zombie, self) and
