@@ -42,7 +42,7 @@ jobs:
       - name: Build pypvz package
         run: |
           echo y | python -m nuitka --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-disable-console main.py
-          mv ./out/main.exe ./out/pypvz-windows-python${{ matrix.python_version }}-msvc-x64.exe
+          mv ./out/main.exe ./out/pypvz-with-python${{ matrix.python_version }}-windows-msvc-x64.exe
 
       # artifact压缩包处上传包含exe和运行环境的文件夹
       - name: "Upload binaries"
