@@ -1,4 +1,4 @@
-name: Nuitka tests
+name: Build
 # makes little sense, spell-checker: disable
 on:
   pull_request:
@@ -35,12 +35,12 @@ jobs:
 
       - name: Build pypvz package
         run: |
-          pip install --no-python-version-warning --disable-pip-version-check pygame
-          python -m nuitka --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\runneradmin\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=C:\Users\runneradmin\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=C:\Users\runneradmin\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-file=C:\Users\runneradmin\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll --include-data-file=C:\Users\runneradmin\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-disable-console main.py
+          python -m nuitka --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll --include-data-file=c:\hostedtoolcache\windows\python\3.10.4\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-disable-console main.py
+          mv ./out/main.exe ./out/pypvz.exe
 
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          tag: all
+          tag: current
           artifacts: ./out/*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
