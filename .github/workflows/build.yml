@@ -41,6 +41,6 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          tag: current
+          tag: Current(Compiled by MSVC)
           artifacts: ./out/*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
