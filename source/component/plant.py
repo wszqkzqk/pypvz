@@ -646,7 +646,7 @@ class Chomper(Plant):
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bigchomp.ogg")).play()
             if self.attack_zombie.alive():
                 self.shouldDiggest = True
-            self.attack_zombie.kill()
+                self.attack_zombie.kill()
         if (self.frame_index + 1) == self.frame_num:
             if self.shouldDiggest:
                 self.setDigest()
