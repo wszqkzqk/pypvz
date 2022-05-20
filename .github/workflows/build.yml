@@ -50,7 +50,7 @@ jobs:
           path: ./out/*.dist
       
       # release处发布单文件可执行版exe
-      - name: “Release”
+      - name: Release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true

@@ -712,9 +712,10 @@ class Level(tool.State):
 
         # 拖动植物或者铲子
         if not self.drag_plant and mouse_pos and mouse_click[0] and not clickedSun:
-            result = self.menubar.checkCardClick(mouse_pos)
-            if result:
-                self.setupMouseImage(result[0], result[1])
+            self.clickResult = self.menubar.checkCardClick(mouse_pos)
+            if self.clickResult:
+                self.setupMouseImage(self.clickResult[0], self.clickResult[1])
+                self.clickResult[1].clicked = True
                 clickedCardsOrMap = True
                 # 播放音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "clickCard.ogg")).play()
@@ -722,7 +723,9 @@ class Level(tool.State):
             if mouse_click[1]:
                 self.removeMouseImage()
                 clickedCardsOrMap = True
+                self.clickResult[1].clicked = False
             elif mouse_click[0]:
+                self.clickResult[1].clicked = False
                 if self.menubar.checkMenuBarClick(mouse_pos):
                     self.removeMouseImage()
                 else:

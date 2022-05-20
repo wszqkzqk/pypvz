@@ -168,6 +168,7 @@ class Card():
         self.frozen_timer = -self.frozen_time
         self.refresh_timer = 0
         self.select = True
+        self.clicked = False
 
     def loadFrame(self, name, scale):
         frame = tool.GFX[name]
@@ -217,6 +218,9 @@ class Card():
         elif self.sun_cost > sun_value: #disable status
             image = self.orig_image.copy()
             image.set_alpha(192)
+        elif self.clicked:
+            image = self.orig_image.copy()
+            image.set_alpha(128)
         else:
             image = self.orig_image
         return image
@@ -441,6 +445,7 @@ class MoveCard():
         self.rect.x = x
         self.rect.y = y
         self.rect.w = 1
+        self.clicked = False
         self.image = self.createShowImage()
 
         self.card_name = card_name
@@ -472,6 +477,10 @@ class MoveCard():
             self.rect.w += 1
         else:
             image = self.orig_image
+        if self.clicked:
+            image.set_alpha(192)
+        else:
+            image.set_alpha(255)
         return image
 
     def update(self, left_x, current_time):
@@ -486,6 +495,7 @@ class MoveCard():
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
+# 传送带
 class MoveBar():
     def __init__(self, card_pool):
         self.loadFrame(c.MOVEBAR_BACKGROUND)
