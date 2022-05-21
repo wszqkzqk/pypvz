@@ -39,19 +39,15 @@ python main.py
 ### 使用Windows可执行文件
 
 下载`pypvz.exe`文件，双击运行即可
-- 可以直接下载GitHub Workflow自动利用Nuitka构建的版本：
-  - [点此跳转至下载地址](https://github.com/wszqkzqk/pypvz/releases/tag/Latest)
-  - 使用MSVC编译
-  - 每次提交均会更新，保证更新及时
-  - 推荐方式
-- 也可以在本仓库的[`Release`（点击跳转）](https://github.com/wszqkzqk/pypvz/releases)页面中找到对应版本下载
+- 可以在仓库的[`Release`（点击跳转）](https://github.com/wszqkzqk/pypvz/releases/latest)页面中下载最新版（推荐）：
   - 使用GCC编译
   - 程序包含名称、版本等信息
   - 得到的验证最多
-  - 为了保证`Latest`tag标签显示在最前面，`0.7.25.0`之后的部分版本被标注成了`pre-release`，实际上仍然为普通版本，按需下载即可
-  - 推荐方式
-- 还可以下载GitHub Workflow自动利用Pyinstaller构建的版本：
-  - [点此跳转至下载地址](https://github.com/wszqkzqk/pypvz/releases/tag/Current.Version.Built.with.Pyinstaller)
+  - `0.7.25.0`之后的部分版本被标注成了`pre-release`，实际上仍然为普通版本，按需下载即可
+- 也可以直接下载GitHub Workflow[自动利用Nuitka构建的版本（点击跳转）](https://github.com/wszqkzqk/pypvz/releases/tag/Latest)（推荐）：
+  - 使用MSVC编译
+  - 每次提交均会更新，保证更新及时
+- 还可以下载GitHub Workflow[自动利用Pyinstaller构建的版本（点击跳转）](https://github.com/wszqkzqk/pypvz/releases/tag/Current.Version.Built.with.Pyinstaller)：
   - 在程序闪退时有报错窗口弹出
   - 但是程序性能较差，不推荐
 - 均仅支持64位操作系统
