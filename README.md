@@ -61,6 +61,8 @@ python main.py
 
 ## Windows单文件封装
 
+### 使用Nuitka进行构建
+
 编译依赖：
 - `Python` >= 3.7，最好使用最新版
 - `Python-Pygame` >= 1.9，最好使用最新版
@@ -89,6 +91,10 @@ nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-d
 * `--windows-product-version=`表示版本号信息，所跟内容格式必须为`x.x.x.x`
 
 可执行文件生成路径为`./out/main.exe`
+
+### 使用pyinstaller进行构建
+
+### 使用Github Workflow进行自动构建
 
 ## 已知bug
 
