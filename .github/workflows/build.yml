@@ -60,6 +60,15 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
+          tag: PyinstallerBuilds
+          artifacts: ./out/*pyinstaller*.exe
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # release处发布单文件可执行版exe
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
           tag: Current
-          artifacts: ./out/*.exe
+          artifacts: ./out/*nuitka*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
