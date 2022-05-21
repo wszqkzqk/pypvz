@@ -37,14 +37,27 @@ jobs:
           echo y | pip install --no-python-version-warning --disable-pip-version-check pygame
           echo y | pip install --no-python-version-warning --disable-pip-version-check ordered-set
 
+      # 使用pyinstaller构建
+      - name: Build pypvz with pyinstaller
+        run: |
+          pyinstaller -F main.py -n pypvz-with-python${{ matrix.python_version }}-pyinstaller-x64.exe --distpath ./out --noconsole --add-data="resources;./resources" -i ./pypvz.ico
+
+      - name: Release the version built by pyinstaller
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          tag: PyinstallerBuilds
+          artifacts: ./out/*pyinstaller*.exe
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 使用Nuitka构建
       - name: Show nuitka version
         run: |
           Get-ChildItem env:
           python -m nuitka --version
 
-      - name: Build pypvz package
+      - name: Build pypvz with Nuitka
         run: |
-          pyinstaller -F main.py -n pypvz-with-python${{ matrix.python_version }}-pyinstaller-x64.exe --distpath ./out --noconsole --add-data="resources;./resources" -i ./pypvz.ico
           echo y | python -m nuitka --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-disable-console main.py
           mv ./out/main.exe ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-msvc-x64.exe
 
@@ -54,18 +67,8 @@ jobs:
         with:
           name: artifact-python-${{ matrix.python_version }}
           path: ./out/*.dist
-      
-      # release处发布单文件可执行版exe
-      - name: Release
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          tag: PyinstallerBuilds
-          artifacts: ./out/*pyinstaller*.exe
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      # release处发布单文件可执行版exe
-      - name: Release
+      - name: Release the version built by nuitka
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
