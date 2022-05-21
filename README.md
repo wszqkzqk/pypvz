@@ -39,7 +39,7 @@ python main.py
 ### 使用Windows可执行文件
 
 下载`pypvz.exe`文件，双击运行即可
-- 可以直接下载：[最新版下载地址](https://github.com/wszqkzqk/pypvz/releases/tag/Current)（MSVC编译，GitHub Workflow自动构建）
+- 可以直接下载：[最新版下载地址](https://github.com/wszqkzqk/pypvz/releases/tag/Latest)（MSVC编译，GitHub Workflow自动构建）
 - 也可以在本仓库的[`Release`](https://github.com/wszqkzqk/pypvz/releases)页面中找到对应版本下载，但更新可能不及时（GCC编译）
 - 仅支持64位操作系统
 - 不依赖python、pygame等外部环境，开箱即用
