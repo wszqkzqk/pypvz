@@ -46,7 +46,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          tag: PyinstallerBuilds
+          tag: 0.0PyinstallerBuilds
           artifacts: ./out/*pyinstaller*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
 
