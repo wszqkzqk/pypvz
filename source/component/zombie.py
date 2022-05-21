@@ -191,10 +191,6 @@ class Zombie(pg.sprite.Sprite):
             if self.helmetType2Health <= 0 and self.helmetType2:
                 self.changeFrames(self.walk_frames)
                 self.helmetType2 = False
-                if self.name == c.NEWSPAPER_ZOMBIE:
-                    self.speed = 2.5
-                    # 触发报纸僵尸暴走音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperZombieAngry.ogg")).play()
         if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
             self.walk_timer = self.current_time
             if self.is_hypno:
@@ -629,6 +625,7 @@ class FlagZombie(Zombie):
 class NewspaperZombie(Zombie):
     def __init__(self, x, y, head_group):
         Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmetType2Health=c.NEWSPAPER_HEALTH)
+        self.speedUp = False
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -637,6 +634,7 @@ class NewspaperZombie(Zombie):
         self.attack_frames = []
         self.losthead_walk_frames = []
         self.losthead_attack_frames = []
+        self.lostnewspaper_frames = []
         self.die_frames = []
         self.boomdie_frames = []
 
@@ -646,24 +644,75 @@ class NewspaperZombie(Zombie):
         attack_name = self.name + 'NoPaperAttack'
         losthead_walk_name = self.name + 'LostHead'
         losthead_attack_name = self.name + 'LostHeadAttack'
+        lostnewspaper_name = self.name + 'LostNewspaper'
         die_name = self.name + 'Die'
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
                       self.walk_frames, self.attack_frames, self.losthead_walk_frames,
-                      self.losthead_attack_frames, self.die_frames, self.boomdie_frames]
+                      self.losthead_attack_frames, self.lostnewspaper_frames,
+                      self.die_frames, self.boomdie_frames]
         name_list = [helmet_walk_name, helmet_attack_name,
                      walk_name, attack_name, losthead_walk_name,
-                     losthead_attack_name, die_name, boomdie_name]
+                     losthead_attack_name, lostnewspaper_name,
+                     die_name, boomdie_name]
 
         for i, name in enumerate(name_list):
-            if name == c.BOOMDIE:
+            if name in {c.BOOMDIE, lostnewspaper_name}:
                 color = c.BLACK
             else:
                 color = c.WHITE
             self.loadFrames(frame_list[i], name, color)
 
         self.frames = self.helmet_walk_frames
+
+    def walking(self):
+        if self.checkToDie(self.losthead_walk_frames):
+            return
+
+        if self.helmetType2Health <= 0 and self.helmetType2:
+            self.changeFrames(self.lostnewspaper_frames)
+            self.helmetType2 = False
+            # 触发报纸撕裂音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperRip.ogg")).play()
+        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
+            self.walk_timer = self.current_time
+            if self.frames == self.lostnewspaper_frames:
+                pass
+            elif self.is_hypno:
+                self.rect.x += 1
+            else:
+                self.rect.x -= 1
+
+    def animation(self):
+        if self.state == c.FREEZE:
+            self.image.set_alpha(192)
+            return
+
+        if (self.current_time - self.animate_timer) > (self.animate_interval * self.getTimeRatio()):
+            self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                if self.state == c.DIE:
+                    self.kill()
+                    return
+                elif self.frames == self.lostnewspaper_frames and (not self.speedUp):
+                    self.changeFrames(self.walk_frames)
+                    self.speedUp = True
+                    self.speed = 2.65
+                    # 触发报纸僵尸暴走音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperZombieAngry.ogg")).play()
+                    return
+                self.frame_index = 0
+            self.animate_timer = self.current_time
+
+        self.image = self.frames[self.frame_index]
+        if self.is_hypno:
+            self.image = pg.transform.flip(self.image, True, False)
+        self.mask = pg.mask.from_surface(self.image)
+        if (self.current_time - self.hit_timer) >= 200:
+            self.image.set_alpha(255)
+        else:
+            self.image.set_alpha(192)
 
 class FootballZombie(Zombie):
     def __init__(self, x, y, head_group):
