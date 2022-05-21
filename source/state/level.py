@@ -41,7 +41,7 @@ class Level(tool.State):
             f = open(file_path)
             self.map_data = json.load(f)
             f.close()
-        except Exception as e:
+        finally:
             print("成功通关！")
             if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
                 self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
