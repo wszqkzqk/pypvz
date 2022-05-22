@@ -40,11 +40,11 @@ jobs:
       # 使用pyinstaller构建
       - name: Build pypvz with pyinstaller
         run: |
-          pyinstaller -F main.py \
-                  -n pypvz-with-python${{ matrix.python_version }}-pyinstaller-x64.exe \
-                  --distpath ./out \
-                  --noconsole \
-                  --add-data="resources;./resources" \
+          pyinstaller -F main.py `
+                  -n pypvz-with-python${{ matrix.python_version }}-pyinstaller-x64.exe `
+                  --distpath ./out `
+                  --noconsole `
+                  --add-data="resources;./resources" `
                   -i ./pypvz.ico
 
       - name: Release the version built by pyinstaller
@@ -63,19 +63,19 @@ jobs:
 
       - name: Build pypvz with Nuitka
         run: |
-          echo y | python -m nuitka --standalone \
-                  --onefile \
-                  --show-progress \
-                  --show-memory \
-                  --output-dir=out \
-                  --windows-icon-from-ico=pypvz.ico \
-                  --include-data-dir=resources=resources \
-                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libogg-0.dll=libogg-0.dll \
-                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopus-0.dll=libopus-0.dll \
-                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll \
-                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll \
-                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll \
-                  --windows-disable-console \
+          echo y | python -m nuitka --standalone `
+                  --onefile `
+                  --show-progress `
+                  --show-memory `
+                  --output-dir=out `
+                  --windows-icon-from-ico=pypvz.ico `
+                  --include-data-dir=resources=resources `
+                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libogg-0.dll=libogg-0.dll `
+                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopus-0.dll=libopus-0.dll `
+                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll `
+                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll `
+                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll `
+                  --windows-disable-console `
                   main.py
           mv ./out/main.exe ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-msvc-x64.exe
 
