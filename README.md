@@ -39,7 +39,7 @@ python main.py
 ### 使用Windows可执行文件
 
 下载`pypvz.exe`文件，双击运行即可
-- 可以在仓库的[`Release`（点击跳转）](https://github.com/wszqkzqk/pypvz/releases/latest)页面中下载最新版（推荐）：
+- 可以在仓库的[`Releases`](https://github.com/wszqkzqk/pypvz/releases)页面中[下载最新版（点击跳转）](https://github.com/wszqkzqk/pypvz/releases/latest)（推荐）：
   - 使用GCC编译
   - 程序包含名称、版本等信息
   - 得到的验证最多（相对）
