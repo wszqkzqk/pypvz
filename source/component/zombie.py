@@ -1088,3 +1088,25 @@ class Zomboni(Zombie):
         # 播放冰车爆炸音效
         pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zomboniExplosion.ogg")).play()
 
+
+class SnorkelZombie(Zombie):
+    def __init__(self, x, y, head_group):
+        Zombie.__init__(self, x, y, c.SNORKELZOMBIE, canSwim=True)
+        self.speed = 1.175
+
+    def loadImages(self):
+        self.walk_frames = []
+        self.swim_frames = []
+        self.attack_frames = []
+        self.jump_frames = []
+        self.float_frames = []
+        self.sink_frame = []
+        self.losthead_walk_frames = []
+        self.losthead_attack_frames = []
+        self.die_frames = []
+        self.boomdie_frames = []
+
+        walk_name = self.name
+        swim_name = self.name + 'Dive'
+        attack_name = self.name + 'Attack'
+        jump_name = self.name + 'Jump'

@@ -410,6 +410,7 @@ BUCKETHEAD_DUCKY_TUBE_ZOMBIE = 'BucketheadDuckyTubeZombie'
 SCREEN_DOOR_ZOMBIE = 'ScreenDoorZombie'
 POLE_VAULTING_ZOMBIE = 'PoleVaultingZombie'
 ZOMBONI = 'Zomboni'
+SNORKELZOMBIE = 'SnorkelZombie'
 
 BOOMDIE = 'BoomDie'
 
@@ -458,25 +459,26 @@ CREATE_ZOMBIE_DICT = {  # 生成僵尸:(级别, 权重)
                 BUCKETHEAD_ZOMBIE:              (4, 3000),
                 NEWSPAPER_ZOMBIE:               (2, 1000),
                 FOOTBALL_ZOMBIE:                (7, 2000),
-                DUCKY_TUBE_ZOMBIE:              (1, 0),  # 作为变种，不主动生成
-                CONEHEAD_DUCKY_TUBE_ZOMBIE:     (2, 0),    # 作为变种，不主动生成
-                BUCKETHEAD_DUCKY_TUBE_ZOMBIE:   (4, 0),  # 作为变种，不主动生成
+                DUCKY_TUBE_ZOMBIE:              (1, 0), # 作为变种，不主动生成
+                CONEHEAD_DUCKY_TUBE_ZOMBIE:     (2, 0), # 作为变种，不主动生成
+                BUCKETHEAD_DUCKY_TUBE_ZOMBIE:   (4, 0), # 作为变种，不主动生成
                 SCREEN_DOOR_ZOMBIE:             (4, 3500),
                 POLE_VAULTING_ZOMBIE:           (2, 2000),
                 ZOMBONI:                        (7, 2000),
+                SNORKELZOMBIE:                  (3, 2000),
                 }
 
 # 记录陆生僵尸的水生变种
 CONVERT_ZOMBIE_IN_POOL = {
                 NORMAL_ZOMBIE:      DUCKY_TUBE_ZOMBIE,
                 CONEHEAD_ZOMBIE:    CONEHEAD_DUCKY_TUBE_ZOMBIE,
-                BUCKETHEAD_ZOMBIE:  BUCKETHEAD_DUCKY_TUBE_ZOMBIE
+                BUCKETHEAD_ZOMBIE:  BUCKETHEAD_DUCKY_TUBE_ZOMBIE,
                 }
 
 # 水上僵尸集合
 WATER_ZOMBIE = {
                 DUCKY_TUBE_ZOMBIE, CONEHEAD_DUCKY_TUBE_ZOMBIE,
-                BUCKETHEAD_DUCKY_TUBE_ZOMBIE,
+                BUCKETHEAD_DUCKY_TUBE_ZOMBIE, SNORKELZOMBIE,
                 }
 
 
