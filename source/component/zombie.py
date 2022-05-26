@@ -1110,3 +1110,9 @@ class SnorkelZombie(Zombie):
         swim_name = self.name + 'Dive'
         attack_name = self.name + 'Attack'
         jump_name = self.name + 'Jump'
+        float_name = self.name + 'Float'
+        sink_name = self.name + 'Sink'
+        losthead_walk_name = self.name + 'LostHead'
+        losthead_attack_name = self.name + 'LostHeadAttack'
+        die_name = self.name + 'Die'
+        self.boomdie_name = c.BOOMDIE
