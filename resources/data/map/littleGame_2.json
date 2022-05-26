@@ -1,13 +1,18 @@
 {
-    "background_type":6,
-    "choosebar_type":2,
-    "shovel":0,
+    "background_type":0,
+    "choosebar_type":1,
+    "shovel":1,
     "spawn_zombies":"auto",
-    "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie", "NewspaperZombie", "PoleVaultingZombie"],
-    "num_flags":4,
+    "num_flags":3,
+    "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie", "PoleVaultingZombie"],
     "inevitable_zombie_list":{"20":["BucketheadZombie"]},
     "card_pool":[
-        {"name":"WallNutBowling"},
-        {"name":"RedWallNutBowling"}
+        {"name":"Peashooter"},
+        {"name":"SnowPea"},
+        {"name":"WallNut"},
+        {"name":"CherryBomb"},
+        {"name":"RepeaterPea"},
+        {"name":"Chomper"},
+        {"name":"PotatoMine"}
     ]
 }

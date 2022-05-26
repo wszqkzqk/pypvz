@@ -1,0 +1,21 @@
+{
+    "background_type":2,
+    "choosebar_type":1,
+    "shovel":1,
+    "spawn_zombies":"auto",
+    "num_flags":4,
+    "included_zombies":["Zombie", "ConeheadZombie",
+                        "BucketheadZombie", "SnorkelZombie",
+                        "Zomboni"],
+    "inevitable_zombie_list":{"30":["BucketheadZombie"]},
+    "card_pool":[
+        {"name":"Lilypad"},
+        {"name":"TorchWood"},
+        {"name":"TallNut"},
+        {"name":"TangleKlep"},
+        {"name":"Spikeweed"},
+        {"name":"Squash"},
+        {"name":"Jalapeno"},
+        {"name":"Threepeater"}
+    ]
+}

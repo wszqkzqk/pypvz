@@ -158,6 +158,9 @@ class Level(tool.State):
                         if randint(1, 3) == 1:  # 1/3概率水上，暂时人为设定
                             if newZombie in c.CONVERT_ZOMBIE_IN_POOL:
                                 newZombie = c.CONVERT_ZOMBIE_IN_POOL[newZombie]
+                    # 首先几轮不出水生僵尸
+                    elif newZombie in c.WATER_ZOMBIE:
+                        continue
                 if c.CREATE_ZOMBIE_DICT[newZombie][0] <= volume:
                     zombieList.append(newZombie)
                     volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
