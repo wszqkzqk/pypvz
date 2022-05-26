@@ -41,7 +41,7 @@ class Level(tool.State):
             f = open(file_path)
             self.map_data = json.load(f)
             f.close()
-        finally:
+        except Exception:
             print("成功通关！")
             if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
                 self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
@@ -826,6 +826,8 @@ class Level(tool.State):
         elif name == c.ZOMBONI:
             # 冰车僵尸生成位置不同
             self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + randint(0, 10) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
+        elif name == c.SNORKELZOMBIE:
+            self.zombie_groups[map_y].add(zombie.SnorkelZombie(c.ZOMBIE_START_X + randint(0, 10) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)
@@ -999,6 +1001,8 @@ class Level(tool.State):
                 if bullet.state == c.FLY:
                     # 利用循环而非内建精灵组碰撞判断函数，处理更加灵活，可排除已死亡僵尸
                     for zombie in self.zombie_groups[i]:
+                        if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+                            continue
                         if collided_func(zombie, bullet):
                             if zombie.state != c.DIE:
                                 zombie.setDamage(bullet.damage, effect=bullet.effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)

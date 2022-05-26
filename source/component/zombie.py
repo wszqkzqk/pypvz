@@ -210,7 +210,8 @@ class Zombie(pg.sprite.Sprite):
             self.helmetType2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
                 self.speed = 2.5
-        if ((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio())) and (not self.lostHead):
+        if (((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()))
+            and (not self.lostHead)):
             if self.prey.health > 0:
                 if self.prey_is_plant:
                     self.prey.setDamage(self.damage, self)
@@ -1093,6 +1094,8 @@ class SnorkelZombie(Zombie):
     def __init__(self, x, y, head_group):
         Zombie.__init__(self, x, y, c.SNORKELZOMBIE, canSwim=True)
         self.speed = 1.175
+        self.walk_animate_interval = 60
+        self.canSetAttack = True
 
     def loadImages(self):
         self.walk_frames = []
@@ -1100,7 +1103,7 @@ class SnorkelZombie(Zombie):
         self.attack_frames = []
         self.jump_frames = []
         self.float_frames = []
-        self.sink_frame = []
+        self.sink_frames = []
         self.losthead_walk_frames = []
         self.losthead_attack_frames = []
         self.die_frames = []
@@ -1115,4 +1118,99 @@ class SnorkelZombie(Zombie):
         losthead_walk_name = self.name + 'LostHead'
         losthead_attack_name = self.name + 'LostHeadAttack'
         die_name = self.name + 'Die'
-        self.boomdie_name = c.BOOMDIE
+        boomdie_name = c.BOOMDIE
+
+        frame_list = [  self.walk_frames, self.swim_frames,
+                        self.attack_frames, self.jump_frames,
+                        self.float_frames, self.sink_frames,
+                        self.losthead_walk_frames, self.losthead_attack_frames,
+                        self.die_frames, self.boomdie_frames]
+        name_list = [   walk_name, swim_name,
+                        attack_name, jump_name,
+                        float_name, sink_name,
+                        losthead_walk_name, losthead_attack_name,
+                        die_name, boomdie_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name)
+
+        self.frames = self.walk_frames
+
+    def walking(self):
+        # 在水池范围内
+        # 在右侧岸左
+        if self.rect.centerx <= c.MAP_POOL_FRONT_X - 25:
+            # 在左侧岸右，左侧岸位置为预估
+            if self.rect.right - 25 >= c.MAP_POOL_OFFSET_X:
+                # 还未进入游泳状态
+                if not self.swimming:
+                    self.swimming = True
+                    self.changeFrames(self.jump_frames)
+                    # 播放入水音效
+                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieEnteringWater.ogg")).play()
+            # 已经接近家门口并且上岸
+            else:
+                if self.swimming:
+                    self.changeFrames(self.walk_frames)
+                    self.swimming = False
+        # 被魅惑时走到岸上需要起立
+        elif self.is_hypno and (self.rect.right > c.MAP_POOL_FRONT_X + 55):   # 常数拟合暂时缺乏检验
+            if self.swimming:
+                self.changeFrames(self.walk_frames)
+            self.swimming = False
+        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
+            self.walk_timer = self.current_time
+            # 正在上浮或者下潜不用移动
+            if (self.frames == self.float_frames) or (self.frames == self.sink_frames):
+                pass
+            elif self.is_hypno:
+                self.rect.x += 1
+            else:
+                self.rect.x -= 1
+
+    def animation(self):
+        if self.state == c.FREEZE:
+            self.image.set_alpha(192)
+            return
+
+        if (self.current_time - self.animate_timer) > (self.animate_interval * self.getTimeRatio()):
+            self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                if self.state == c.DIE:
+                    self.kill()
+                    return
+                elif (self.frames == self.jump_frames):
+                    self.changeFrames(self.swim_frames)
+                elif (self.frames == self.sink_frames):
+                    self.changeFrames(self.swim_frames)
+                    # 还需要改回原来的可进入攻击状态的设定
+                    self.canSetAttack = True
+                elif self.frames == self.float_frames:
+                    self.state = c.ATTACK
+                    self.attack_timer = self.current_time
+                    self.changeFrames(self.attack_frames)
+                self.frame_index = 0
+            self.animate_timer = self.current_time
+
+        self.image = self.frames[self.frame_index]
+        if self.is_hypno:
+            self.image = pg.transform.flip(self.image, True, False)
+        self.mask = pg.mask.from_surface(self.image)
+
+        if (self.current_time - self.hit_timer) >= 200:
+            self.image.set_alpha(255)
+        else:
+            self.image.set_alpha(192)
+
+    # 注意潜水僵尸较为特殊：这里的setAttack并没有直接触发攻击状态，而是触发从水面浮起
+    def setAttack(self, prey, is_plant=True):
+        self.prey = prey  # prey can be plant or other zombies
+        self.prey_is_plant = is_plant
+        self.animate_interval = self.attack_animate_interval
+
+        if self.lostHead:
+            self.changeFrames(self.losthead_attack_frames)
+        elif self.canSetAttack:
+            self.changeFrames(self.float_frames)
+            self.canSetAttack = False
+

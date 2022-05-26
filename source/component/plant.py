@@ -320,9 +320,11 @@ class Plant(pg.sprite.Sprite):
             self.image.set_alpha(255)
 
     def canAttack(self, zombie):
+        if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+            return False
         if (self.state != c.SLEEP and zombie.state != c.DIE and
-                self.rect.x <= zombie.rect.right and zombie.rect.left <= c.SCREEN_WIDTH):
-                return True
+            self.rect.x <= zombie.rect.right and zombie.rect.left <= c.SCREEN_WIDTH):
+            return True
         return False
 
     def setAttack(self):
@@ -620,6 +622,8 @@ class Chomper(Plant):
     def canAttack(self, zombie):
         if (zombie.name in {c.POLE_VAULTING_ZOMBIE}) and (not zombie.jumped):
             return False
+        if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+            return False
         elif (self.state == c.IDLE and zombie.state != c.DIGEST and
                 self.rect.x <= zombie.rect.centerx and (not zombie.lostHead) and
                 (self.rect.x + c.GRID_X_SIZE*2.7 >= zombie.rect.centerx)):
@@ -694,6 +698,8 @@ class PuffShroom(Plant):
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
 
     def canAttack(self, zombie):
+        if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+            return False
         if (self.rect.x <= zombie.rect.right and
                 (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
@@ -741,7 +747,7 @@ class PotatoMine(Plant):
                 self.changeFrames(self.idle_frames)
                 self.is_init = False
 
-    def canAttack(self, zombie):
+    def canAttack(self, zombie):    # 土豆雷不可能遇上潜水僵尸
         if (zombie.name == c.POLE_VAULTING_ZOMBIE and (not zombie.jumped)):
             return False
         # 这里碰撞应当比碰撞一般更容易，就设置成圆形或矩形模式，不宜采用mask
@@ -1310,6 +1316,8 @@ class StarFruit(Plant):
         self.map_x, self.map_y = self.level.map.getMapIndex(x, y)
 
     def canAttack(self, zombie):
+        if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+            return False
         if zombie.state != c.DIE:
             _, zombieMapY = self.level.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
             if (self.rect.x >= zombie.rect.x) and (self.map_y == zombieMapY):  # 对于同行且在杨桃后的僵尸
@@ -1418,6 +1426,8 @@ class SeaShroom(Plant):
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
 
     def canAttack(self, zombie):
+        if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+            return False
         if (self.rect.x <= zombie.rect.right and
                 (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
@@ -1707,6 +1717,8 @@ class FumeShroom(Plant):
         self.frames = self.idle_frames
 
     def canAttack(self, zombie):
+        if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+            return False
         if (self.rect.x <= zombie.rect.right and
                 (self.rect.x + c.GRID_X_SIZE * 5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
