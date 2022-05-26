@@ -1,7 +1,7 @@
 # 冒险模式起始关卡
 START_LEVEL_NUM = 1
 # 小游戏模式起始关卡
-START_LITTLE_GAME_NUM = 4
+START_LITTLE_GAME_NUM = 1
 
 # 游戏速度倍率（调试用）
 GAME_RATE = 1
