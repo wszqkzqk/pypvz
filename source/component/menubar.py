@@ -148,9 +148,8 @@ def getSunValueImage(sun_value):
 def getCardPool(data):
     card_pool = []
     for card in data:
-        tmp = card['name']
         for i,name in enumerate(plantInfo):
-            if name[c.PLANT_NAME_INDEX] == tmp:
+            if name[c.PLANT_NAME_INDEX] == card:
                 card_pool.append(i)
                 break
     return card_pool

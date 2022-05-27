@@ -8,14 +8,13 @@
                         "BucketheadZombie", "SnorkelZombie",
                         "Zomboni"],
     "inevitable_zombie_list":{"30":["BucketheadZombie"]},
-    "card_pool":[
-        {"name":"Lilypad"}, {"name":"Lilypad"},
-        {"name":"TorchWood"},
-        {"name":"TallNut"},
-        {"name":"TangleKlep"},
-        {"name":"Spikeweed"},
-        {"name":"Squash"},
-        {"name":"Jalapeno"},
-        {"name":"Threepeater"}, {"name":"Threepeater"}, {"name":"Threepeater"}, {"name":"Threepeater"}, {"name":"Threepeater"}
-    ]
+    "card_pool":[   "Lilypad", "Lilypad",
+                    "TorchWood",
+                    "TallNut",
+                    "TangleKlep",
+                    "Spikeweed",
+                    "Squash",
+                    "Jalapeno",
+                    "Threepeater", "Threepeater", "Threepeater", "Threepeater", "Threepeater"
+                    ]
 }

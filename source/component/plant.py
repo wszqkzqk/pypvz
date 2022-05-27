@@ -1391,7 +1391,6 @@ class CoffeeBean(Plant):
             self.image.set_alpha(192)
         else:
             self.image.set_alpha(255)
-
             
 
 class SeaShroom(Plant):

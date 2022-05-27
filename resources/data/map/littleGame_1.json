@@ -6,8 +6,7 @@
     "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie", "NewspaperZombie", "PoleVaultingZombie"],
     "num_flags":4,
     "inevitable_zombie_list":{"20":["BucketheadZombie"]},
-    "card_pool":[
-        {"name":"WallNutBowling"},
-        {"name":"RedWallNutBowling"}
-    ]
+    "card_pool":[   "WallNutBowling",
+                    "RedWallNutBowling"
+                    ]
 }
