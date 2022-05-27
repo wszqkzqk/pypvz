@@ -113,6 +113,10 @@ plantInfo = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 c.CARD_COFFEEBEAN,
                 75,
                 7500),
+            (c.GARLIC,
+                c.CARD_GARLIC,
+                50,
+                7500),
             # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
             (c.WALLNUTBOWLING,
                 c.CARD_WALLNUT,

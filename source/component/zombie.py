@@ -20,6 +20,10 @@ class Zombie(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.bottom = y
+        # 大蒜换行移动像素值，< 0时向上，= 0时不变，> 0时向上
+        self.targetYChange = 0
+        self.originalY = y
+        self.toChangeGroup = False
 
         self.helmetHealth = helmetHealth
         self.helmetType2Health = helmetType2Health
@@ -191,12 +195,44 @@ class Zombie(pg.sprite.Sprite):
             if self.helmetType2Health <= 0 and self.helmetType2:
                 self.changeFrames(self.walk_frames)
                 self.helmetType2 = False
-        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
+
+        if ((self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio())
+            and self.handleGarlicYChange()):
             self.walk_timer = self.current_time
             if self.is_hypno:
                 self.rect.x += 1
             else:
                 self.rect.x -= 1
+
+    def handleGarlicYChange(self):
+        if self.targetYChange < 0:
+            self.setWalk()
+            if self.rect.bottom > self.originalY + self.targetYChange:  # 注意这里加的是负数
+                self.rect.bottom -= 3
+                # 过半时换行
+                if ((self.toChangeGroup) and
+                    (self.rect.bottom >= self.originalY + 0.5*self.targetYChange)):
+                    self.level.zombie_groups[self.mapY].remove(self)
+                    self.level.zombie_groups[self.targetMapY].add(self)
+            else:
+                self.rect.bottom = self.originalY + self.targetYChange
+                self.targetYChange = 0
+            return None
+        elif self.targetYChange > 0:
+            self.setWalk()
+            if self.rect.bottom < self.originalY + self.targetYChange:  # 注意这里加的是负数
+                self.rect.bottom += 3
+                # 过半时换行
+                if ((self.toChangeGroup) and
+                    (self.rect.bottom <= self.originalY + 0.5*self.targetYChange)):
+                    self.level.zombie_groups[self.mapY].remove(self)
+                    self.level.zombie_groups[self.targetMapY].add(self)
+            else:
+                self.rect.bottom = self.originalY + self.targetYChange
+                self.targetYChange = 0
+            return None
+        else:
+            return True
 
     def attacking(self):
         if self.checkToDie(self.losthead_attack_frames):
@@ -676,7 +712,8 @@ class NewspaperZombie(Zombie):
             self.helmetType2 = False
             # 触发报纸撕裂音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperRip.ogg")).play()
-        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
+        if ((self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio())
+            and self.handleGarlicYChange()):
             self.walk_timer = self.current_time
             if self.frames == self.lostnewspaper_frames:
                 pass
@@ -1158,7 +1195,8 @@ class SnorkelZombie(Zombie):
             if self.swimming:
                 self.changeFrames(self.walk_frames)
             self.swimming = False
-        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
+        if ((self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio())
+            and self.handleGarlicYChange()):
             self.walk_timer = self.current_time
             # 正在上浮或者下潜不用移动
             if (self.frames == self.float_frames) or (self.frames == self.sink_frames):

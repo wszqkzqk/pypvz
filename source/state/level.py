@@ -1040,7 +1040,6 @@ class Level(tool.State):
                     # 被攻击对象是植物时才可能刷新
                     if zombie.prey_is_plant:
                         # 新植物种在被攻击植物同一格时才可能刷新
-                        mapX, mapY = self.map.getMapIndex(zombie.prey.rect.centerx, zombie.prey.rect.centery)
                         if (mapX, mapY) == self.newPlantAndPositon[1]:
                             # 如果被攻击植物是睡莲和花盆，同一格种了植物必然刷新
                             # 如果被攻击植物不是睡莲和花盆，同一格种了南瓜头才刷新
@@ -1128,6 +1127,22 @@ class Level(tool.State):
                     elif targetPlant.name == c.REDWALLNUTBOWLING:
                         if targetPlant.state == c.IDLE:
                             targetPlant.setAttack()
+                    elif targetPlant.name == c.GARLIC:
+                        zombie.setAttack(targetPlant)
+                        # 向吃过大蒜的僵尸传入level
+                        zombie.level = self
+                        zombie.toChangeGroup = True
+                        zombie.mapY = i
+                        if i == 0:
+                            _move = 1
+                        elif i == self.map_y_len - 1:
+                            _move = -1
+                        else:
+                            _move = randint(0, 1)*2 - 1
+                            if self.map.map[i][0][c.MAP_PLOT_TYPE] != self.map.map[i + _move][0][c.MAP_PLOT_TYPE]:
+                                _move = -_move
+                        zombie.targetMapY = i + _move
+                        zombie.targetYChange = _move * self.map.gridHeightSize
                     else:
                         zombie.setAttack(targetPlant)
 

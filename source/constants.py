@@ -1,5 +1,5 @@
 # 冒险模式起始关卡
-START_LEVEL_NUM = 1
+START_LEVEL_NUM = 0
 # 小游戏模式起始关卡
 START_LITTLE_GAME_NUM = 1
 
@@ -23,7 +23,7 @@ SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 # 最大数量
 CARD_MAX_NUM = 10   # 这里以后可以增加解锁功能，从最初的6格逐渐解锁到10格
 # 最小数量
-CARD_LIST_NUM = CARD_MAX_NUM
+CARD_LIST_NUM = 0#CARD_MAX_NUM
 
 # 方格数据
 # 一般
