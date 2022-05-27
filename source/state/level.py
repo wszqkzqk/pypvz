@@ -913,6 +913,8 @@ class Level(tool.State):
             new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
         elif self.plant_name == c.FUMESHROOM:
             new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
+        elif self.plant_name == c.GARLIC:
+            new_plant = plant.Garlic(x, y)
 
 
         if new_plant.can_sleep and self.background_type in c.DAYTIME_BACKGROUNDS:
