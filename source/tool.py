@@ -106,7 +106,7 @@ def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
         rect = image.get_rect()
 
         image.blit(sheet, (0, 0), (x, y, width, height))
-        if colorkey != c.NULL:
+        if colorkey:
             image.set_colorkey(colorkey)
         image = pg.transform.scale(image,
                                    (int(rect.width*scale),

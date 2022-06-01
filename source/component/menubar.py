@@ -313,7 +313,7 @@ class Panel():
         if self.selected_num >= c.CARD_LIST_NUM:
             surface.blit(self.button_image, self.button_rect)
 
-# 传送带模式
+# 传送带模式的卡片
 class MoveCard():
     def __init__(self, x, y, card_name, plant_name, scale=0.5):
         self.loadFrame(card_name, scale)

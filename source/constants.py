@@ -55,8 +55,6 @@ GREEN        = (  0, 255,   0)
 
 # 退出游戏按钮
 EXIT = 'exit'
-# 当想要一个特殊值时用
-NULL = 'null'
 # 游戏界面可选的菜单
 LITTLE_MENU = 'littleMenu'
 BIG_MENU = 'bigMenu'
@@ -338,7 +336,7 @@ ICE_SLOW_TIME = 10000
 MIN_FREEZE_TIME = 4000
 ICETRAP = 'IceTrap'
 
-# 植物卡片信息
+# 植物卡片名称
 CARD_SUNFLOWER = 'card_sunflower'
 CARD_PEASHOOTER = 'card_peashooter'
 CARD_SNOWPEASHOOTER = 'card_snowpea'
@@ -369,7 +367,7 @@ CARD_GRAVEBUSTER = 'card_gravebuster'
 CARD_FUMESHROOM = 'card_fumeshroom'
 
 
-# 植物卡片信息（包括植物名称, 卡片名称, 阳光, 冷却时间）
+# 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
 PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (PEASHOOTER,
                 CARD_PEASHOOTER,
@@ -490,8 +488,9 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 0),
             )
 
-# 指定了哪些卡可选
+# 指定了哪些卡可选（排除坚果保龄球特殊植物）
 CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 2)
+
 
 # 子弹信息
 # 子弹类型
