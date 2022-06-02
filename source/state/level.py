@@ -2,7 +2,7 @@ import os
 import json
 import sys
 import pygame as pg
-from random import randint, uniform, choices
+import random
 from .. import tool
 from .. import constants as c
 from ..component import map, plant, zombie, menubar
@@ -147,7 +147,7 @@ class Level(tool.State):
             minCost = c.CREATE_ZOMBIE_DICT[min(useableZombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
 
             while (volume >= minCost) and (len(zombieList) < 50):
-                newZombie = choices(useableZombies, weights)[0]
+                newZombie = random.choices(useableZombies, weights)[0]
                 # 普通僵尸、路障僵尸、铁桶僵尸有概率生成水中变种
                 if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
                     # 有泳池第一轮的第四波设定上生成水生僵尸
@@ -155,7 +155,7 @@ class Level(tool.State):
                         if newZombie in c.CONVERT_ZOMBIE_IN_POOL:
                             newZombie = c.CONVERT_ZOMBIE_IN_POOL[newZombie]
                     elif survivalRounds > 0 or wave > 4:
-                        if randint(1, 3) == 1:  # 1/3概率水上，暂时人为设定
+                        if random.randint(1, 3) == 1:  # 1/3概率水上，暂时人为设定
                             if newZombie in c.CONVERT_ZOMBIE_IN_POOL:
                                 newZombie = c.CONVERT_ZOMBIE_IN_POOL[newZombie]
                     # 首先几轮不出水生僵尸
@@ -201,14 +201,14 @@ class Level(tool.State):
                                     elif c.GRAVE not in self.map.map[mapY][mapX][c.MAP_PLANT]:
                                         occupied.append((mapX, mapY))
                             if unoccupied:
-                                target = unoccupied[randint(0, len(unoccupied) - 1)]
+                                target = unoccupied[random.randint(0, len(unoccupied) - 1)]
                                 mapX, mapY = target
                                 posX, posY = self.map.getMapGridPos(mapX, mapY)
                                 self.plant_groups[mapY].add(plant.Grave(posX, posY))
                                 self.map.map[mapY][mapX][c.MAP_PLANT].add(c.GRAVE)
                                 self.graveSet.add((mapX, mapY))
                             elif occupied:
-                                target = occupied[randint(0, len(occupied) - 1)]
+                                target = occupied[random.randint(0, len(occupied) - 1)]
                                 mapX, mapY = target
                                 posX, posY = self.map.getMapGridPos(mapX, mapY)
                                 for i in self.plant_groups[mapY]:
@@ -227,7 +227,7 @@ class Level(tool.State):
                         for item in self.graveSet:
                             itemX, itemY = self.map.getMapGridPos(*item)
                             # 目前设定：2/3概率普通僵尸，1/3概率路障僵尸
-                            if randint(0, 2):
+                            if random.randint(0, 2):
                                 self.zombie_groups[item[1]].add(zombie.NormalZombie(itemX, itemY, self.head_group))
                             else:
                                 self.zombie_groups[item[1]].add(zombie.ConeHeadZombie(itemX, itemY, self.head_group))
@@ -237,11 +237,11 @@ class Level(tool.State):
                     if current_time - self.waveTime > 1500:
                         for i in range(3):
                             # 水中倒数四列内可以在此时产生僵尸。共产生3个
-                            mapX, mapY = randint(5, 8), randint(2, 3)
+                            mapX, mapY = random.randint(5, 8), random.randint(2, 3)
                             itemX, itemY = self.map.getMapGridPos(mapX, mapY)
                             # 用随机数指定产生的僵尸类型
                             # 带有权重
-                            zombieType = randint(1, 6)
+                            zombieType = random.randint(1, 6)
                             if zombieType == 1:
                                 self.zombie_groups[mapY].add(zombie.BucketHeadDuckyTubeZombie(itemX, itemY, self.head_group))
                             elif zombieType <= 3:
@@ -272,7 +272,7 @@ class Level(tool.State):
                         pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieComing.ogg")).play()
             return
         if (self.waveNum % 10 != 9):
-            if ((current_time - self.waveTime >= 25000 + randint(0, 6000)) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 12500 + randint(0, 3000))):
+            if ((current_time - self.waveTime >= 25000 + random.randint(0, 6000)) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 12500 + random.randint(0, 3000))):
                 self.waveNum += 1
                 self.waveTime = current_time
                 self.waveZombies = self.waves[self.waveNum - 1]
@@ -293,7 +293,7 @@ class Level(tool.State):
         numZombies = 0
         for i in range(self.map_y_len):
             numZombies += len(self.zombie_groups[i])
-        if (numZombies / self.numZombie < uniform(0.15, 0.25)) and (current_time - self.waveTime > 4000):
+        if (numZombies / self.numZombie < random.uniform(0.15, 0.25)) and (current_time - self.waveTime > 4000):
             # 当僵尸所剩无几并且时间过了4000 ms以上时，改变时间记录，使得2000 ms后刷新僵尸（所以需要判断剩余时间是否大于2000 ms）
             if self.bar_type == c.CHOOSEBAR_STATIC:
                 if current_time - 43000 < self.waveTime:    # 判断剩余时间是否有2000 ms
@@ -468,8 +468,8 @@ class Level(tool.State):
             graveVolume = c.GRAVES_GRADE_INFO[gradeGraves]
             self.graveSet = set()
             while len(self.graveSet) < graveVolume:
-                mapX = randint(4, 8)    # 注意是从0开始编号
-                mapY = randint(0, 4)
+                mapX = random.randint(4, 8)    # 注意是从0开始编号
+                mapY = random.randint(0, 4)
                 self.graveSet.add((mapX, mapY))
             if self.graveSet:
                 for i in self.graveSet:
@@ -694,7 +694,7 @@ class Level(tool.State):
         
         if self.produce_sun:
             # 原版阳光掉落机制：(已掉落阳光数*100 ms + 4250 ms) 与 9500 ms的最小值，再加 0 ~ 2750 ms 之间的一个数
-            if (self.current_time - self.sun_timer) > min(c.PRODUCE_SUN_INTERVAL + 100*self.fallenSun, 9500) + randint(0, 2750):
+            if (self.current_time - self.sun_timer) > min(c.PRODUCE_SUN_INTERVAL + 100*self.fallenSun, 9500) + random.randint(0, 2750):
                 self.sun_timer = self.current_time
                 map_x, map_y = self.map.getRandomMapIndex()
                 x, y = self.map.getMapGridPos(map_x, map_y)
@@ -779,19 +779,19 @@ class Level(tool.State):
             # 0, 1, 4, 5路为陆路，2, 3路为水路
             if self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS:
                 if name in c.WATER_ZOMBIE:  # 水生僵尸集合
-                    map_y = randint(2, 3)
+                    map_y = random.randint(2, 3)
                 elif name == '这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）':
-                    map_y = randint(0, 5)
+                    map_y = random.randint(0, 5)
                 else:   # 陆生僵尸
-                    map_y = randint(0, 3)
+                    map_y = random.randint(0, 3)
                     if map_y >= 2:   # 后两路的map_y应当+2
                         map_y += 2
             elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_SINGLE:
                 map_y = 2
             elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_TRIPLE:
-                map_y = randint(1, 3)
+                map_y = random.randint(1, 3)
             else:
-                map_y = randint(0, 4)
+                map_y = random.randint(0, 4)
 
         if not ((c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
             # 旗帜波出生点右移
@@ -804,33 +804,33 @@ class Level(tool.State):
         x, y = self.map.getMapGridPos(0, map_y)
         # 新增的僵尸也需要在这里声明
         if name == c.NORMAL_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.CONEHEAD_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.ConeHeadZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.ConeHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.BUCKETHEAD_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.BucketHeadZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.BucketHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.FLAG_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.FlagZombie(c.ZOMBIE_START_X, y, self.head_group))
         elif name == c.NEWSPAPER_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.FOOTBALL_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.DUCKY_TUBE_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.CONEHEAD_DUCKY_TUBE_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.SCREEN_DOOR_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(c.ZOMBIE_START_X + randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
         elif name == c.POLE_VAULTING_ZOMBIE:
             # 本来撑杆跳生成位置不同，对齐左端可认为修正了一部分（看作移动了70），只需要相对修改即可
-            self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + randint(0, 10) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
         elif name == c.ZOMBONI:
             # 冰车僵尸生成位置不同
-            self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + randint(0, 10) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
+            self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
         elif name == c.SNORKELZOMBIE:
-            self.zombie_groups[map_y].add(zombie.SnorkelZombie(c.ZOMBIE_START_X + randint(0, 10) + hugeWaveMove, y, self.head_group))
+            self.zombie_groups[map_y].add(zombie.SnorkelZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)

@@ -1,6 +1,6 @@
 import pygame as pg
 import os
-from random import randint
+import random
 from .. import tool
 from .. import constants as c
 
@@ -237,7 +237,7 @@ class Zombie(pg.sprite.Sprite):
             if self.checkToDie(self.losthead_attack_frames):
                 return
 
-        if (self.current_time - self.freeze_timer) >= c.MIN_FREEZE_TIME + randint(0, 2000):
+        if (self.current_time - self.freeze_timer) >= c.MIN_FREEZE_TIME + random.randint(0, 2000):
             self.setWalk()
             # 注意寒冰菇解冻后还有减速
             self.ice_slow_timer = self.freeze_timer + 10000 # 每次冰冻冻结 + 减速时间为20 s，而减速有10 s计时，故这里+10 s
