@@ -165,7 +165,7 @@ class Level(tool.State):
                     zombieList.append(newZombie)
                     volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
             waves.append(zombieList)
-            #print(wave, zombieList, len(zombieList))
+            # print(wave, zombieList, len(zombieList))
 
         self.waves = waves
 
@@ -214,7 +214,7 @@ class Level(tool.State):
                                 for i in self.plant_groups[mapY]:
                                     checkMapX, _ = self.map.getMapIndex(i.rect.centerx, i.rect.bottom)
                                     if mapX == checkMapX:
-                                        # 不能杀死毁灭菇坑和冰道
+                                        # 不杀死毁灭菇坑和冰道
                                         if i.name not in exceptionObjects:
                                             i.health = 0
                                 self.plant_groups[mapY].add(plant.Grave(posX, posY))
@@ -417,7 +417,7 @@ class Level(tool.State):
 
         self.removeMouseImage()
         self.setupGroups()
-        if (c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+        if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
             self.setupZombies()
         else:
             # 僵尸波数数据及僵尸生成数据
@@ -656,7 +656,7 @@ class Level(tool.State):
             self.pauseAndCheckLittleMenuOptions(mouse_pos, mouse_click)
             return
 
-        if (c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+        if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
             # 旧僵尸生成方式
             if self.zombie_start_time == 0:
                 self.zombie_start_time = self.current_time
@@ -778,7 +778,7 @@ class Level(tool.State):
             # 情况复杂：分水路和陆路，不能简单实现，需要另外加判断
             # 0, 1, 4, 5路为陆路，2, 3路为水路
             if self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS:
-                if name in c.WATER_ZOMBIE:  # 水生僵尸集合
+                if name in c.WATER_ZOMBIE:
                     map_y = random.randint(2, 3)
                 elif name == '这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）':
                     map_y = random.randint(0, 5)
@@ -793,7 +793,7 @@ class Level(tool.State):
             else:
                 map_y = random.randint(0, 4)
 
-        if not ((c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
+        if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
             # 旗帜波出生点右移
             if self.waveNum % 10:
                 hugeWaveMove = 0
@@ -802,6 +802,7 @@ class Level(tool.State):
         else:
             hugeWaveMove = 0
         x, y = self.map.getMapGridPos(0, map_y)
+
         # 新增的僵尸也需要在这里声明
         if name == c.NORMAL_ZOMBIE:
             self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
@@ -830,6 +831,7 @@ class Level(tool.State):
             # 冰车僵尸生成位置不同
             self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
         elif name == c.SNORKELZOMBIE:
+            # 潜水僵尸生成位置不同
             self.zombie_groups[map_y].add(zombie.SnorkelZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
@@ -925,7 +927,7 @@ class Level(tool.State):
             mushroomSleep = False
         self.plant_groups[map_y].add(new_plant)
         # 种植植物后应当刷新僵尸的攻击对象
-        # 这里用植物名称代替布尔值，保存更多信息
+        # 用元组表示植物的名称和格子坐标
         self.newPlantAndPositon = (new_plant.name, (map_x, map_y))
         if self.bar_type == c.CHOOSEBAR_STATIC:
             self.menubar.decreaseSunValue(self.select_plant.sun_cost)
@@ -933,8 +935,8 @@ class Level(tool.State):
         else:
             self.menubar.deleateCard(self.select_plant)
 
-        if self.bar_type != c.CHOSSEBAR_BOWLING:
-                self.map.addMapPlant(map_x, map_y, self.plant_name, sleep=mushroomSleep)
+        if self.bar_type != c.CHOSSEBAR_BOWLING:    # 坚果保龄球关卡无需考虑格子被占用的情况
+            self.map.addMapPlant(map_x, map_y, self.plant_name, sleep=mushroomSleep)
         self.removeMouseImage()
 
         # print(self.newPlantAndPositon)
@@ -1135,8 +1137,8 @@ class Level(tool.State):
             for hypno_zombie in self.hypno_zombie_groups[i]:
                 if hypno_zombie.health <= 0:
                     continue
-                zombie_list = pg.sprite.spritecollide(hypno_zombie,
-                               self.zombie_groups[i], False,collided_func)
+                zombie_list = pg.sprite.spritecollide(  hypno_zombie, self.zombie_groups[i],
+                                                        False, collided_func)
                 for zombie in zombie_list:
                     if zombie.state == c.DIE:
                         continue
@@ -1358,7 +1360,7 @@ class Level(tool.State):
                     self.killPlant(plant)
 
     def checkVictory(self):
-        if (c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+        if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
             if len(self.zombie_list) > 0:
                 return False
             for i in range(self.map_y_len):
@@ -1508,7 +1510,7 @@ class Level(tool.State):
                 surface.blit(self.restart_button, self.restart_button_rect)
                 surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
 
-            if not ((c.ZOMBIE_LIST in self.map_data) and self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST):
+            if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
                 self.showLevelProgress(surface)
                 if self.current_time - self.showHugeWaveApprochingTime <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
