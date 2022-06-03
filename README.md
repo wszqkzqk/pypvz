@@ -44,7 +44,6 @@ python main.py
   - 程序包含名称、版本等信息
   - 得到的验证最多（相对）
   - 并非每次提交都会更新，更新可能不及时
-  - `0.7.25.0`之后的部分版本被标注成了`pre-release`，实际上仍然为普通版本，按需下载即可
 - 也可以直接下载GitHub Workflow[自动利用Nuitka构建的版本（点击跳转）](https://github.com/wszqkzqk/pypvz/releases/tag/Latest)（推荐）：
   - 使用MSVC编译
   - 每次提交均会更新，保证更新及时
