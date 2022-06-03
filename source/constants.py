@@ -242,6 +242,7 @@ HOLE = 'Hole'
 GRAVE = 'Grave'
 GRAVEBUSTER = 'GraveBuster'
 FUMESHROOM = 'FumeShroom'
+GARLIC = 'Garlic'
 
 
 # 植物集体属性集合
@@ -302,7 +303,7 @@ PLANT_NON_CHECK_ATTACK_STATE = (    # 这里运用了集合运算
                 TORCHWOOD, SUNFLOWER,
                 SUNSHROOM, COFFEEBEAN,
                 GRAVEBUSTER, LILYPAD,
-                HYPNOSHROOM,
+                HYPNOSHROOM, GARLIC,
                 } |
                 # 非植物类
                 NON_PLANT_OBJECTS
@@ -324,6 +325,9 @@ WALLNUT_CRACKED2_HEALTH = WALLNUT_HEALTH//3
 TALLNUT_HEALTH = 8000
 TALLNUT_CRACKED1_HEALTH = TALLNUT_HEALTH//3 * 2
 TALLNUT_CRACKED2_HEALTH = TALLNUT_HEALTH//3
+GARLIC_HEALTH = 450
+GARLIC_CRACKED1_HEALTH = GARLIC_HEALTH//3 * 2
+GARLIC_CRACKED2_HEALTH = GARLIC_HEALTH//3
 # 坚果保龄球攻击伤害
 WALLNUT_BOWLING_DAMAGE = 550
 
@@ -367,6 +371,7 @@ CARD_TANGLEKLEP = 'card_tangleklep'
 CARD_DOOMSHROOM = 'card_doomshroom'
 CARD_GRAVEBUSTER = 'card_gravebuster'
 CARD_FUMESHROOM = 'card_fumeshroom'
+CARD_GARLIC = 'card_garlic'
 
 
 # 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
@@ -478,6 +483,10 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (COFFEEBEAN,
                 CARD_COFFEEBEAN,
                 75,
+                7500),
+            (GARLIC,
+                CARD_GARLIC,
+                50,
                 7500),
             # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
             (WALLNUTBOWLING,

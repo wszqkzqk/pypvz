@@ -1780,3 +1780,27 @@ class IceFrozenPlot(Plant):
             self.health = 0
 
 
+class Garlic(Plant):
+    def __init__(self, x, y):
+        Plant.__init__(self, x, y, c.GARLIC, c.GARLIC_HEALTH, None)
+        self.load_images()
+        self.cracked1 = False
+        self.cracked2 = False
+
+    def load_images(self):
+        self.cracked1_frames = []
+        self.cracked2_frames = []
+
+        cracked1_frames_name = self.name + '_cracked1'
+        cracked2_frames_name = self.name + '_cracked2'
+
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name, 1)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
+
+    def idling(self):
+        if (not self.cracked1) and self.health <= c.GARLIC_CRACKED1_HEALTH:
+            self.changeFrames(self.cracked1_frames)
+            self.cracked1 = True
+        elif (not self.cracked2) and self.health <= c.GARLIC_CRACKED2_HEALTH:
+            self.changeFrames(self.cracked2_frames)
+            self.cracked2 = True

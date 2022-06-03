@@ -96,10 +96,27 @@ python main.py
   - 对于`opus`编码，需要添加`libogg-0.dll`，`libopus-0.dll`和`libopusfile-0.dll`
 - 以添加`opus`和`vorbis`编码的背景音乐支持为例，编译需执行以下命令：
 
-``` cmd
+``` powershell
 git clone https://github.com/wszqkzqk/pypvz.git
 cd pypvz
-nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-dir=out --windows-icon-from-ico=pypvz.ico --include-data-dir=resources=resources --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-disable-console --windows-product-name=pypvz --windows-company-name=null --windows-file-description="pypvz" --windows-product-version=0.6.9.0 main.py
+nuitka --mingw64 --standalone `
+        --onefile `
+        --show-progress `
+        --show-memory `
+        --output-dir=out `
+        --windows-icon-from-ico=pypvz.ico `
+        --include-data-dir=resources=resources `
+        --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll `
+        --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll `
+        --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll `
+        --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll `
+        --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll `
+        --windows-disable-console `
+        --windows-product-name=pypvz `
+        --windows-company-name=null `
+        --windows-file-description="pypvz" `
+        --windows-product-version=0.6.9.0 `
+        main.py
 ```
 
 * 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径
