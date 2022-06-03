@@ -728,8 +728,8 @@ class Level(tool.State):
                 clickedCardsOrMap = True
                 self.clickResult[1].clicked = False
             elif mouse_click[0]:
-                self.clickResult[1].clicked = False
                 if self.menubar.checkMenuBarClick(mouse_pos):
+                    self.clickResult[1].clicked = False
                     self.removeMouseImage()
                 else:
                     self.addPlant()
@@ -844,6 +844,9 @@ class Level(tool.State):
         pos = self.canSeedPlant(self.plant_name)
         if pos is None:
             return
+
+        # 恢复植物卡片样式
+        self.clickResult[1].clicked = False
 
         if self.hint_image is None:
             self.setupHintImage()

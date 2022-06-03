@@ -1214,3 +1214,12 @@ class SnorkelZombie(Zombie):
             self.changeFrames(self.float_frames)
             self.canSetAttack = False
 
+    def setWalk(self):
+        self.state = c.WALK
+        self.animate_interval = self.walk_animate_interval
+
+        if self.rect.right <= c.MAP_POOL_FRONT_X:
+            self.swimming = True
+            self.changeFrames(self.sink_frames)
+            # 同样没有兼容双防具
+
