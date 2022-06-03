@@ -8,6 +8,8 @@ GAME_RATE = 1
 
 # 窗口标题
 ORIGINAL_CAPTION = 'pypvz'
+# 窗口图标
+ORIGINAL_LOGO = "pypvz-exec-logo.png"
 
 # 游戏模式
 GAME_MODE = 'mode'
@@ -55,8 +57,6 @@ GREEN        = (  0, 255,   0)
 
 # 退出游戏按钮
 EXIT = 'exit'
-# 当想要一个特殊值时用
-NULL = 'null'
 # 游戏界面可选的菜单
 LITTLE_MENU = 'littleMenu'
 BIG_MENU = 'bigMenu'
@@ -342,7 +342,7 @@ ICE_SLOW_TIME = 10000
 MIN_FREEZE_TIME = 4000
 ICETRAP = 'IceTrap'
 
-# 植物卡片信息
+# 植物卡片名称
 CARD_SUNFLOWER = 'card_sunflower'
 CARD_PEASHOOTER = 'card_peashooter'
 CARD_SNOWPEASHOOTER = 'card_snowpea'
@@ -372,6 +372,136 @@ CARD_DOOMSHROOM = 'card_doomshroom'
 CARD_GRAVEBUSTER = 'card_gravebuster'
 CARD_FUMESHROOM = 'card_fumeshroom'
 CARD_GARLIC = 'card_garlic'
+
+
+# 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
+PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
+            (PEASHOOTER,
+                CARD_PEASHOOTER,
+                100,
+                7500),
+            (SUNFLOWER,
+                CARD_SUNFLOWER,
+                50,
+                7500),
+            (CHERRYBOMB,
+                CARD_CHERRYBOMB,
+                150,
+                50000),
+            (WALLNUT,
+                CARD_WALLNUT,
+                50,
+                30000),
+            (POTATOMINE,
+                CARD_POTATOMINE, 
+                25,
+                30000),
+            (SNOWPEASHOOTER,
+                CARD_SNOWPEASHOOTER,
+                175,
+                7500),
+            (CHOMPER,
+                CARD_CHOMPER,
+                150,
+                7500),
+            (REPEATERPEA,
+                CARD_REPEATERPEA,
+                200,
+                7500),
+            (PUFFSHROOM,
+                CARD_PUFFSHROOM,
+                0,
+                7500),
+            (SUNSHROOM,
+                CARD_SUNSHROOM,
+                25,
+                7500),
+            (FUMESHROOM,
+                CARD_FUMESHROOM,
+                75,
+                7500),
+            (GRAVEBUSTER,
+                CARD_GRAVEBUSTER,
+                75,
+                7500),
+            (HYPNOSHROOM,
+                CARD_HYPNOSHROOM,
+                75,
+                30000),
+            (SCAREDYSHROOM,
+                CARD_SCAREDYSHROOM,
+                25,
+                7500),
+            (ICESHROOM,
+                CARD_ICESHROOM,
+                75,
+                50000),
+            (DOOMSHROOM,
+                CARD_DOOMSHROOM,
+                75,
+                50000),
+            (LILYPAD,
+                CARD_LILYPAD,
+                25,
+                7500),
+            (SQUASH,
+                CARD_SQUASH,
+                50,
+                30000),
+            (TANGLEKLEP,
+                CARD_TANGLEKLEP,
+                25,
+                30000),
+            (THREEPEASHOOTER,
+                CARD_THREEPEASHOOTER,
+                325,
+                7500),
+            (JALAPENO,
+                CARD_JALAPENO,
+                125,
+                50000),
+            (SPIKEWEED,
+                CARD_SPIKEWEED,
+                100,
+                7500),
+            (TORCHWOOD,
+                CARD_TORCHWOOD,
+                175,
+                7500),
+            (TALLNUT,
+                CARD_TALLNUT,
+                125,
+                30000),
+            (SEASHROOM,
+                CARD_SEASHROOM,
+                125,
+                30000),
+            (STARFRUIT,
+                CARD_STARFRUIT,
+                125,
+                7500),
+            (COFFEEBEAN,
+                CARD_COFFEEBEAN,
+                75,
+                7500),
+            (c.GARLIC,
+                c.CARD_GARLIC,
+                50,
+                7500),
+            # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
+            (WALLNUTBOWLING,
+                CARD_WALLNUT,
+                0,
+                0),
+            (REDWALLNUTBOWLING,
+                CARD_REDWALLNUT,
+                0,
+                0),
+            )
+
+# 指定了哪些卡可选（排除坚果保龄球特殊植物）
+CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 2)
+
 
 # 子弹信息
 # 子弹类型

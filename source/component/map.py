@@ -44,7 +44,6 @@ class Map():
     # 判断位置是否可用
     # 暂时没有写紫卡植物的判断方法
     # 由于紫卡植物需要移除以前的植物，所以可用另外定义一个函数
-    # 注意咖啡豆生效后需要同时将植物的睡眠状态和格子的睡眠记录改变
     def isAvailable(self, map_x, map_y, plantName):
         # 咖啡豆和墓碑吞噬者的判别最为特殊
         if plantName == c.COFFEEBEAN:
@@ -97,7 +96,7 @@ class Map():
             else:   # 非水生植物，依赖睡莲
                 if c.LILYPAD in self.map[map_y][map_x][c.MAP_PLANT]:
                     if (all((i in {c.LILYPAD, '南瓜头（未实现）'}) for i in self.map[map_y][map_x][c.MAP_PLANT])
-                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])):
                         if plantName in {c.SPIKEWEED, c.POTATOMINE, '花盆（未实现）'}: # 不能在睡莲上种植的植物
                             return False
                         else:

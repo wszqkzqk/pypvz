@@ -1,4 +1,4 @@
-from random import randint
+import random
 import pygame as pg
 import os
 from .. import tool
@@ -1143,7 +1143,7 @@ class WallNutBowling(Plant):
         self.animate_interval = 200
         self.move_timer = 0
         self.move_interval = 70
-        self.vel_x = randint(12, 15)
+        self.vel_x = random.randint(12, 15)
         self.vel_y = 0
         self.disable_hit_y = -1
 
@@ -1192,7 +1192,7 @@ class WallNutBowling(Plant):
             elif self.map_y == (c.GRID_Y_LEN - 1):  # 坚果保龄球显然没有泳池的6行情形
                 self.vel_y = -self.vel_x
             else:
-                if randint(0, 1):
+                if random.randint(0, 1):
                     self.vel_y = self.vel_x
                 else:
                     self.vel_y = -self.vel_x
@@ -1227,7 +1227,7 @@ class RedWallNutBowling(Plant):
         self.animate_interval = 200
         self.move_timer = 0
         self.move_interval = 70
-        self.vel_x = randint(12, 15)
+        self.vel_x = random.randint(12, 15)
         self.start_boom = False
         self.boomed = False
 
@@ -1648,7 +1648,7 @@ class Hole(Plant):
 class Grave(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.GRAVE, c.INF, None)
-        self.frame_index = randint(0, self.frame_num - 1)
+        self.frame_index = random.randint(0, self.frame_num - 1)
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
 

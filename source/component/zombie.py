@@ -1,6 +1,6 @@
 import pygame as pg
 import os
-from random import randint
+import random
 from .. import tool
 from .. import constants as c
 
@@ -245,7 +245,8 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.attack_frames)
             self.helmetType2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
-                self.speed = 2.5
+                self.speed = 2.65
+                self.walk_animate_interval = 300
         if (((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()))
             and (not self.lostHead)):
             if self.prey.health > 0:
@@ -273,7 +274,7 @@ class Zombie(pg.sprite.Sprite):
             if self.checkToDie(self.losthead_attack_frames):
                 return
 
-        if (self.current_time - self.freeze_timer) >= c.MIN_FREEZE_TIME + randint(0, 2000):
+        if (self.current_time - self.freeze_timer) >= c.MIN_FREEZE_TIME + random.randint(0, 2000):
             self.setWalk()
             # 注意寒冰菇解冻后还有减速
             self.ice_slow_timer = self.freeze_timer + 10000 # 每次冰冻冻结 + 减速时间为20 s，而减速有10 s计时，故这里+10 s
@@ -737,6 +738,7 @@ class NewspaperZombie(Zombie):
                     self.changeFrames(self.walk_frames)
                     self.speedUp = True
                     self.speed = 2.65
+                    self.walk_animate_interval = 300
                     # 触发报纸僵尸暴走音效
                     pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperZombieAngry.ogg")).play()
                     return
@@ -1252,3 +1254,10 @@ class SnorkelZombie(Zombie):
             self.changeFrames(self.float_frames)
             self.canSetAttack = False
 
+    def setWalk(self):
+        self.state = c.WALK
+        self.animate_interval = self.walk_animate_interval
+
+        if self.rect.right <= c.MAP_POOL_FRONT_X:
+            self.swimming = True
+            self.changeFrames(self.sink_frames)
