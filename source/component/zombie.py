@@ -252,6 +252,8 @@ class Zombie(pg.sprite.Sprite):
             if self.prey.health > 0:
                 if self.prey_is_plant:
                     self.prey.setDamage(self.damage, self)
+                    if self.prey.name == c.GARLIC:
+                        self.setWalk()
                 else:
                     self.prey.setDamage(self.damage)
                 
@@ -1258,6 +1260,5 @@ class SnorkelZombie(Zombie):
         self.state = c.WALK
         self.animate_interval = self.walk_animate_interval
 
-        if self.rect.right <= c.MAP_POOL_FRONT_X:
-            self.swimming = True
-            self.changeFrames(self.sink_frames)
+        self.swimming = True
+        self.changeFrames(self.sink_frames)
