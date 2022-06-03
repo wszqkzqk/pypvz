@@ -97,7 +97,7 @@ class Control():
         while not self.done:
             self.event_loop()
             self.update()
-            pg.display.flip()
+            pg.display.update()
             self.clock.tick(self.fps)
         print('game over')
 
