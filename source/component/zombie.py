@@ -1221,5 +1221,3 @@ class SnorkelZombie(Zombie):
         if self.rect.right <= c.MAP_POOL_FRONT_X:
             self.swimming = True
             self.changeFrames(self.sink_frames)
-            # 同样没有兼容双防具
-
