@@ -1143,7 +1143,7 @@ class Level(tool.State):
                         elif i == self.map_y_len - 1:
                             _move = -1
                         else:
-                            _move = randint(0, 1)*2 - 1
+                            _move = random.randint(0, 1)*2 - 1
                             if self.map.map[i][0][c.MAP_PLOT_TYPE] != self.map.map[i + _move][0][c.MAP_PLOT_TYPE]:
                                 _move = -_move
                         zombie.targetMapY = i + _move

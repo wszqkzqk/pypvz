@@ -1,5 +1,5 @@
 # 冒险模式起始关卡
-START_LEVEL_NUM = 0
+START_LEVEL_NUM = 1
 # 小游戏模式起始关卡
 START_LITTLE_GAME_NUM = 1
 
@@ -25,7 +25,7 @@ SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 # 最大数量
 CARD_MAX_NUM = 10   # 这里以后可以增加解锁功能，从最初的6格逐渐解锁到10格
 # 最小数量
-CARD_LIST_NUM = 0#CARD_MAX_NUM
+CARD_LIST_NUM = CARD_MAX_NUM
 
 # 方格数据
 # 一般
@@ -484,8 +484,8 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_COFFEEBEAN,
                 75,
                 7500),
-            (c.GARLIC,
-                c.CARD_GARLIC,
+            (GARLIC,
+                CARD_GARLIC,
                 50,
                 7500),
             # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
