@@ -365,7 +365,7 @@ class MoveCard():
         elif (current_time - self.move_timer) >= c.CARD_MOVE_TIME:
             if self.rect.x > left_x:
                 self.rect.x -= 1
-                self.image = self.createShowImage()
+            self.image = self.createShowImage()
             self.move_timer += c.CARD_MOVE_TIME
 
     def draw(self, surface):
