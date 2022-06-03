@@ -242,6 +242,7 @@ HOLE = 'Hole'
 GRAVE = 'Grave'
 GRAVEBUSTER = 'GraveBuster'
 FUMESHROOM = 'FumeShroom'
+GARLIC = 'Garlic'
 
 
 # 植物集体属性集合
@@ -302,7 +303,7 @@ PLANT_NON_CHECK_ATTACK_STATE = (    # 这里运用了集合运算
                 TORCHWOOD, SUNFLOWER,
                 SUNSHROOM, COFFEEBEAN,
                 GRAVEBUSTER, LILYPAD,
-                HYPNOSHROOM,
+                HYPNOSHROOM, GARLIC,
                 } |
                 # 非植物类
                 NON_PLANT_OBJECTS
@@ -324,6 +325,9 @@ WALLNUT_CRACKED2_HEALTH = WALLNUT_HEALTH//3
 TALLNUT_HEALTH = 8000
 TALLNUT_CRACKED1_HEALTH = TALLNUT_HEALTH//3 * 2
 TALLNUT_CRACKED2_HEALTH = TALLNUT_HEALTH//3
+GARLIC_HEALTH = 450
+GARLIC_CRACKED1_HEALTH = GARLIC_HEALTH//3 * 2
+GARLIC_CRACKED2_HEALTH = GARLIC_HEALTH//3
 # 坚果保龄球攻击伤害
 WALLNUT_BOWLING_DAMAGE = 550
 
@@ -367,6 +371,136 @@ CARD_TANGLEKLEP = 'card_tangleklep'
 CARD_DOOMSHROOM = 'card_doomshroom'
 CARD_GRAVEBUSTER = 'card_gravebuster'
 CARD_FUMESHROOM = 'card_fumeshroom'
+CARD_GARLIC = 'card_garlic'
+
+
+# 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
+PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
+            (PEASHOOTER,
+                CARD_PEASHOOTER,
+                100,
+                7500),
+            (SUNFLOWER,
+                CARD_SUNFLOWER,
+                50,
+                7500),
+            (CHERRYBOMB,
+                CARD_CHERRYBOMB,
+                150,
+                50000),
+            (WALLNUT,
+                CARD_WALLNUT,
+                50,
+                30000),
+            (POTATOMINE,
+                CARD_POTATOMINE, 
+                25,
+                30000),
+            (SNOWPEASHOOTER,
+                CARD_SNOWPEASHOOTER,
+                175,
+                7500),
+            (CHOMPER,
+                CARD_CHOMPER,
+                150,
+                7500),
+            (REPEATERPEA,
+                CARD_REPEATERPEA,
+                200,
+                7500),
+            (PUFFSHROOM,
+                CARD_PUFFSHROOM,
+                0,
+                7500),
+            (SUNSHROOM,
+                CARD_SUNSHROOM,
+                25,
+                7500),
+            (FUMESHROOM,
+                CARD_FUMESHROOM,
+                75,
+                7500),
+            (GRAVEBUSTER,
+                CARD_GRAVEBUSTER,
+                75,
+                7500),
+            (HYPNOSHROOM,
+                CARD_HYPNOSHROOM,
+                75,
+                30000),
+            (SCAREDYSHROOM,
+                CARD_SCAREDYSHROOM,
+                25,
+                7500),
+            (ICESHROOM,
+                CARD_ICESHROOM,
+                75,
+                50000),
+            (DOOMSHROOM,
+                CARD_DOOMSHROOM,
+                75,
+                50000),
+            (LILYPAD,
+                CARD_LILYPAD,
+                25,
+                7500),
+            (SQUASH,
+                CARD_SQUASH,
+                50,
+                30000),
+            (TANGLEKLEP,
+                CARD_TANGLEKLEP,
+                25,
+                30000),
+            (THREEPEASHOOTER,
+                CARD_THREEPEASHOOTER,
+                325,
+                7500),
+            (JALAPENO,
+                CARD_JALAPENO,
+                125,
+                50000),
+            (SPIKEWEED,
+                CARD_SPIKEWEED,
+                100,
+                7500),
+            (TORCHWOOD,
+                CARD_TORCHWOOD,
+                175,
+                7500),
+            (TALLNUT,
+                CARD_TALLNUT,
+                125,
+                30000),
+            (SEASHROOM,
+                CARD_SEASHROOM,
+                125,
+                30000),
+            (STARFRUIT,
+                CARD_STARFRUIT,
+                125,
+                7500),
+            (COFFEEBEAN,
+                CARD_COFFEEBEAN,
+                75,
+                7500),
+            (GARLIC,
+                CARD_GARLIC,
+                50,
+                7500),
+            # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
+            (WALLNUTBOWLING,
+                CARD_WALLNUT,
+                0,
+                0),
+            (REDWALLNUTBOWLING,
+                CARD_REDWALLNUT,
+                0,
+                0),
+            )
+
+# 指定了哪些卡可选（排除坚果保龄球特殊植物）
+CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 2)
 
 
 # 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
