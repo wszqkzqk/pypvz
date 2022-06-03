@@ -45,6 +45,7 @@ jobs:
                   --distpath ./out `
                   --noconsole `
                   --add-data="resources;./resources" `
+                  --add-data="pypvz-exec-logo.png;./pypvz-exec-logo.png" `
                   -i ./pypvz.ico
 
       - name: Release the version built by pyinstaller

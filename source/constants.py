@@ -8,6 +8,8 @@ GAME_RATE = 1
 
 # 窗口标题
 ORIGINAL_CAPTION = 'pypvz'
+# 窗口图标
+ORIGINAL_LOGO = "pypvz-exec-logo.png"
 
 # 游戏模式
 GAME_MODE = 'mode'

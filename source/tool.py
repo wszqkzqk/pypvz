@@ -203,6 +203,10 @@ def loadPlantImageRect():
 pg.init()
 pg.display.set_caption(c.ORIGINAL_CAPTION)  # 设置标题
 SCREEN = pg.display.set_mode(c.SCREEN_SIZE) # 设置初始屏幕
+try:    # 设置窗口图标，仅对非Nuitka时生效，Nuitka不需要包括额外的图标文件，自动跳过这一过程即可
+    pg.display.set_icon(pg.image.load(os.path.join(os.path.dirname(os.path.dirname(__file__)), c.ORIGINAL_LOGO)))
+except Exception:
+    pass
 
 GFX = load_all_gfx(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,os.path.join("resources","graphics")))
 ZOMBIE_RECT = loadZombieImageRect()
