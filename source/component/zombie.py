@@ -210,6 +210,7 @@ class Zombie(pg.sprite.Sprite):
             self.helmetType2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
                 self.speed = 2.65
+                self.walk_animate_interval = 300
         if (((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()))
             and (not self.lostHead)):
             if self.prey.health > 0:
@@ -700,6 +701,7 @@ class NewspaperZombie(Zombie):
                     self.changeFrames(self.walk_frames)
                     self.speedUp = True
                     self.speed = 2.65
+                    self.walk_animate_interval = 300
                     # 触发报纸僵尸暴走音效
                     pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperZombieAngry.ogg")).play()
                     return
