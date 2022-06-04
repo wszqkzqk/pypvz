@@ -207,7 +207,7 @@ class StarBullet(Bullet):
             else:
                 self.rect.x -= 10
             self.handleMapYPosition()
-            if ((self.rect.x > c.SCREEN_WIDTH + 60) or (self.rect.x < -40)
+            if ((self.rect.x > c.SCREEN_WIDTH + 60) or (self.rect.x < -60)
                 or (self.rect.y > c.SCREEN_HEIGHT) or (self.rect.y < 0)):
                 self.kill()
         elif self.state == c.EXPLODE:
@@ -1161,7 +1161,7 @@ class WallNutBowling(Plant):
             self.handleMapYPosition()
             if self.shouldChangeDirection():
                 self.changeDirection(-1)
-            if self.init_rect.x > c.SCREEN_WIDTH:
+            if self.init_rect.x > c.SCREEN_WIDTH + 60:
                 self.health = 0
             self.move_timer += self.move_interval
 
@@ -1253,7 +1253,7 @@ class RedWallNutBowling(Plant):
         elif (self.current_time - self.move_timer) >= self.move_interval:
             self.rotate_degree = (self.rotate_degree - 30) % 360
             self.init_rect.x += self.vel_x
-            if self.init_rect.x > c.SCREEN_WIDTH:
+            if self.init_rect.x > c.SCREEN_WIDTH + 60:
                 self.health = 0
             self.move_timer += self.move_interval
 
