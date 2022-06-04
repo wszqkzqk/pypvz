@@ -1132,6 +1132,9 @@ class Level(tool.State):
                     elif targetPlant.name == c.REDWALLNUTBOWLING:
                         if targetPlant.state == c.IDLE:
                             targetPlant.setAttack()
+                    elif zombie.targetYChange:
+                        # 大蒜作用正在生效的僵尸不进行传递
+                        continue
                     elif targetPlant.name == c.GARLIC:
                         zombie.setAttack(targetPlant)
                         # 向吃过大蒜的僵尸传入level
@@ -1394,7 +1397,8 @@ class Level(tool.State):
     def checkLose(self):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.rect.right < -20 and (not zombie.lostHead) and zombie.state != c.DIE:
+                if zombie.rect.right < -20 and (not zombie.lostHead) and (zombie.state != c.DIE):
+                    print(zombie.rect.right, zombie.lostHead, zombie.state,zombie.name)
                     return True
         return False
 
