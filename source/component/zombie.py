@@ -208,7 +208,7 @@ class Zombie(pg.sprite.Sprite):
         if self.targetYChange < 0:
             self.setWalk()
             if self.rect.bottom > self.originalY + self.targetYChange:  # 注意这里加的是负数
-                self.rect.bottom -= 3
+                self.rect.bottom -= 2
                 # 过半时换行
                 if ((self.toChangeGroup) and
                     (self.rect.bottom >= self.originalY + 0.5*self.targetYChange)):
@@ -221,7 +221,7 @@ class Zombie(pg.sprite.Sprite):
         elif self.targetYChange > 0:
             self.setWalk()
             if self.rect.bottom < self.originalY + self.targetYChange:  # 注意这里加的是负数
-                self.rect.bottom += 3
+                self.rect.bottom += 2
                 # 过半时换行
                 if ((self.toChangeGroup) and
                     (self.rect.bottom <= self.originalY + 0.5*self.targetYChange)):
