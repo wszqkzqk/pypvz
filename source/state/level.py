@@ -189,7 +189,7 @@ class Level(tool.State):
                             unoccupied = []
                             occupied = []
                             # 毁灭菇坑与冰道应当特殊化
-                            exceptionObjects = {c.HOLE, c.ICE_FROZEN_PLOT}
+                            exceptionObjects = {c.HOLE, c.ICEFROZENPLOT}
                             # 遍历能生成墓碑的区域
                             for mapY in range(0, 4):
                                 for mapX in range(4, 8):
@@ -1145,7 +1145,7 @@ class Level(tool.State):
                         else:
                             _move = random.randint(0, 1)*2 - 1
                             if self.map.map[i][0][c.MAP_PLOT_TYPE] != self.map.map[i + _move][0][c.MAP_PLOT_TYPE]:
-                                _move = -_move
+                                _move = -(_move)
                         zombie.targetMapY = i + _move
                         zombie.targetYChange = _move * self.map.gridHeightSize
                     else:
@@ -1351,7 +1351,7 @@ class Level(tool.State):
                                     targetPlant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
                     # 消除冰道
                     for item in self.plant_groups[i]:
-                        if item.name == c.ICE_FROZEN_PLOT:
+                        if item.name == c.ICEFROZENPLOT:
                             item.health = 0
                 elif targetPlant.name == c.ICESHROOM:
                     self.freezeZombies(targetPlant)

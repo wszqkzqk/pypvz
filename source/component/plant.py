@@ -1770,7 +1770,7 @@ class FumeShroom(Plant):
 
 class IceFrozenPlot(Plant):
     def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.ICE_FROZEN_PLOT, c.INF, None)
+        Plant.__init__(self, x, y, c.ICEFROZENPLOT, c.INF, None)
         self.timer = 0
 
     def idling(self):

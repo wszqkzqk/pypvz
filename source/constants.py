@@ -193,7 +193,7 @@ PANEL_Y_INTERNAL = 69
 PANEL_X_INTERNAL = 53
 BAR_CARD_X_INTERNAL = 51
 
-# 所选植物信息索引
+# 植物卡片信息索引
 PLANT_NAME_INDEX = 0
 CARD_INDEX = 1
 SUN_INDEX = 2
@@ -237,7 +237,7 @@ SEASHROOM = 'SeaShroom'
 TALLNUT = 'TallNut'
 TANGLEKLEP = 'TangleKlep'
 DOOMSHROOM = 'DoomShroom'
-ICE_FROZEN_PLOT = 'IceFrozenPlot'
+ICEFROZENPLOT = 'IceFrozenPlot'
 HOLE = 'Hole'
 GRAVE = 'Grave'
 GRAVEBUSTER = 'GraveBuster'
@@ -246,9 +246,9 @@ GARLIC = 'Garlic'
 
 
 # 植物集体属性集合
-# 在生效时不用与僵尸进行碰撞检测的对象
+# 在生效时不用与僵尸进行碰撞检测的对象（即生效时不可发生被僵尸啃食的事件）
 SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING = {
-                # 注意爆炸坚果的触发也是啃食类碰撞，因此这里不能省略
+                # 注意爆炸坚果的触发也是啃食类碰撞，因此只能算作爆炸后不检测
                 SQUASH, ICESHROOM,
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 JALAPENO, DOOMSHROOM,
@@ -257,12 +257,15 @@ SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING = {
 
 # 非植物对象
 NON_PLANT_OBJECTS = {
-                HOLE, ICE_FROZEN_PLOT,
+                HOLE, ICEFROZENPLOT,
                 GRAVE,
                 }
 
 # 所有可能不用与僵尸进行碰撞检测的对象
 CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 这里运用了集合运算
+                # 注意这个外围的小括号是用来换行的
+                # 各个部分末尾千万不能加逗号！！！
+
                 # 生效时不检测的植物
                 SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING |
                 # 非植物对象
@@ -274,7 +277,7 @@ CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 这里运用了集合运算
 # 死亡时不触发音效的对象
 PLANT_DIE_SOUND_EXCEPTIONS = {
                 WALLNUTBOWLING, TANGLEKLEP,
-                ICE_FROZEN_PLOT, HOLE,
+                ICEFROZENPLOT, HOLE,
                 GRAVE, JALAPENO,
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 }
