@@ -211,7 +211,7 @@ class StarBullet(Bullet):
                 or (self.rect.y > c.SCREEN_HEIGHT) or (self.rect.y < 0)):
                 self.kill()
         elif self.state == c.EXPLODE:
-            if (self.current_time - self.explode_timer) > 250:
+            if (self.current_time - self.explode_timer) >= 250:
                 self.kill()
 
     # 这里用的是坚果保龄球的代码改一下，实现子弹换行
@@ -220,7 +220,6 @@ class StarBullet(Bullet):
             _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery + 40)
         else:
             _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery + 20)
-        # _, map_y2 = self.level.map.getMapIndex(self.rect.x, self.rect.bottom +20)
         if (self.map_y != map_y1) and (0 <= map_y1 <= self.level.map_y_len-1):    # 换行
             self.level.bullet_groups[self.map_y].remove(self)
             self.level.bullet_groups[map_y1].add(self)
@@ -344,8 +343,8 @@ class Plant(pg.sprite.Sprite):
             self.health -= damage
         self.hit_timer = self.current_time
         if ((self.name == c.HYPNOSHROOM) and
-        (self.state != c.SLEEP) and
-        (zombie.name not in {c.ZOMBONI, "投石车僵尸（未实现）", "加刚特尔（未实现）"})):
+            (self.state != c.SLEEP) and
+            (zombie.name not in {c.ZOMBONI, "投石车僵尸（未实现）", "加刚特尔（未实现）"})):
             self.zombie_to_hypno = zombie
 
     def getPosition(self):
@@ -383,7 +382,7 @@ class Sun(Plant):
         if self.state == c.DIE:
             return False
         if (x >= self.rect.x and x <= self.rect.right and
-                y >= self.rect.y and y <= self.rect.bottom):
+            y >= self.rect.y and y <= self.rect.bottom):
             self.state = c.DIE
             self.kill()
             return True
@@ -626,8 +625,8 @@ class Chomper(Plant):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         elif (self.state == c.IDLE and zombie.state != c.DIGEST and
-                self.rect.x <= zombie.rect.centerx and (not zombie.lostHead) and
-                (self.rect.x + c.GRID_X_SIZE*2.7 >= zombie.rect.centerx)):
+            self.rect.x <= zombie.rect.centerx and (not zombie.lostHead) and
+            (self.rect.x + c.GRID_X_SIZE*2.7 >= zombie.rect.centerx)):
             return True
         return False
 
@@ -702,7 +701,7 @@ class PuffShroom(Plant):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         if (self.rect.x <= zombie.rect.right and
-                (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+            (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -796,7 +795,7 @@ class Squash(Plant):
     def canAttack(self, zombie):
         # 普通状态
         if (self.state == c.IDLE and self.rect.x <= zombie.rect.right and
-                (self.rect.right + c.GRID_X_SIZE >= zombie.rect.x)):
+            (self.rect.right + c.GRID_X_SIZE >= zombie.rect.x)):
             return True
         # 攻击状态
         elif (self.state == c.ATTACK):
@@ -1431,7 +1430,7 @@ class SeaShroom(Plant):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         if (self.rect.x <= zombie.rect.right and
-                (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+            (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -1723,7 +1722,7 @@ class FumeShroom(Plant):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         if (self.rect.x <= zombie.rect.right and
-                (self.rect.x + c.GRID_X_SIZE * 5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+            (self.rect.x + c.GRID_X_SIZE * 5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 

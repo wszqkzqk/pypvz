@@ -581,32 +581,32 @@ class Level(tool.State):
     # 检查小菜单有没有被点击
     def checkLittleMenuClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.little_menu_rect.x and x <= self.little_menu_rect.right and
-           y >= self.little_menu_rect.y and y <= self.little_menu_rect.bottom):
+        if (x >= self.little_menu_rect.x and x <= self.little_menu_rect.right and
+            y >= self.little_menu_rect.y and y <= self.little_menu_rect.bottom):
             return True
         return False
 
     # 检查小菜单的返回有没有被点击
     def checkReturnClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.return_button_rect.x and x <= self.return_button_rect.right and
-           y >= self.return_button_rect.y and y <= self.return_button_rect.bottom):
+        if (x >= self.return_button_rect.x and x <= self.return_button_rect.right and
+            y >= self.return_button_rect.y and y <= self.return_button_rect.bottom):
             return True
         return False
 
     # 检查小菜单的重新开始有没有被点击
     def checkRestartClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.restart_button_rect.x and x <= self.restart_button_rect.right and
-           y >= self.restart_button_rect.y and y <= self.restart_button_rect.bottom):
+        if (x >= self.restart_button_rect.x and x <= self.restart_button_rect.right and
+            y >= self.restart_button_rect.y and y <= self.restart_button_rect.bottom):
             return True
         return False
     
     # 检查小菜单的主菜单有没有被点击
     def checkMainMenuClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.mainMenu_button_rect.x and x <= self.mainMenu_button_rect.right and
-           y >= self.mainMenu_button_rect.y and y <= self.mainMenu_button_rect.bottom):
+        if (x >= self.mainMenu_button_rect.x and x <= self.mainMenu_button_rect.right and
+            y >= self.mainMenu_button_rect.y and y <= self.mainMenu_button_rect.bottom):
             return True
         return False
 
@@ -910,7 +910,7 @@ class Level(tool.State):
             new_plant = plant.TangleKlep(x, y)
         elif self.plant_name == c.DOOMSHROOM:
             if ((self.map_data[c.BACKGROUND_TYPE] in c.ON_ROOF_BACKGROUNDS) or
-            (self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS)):
+                (self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS)):
                 new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
             else:
                 new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2)
@@ -1188,7 +1188,7 @@ class Level(tool.State):
                 continue
             for zombie in self.zombie_groups[i]:
                 if ((abs(zombie.rect.centerx - x) <= x_range) or
-                ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.2, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
+                    ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.2, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
                     if effect == c.BULLET_EFFECT_UNICE:
                         zombie.ice_slow_ratio = 1
                     zombie.setDamage(1800, damageType=c.ZOMBIE_ASH_DAMAGE)
@@ -1280,7 +1280,7 @@ class Level(tool.State):
                 for zombie in self.zombie_groups[i]:
                     # 双判断：发生碰撞或在攻击范围内
                     if ((pg.sprite.collide_mask(zombie, targetPlant)) or
-                    (abs(zombie.rect.centerx - targetPlant.rect.centerx) <= targetPlant.explode_x_range)):
+                        (abs(zombie.rect.centerx - targetPlant.rect.centerx) <= targetPlant.explode_x_range)):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
                 targetPlant.boomed = True
         elif targetPlant.name == c.SQUASH:
