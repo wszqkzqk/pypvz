@@ -38,7 +38,7 @@ class Car(pg.sprite.Sprite):
 
 # 豌豆及孢子类普通子弹
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, x, start_y, dest_y, name, damage, effect=None, passedTorchWood=None):
+    def __init__(self, x, start_y, dest_y, name, damage, effect=None, passedTorchWood=None, damageType=c.ZOMBIE_DEAFULT_DAMAGE):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -55,6 +55,7 @@ class Bullet(pg.sprite.Sprite):
         self.y_vel = 15 if (dest_y > start_y) else -15
         self.x_vel = 10
         self.damage = damage
+        self.damageType = damageType
         self.effect = effect
         self.state = c.FLY
         self.current_time = 0
@@ -182,8 +183,8 @@ class Fume(pg.sprite.Sprite):
 
 # 杨桃的子弹
 class StarBullet(Bullet):
-    def __init__(self, x, start_y, damage, direction, level):    # direction指星星飞行方向
-        Bullet.__init__(self, x, start_y, start_y, c.BULLET_STAR, damage)
+    def __init__(self, x, start_y, damage, direction, level, damageType = c.ZOMBIE_DEAFULT_DAMAGE):    # direction指星星飞行方向
+        Bullet.__init__(self, x, start_y, start_y, c.BULLET_STAR, damage, damageType = damageType)
 
         self.level = level
         _, self.map_y = self.level.map.getMapIndex(self.rect.x, self.rect.centery)
@@ -1338,7 +1339,9 @@ class StarFruit(Plant):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
-            self.bullet_group.add(StarBullet(self.rect.left - 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level))
+            # 向后打的杨桃子弹无视铁门与报纸防具
+            self.bullet_group.add(StarBullet(self.rect.left - 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level, damageType = c.ZOMBIE_COMMON_DAMAGE))
+            # 其他方向的杨桃子弹伤害效果与豌豆等同
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h - 15, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.bottom - 20, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN, self.level))
@@ -1588,6 +1591,7 @@ class DoomShroom(Plant):
             self.image.set_alpha(192)
         else:
             self.image.set_alpha(255)
+
 
 # 用于描述毁灭菇的坑
 class Hole(Plant):

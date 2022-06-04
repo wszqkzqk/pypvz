@@ -1015,7 +1015,7 @@ class Level(tool.State):
                             continue
                         if collided_func(zombie, bullet):
                             if zombie.state != c.DIE:
-                                zombie.setDamage(bullet.damage, effect=bullet.effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+                                zombie.setDamage(bullet.damage, effect=bullet.effect, damageType=bullet.damageType)
                                 bullet.setExplode()
                                 # 火球有溅射伤害
                                 if bullet.name == c.BULLET_FIREBALL:
