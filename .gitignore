@@ -1,8 +1,9 @@
-# ignore debug
+# 忽略构建内容
 out/
 build/
+# 忽略调试内容
 .vscode/
 __pycache__/
 */__pycache__/
-# ignore test
+# 忽略测试文件
 test.py
