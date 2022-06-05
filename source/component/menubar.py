@@ -168,8 +168,8 @@ class MenuBar():
     
     def checkMenuBarClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.rect.x and x <= self.rect.right and
-           y >= self.rect.y and y <= self.rect.bottom):
+        if (x >= self.rect.x and x <= self.rect.right and
+            y >= self.rect.y and y <= self.rect.bottom):
             return True
         return False
 

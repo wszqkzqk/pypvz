@@ -320,7 +320,7 @@ class Level(tool.State):
     def setupCars(self):
         self.cars = []
         for i in range(self.map_y_len):
-            _, y = self.map.getMapGridPos(0, i)
+            y = self.map.getMapGridPos(0, i)[1]
             self.cars.append(plant.Car(-40, y+20, i))
 
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数

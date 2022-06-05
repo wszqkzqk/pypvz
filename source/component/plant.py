@@ -187,7 +187,7 @@ class StarBullet(Bullet):
         Bullet.__init__(self, x, start_y, start_y, c.BULLET_STAR, damage, damageType = damageType)
 
         self.level = level
-        _, self.map_y = self.level.map.getMapIndex(self.rect.x, self.rect.centery)
+        self.map_y = self.level.map.getMapIndex(self.rect.x, self.rect.centery)[1]
         self.direction = direction
 
     def update(self, game_info):
@@ -217,9 +217,9 @@ class StarBullet(Bullet):
     # 这里用的是坚果保龄球的代码改一下，实现子弹换行
     def handleMapYPosition(self):
         if self.direction == c.STAR_UPWARD:
-            _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery + 40)
+            map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery + 40)[1]
         else:
-            _, map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery + 20)
+            map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery + 20)[1]
         if (self.map_y != map_y1) and (0 <= map_y1 <= self.level.map_y_len-1):    # 换行
             self.level.bullet_groups[self.map_y].remove(self)
             self.level.bullet_groups[map_y1].add(self)
@@ -1170,8 +1170,8 @@ class WallNutBowling(Plant):
         return True
 
     def handleMapYPosition(self):
-        _, map_y1 = self.level.map.getMapIndex(self.init_rect.x, self.init_rect.centery)
-        _, map_y2 = self.level.map.getMapIndex(self.init_rect.x, self.init_rect.bottom)
+        map_y1 = self.level.map.getMapIndex(self.init_rect.x, self.init_rect.centery)[1]
+        map_y2 = self.level.map.getMapIndex(self.init_rect.x, self.init_rect.bottom)[1]
         if self.map_y != map_y1 and map_y1 == map_y2:
             # wallnut bowls to another row, should modify which plant group it belongs to
             self.level.plant_groups[self.map_y].remove(self)
@@ -1319,7 +1319,7 @@ class StarFruit(Plant):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         if zombie.state != c.DIE:
-            _, zombieMapY = self.level.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)
+            zombieMapY = self.level.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)[1]
             if (self.rect.x >= zombie.rect.x) and (self.map_y == zombieMapY):  # 对于同行且在杨桃后的僵尸
                 return True
             # 斜向上，理想直线方程为：f(zombie.rect.x) = -0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10
