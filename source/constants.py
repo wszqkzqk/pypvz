@@ -158,10 +158,16 @@ MAP_WATER = 'water'
 MAP_TILE = 'tile'  # 指屋顶上的瓦片
 MAP_UNAVAILABLE = 'unavailable' # 指完全不能种植物的地方，包括无草皮的荒地和坚果保龄球等红线右侧
 # 地图单元格状态
-MAP_STATE_EMPTY = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_GRASS}  # 由于同一格显然不可能种两个相同的植物，所以用集合
-MAP_STATE_WATER = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_WATER}
-MAP_STATE_TILE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_TILE}
-MAP_STATE_UNAVAILABLE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_UNAVAILABLE}
+# 注意是可变对象，不能直接引用
+# 不喜欢用深拷贝，直接改用函数表示，需要时直接调用该函数生成即可
+def MAP_STATE_EMPTY():  # 由于同一格显然不可能种两个相同的植物，所以用集合
+    return {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_GRASS}
+def MAP_STATE_WATER():
+    return {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_WATER}
+def MAP_STATE_TILE():
+    return {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_TILE}
+def MAP_STATE_UNAVAILABLE():
+    return {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_UNAVAILABLE}
 
 # 地图相关像素数据
 BACKGROUND_OFFSET_X = 220

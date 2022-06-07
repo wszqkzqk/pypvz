@@ -2,38 +2,36 @@ import random
 import pygame as pg
 from .. import tool
 from .. import constants as c
-from copy import deepcopy
 
 class Map():
     def __init__(self, background_type):
         self.background_type = background_type
         # 注意：从0开始编号
-        # 集合内容需要deepcopy
         if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
             self.width = c.GRID_POOL_X_LEN
             self.height = c.GRID_POOL_Y_LEN
             self.gridHeightSize = c.GRID_POOL_Y_SIZE
-            self.map = [[(deepcopy(c.MAP_STATE_EMPTY), deepcopy(c.MAP_STATE_WATER))[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(c.MAP_STATE_EMPTY(), c.MAP_STATE_WATER())[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
         elif self.background_type in c.ON_ROOF_BACKGROUNDS:
             self.width = c.GRID_ROOF_X_LEN
             self.height = c.GRID_ROOF_Y_LEN
             self.gridHeightSize = c.GRID_ROOF_Y_SIZE
-            self.map = [[deepcopy(c.MAP_STATE_TILE) for x in range(self.width)] for y in range(self.height)]
+            self.map = [[c.MAP_STATE_TILE() for x in range(self.width)] for y in range(self.height)]
         elif self.background_type == c.BACKGROUND_SINGLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[(deepcopy(c.MAP_STATE_UNAVAILABLE), deepcopy(c.MAP_STATE_EMPTY))[y == 2] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(c.MAP_STATE_UNAVAILABLE(), c.MAP_STATE_EMPTY())[y == 2] for x in range(self.width)] for y in range(self.height)]
         elif self.background_type == c.BACKGROUND_TRIPLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[(deepcopy(c.MAP_STATE_UNAVAILABLE), deepcopy(c.MAP_STATE_EMPTY))[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(c.MAP_STATE_UNAVAILABLE(), c.MAP_STATE_EMPTY())[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
         else:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[deepcopy(c.MAP_STATE_EMPTY) for x in range(self.width)] for y in range(self.height)]
+            self.map = [[c.MAP_STATE_EMPTY() for x in range(self.width)] for y in range(self.height)]
 
     def isValid(self, map_x, map_y):
         if (map_x < 0 or map_x >= self.width or
