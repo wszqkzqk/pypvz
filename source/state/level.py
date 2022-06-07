@@ -93,15 +93,11 @@ class Level(tool.State):
         self.sun_group = pg.sprite.Group()
         self.head_group = pg.sprite.Group()
 
-        self.plant_groups = []
-        self.zombie_groups = []
-        self.hypno_zombie_groups = [] #zombies who are hypno after eating hypnoshroom
-        self.bullet_groups = []
-        for i in range(self.map_y_len):
-            self.plant_groups.append(pg.sprite.Group())
-            self.zombie_groups.append(pg.sprite.Group())
-            self.hypno_zombie_groups.append(pg.sprite.Group())
-            self.bullet_groups.append(pg.sprite.Group())
+        # 改用列表生成器直接生成内容，不再在这里使用for循环
+        self.plant_groups = [pg.sprite.Group() for i in range(self.map_y_len)]
+        self.zombie_groups = [pg.sprite.Group() for i in range(self.map_y_len)]
+        self.hypno_zombie_groups = [pg.sprite.Group() for i in range(self.map_y_len)] #zombies who are hypno after eating hypnoshroom
+        self.bullet_groups = [pg.sprite.Group() for i in range(self.map_y_len)]
 
 
     # 按照规则生成每一波僵尸
