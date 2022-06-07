@@ -110,6 +110,7 @@ nuitka --mingw64 --standalone `
         --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll `
         --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll `
         --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll `
+        --lto=yes `
         --windows-disable-console `
         --windows-product-name=pypvz `
         --windows-company-name=null `
@@ -121,6 +122,7 @@ nuitka --mingw64 --standalone `
 * 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径
 * 由于仅复制了`opus`与`vorbis`的解码器，故要求所有背景音乐都要以opus或vorbis编码
 * `--windows-product-version=`表示版本号信息，所跟内容格式必须为`x.x.x.x`
+* 建议开启`--lto=yes`选项优化链接，如果编译失败可以关闭此选项
 
 可执行文件生成路径为`./out/main.exe`
 

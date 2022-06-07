@@ -270,7 +270,7 @@ NON_PLANT_OBJECTS = {
 # 所有可能不用与僵尸进行碰撞检测的对象
 CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 这里运用了集合运算
                 # 注意这个外围的小括号是用来换行的
-                # 各个部分末尾千万不能加逗号！！！
+                # 各个部分末！尾！千！万！不！能！加！逗！号！！！
 
                 # 生效时不检测的植物
                 SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING |
