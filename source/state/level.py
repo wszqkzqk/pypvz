@@ -340,7 +340,7 @@ class Level(tool.State):
     def initBowlingMap(self):
         for x in range(3, self.map.width):
             for y in range(self.map.height):
-                self.map.setMapGridType(x, y, c.MAP_STATE_UNAVAILABLE) # 将坚果保龄球红线右侧设置为不可种植任何植物
+                self.map.setMapGridType(x, y, c.MAP_UNAVAILABLE) # 将坚果保龄球红线右侧设置为不可种植任何植物
 
     def initState(self):
         if c.CHOOSEBAR_TYPE in self.map_data:
