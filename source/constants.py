@@ -136,7 +136,7 @@ BACKGROUND_DAY_LIKE_BACKGROUNDS = {
 
 # 夜晚地图的墓碑数量等级
 GRADE_GRAVES = 'grade_graves'
-# 不同墓碑等级对应的信息
+# 不同墓碑等级对应的信息，列表位置对应的是墓碑等级
 GRAVES_GRADE_INFO = (0, 4, 7, 11)
 
 # 僵尸生成方式
