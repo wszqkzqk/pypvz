@@ -97,8 +97,10 @@ class Menu(tool.State):
         # 高亮冒险模式按钮
         if self.inAreaAdventure(x, y):
             self.adventure_highlight_time = self.current_time
+        # 高亮退出按钮
         elif self.inAreaExit(x, y):
             self.exit_highlight_time = self.current_time
+        # 高亮小游戏按钮
         elif self.inAreaLittleGame(x, y):
             self.littleGame_highlight_time = self.current_time
 
@@ -126,8 +128,6 @@ class Menu(tool.State):
         x, y = mouse_pos
         if self.inAreaLittleGame(x, y):
             self.done = True
-            # 确实小游戏还是用的level
-            # 因为目前暂时没有生存模式和解谜模式，所以暂时设置为这样
             self.persist[c.GAME_MODE] = c.MODE_LITTLEGAME
             # 播放点击音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
