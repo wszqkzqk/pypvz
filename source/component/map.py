@@ -11,27 +11,27 @@ class Map():
             self.width = c.GRID_POOL_X_LEN
             self.height = c.GRID_POOL_Y_LEN
             self.gridHeightSize = c.GRID_POOL_Y_SIZE
-            self.map = [[(c.MAP_STATE_EMPTY(), c.MAP_STATE_WATER())[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(c.INIT_MAP_GRID(c.MAP_GRASS), c.INIT_MAP_GRID(c.MAP_WATER))[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
         elif self.background_type in c.ON_ROOF_BACKGROUNDS:
             self.width = c.GRID_ROOF_X_LEN
             self.height = c.GRID_ROOF_Y_LEN
             self.gridHeightSize = c.GRID_ROOF_Y_SIZE
-            self.map = [[c.MAP_STATE_TILE() for x in range(self.width)] for y in range(self.height)]
+            self.map = [[c.INIT_MAP_GRID(c.MAP_TILE) for x in range(self.width)] for y in range(self.height)]
         elif self.background_type == c.BACKGROUND_SINGLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[(c.MAP_STATE_UNAVAILABLE(), c.MAP_STATE_EMPTY())[y == 2] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(c.INIT_MAP_GRID(c.MAP_UNAVAILABLE), c.INIT_MAP_GRID(c.MAP_GRASS))[y == 2] for x in range(self.width)] for y in range(self.height)]
         elif self.background_type == c.BACKGROUND_TRIPLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[(c.MAP_STATE_UNAVAILABLE(), c.MAP_STATE_EMPTY())[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(c.INIT_MAP_GRID(c.MAP_UNAVAILABLE), c.INIT_MAP_GRID(c.MAP_GRASS))[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
         else:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[c.MAP_STATE_EMPTY() for x in range(self.width)] for y in range(self.height)]
+            self.map = [[c.INIT_MAP_GRID(c.MAP_GRASS) for x in range(self.width)] for y in range(self.height)]
 
     def isValid(self, map_x, map_y):
         if (map_x < 0 or map_x >= self.width or
