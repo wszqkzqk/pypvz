@@ -639,4 +639,4 @@ CHOOSE = 'choose'
 PLAY = 'play'
 
 # 无穷大常量
-INF = float('inf')
+INF = 1e1024    # 等价于float("inf")
