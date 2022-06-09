@@ -639,4 +639,4 @@ CHOOSE = 'choose'
 PLAY = 'play'
 
 # 无穷大常量
-INF = float("inf")
+INF = float("inf")  # python传递字符串性能较低，故在这里对inf声明一次，以后仅需调用即可
