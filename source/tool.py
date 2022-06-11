@@ -90,7 +90,7 @@ class Control():
                 self.mouse_pos = pg.mouse.get_pos()
                 self.mouse_click[0], _, self.mouse_click[1] = pg.mouse.get_pressed()
                 # self.mouse_click[0]表示左键，self.mouse_click[1]表示右键
-                print('点击位置:', self.mouse_pos, '左右键点击情况:', self.mouse_click)
+                print(f'''点击位置: ({self.mouse_pos[0]:3}, {self.mouse_pos[1]:3}) 左右键点击情况: {self.mouse_click}''')
 
 
     def run(self):
