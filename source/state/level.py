@@ -24,7 +24,13 @@ class Level(tool.State):
         self.showLittleMenu = False
 
         # 导入地图参数
-        self.loadMap()
+        # 这些注释内容是将来增加通过界面后的容错设计，以保证直接通关时不会闪退
+        # 现在为了明确一开始就没有正确导入地图的错误，没有启用这些设定
+        # if self.loadMap():  # 表示导入成功
+        #     self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
+        #     self.map_y_len = self.map.height
+        #     self.setupBackground()
+        #     self.initState()
         self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
         self.map_y_len = self.map.height
         self.setupBackground()
@@ -32,9 +38,9 @@ class Level(tool.State):
 
     def loadMap(self):
         if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-            map_file = 'littleGame_' + str(self.game_info[c.LITTLEGAME_NUM]) + '.json'
+            map_file = f'littleGame_{self.game_info[c.LITTLEGAME_NUM]}.json'
         elif self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
-            map_file = 'level_' + str(self.game_info[c.LEVEL_NUM]) + '.json'
+            map_file = f'level_{self.game_info[c.LEVEL_NUM]}.json'
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
@@ -55,6 +61,7 @@ class Level(tool.State):
             return
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
         self.hasShovel = self.map_data[c.SHOVEL]
+        return True
 
         # 同时指定音乐
         # 缺省音乐为进入的音乐，方便发现错误
@@ -321,6 +328,9 @@ class Level(tool.State):
 
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
+        # 这些注释内容是将来增加通过界面后的容错设计，以保证直接通关时不会闪退
+        # if self.done:
+        #     return
         self.current_time = self.game_info[c.CURRENT_TIME] = self.pvzTime(current_time)
         if self.state == c.CHOOSE:
             self.choose(mouse_pos, mouse_click)
