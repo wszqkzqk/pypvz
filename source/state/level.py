@@ -1041,7 +1041,7 @@ class Level(tool.State):
                     # 被攻击对象是植物时才可能刷新
                     if zombie.prey_is_plant:
                         # 新植物种在被攻击植物同一格时才可能刷新
-                        if (mapX, mapY) == self.newPlantAndPositon[1]:
+                        if (zombie.preyMapX, zombie.preyMapY) == self.newPlantAndPositon[1]:
                             # 如果被攻击植物是睡莲和花盆，同一格种了植物必然刷新
                             # 如果被攻击植物不是睡莲和花盆，同一格种了南瓜头才刷新
                             if ((zombie.prey.name not in {c.LILYPAD, "花盆（未实现）"})
@@ -1098,11 +1098,11 @@ class Level(tool.State):
                         targetPlant = None
 
                 if targetPlant:
+                    zombie.preyMapX, zombie.preyMapY = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.centery)
                     # 撑杆跳的特殊情况
                     if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
                         if not zombie.jumping:
-                            zombie.jumpMap_x, zombie.jumpMap_y = self.map.getMapIndex(targetPlant.rect.centerx, targetPlant.rect.centery)
-                            zombie.jumpMap_x, zombie.jumpMap_y = min(c.GRID_X_LEN - 1, zombie.jumpMap_x), min(self.map_y_len - 1, zombie.jumpMap_y)
+                            zombie.jumpMap_x, zombie.jumpMap_y = min(c.GRID_X_LEN - 1, zombie.preyMapX), min(self.map_y_len - 1, zombie.preyMapY)
                             jumpX = targetPlant.rect.x - c.GRID_X_SIZE * 0.6
                             if c.TALLNUT in self.map.map[zombie.jumpMap_y][zombie.jumpMap_x][c.MAP_PLANT]:
                                 zombie.setJump(False, jumpX)

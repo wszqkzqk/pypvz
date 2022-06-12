@@ -433,7 +433,7 @@ class Zombie(pg.sprite.Sprite):
                 self.health -= damage
         else:
             print('警告：植物攻击类型错误，现在默认进行类豌豆射手型攻击')
-            setDamage(damage, effect=effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+            self.setDamage(damage, effect=effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
         
         # 记录攻击时间              
         self.hit_timer = self.current_time
