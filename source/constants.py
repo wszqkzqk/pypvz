@@ -136,7 +136,7 @@ BACKGROUND_DAY_LIKE_BACKGROUNDS = {
 
 # 夜晚地图的墓碑数量等级
 GRADE_GRAVES = 'grade_graves'
-# 不同墓碑等级对应的信息
+# 不同墓碑等级对应的信息，列表位置对应的是墓碑等级
 GRAVES_GRADE_INFO = (0, 4, 7, 11)
 
 # 僵尸生成方式
@@ -158,10 +158,11 @@ MAP_WATER = 'water'
 MAP_TILE = 'tile'  # 指屋顶上的瓦片
 MAP_UNAVAILABLE = 'unavailable' # 指完全不能种植物的地方，包括无草皮的荒地和坚果保龄球等红线右侧
 # 地图单元格状态
-MAP_STATE_EMPTY = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_GRASS}  # 由于同一格显然不可能种两个相同的植物，所以用集合
-MAP_STATE_WATER = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_WATER}
-MAP_STATE_TILE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_TILE}
-MAP_STATE_UNAVAILABLE = {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:MAP_UNAVAILABLE}
+# 注意是可变对象，不能直接引用
+# 不喜欢用深拷贝，直接改用函数表示，需要时直接调用该函数生成即可
+# 由于同一格显然不可能种两个相同的植物，所以用集合
+def INIT_MAP_GRID(PLOT_TYPE):
+    return {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:PLOT_TYPE}
 
 # 地图相关像素数据
 BACKGROUND_OFFSET_X = 220
@@ -193,7 +194,7 @@ PANEL_Y_INTERNAL = 69
 PANEL_X_INTERNAL = 53
 BAR_CARD_X_INTERNAL = 51
 
-# 所选植物信息索引
+# 植物卡片信息索引
 PLANT_NAME_INDEX = 0
 CARD_INDEX = 1
 SUN_INDEX = 2
@@ -237,7 +238,7 @@ SEASHROOM = 'SeaShroom'
 TALLNUT = 'TallNut'
 TANGLEKLEP = 'TangleKlep'
 DOOMSHROOM = 'DoomShroom'
-ICE_FROZEN_PLOT = 'IceFrozenPlot'
+ICEFROZENPLOT = 'IceFrozenPlot'
 HOLE = 'Hole'
 GRAVE = 'Grave'
 GRAVEBUSTER = 'GraveBuster'
@@ -246,9 +247,9 @@ GARLIC = 'Garlic'
 
 
 # 植物集体属性集合
-# 在生效时不用与僵尸进行碰撞检测的对象
+# 在生效时不用与僵尸进行碰撞检测的对象（即生效时不可发生被僵尸啃食的事件）
 SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING = {
-                # 注意爆炸坚果的触发也是啃食类碰撞，因此这里不能省略
+                # 注意爆炸坚果的触发也是啃食类碰撞，因此只能算作爆炸后不检测
                 SQUASH, ICESHROOM,
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 JALAPENO, DOOMSHROOM,
@@ -257,12 +258,15 @@ SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING = {
 
 # 非植物对象
 NON_PLANT_OBJECTS = {
-                HOLE, ICE_FROZEN_PLOT,
+                HOLE, ICEFROZENPLOT,
                 GRAVE,
                 }
 
 # 所有可能不用与僵尸进行碰撞检测的对象
 CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 这里运用了集合运算
+                # 注意这个外围的小括号是用来换行的
+                # 各个部分末！尾！千！万！不！能！加！逗！号！！！
+
                 # 生效时不检测的植物
                 SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING |
                 # 非植物对象
@@ -274,7 +278,7 @@ CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 这里运用了集合运算
 # 死亡时不触发音效的对象
 PLANT_DIE_SOUND_EXCEPTIONS = {
                 WALLNUTBOWLING, TANGLEKLEP,
-                ICE_FROZEN_PLOT, HOLE,
+                ICEFROZENPLOT, HOLE,
                 GRAVE, JALAPENO,
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 }
@@ -635,4 +639,4 @@ CHOOSE = 'choose'
 PLAY = 'play'
 
 # 无穷大常量
-INF = float('inf')
+INF = float("inf")  # python传递字符串性能较低，故在这里对inf声明一次，以后仅需调用即可

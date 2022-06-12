@@ -4,7 +4,7 @@
   
 **本项目为个人python语言学习的练习项目，仅供个人学习和研究使用，不得用于其他用途。如果这个游戏侵犯了版权，请联系我删除**
 
-* 已有的植物：向日葵，豌豆射手，坚果墙，寒冰射手，樱桃炸弹，双发射手，三线射手，大嘴花，小喷菇，土豆雷，地刺，胆小菇，倭瓜，火爆辣椒，阳光菇，寒冰菇，魅惑菇，火炬树桩，睡莲，杨桃，咖啡豆，海蘑菇，高坚果，缠绕水草，毁灭菇，墓碑吞噬者，大喷菇
+* 已有的植物：向日葵，豌豆射手，坚果墙，寒冰射手，樱桃炸弹，双发射手，三线射手，大嘴花，小喷菇，土豆雷，地刺，胆小菇，倭瓜，火爆辣椒，阳光菇，寒冰菇，魅惑菇，火炬树桩，睡莲，杨桃，咖啡豆，海蘑菇，高坚果，缠绕水草，毁灭菇，墓碑吞噬者，大喷菇，大蒜
 * 已有的僵尸：普通僵尸，旗帜僵尸，路障僵尸，铁桶僵尸，读报僵尸，橄榄球僵尸，鸭子救生圈僵尸，铁门僵尸，撑杆跳僵尸，冰车僵尸，潜水僵尸
 * 使用 JSON 文件记录关卡信息数据 
 * 支持选择植物卡片
@@ -21,7 +21,7 @@
 
 ## 环境要求
 
-* `Python` >= 3.7，最好使用最新版
+* `Python` >= 3.10，最好使用最新版
 * `Python-Pygame` >= 1.9，最好使用最新版
 
 ## 开始游戏
@@ -44,7 +44,6 @@ python main.py
   - 程序包含名称、版本等信息
   - 得到的验证最多（相对）
   - 并非每次提交都会更新，更新可能不及时
-  - `0.7.25.0`之后的部分版本被标注成了`pre-release`，实际上仍然为普通版本，按需下载即可
 - 也可以直接下载GitHub Workflow[自动利用Nuitka构建的版本（点击跳转）](https://github.com/wszqkzqk/pypvz/releases/tag/Latest)（推荐）：
   - 使用MSVC编译
   - 每次提交均会更新，保证更新及时
@@ -111,6 +110,7 @@ nuitka --mingw64 --standalone `
         --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll `
         --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll `
         --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll `
+        --lto=yes `
         --windows-disable-console `
         --windows-product-name=pypvz `
         --windows-company-name=null `
@@ -122,6 +122,7 @@ nuitka --mingw64 --standalone `
 * 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径
 * 由于仅复制了`opus`与`vorbis`的解码器，故要求所有背景音乐都要以opus或vorbis编码
 * `--windows-product-version=`表示版本号信息，所跟内容格式必须为`x.x.x.x`
+* 建议开启`--lto=yes`选项优化链接，如果编译失败可以关闭此选项
 
 可执行文件生成路径为`./out/main.exe`
 

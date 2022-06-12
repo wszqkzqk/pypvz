@@ -30,7 +30,7 @@ class Screen(tool.State):
         self.rect.y = 0
 
     def update(self, surface, current_time, mouse_pos, mouse_click):
-        if(current_time - self.start_time) < self.end_time:
+        if (current_time - self.start_time) < self.end_time:
             surface.fill(c.WHITE)
             surface.blit(self.image, self.rect)
         else:

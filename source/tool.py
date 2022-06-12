@@ -14,7 +14,7 @@ class State():
         self.done = False   # false 代表未做完
         self.next = None    # 表示这个状态退出后要转到的下一个状态
         self.persist = {}   # 在状态间转换时需要传递的数据
-    
+
     # 当从其他状态进入这个状态时，需要进行的初始化操作
     @abstractmethod
     def startup(self, current_time, persist):
@@ -90,7 +90,8 @@ class Control():
                 self.mouse_pos = pg.mouse.get_pos()
                 self.mouse_click[0], _, self.mouse_click[1] = pg.mouse.get_pressed()
                 # self.mouse_click[0]表示左键，self.mouse_click[1]表示右键
-                print('点击位置:', self.mouse_pos, '左右键点击情况:', self.mouse_click)
+                print(  f"点击位置: ({self.mouse_pos[0]:3}, {self.mouse_pos[1]:3})",
+                        f"左右键点击情况: {self.mouse_click}")
 
 
     def run(self):
@@ -188,16 +189,14 @@ def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.
 # 用于消除文件边框影响
 def loadZombieImageRect():
     file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'zombie.json')
-    f = open(file_path)
-    data = json.load(f)
-    f.close()
+    with open(file_path) as f:
+        data = json.load(f)
     return data[c.ZOMBIE_IMAGE_RECT]
 
 def loadPlantImageRect():
     file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'plant.json')
-    f = open(file_path)
-    data = json.load(f)
-    f.close()
+    with open(file_path) as f:
+        data = json.load(f)
     return data[c.PLANT_IMAGE_RECT]
 
 pg.init()
