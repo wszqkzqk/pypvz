@@ -162,7 +162,7 @@ MAP_UNAVAILABLE = 'unavailable' # 指完全不能种植物的地方，包括无�
 # 不喜欢用深拷贝，直接改用函数表示，需要时直接调用该函数生成即可
 # 由于同一格显然不可能种两个相同的植物，所以用集合
 def INIT_MAP_GRID(PLOT_TYPE):
-    return {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:POLT_TYPE}
+    return {MAP_PLANT:set(), MAP_SLEEP:False, MAP_PLOT_TYPE:PLOT_TYPE}
 
 # 地图相关像素数据
 BACKGROUND_OFFSET_X = 220
