@@ -1,4 +1,4 @@
-name: Build
+name: "Build for PR"
 
 concurrency: 
   group: ${{ github.workflow }}-${{ github.ref }}
