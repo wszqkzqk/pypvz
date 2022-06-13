@@ -62,7 +62,6 @@ class Level(tool.State):
             return
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
         self.hasShovel = self.map_data[c.SHOVEL]
-        return True
 
         # 同时指定音乐
         # 缺省音乐为进入的音乐，方便发现错误
