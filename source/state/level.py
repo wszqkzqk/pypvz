@@ -31,6 +31,7 @@ class Level(tool.State):
         #     self.map_y_len = self.map.height
         #     self.setupBackground()
         #     self.initState()
+        self.loadMap()
         self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
         self.map_y_len = self.map.height
         self.setupBackground()
