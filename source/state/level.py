@@ -45,9 +45,8 @@ class Level(tool.State):
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
-            f = open(file_path)
-            self.map_data = json.load(f)
-            f.close()
+            with open(file_path) as f:
+                self.map_data = json.load(f)
         except:
             print("成功通关！")
             if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
