@@ -1,13 +1,11 @@
-name: Build
+name: "Build for PR"
 
 concurrency: 
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
 
 jobs:
   windows:
@@ -47,14 +45,6 @@ jobs:
                   --add-data="pypvz-exec-logo.png;./pypvz-exec-logo.png" `
                   -i ./pypvz.ico
 
-      - name: Release the version built by pyinstaller
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          tag: Current.Version.Built.with.Pyinstaller
-          artifacts: ./out/*pyinstaller*.exe
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       # 使用Nuitka构建
       - name: Show nuitka version
         run: |
@@ -80,16 +70,20 @@ jobs:
                   main.py
 
       # artifact压缩包处上传包含exe和运行环境的文件夹
-      - name: "Upload binaries"
+      - name: "Upload binarie directory"
         uses: actions/upload-artifact@v2
         with:
-          name: artifact-python-${{ matrix.python_version }}
+          name: DIR-python-${{ matrix.python_version }}
           path: ./out/*.dist
 
-      - name: Release the version built by nuitka
-        uses: ncipollo/release-action@v1
+      - name: "Upload binaries of pyinstaller"
+        uses: actions/upload-artifact@v2
         with:
-          allowUpdates: true
-          tag: Latest
-          artifacts: ./out/*nuitka*.exe
-          token: ${{ secrets.GITHUB_TOKEN }}
+          name: pyinstaller-python-${{ matrix.python_version }}
+          path: ./out/*pyinstaller*.exe
+
+      - name: "Upload binaries of pyinstaller"
+        uses: actions/upload-artifact@v2
+        with:
+          name: nuitka-python-${{ matrix.python_version }}
+          path: ./out/*nuitka*.exe
