@@ -95,14 +95,14 @@ python main.py
   - 对于`opus`编码，需要添加`libogg-0.dll`，`libopus-0.dll`和`libopusfile-0.dll`
 - 以添加`opus`和`vorbis`编码的背景音乐支持为例，编译需执行以下命令：
 
-``` powershell
+``` cmd
 git clone https://github.com/wszqkzqk/pypvz.git
 cd pypvz
 nuitka --mingw64 --standalone `
         --onefile `
         --show-progress `
         --show-memory `
-        --output-dir=D:\17265\Documents\GitHub\pypvz\release `
+        --output-dir=release `
         --windows-icon-from-ico=pypvz.ico `
         --include-data-dir=resources=resources `
         --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll `
@@ -124,7 +124,23 @@ nuitka --mingw64 --standalone `
 * `--windows-product-version=`表示版本号信息，所跟内容格式必须为`x.x.x.x`
 * 建议开启`--lto=yes`选项优化链接，如果编译失败可以关闭此选项
 
-可执行文件生成路径为`./out/main.exe`
+可执行文件生成路径为`./release/main.exe`
+
+如果只需要在本地生成编译文件测试，则只需要执行：
+
+``` cmd
+nuitka --mingw64 `
+    --follow-imports `
+    --show-progress `
+    --output-dir=test-build `
+    --windows-icon-from-ico=pypvz.ico `
+    --windows-product-name=pypvz `
+    --windows-company-name=null `
+    --windows-file-description=pypvz `
+    --windows-disable-console `
+    --windows-product-version=0.7.33.0 `
+    main.py
+```
 
 ### 使用pyinstaller进行构建
 
