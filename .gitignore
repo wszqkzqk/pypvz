@@ -1,6 +1,7 @@
 # 忽略构建内容
 out/
-build/
+test-build/
+release/
 # 忽略调试内容
 .vscode/
 __pycache__/

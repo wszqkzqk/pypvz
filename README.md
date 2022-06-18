@@ -102,7 +102,7 @@ nuitka --mingw64 --standalone `
         --onefile `
         --show-progress `
         --show-memory `
-        --output-dir=out `
+        --output-dir=D:\17265\Documents\GitHub\pypvz\release `
         --windows-icon-from-ico=pypvz.ico `
         --include-data-dir=resources=resources `
         --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll `
@@ -119,7 +119,7 @@ nuitka --mingw64 --standalone `
         main.py
 ```
 
-* 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径
+* 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径，`--output-dir=`后应当跟实际需要输出的路径，绝对路径或者相对路径均可
 * 由于仅复制了`opus`与`vorbis`的解码器，故要求所有背景音乐都要以opus或vorbis编码
 * `--windows-product-version=`表示版本号信息，所跟内容格式必须为`x.x.x.x`
 * 建议开启`--lto=yes`选项优化链接，如果编译失败可以关闭此选项
