@@ -142,6 +142,8 @@ nuitka --mingw64 `
     main.py
 ```
 
+这样生成的程序只能在有python环境的机器上运行
+
 ### 使用pyinstaller进行构建
 
 ### 使用Github Workflow进行自动构建
