@@ -809,35 +809,35 @@ class Level(tool.State):
         x, y = self.map.getMapGridPos(0, map_y)
 
         # 新增的僵尸也需要在这里声明
-        if name == c.NORMAL_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-        elif name == c.CONEHEAD_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.ConeHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-        elif name == c.BUCKETHEAD_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.BucketHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-        elif name == c.FLAG_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.FlagZombie(c.ZOMBIE_START_X, y, self.head_group))
-        elif name == c.NEWSPAPER_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-        elif name == c.FOOTBALL_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-        elif name == c.DUCKY_TUBE_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-        elif name == c.CONEHEAD_DUCKY_TUBE_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-        elif name == c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-        elif name == c.SCREEN_DOOR_ZOMBIE:
-            self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-        elif name == c.POLE_VAULTING_ZOMBIE:
-            # 本来撑杆跳生成位置不同，对齐左端可认为修正了一部分（看作移动了70），只需要相对修改即可
-            self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
-        elif name == c.ZOMBONI:
-            # 冰车僵尸生成位置不同
-            self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
-        elif name == c.SNORKELZOMBIE:
-            # 潜水僵尸生成位置不同
-            self.zombie_groups[map_y].add(zombie.SnorkelZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
+        match name:
+            case c.NORMAL_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            case c.CONEHEAD_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.ConeHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            case c.BUCKETHEAD_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.BucketHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            case c.FLAG_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.FlagZombie(c.ZOMBIE_START_X, y, self.head_group))
+            case c.NEWSPAPER_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            case c.FOOTBALL_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            case c.DUCKY_TUBE_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            case c.CONEHEAD_DUCKY_TUBE_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            case c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            case c.SCREEN_DOOR_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+            case c.POLE_VAULTING_ZOMBIE:
+                # 本来撑杆跳生成位置不同，对齐左端可认为修正了一部分（看作移动了70），只需要相对修改即可
+                self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
+            case c.ZOMBONI:
+                # 冰车僵尸生成位置不同
+                self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
+            case c.SNORKELZOMBIE:
+                self.zombie_groups[map_y].add(zombie.SnorkelZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)
@@ -861,69 +861,71 @@ class Level(tool.State):
         map_x, map_y = self.map.getMapIndex(x, y)
 
         # 新植物也需要在这里声明
-        if self.plant_name == c.SUNFLOWER:
-            new_plant = plant.SunFlower(x, y, self.sun_group)
-        elif self.plant_name == c.PEASHOOTER:
-            new_plant = plant.PeaShooter(x, y, self.bullet_groups[map_y])
-        elif self.plant_name == c.SNOWPEASHOOTER:
-            new_plant = plant.SnowPeaShooter(x, y, self.bullet_groups[map_y])
-        elif self.plant_name == c.WALLNUT:
-            new_plant = plant.WallNut(x, y)
-        elif self.plant_name == c.CHERRYBOMB:
-            new_plant = plant.CherryBomb(x, y)
-        elif self.plant_name == c.THREEPEASHOOTER:
-            new_plant = plant.ThreePeaShooter(x, y, self.bullet_groups, map_y, self.map.background_type)
-        elif self.plant_name == c.REPEATERPEA:
-            new_plant = plant.RepeaterPea(x, y, self.bullet_groups[map_y])
-        elif self.plant_name == c.CHOMPER:
-            new_plant = plant.Chomper(x, y)
-        elif self.plant_name == c.PUFFSHROOM:
-            new_plant = plant.PuffShroom(x, y, self.bullet_groups[map_y])
-        elif self.plant_name == c.POTATOMINE:
-            new_plant = plant.PotatoMine(x, y)
-        elif self.plant_name == c.SQUASH:
-            new_plant = plant.Squash(x, y, self.map.map[map_y][map_x][c.MAP_PLANT])
-        elif self.plant_name == c.SPIKEWEED:
-            new_plant = plant.Spikeweed(x, y)
-        elif self.plant_name == c.JALAPENO:
-            new_plant = plant.Jalapeno(x, y)
-        elif self.plant_name == c.SCAREDYSHROOM:
-            new_plant = plant.ScaredyShroom(x, y, self.bullet_groups[map_y])
-        elif self.plant_name == c.SUNSHROOM:
-            new_plant = plant.SunShroom(x, y, self.sun_group)
-        elif self.plant_name == c.ICESHROOM:
-            new_plant = plant.IceShroom(x, y)
-        elif self.plant_name == c.HYPNOSHROOM:
-            new_plant = plant.HypnoShroom(x, y)
-        elif self.plant_name == c.WALLNUTBOWLING:
-            new_plant = plant.WallNutBowling(x, y, map_y, self)
-        elif self.plant_name == c.REDWALLNUTBOWLING:
-            new_plant = plant.RedWallNutBowling(x, y)
-        elif self.plant_name == c.LILYPAD:
-            new_plant = plant.LilyPad(x, y)
-        elif self.plant_name == c.TORCHWOOD:
-            new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y])
-        elif self.plant_name == c.STARFRUIT:
-            new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self)
-        elif self.plant_name == c.COFFEEBEAN:
-            new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x], self.map, map_x)
-        elif self.plant_name == c.SEASHROOM:
-            new_plant = plant.SeaShroom(x, y, self.bullet_groups[map_y])
-        elif self.plant_name == c.TALLNUT:
-            new_plant = plant.TallNut(x, y)
-        elif self.plant_name == c.TANGLEKLEP:
-            new_plant = plant.TangleKlep(x, y)
-        elif self.plant_name == c.DOOMSHROOM:
-            if self.map.gridHeightSize == c.GRID_Y_SIZE:
-                new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2)
-            else:
-                new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
-        elif self.plant_name == c.GRAVEBUSTER:
-            new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
-        elif self.plant_name == c.FUMESHROOM:
-            new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
-        elif self.plant_name == c.GARLIC:
-            new_plant = plant.Garlic(x, y)
+        match self.plant_name:
+            case c.SUNFLOWER:
+                new_plant = plant.SunFlower(x, y, self.sun_group)
+            case c.PEASHOOTER:
+                new_plant = plant.PeaShooter(x, y, self.bullet_groups[map_y])
+            case c.SNOWPEASHOOTER:
+                new_plant = plant.SnowPeaShooter(x, y, self.bullet_groups[map_y])
+            case c.WALLNUT:
+                new_plant = plant.WallNut(x, y)
+            case c.CHERRYBOMB:
+                new_plant = plant.CherryBomb(x, y)
+            case c.THREEPEASHOOTER:
+                new_plant = plant.ThreePeaShooter(x, y, self.bullet_groups, map_y, self.map.background_type)
+            case c.REPEATERPEA:
+                new_plant = plant.RepeaterPea(x, y, self.bullet_groups[map_y])
+            case c.CHOMPER:
+                new_plant = plant.Chomper(x, y)
+            case c.PUFFSHROOM:
+                new_plant = plant.PuffShroom(x, y, self.bullet_groups[map_y])
+            case c.POTATOMINE:
+                new_plant = plant.PotatoMine(x, y)
+            case c.SQUASH:
+                new_plant = plant.Squash(x, y, self.map.map[map_y][map_x][c.MAP_PLANT])
+            case c.SPIKEWEED:
+                new_plant = plant.Spikeweed(x, y)
+            case c.JALAPENO:
+                new_plant = plant.Jalapeno(x, y)
+            case c.SCAREDYSHROOM:
+                new_plant = plant.ScaredyShroom(x, y, self.bullet_groups[map_y])
+            case c.SUNSHROOM:
+                new_plant = plant.SunShroom(x, y, self.sun_group)
+            case c.ICESHROOM:
+                new_plant = plant.IceShroom(x, y)
+            case c.HYPNOSHROOM:
+                new_plant = plant.HypnoShroom(x, y)
+            case c.WALLNUTBOWLING:
+                new_plant = plant.WallNutBowling(x, y, map_y, self)
+            case c.REDWALLNUTBOWLING:
+                new_plant = plant.RedWallNutBowling(x, y)
+            case c.LILYPAD:
+                new_plant = plant.LilyPad(x, y)
+            case c.TORCHWOOD:
+                new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y])
+            case c.STARFRUIT:
+                new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self)
+            case c.COFFEEBEAN:
+                new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x], self.map, map_x)
+            case c.SEASHROOM:
+                new_plant = plant.SeaShroom(x, y, self.bullet_groups[map_y])
+            case c.TALLNUT:
+                new_plant = plant.TallNut(x, y)
+            case c.TANGLEKLEP:
+                new_plant = plant.TangleKlep(x, y)
+            case c.DOOMSHROOM:
+                if self.map.gridHeightSize == c.GRID_Y_SIZE:
+                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2)
+                else:
+                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
+            case c.GRAVEBUSTER:
+                new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
+            case c.FUMESHROOM:
+                new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
+            case c.GARLIC:
+                new_plant = plant.Garlic(x, y)
+
 
 
         if new_plant.can_sleep and self.background_type in c.DAYTIME_BACKGROUNDS:
