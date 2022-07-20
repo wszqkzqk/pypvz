@@ -69,7 +69,8 @@ class Control():
         if self.state.next == c.EXIT:
             pg.quit()
             os._exit(0)
-        previous, self.state_name = self.state_name, self.state.next
+        # previous, self.state_name = self.state_name, self.state.next
+        self.state_name = self.state.next
         persist = self.state.cleanup()
         self.state = self.state_dict[self.state_name]
         self.state.startup(self.current_time, persist)
