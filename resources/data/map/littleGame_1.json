@@ -4,7 +4,7 @@
     "shovel":0,
     "spawn_zombies":"auto",
     "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie", "NewspaperZombie", "PoleVaultingZombie"],
-    "num_flags":4,
+    "num_flags":3,
     "inevitable_zombie_list":{"20":["BucketheadZombie"]},
     "card_pool":{   "WallNutBowling":300,
                     "RedWallNutBowling":100
