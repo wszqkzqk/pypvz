@@ -120,9 +120,9 @@ nuitka --mingw64 --standalone `
         --lto=yes `
         --windows-disable-console `
         --windows-product-name=pypvz `
-        --windows-company-name=null `
+        --windows-company-name=wszqkzqk.dev `
         --windows-file-description="pypvz" `
-        --windows-product-version=0.6.9.0 `
+        --windows-product-version=0.8.2.0 `
         main.py
 ```
 
@@ -142,10 +142,10 @@ nuitka --mingw64 `
     --output-dir=test-build `
     --windows-icon-from-ico=pypvz.ico `
     --windows-product-name=pypvz `
-    --windows-company-name=null `
+    --windows-company-name=wszqkzqk.dev `
     --windows-file-description=pypvz `
     --windows-disable-console `
-    --windows-product-version=0.7.33.0 `
+    --windows-product-version=0.8.2.0 `
     main.py
 ```
 
