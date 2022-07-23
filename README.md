@@ -21,6 +21,7 @@
 * 支持保存进度
   * Windows默认保存的进度文件路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`
   * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/userdata.json`
+  * 如果出现因存档损坏而造成程序无法启动，可以手动编辑或者删除该文件重试
 
 ## 环境要求
 
