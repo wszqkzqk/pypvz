@@ -60,7 +60,7 @@ class Level(tool.State):
             pg.mixer.music.stop()
             pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
             pg.mixer.music.play(-1, 0)
-            with open(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json")), "w") as f:
+            with open(c.USERDATA_PATH, "w") as f:
                 userdata = {}
                 for i in self.game_info:
                     if i in c.USERDATA_KEYS:
@@ -1426,7 +1426,7 @@ class Level(tool.State):
             self.done = True
             # 播放胜利音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "win.ogg")).play()
-            with open(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json")), "w") as f:
+            with open(c.USERDATA_PATH, "w") as f:
                 userdata = {}
                 for i in self.game_info:
                     if i in c.USERDATA_KEYS:

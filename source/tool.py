@@ -44,7 +44,7 @@ class Control():
         self.state = None
         try:
             # 存在存档即导入
-            with open(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))) as f:
+            with open(c.USERDATA_PATH) as f:
                 userdata = json.load(f)
             # 导入数据
             self.game_info = {c.CURRENT_TIME:0} # 时间信息需要新建
@@ -56,9 +56,9 @@ class Control():
                         c.LEVEL_COMPLETIONS:c.START_LEVEL_COMPLETIONS,
                         c.LITTLEGAME_COMPLETIONS:c.START_LITTLEGAME_COMPLETIONS
                         }
-            if not os.path.exists(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz"))):
-                os.makedirs(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz")))
-            with open(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json")), "w") as f:
+            if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
+                os.makedirs(os.path.dirname(c.USERDATA_PATH))
+            with open(c.USERDATA_PATH, "w") as f:
                 savedata = json.dumps(userdata, sort_keys=True, indent=4)
                 f.write(savedata)
             self.game_info = userdata

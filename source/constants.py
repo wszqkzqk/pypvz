@@ -1,3 +1,10 @@
+import os
+# 用户数据存储路径
+if os.name == 'nt':
+    USERDATA_PATH = os.path.expandvars(os.path.join("%APPDATA%", "wszqkzqk.dev", "pypvz", "userdata.json"))
+else:
+    USERDATA_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))
+
 # 游戏起始关卡
 START_LEVEL_NUM = 1
 START_LITTLE_GAME_NUM = 1
