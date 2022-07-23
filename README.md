@@ -19,8 +19,8 @@
 * 夜晚模式支持墓碑以及从墓碑生成僵尸
   * 含有泳池的模式也支持在最后一波时从泳池中自动冒出僵尸
 * 支持保存进度
-  * Windows默认保存的进度文件路径为`"~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json"`
-  * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/userdata.json"`
+  * Windows默认保存的进度文件路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`
+  * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/userdata.json`
 
 ## 环境要求
 
@@ -74,8 +74,9 @@ python main.py
     * 3：传送带模式（黑夜）
     * 4：传送带模式（泳池）
   * 目前暂时按照以上设定，未与原版相符
+* 对于已经存在存档的用户，可以在`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`（Windows）或`~/.config/wszqkzqk.dev/pypvz/userdata.json`（其他操作系统）中修改当前关卡
 * 可以通过修改`source/constants.py`中的`GAME_RATE`来调节游戏速度倍率
-* **注意：目前单文件发布版本不支持自定义调整关卡和速度倍率**
+* **注意：目前单文件发布版本不支持自定义速度倍率**
 
 ## Windows单文件封装
 
