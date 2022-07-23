@@ -932,6 +932,8 @@ class Level(tool.State):
             new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
         elif self.plant_name == c.GARLIC:
             new_plant = plant.Garlic(x, y)
+        elif self.plant_name == c.PUMPKINHEAD:
+            new_plant = plant.PumpkinHead(x, y)
 
 
         if new_plant.can_sleep and self.background_type in c.DAYTIME_BACKGROUNDS:
@@ -1061,7 +1063,7 @@ class Level(tool.State):
                             # 如果被攻击植物是睡莲和花盆，同一格种了植物必然刷新
                             # 如果被攻击植物不是睡莲和花盆，同一格种了南瓜头才刷新
                             if ((zombie.prey.name not in {c.LILYPAD, "花盆（未实现）"})
-                            and (self.newPlantAndPositon[0] != "南瓜头（未实现）")):
+                            and (self.newPlantAndPositon[0] != c.PUMPKINHEAD)):
                                 continue
                         else:
                             continue
@@ -1077,7 +1079,7 @@ class Level(tool.State):
                 for plant in self.plant_groups[i]:
                     if collided_func(plant, zombie):
                         # 优先攻击南瓜头
-                        if plant.name == "南瓜头（未实现）":
+                        if plant.name == c.PUMPKINHEAD:
                             targetPlant = plant
                             break
                         # 衬底植物情形
@@ -1102,7 +1104,7 @@ class Level(tool.State):
                             for actualTargetPlant in self.plant_groups[i]:
                                 # 检测同一格的其他植物
                                 if self.map.getMapIndex(actualTargetPlant.rect.centerx, actualTargetPlant.rect.bottom) == (map_x, map_y):
-                                    if actualTargetPlant.name == "南瓜头（未实现）":
+                                    if actualTargetPlant.name == c.PUMPKINHEAD:
                                         targetPlant = actualTargetPlant
                                         break
                                     elif actualTargetPlant.name not in {c.LILYPAD, "花盆（未实现）"}:

@@ -255,6 +255,7 @@ GRAVE = 'Grave'
 GRAVEBUSTER = 'GraveBuster'
 FUMESHROOM = 'FumeShroom'
 GARLIC = 'Garlic'
+PUMPKINHEAD = 'PumpkinHead'
 
 
 # 植物集体属性集合
@@ -319,6 +320,7 @@ PLANT_NON_CHECK_ATTACK_STATE = (    # 这里运用了集合运算
                 SUNSHROOM, COFFEEBEAN,
                 GRAVEBUSTER, LILYPAD,
                 HYPNOSHROOM, GARLIC,
+                PUMPKINHEAD,
                 } |
                 # 非植物类
                 NON_PLANT_OBJECTS
@@ -387,6 +389,7 @@ CARD_DOOMSHROOM = 'card_doomshroom'
 CARD_GRAVEBUSTER = 'card_gravebuster'
 CARD_FUMESHROOM = 'card_fumeshroom'
 CARD_GARLIC = 'card_garlic'
+CARD_PUMPKINHEAD = 'card_pumpkinhead'
 
 
 # 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
@@ -495,6 +498,10 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_STARFRUIT,
                 125,
                 7500),
+            (PUMPKINHEAD,
+                CARD_PUMPKINHEAD,
+                125,
+                30000),
             (COFFEEBEAN,
                 CARD_COFFEEBEAN,
                 75,
