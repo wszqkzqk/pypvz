@@ -1,0 +1,9 @@
+{
+    "background_type":2,
+    "init_sun_value":50,
+    "shovel":1,
+    "spawn_zombies":"auto",
+    "included_zombies":["Zombie", "Zomboni"],
+    "inevitable_zombie_list":{"30":["Zomboni"]},
+    "num_flags":3
+}
