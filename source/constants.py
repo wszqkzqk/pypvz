@@ -198,7 +198,7 @@ BAR_CARD_X_INTERNAL = 51
 PLANT_NAME_INDEX = 0
 CARD_INDEX = 1
 SUN_INDEX = 2
-FROZEN_INDEX = 3
+FROZEN_TIME_INDEX = 3
 
 # 传送带模式中的刷新间隔和移动速率
 MOVEBAR_CARD_FRESH_TIME = 6000
@@ -502,6 +502,11 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 0,
                 0),
             )
+
+# 卡片中的植物名称与索引序号的对应关系，指定名称以得到索引值
+PLANT_CARD_INDEX={}
+for i, item in enumerate(PLANT_CARD_INFO):
+    PLANT_CARD_INDEX[item[PLANT_NAME_INDEX]] = i
 
 # 指定了哪些卡可选（排除坚果保龄球特殊植物）
 CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 2)
