@@ -42,9 +42,28 @@ class Control():
         self.state_dict = {}
         self.state_name = None
         self.state = None
-        self.game_info = {c.CURRENT_TIME:0,
-                          c.LEVEL_NUM:c.START_LEVEL_NUM,
-                          c.LITTLEGAME_NUM:c.START_LITTLE_GAME_NUM}
+        try:
+            # 存在存档即导入
+            with open(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))) as f:
+                userdata = json.load(f)
+            # 导入数据
+            self.game_info = {c.CURRENT_TIME:0} # 时间信息需要新建
+            self.game_info.update(userdata)
+        except FileNotFoundError:
+            # 不存在存档即新建
+            userdata = {c.LEVEL_NUM:c.START_LEVEL_NUM,
+                        c.LITTLEGAME_NUM:c.START_LITTLE_GAME_NUM,
+                        c.LEVEL_COMPLETIONS:c.START_LEVEL_COMPLETIONS,
+                        c.LITTLEGAME_COMPLETIONS:c.START_LITTLEGAME_COMPLETIONS
+                        }
+            if not os.path.exists(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz"))):
+                os.makedirs(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz")))
+            with open(os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json")), "w") as f:
+                savedata = json.dumps(userdata, sort_keys=True, indent=4)
+                f.write(savedata)
+            self.game_info = userdata
+            self.game_info[c.CURRENT_TIME] = 0  # 时间信息需要新建
+
  
     def setup_states(self, state_dict, start_state):
         self.state_dict = state_dict

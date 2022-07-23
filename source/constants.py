@@ -1,7 +1,9 @@
-# 冒险模式起始关卡
+# 游戏起始关卡
 START_LEVEL_NUM = 1
-# 小游戏模式起始关卡
 START_LITTLE_GAME_NUM = 1
+# 游戏模式完成次数
+START_LEVEL_COMPLETIONS = 0
+START_LITTLEGAME_COMPLETIONS = 0
 
 # 游戏速度倍率（调试用）
 GAME_RATE = 1
@@ -79,6 +81,8 @@ LEVEL_PROGRESS_FLAG = 'LevelProgressFlag'
 CURRENT_TIME = 'current time'
 LEVEL_NUM = 'level num'
 LITTLEGAME_NUM = 'littleGame num'
+LEVEL_COMPLETIONS = 'level completions'
+LITTLEGAME_COMPLETIONS = 'littleGame completions'
 
 # 整个游戏的状态
 MAIN_MENU = 'main menu'
@@ -642,6 +646,12 @@ SLEEP = 'sleep'
 # 关卡状态
 CHOOSE = 'choose'
 PLAY = 'play'
+
+# 记录本地存储文件需要记录哪些内容
+USERDATA_KEYS = {   LEVEL_NUM, LITTLEGAME_NUM,
+                    LEVEL_COMPLETIONS,
+                    LITTLEGAME_COMPLETIONS,
+                    }
 
 # 无穷大常量
 INF = float("inf")  # python传递字符串性能较低，故在这里对inf声明一次，以后仅需调用即可
