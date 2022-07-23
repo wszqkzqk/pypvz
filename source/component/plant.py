@@ -1814,7 +1814,7 @@ class PumpkinHead(Plant):
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
-        self.animate_interval = 140
+        self.animate_interval = 160
 
     def load_images(self):
         self.cracked1_frames = []
