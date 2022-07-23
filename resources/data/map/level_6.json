@@ -1,9 +1,9 @@
 {
-    "background_type":2,
+    "background_type":1,
     "init_sun_value":50,
     "shovel":1,
     "spawn_zombies":"auto",
-    "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie", "FootballZombie"],
-    "inevitable_zombie_list":{"20":["BucketheadZombie"], "30":["FootballZombie"]},
+    "included_zombies":["Zombie", "ConeheadZombie", "ScreenDoorZombie", "BucketheadZombie", "FootballZombie"],
+    "inevitable_zombie_list":{"20":["ScreenDoorZombie"], "30":["FootballZombie"]},
     "num_flags":4
 }
