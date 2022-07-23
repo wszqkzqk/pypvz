@@ -1,7 +1,16 @@
-# 冒险模式起始关卡
+import os
+# 用户数据存储路径
+if os.name == 'nt': # Windows系统存储路径
+    USERDATA_PATH = os.path.expandvars(os.path.join("%APPDATA%", "wszqkzqk.dev", "pypvz", "userdata.json"))
+else:   # 非Windows系统存储路径
+    USERDATA_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))
+
+# 游戏起始关卡
 START_LEVEL_NUM = 1
-# 小游戏模式起始关卡
 START_LITTLE_GAME_NUM = 1
+# 游戏模式完成次数
+START_LEVEL_COMPLETIONS = 0
+START_LITTLEGAME_COMPLETIONS = 0
 
 # 游戏速度倍率（调试用）
 GAME_RATE = 1
@@ -79,6 +88,8 @@ LEVEL_PROGRESS_FLAG = 'LevelProgressFlag'
 CURRENT_TIME = 'current time'
 LEVEL_NUM = 'level num'
 LITTLEGAME_NUM = 'littleGame num'
+LEVEL_COMPLETIONS = 'level completions'
+LITTLEGAME_COMPLETIONS = 'littleGame completions'
 
 # 整个游戏的状态
 MAIN_MENU = 'main menu'
@@ -198,7 +209,7 @@ BAR_CARD_X_INTERNAL = 51
 PLANT_NAME_INDEX = 0
 CARD_INDEX = 1
 SUN_INDEX = 2
-FROZEN_INDEX = 3
+FROZEN_TIME_INDEX = 3
 
 # 传送带模式中的刷新间隔和移动速率
 MOVEBAR_CARD_FRESH_TIME = 6000
@@ -503,6 +514,11 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 0),
             )
 
+# 卡片中的植物名称与索引序号的对应关系，指定名称以得到索引值
+PLANT_CARD_INDEX={}
+for i, item in enumerate(PLANT_CARD_INFO):
+    PLANT_CARD_INDEX[item[PLANT_NAME_INDEX]] = i
+
 # 指定了哪些卡可选（排除坚果保龄球特殊植物）
 CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 2)
 
@@ -637,6 +653,12 @@ SLEEP = 'sleep'
 # 关卡状态
 CHOOSE = 'choose'
 PLAY = 'play'
+
+# 记录本地存储文件需要记录哪些内容
+USERDATA_KEYS = {   LEVEL_NUM, LITTLEGAME_NUM,
+                    LEVEL_COMPLETIONS,
+                    LITTLEGAME_COMPLETIONS,
+                    }
 
 # 无穷大常量
 INF = float("inf")  # python传递字符串性能较低，故在这里对inf声明一次，以后仅需调用即可

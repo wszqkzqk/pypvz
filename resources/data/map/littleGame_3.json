@@ -8,12 +8,12 @@
                         "BucketheadZombie", "NewspaperZombie",
                         "FootballZombie", "ScreenDoorZombie"],
     "inevitable_zombie_list":{"30":["FootballZombie"]},
-    "card_pool":[   "PuffShroom",
-                    "ScaredyShroom",
-                    "IceShroom",
-                    "HypnoShroom",
-                    "DoomShroom",
-                    "GraveBuster",
-                    "FumeShroom"
-                    ]
+    "card_pool":{   "PuffShroom":200,
+                    "ScaredyShroom":100,
+                    "IceShroom":100,
+                    "HypnoShroom":100,
+                    "DoomShroom":100,
+                    "GraveBuster":100,
+                    "FumeShroom":200
+                    }
 }

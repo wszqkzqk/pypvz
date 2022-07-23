@@ -1,5 +1,6 @@
 import os
 import random
+from select import select
 import pygame as pg
 from .. import tool
 from .. import constants as c
@@ -23,12 +24,9 @@ def getSunValueImage(sun_value):
     return image
 
 def getCardPool(data):
-    card_pool = []
-    for card in data:
-        for i,name in enumerate(c.PLANT_CARD_INFO):
-            if name[c.PLANT_NAME_INDEX] == card:
-                card_pool.append(i)
-                break
+    card_pool = {}
+    for cardName in data:
+        card_pool[c.PLANT_CARD_INFO[c.PLANT_CARD_INDEX[cardName]]] = data[cardName]
     return card_pool
 
 class Card():
@@ -40,7 +38,7 @@ class Card():
         
         self.index = index
         self.sun_cost = c.PLANT_CARD_INFO[index][c.SUN_INDEX]
-        self.frozen_time = c.PLANT_CARD_INFO[index][c.FROZEN_INDEX]
+        self.frozen_time = c.PLANT_CARD_INFO[index][c.FROZEN_TIME_INDEX]
         self.frozen_timer = -self.frozen_time
         self.refresh_timer = 0
         self.select = True
@@ -382,6 +380,8 @@ class MoveBar():
         self.card_start_x = self.rect.x + 8
         self.card_end_x = self.rect.right - 5
         self.card_pool = card_pool
+        self.card_pool_name = tuple(self.card_pool.keys())
+        self.card_pool_weight = tuple(self.card_pool.values())
         self.card_list = []
         self.create_timer = -c.MOVEBAR_CARD_FRESH_TIME
 
@@ -397,11 +397,8 @@ class MoveBar():
             return False
         x = self.card_end_x
         y = 6
-        index = random.randint(0, len(self.card_pool) - 1)
-        card_index = self.card_pool[index]
-        card_name = c.PLANT_CARD_INFO[card_index][c.CARD_INDEX] + '_move'
-        plant_name = c.PLANT_CARD_INFO[card_index][c.PLANT_NAME_INDEX]
-        self.card_list.append(MoveCard(x, y, card_name, plant_name))
+        selected_card = random.choices(self.card_pool_name, self.card_pool_weight)[0]
+        self.card_list.append(MoveCard(x, y, selected_card[c.CARD_INDEX] + "_move", selected_card[c.PLANT_NAME_INDEX]))
         return True
 
     def update(self, current_time):

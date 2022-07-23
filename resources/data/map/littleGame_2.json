@@ -6,12 +6,12 @@
     "num_flags":3,
     "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie", "PoleVaultingZombie"],
     "inevitable_zombie_list":{"20":["BucketheadZombie"]},
-    "card_pool":[   "Peashooter",
-                    "SnowPea",
-                    "WallNut",
-                    "CherryBomb",
-                    "RepeaterPea",
-                    "Chomper",
-                    "PotatoMine"
-                    ]
+    "card_pool":{   "Peashooter":200,
+                    "SnowPea":200,
+                    "WallNut":100,
+                    "CherryBomb":100,
+                    "RepeaterPea":200,
+                    "Chomper":100,
+                    "PotatoMine":100
+                    }
 }

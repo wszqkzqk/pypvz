@@ -18,6 +18,7 @@
 * 支持“关卡进程”进度条显示
 * 夜晚模式支持墓碑以及从墓碑生成僵尸
   * 含有泳池的模式也支持在最后一波时从泳池中自动冒出僵尸
+* 支持保存进度
 
 ## 环境要求
 
@@ -79,7 +80,7 @@ python main.py
 ### 使用Nuitka进行构建
 
 编译依赖：
-- `Python` >= 3.7，最好使用最新版
+- `Python` >= 3.10，最好使用最新版
 - `Python-Pygame` >= 1.9，最好使用最新版
 - `Nuitka`
 - `MinGW-w64`（或其他C编译器）
@@ -95,14 +96,14 @@ python main.py
   - 对于`opus`编码，需要添加`libogg-0.dll`，`libopus-0.dll`和`libopusfile-0.dll`
 - 以添加`opus`和`vorbis`编码的背景音乐支持为例，编译需执行以下命令：
 
-``` powershell
+``` cmd
 git clone https://github.com/wszqkzqk/pypvz.git
 cd pypvz
 nuitka --mingw64 --standalone `
         --onefile `
         --show-progress `
         --show-memory `
-        --output-dir=out `
+        --output-dir=release `
         --windows-icon-from-ico=pypvz.ico `
         --include-data-dir=resources=resources `
         --include-data-file=C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll `
@@ -119,12 +120,30 @@ nuitka --mingw64 --standalone `
         main.py
 ```
 
-* 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径
+* 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径，`--output-dir=`后应当跟实际需要输出的路径，绝对路径或者相对路径均可
 * 由于仅复制了`opus`与`vorbis`的解码器，故要求所有背景音乐都要以opus或vorbis编码
 * `--windows-product-version=`表示版本号信息，所跟内容格式必须为`x.x.x.x`
 * 建议开启`--lto=yes`选项优化链接，如果编译失败可以关闭此选项
 
-可执行文件生成路径为`./out/main.exe`
+可执行文件生成路径为`./release/main.exe`
+
+如果只需要在本地生成编译文件测试，则只需要执行：
+
+``` cmd
+nuitka --mingw64 `
+    --follow-imports `
+    --show-progress `
+    --output-dir=test-build `
+    --windows-icon-from-ico=pypvz.ico `
+    --windows-product-name=pypvz `
+    --windows-company-name=null `
+    --windows-file-description=pypvz `
+    --windows-disable-console `
+    --windows-product-version=0.7.33.0 `
+    main.py
+```
+
+这样生成的程序只能在有python环境的机器上运行
 
 ### 使用pyinstaller进行构建
 
@@ -145,6 +164,7 @@ nuitka --mingw64 --standalone `
 * 增加关卡进程进度条
   * 该功能自0.5.4已实现
 * 增加保存数据文件以存储用户进度的功能
+  * 该功能自0.8.0.0已实现
 * 增加调整音量的功能
   * `pg.mixer.music.set_volume()`
   * 可以用`音量+`、`音量-`按钮实现

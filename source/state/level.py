@@ -45,20 +45,28 @@ class Level(tool.State):
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
-            f = open(file_path)
-            self.map_data = json.load(f)
-            f.close()
-        except:
+            with open(file_path) as f:
+                self.map_data = json.load(f)
+        except FileNotFoundError:
             print("成功通关！")
             if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
                 self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
+                self.game_info[c.LEVEL_COMPLETIONS] += 1
             elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
                 self.game_info[c.LITTLEGAME_NUM] = c.START_LITTLE_GAME_NUM
+                self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
             self.done = True
             self.next = c.MAIN_MENU
             pg.mixer.music.stop()
             pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
             pg.mixer.music.play(-1, 0)
+            with open(c.USERDATA_PATH, "w") as f:
+                userdata = {}
+                for i in self.game_info:
+                    if i in c.USERDATA_KEYS:
+                        userdata[i] = self.game_info[i]
+                savedata = json.dumps(userdata, sort_keys=True, indent=4)
+                f.write(savedata)
             return
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
         self.hasShovel = self.map_data[c.SHOVEL]
@@ -542,7 +550,6 @@ class Level(tool.State):
             elif self.checkMainMenuClick(mouse_pos):
                 self.done = True
                 self.next = c.MAIN_MENU
-                #self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:c.START_LEVEL_NUM} # 应该不能用c.LEVEL_NUM:c.START_LEVEL_NUM
                 self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:self.persist[c.LEVEL_NUM], c.LITTLEGAME_NUM:self.persist[c.LITTLEGAME_NUM]}
                 pg.mixer.music.stop()
                 pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
@@ -917,15 +924,16 @@ class Level(tool.State):
                 new_plant = plant.TangleKlep(x, y)
             case c.DOOMSHROOM:
                 if self.map.gridHeightSize == c.GRID_Y_SIZE:
-                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
-                else:
                     new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2)
+                else:
+                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
             case c.GRAVEBUSTER:
                 new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
             case c.FUMESHROOM:
                 new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
             case c.GARLIC:
                 new_plant = plant.Garlic(x, y)
+
 
 
         if new_plant.can_sleep and self.background_type in c.DAYTIME_BACKGROUNDS:
@@ -1418,6 +1426,13 @@ class Level(tool.State):
             self.done = True
             # 播放胜利音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "win.ogg")).play()
+            with open(c.USERDATA_PATH, "w") as f:
+                userdata = {}
+                for i in self.game_info:
+                    if i in c.USERDATA_KEYS:
+                        userdata[i] = self.game_info[i]
+                savedata = json.dumps(userdata, sort_keys=True, indent=4)
+                f.write(savedata)
         elif self.checkLose():
             self.next = c.GAME_LOSE
             self.done = True
