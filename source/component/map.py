@@ -63,7 +63,9 @@ class Map():
                 if not self.map[map_y][map_x][c.MAP_PLANT]: # 没有植物肯定可以种植
                     return True
                 elif (all((i in {'花盆（未实现）', c.PUMPKINHEAD}) for i in self.map[map_y][map_x][c.MAP_PLANT])
-                and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植
+                    return True
+                elif (plantName == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 没有南瓜头就能种南瓜头
                     return True
                 else:
                     return False
@@ -74,11 +76,15 @@ class Map():
             if plantName not in c.WATER_PLANTS:
                 if '花盆（未实现）' in self.map[map_y][map_x][c.MAP_PLANT]:
                     if (all((i in {'花盆（未实现）', c.PUMPKINHEAD}) for i in self.map[map_y][map_x][c.MAP_PLANT])
-                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植
                         if plantName in {c.SPIKEWEED}: # 不能在花盆上种植的植物
                             return False
                         else:
                             return True
+                    elif (plantName == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 有花盆且没有南瓜头就能种南瓜头
+                        return True
+                    else:
+                        return False
                 elif plantName == '花盆（未实现）': # 这一格本来没有花盆而且新来的植物是花盆，可以种
                     return True
                 else:
@@ -99,6 +105,8 @@ class Map():
                             return False
                         else:
                             return True
+                    elif (plantName == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 在睡莲上且没有南瓜头就能种南瓜头
+                        return True
                     else:
                         return False
                 else:
