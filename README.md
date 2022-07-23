@@ -19,6 +19,8 @@
 * 夜晚模式支持墓碑以及从墓碑生成僵尸
   * 含有泳池的模式也支持在最后一波时从泳池中自动冒出僵尸
 * 支持保存进度
+  * Windows默认保存的进度文件路径为`"~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json"`
+  * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/userdata.json"`
 
 ## 环境要求
 
