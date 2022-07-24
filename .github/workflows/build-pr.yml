@@ -84,13 +84,6 @@ jobs:
           name: artifact-windows-python-${{ matrix.python_version }}
           path: ./out/*.dist
 
-      - name: Release the version built by nuitka
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          tag: Latest
-          artifacts: ./out/*nuitka*.exe
-          token: ${{ secrets.GITHUB_TOKEN }}
 
   #linux:
   #  runs-on: ubuntu-latest
@@ -140,10 +133,8 @@ jobs:
   #        cd out
   #        tar -cvpaf ../pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst .
 
-  #    - name: Release the version built by nuitka
-  #      uses: ncipollo/release-action@v1
+  #    - name: "Upload binaries"
+  #      uses: actions/upload-artifact@v2
   #      with:
-  #        allowUpdates: true
-  #        tag: Latest
-  #        artifacts: ./*.tar.zst
-  #        token: ${{ secrets.GITHUB_TOKEN }}
+  #        name: artifact-windows-python-${{ matrix.python_version }}
+  #        path: ./pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst
