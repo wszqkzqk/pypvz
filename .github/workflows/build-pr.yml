@@ -128,26 +128,19 @@ jobs:
       - name: Build pypvz with Nuitka
         run: |
           yes | python -m nuitka --standalone \
-                  --onefile \
                   --show-progress \
                   --show-memory \
                   --output-dir=out \
                   --linux-onefile-icon=pypvz.ico \
                   --include-data-dir=resources=resources \
-                  -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.appimage \
+                  -o ./out/pypvz \
                   main.py
-
-      # artifact压缩包处上传包含运行环境的文件夹
-      - name: "Upload binaries"
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifact-linux-python-${{ matrix.python_version }}
-          path: ./out/*.dist
+          tar -cvpaf -C ./out out pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst
 
       - name: Release the version built by nuitka
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           tag: Latest
-          artifacts: ./out/*nuitka*.appimage
+          artifacts: ./*.tar.zst
           token: ${{ secrets.GITHUB_TOKEN }}
