@@ -115,7 +115,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install patchelf gdb ccache libfuse2
-          python -m pip install --no-python-version-warning --disable-pip-version-check -r requirements-devel.txt
+          python -m pip install --no-python-version-warning --disable-pip-version-check zstandard appdirs ordered-set tqdm Jinja2
           python -m pip install --no-python-version-warning --disable-pip-version-check nuitka
           python -m pip install --no-python-version-warning --disable-pip-version-check pygame
 
