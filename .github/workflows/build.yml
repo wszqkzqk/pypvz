@@ -139,7 +139,8 @@ jobs:
                   --remove-output \
                   main.py
           cp -r ./resources ./out/resources
-          tar -cvpaf -C ./out out pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst
+          cd out
+          tar -cvpaf . ../pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst
 
       - name: Release the version built by nuitka
         uses: ncipollo/release-action@v1
