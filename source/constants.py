@@ -1,9 +1,11 @@
 import os
-# 用户数据存储路径
+# 用户数据及日志存储路径
 if os.name == 'nt': # Windows系统存储路径
     USERDATA_PATH = os.path.expandvars(os.path.join("%APPDATA%", "wszqkzqk.dev", "pypvz", "userdata.json"))
+    USERLOG_PATH = os.path.expandvars(os.path.join("%APPDATA%", "wszqkzqk.dev", "pypvz", "run.log"))
 else:   # 非Windows系统存储路径
     USERDATA_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))
+    USERLOG_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "run.log"))
 
 # 游戏起始关卡
 START_LEVEL_NUM = 1
