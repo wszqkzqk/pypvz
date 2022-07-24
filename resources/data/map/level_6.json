@@ -5,5 +5,6 @@
     "spawn_zombies":"auto",
     "included_zombies":["Zombie", "ConeheadZombie", "ScreenDoorZombie", "BucketheadZombie", "FootballZombie"],
     "inevitable_zombie_list":{"20":["ScreenDoorZombie"], "30":["FootballZombie"]},
-    "num_flags":4
+    "num_flags":4,
+    "grade_graves":2
 }
