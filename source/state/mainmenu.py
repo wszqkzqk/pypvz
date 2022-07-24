@@ -2,7 +2,6 @@ import pygame as pg
 import os
 from .. import tool
 from .. import constants as c
-from . import level
 
 class Menu(tool.State):
     

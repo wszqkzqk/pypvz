@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import pygame as pg
 import logging
 import traceback
 import os
@@ -8,12 +7,12 @@ from source import tool
 from source import constants as c
 from source.state import mainmenu, screen, level
 
-if __name__=='__main__':
+if __name__=="__main__":
     # 日志设置
     if not os.path.exists(os.path.dirname(c.USERLOG_PATH)):
         os.makedirs(os.path.dirname(c.USERLOG_PATH))
     logger = logging.getLogger()
-    formatter = logging.Formatter('%(asctime)s: %(message)s')
+    formatter = logging.Formatter("%(asctime)s: %(message)s")
     file_handler = RotatingFileHandler(c.USERLOG_PATH, "a", 1024*1024, 0, "utf-8")
     file_handler.setFormatter(formatter)
     stream_handler = logging.StreamHandler()
@@ -33,4 +32,4 @@ if __name__=='__main__':
         game.run()
     except:
         print() # 将日志输出与上文内容分隔开，增加可读性
-        logger.error(f'\n{traceback.format_exc()}') 
+        logger.error(f"\n{traceback.format_exc()}") 
