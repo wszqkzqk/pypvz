@@ -32,5 +32,5 @@ if __name__=='__main__':
         game.setup_states(state_dict, c.MAIN_MENU)
         game.run()
     except:
-        print()
+        print() # 将日志输出与上文内容分隔开，增加可读性
         logger.error(f'\n{traceback.format_exc()}') 

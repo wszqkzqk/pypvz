@@ -22,6 +22,9 @@
   * Windows默认保存的进度文件路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`
   * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/userdata.json`
   * 存档为JSON文件，如果出现因存档损坏而造成程序无法启动，可以手动编辑修复或者删除该文件重试
+* 支持错误日志记录
+  * Windows默认保存的进度文件路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\run.log`
+  * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/run.log`
 
 ## 环境要求
 
@@ -162,6 +165,8 @@ nuitka --mingw64 `
   * 这个想不到很好的实现方法，可能会想一种替代方案
 * 魅惑的僵尸未用红色滤镜标识
   * 这个可能会作为一种“特性”
+* 南瓜头显示不正常
+* 墓碑吞噬者吞噬墓碑过程中被吞噬的墓碑顶端不会消失
 
 **欢迎提供[Pull requests](https://github.com/wszqkzqk/pypvz/pulls)或修复方法建议，也欢迎在这里反馈新的bug()**
 
@@ -265,3 +270,12 @@ nuitka --mingw64 `
 ![截屏13](/demo/demo13.webp)
 ![截屏14](/demo/demo14.webp)
 ![截屏15](/demo/demo15.webp)
+
+## 关于日志与反馈
+
+对于闪退情况，Linux用户与Windows下的python源代码运行用户可以直接在终端中复制出崩溃日志进行反馈。
+
+Windows单文件封装版本无法通过终端显示日志，需要在日志文件中寻找崩溃原因
+* Windows默认日志文件路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\run.log`
+* 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/run.log`
+* 
