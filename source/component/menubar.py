@@ -1,6 +1,5 @@
 import os
 import random
-from select import select
 import pygame as pg
 from .. import tool
 from .. import constants as c

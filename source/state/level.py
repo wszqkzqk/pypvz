@@ -1,6 +1,5 @@
 import os
 import json
-import sys
 import pygame as pg
 import random
 from .. import tool

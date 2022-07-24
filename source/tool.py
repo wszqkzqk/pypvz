@@ -1,6 +1,5 @@
 import os
 import json
-import sys
 from abc import abstractmethod
 import pygame as pg
 from pygame.locals import *
