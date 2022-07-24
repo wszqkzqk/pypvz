@@ -14,6 +14,7 @@ class Menu(tool.State):
         self.game_info = persist
         self.setupBackground()
         self.setupOptions()
+        pg.display.set_caption(c.ORIGINAL_CAPTION)
 
     def setupBackground(self):
         frame_rect = (80, 0, 800, 600)

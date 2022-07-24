@@ -39,8 +39,12 @@ class Level(tool.State):
     def loadMap(self):
         if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
             map_file = f'littleGame_{self.game_info[c.LITTLEGAME_NUM]}.json'
+            # 设置标题
+            pg.display.set_caption(f"pypvz: 玩玩小游戏 第{self.game_info[c.LITTLEGAME_NUM]}关")
         elif self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
             map_file = f'level_{self.game_info[c.LEVEL_NUM]}.json'
+            # 设置标题
+            pg.display.set_caption(f"pypvz: 冒险模式 第{self.game_info[c.LEVEL_NUM]}关")
         file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
         # 最后一关之后应该结束了
         try:
@@ -1506,17 +1510,6 @@ class Level(tool.State):
         # 画僵尸头
         surface.blit(self.level_progress_zombie_head_image, self.level_progress_zombie_head_image_rect)
 
-    def showLevelInfo(self, surface):
-        fontPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources', 'freesansbold.ttf')
-        font = pg.font.Font(fontPath, 20)
-        if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
-            text_to_show = f"Adventure: {self.game_info[c.LEVEL_NUM]}th"
-        elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-            text_to_show = f"Mini Games: {self.game_info[c.LITTLEGAME_NUM]}th"
-        msg_image = font.render(text_to_show, True, c.LIGHTYELLOW, c.NAVYBLUE)
-        msg_rect = msg_image.get_rect()
-
-        surface.blit(msg_image, (410, 565), (0, 0, msg_rect.w, msg_rect.h))
 
     def draw(self, surface):
         self.level.blit(self.background, self.viewport, self.viewport)
@@ -1565,6 +1558,5 @@ class Level(tool.State):
 
             if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
                 self.showLevelProgress(surface)
-                self.showLevelInfo(surface)
                 if self.current_time - self.showHugeWaveApprochingTime <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)

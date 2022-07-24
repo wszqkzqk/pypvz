@@ -3,9 +3,10 @@ from .. import tool
 from .. import constants as c
 
 class Screen(tool.State):
-    def __init__(self):
+    def __init__(self, caption=c.ORIGINAL_CAPTION):
         tool.State.__init__(self)
         self.end_time = 3000
+        self.caption = caption
 
     def startup(self, current_time, persist):
         self.start_time = current_time
@@ -15,6 +16,7 @@ class Screen(tool.State):
         name = self.getImageName()
         self.setupImage(name)
         self.next = self.set_next_state()
+        pg.display.set_caption(self.caption)
     
     def getImageName(self):
         pass
@@ -38,7 +40,7 @@ class Screen(tool.State):
 
 class GameVictoryScreen(Screen):
     def __init__(self):
-        Screen.__init__(self)
+        Screen.__init__(self, caption="pypvz: 战斗胜利！")
     
     def getImageName(self):
         return c.GAME_VICTORY_IMAGE
@@ -48,7 +50,7 @@ class GameVictoryScreen(Screen):
 
 class GameLoseScreen(Screen):
     def __init__(self):
-        Screen.__init__(self)
+        Screen.__init__(self, caption="pypvz: 战斗失败！")
     
     def getImageName(self):
         return c.GAME_LOSE_IMAGE
