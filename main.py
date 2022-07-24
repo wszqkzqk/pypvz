@@ -32,4 +32,5 @@ if __name__=='__main__':
         game.setup_states(state_dict, c.MAIN_MENU)
         game.run()
     except:
+        print()
         logger.error(f'\n{traceback.format_exc()}') 
