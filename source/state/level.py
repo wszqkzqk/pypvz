@@ -49,7 +49,7 @@ class Level(tool.State):
                 self.map_data = json.load(f)
         except FileNotFoundError:
             print("成功通关！")
-            if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
+            if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
                 self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
                 self.game_info[c.LEVEL_COMPLETIONS] += 1
             elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
@@ -574,22 +574,22 @@ class Level(tool.State):
         frame_rect = (0, 0, 158, 26)
         self.level_progress_bar_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_BAR], *frame_rect, c.BLACK, 1)
         self.level_progress_bar_image_rect = self.level_progress_bar_image.get_rect()
-        self.level_progress_bar_image_rect.x = 600      # 猜的
-        self.level_progress_bar_image_rect.y = 565      # 猜的
+        self.level_progress_bar_image_rect.x = 600
+        self.level_progress_bar_image_rect.y = 565
 
         # 僵尸头
         frame_rect = (0, 0, 23, 25)
         self.level_progress_zombie_head_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_ZOMBIE_HEAD], *frame_rect, c.BLACK, 1)
         self.level_progress_zombie_head_image_rect = self.level_progress_zombie_head_image.get_rect()
-        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x + 75      # 猜的
-        self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
+        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x + 75
+        self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3
 
         # 旗帜（这里只包括最后一面）
         frame_rect = (0, 0, 20, 18)
         self.level_progress_flag = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_FLAG], *frame_rect, c.BLACK, 1)
         self.level_progress_flag_rect = self.level_progress_flag.get_rect()
-        self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x - 78     # 猜的
-        self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
+        self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x - 78
+        self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3
 
     # 检查小菜单有没有被点击
     def checkLittleMenuClick(self, mouse_pos):
@@ -1171,6 +1171,7 @@ class Level(tool.State):
             for hypno_zombie in self.hypno_zombie_groups[i]:
                 if hypno_zombie.health <= 0:
                     continue
+                collided_func = pg.sprite.collide_mask
                 zombie_list = pg.sprite.spritecollide(  hypno_zombie, self.zombie_groups[i],
                                                         False, collided_func)
                 for zombie in zombie_list:
@@ -1506,6 +1507,17 @@ class Level(tool.State):
         # 画僵尸头
         surface.blit(self.level_progress_zombie_head_image, self.level_progress_zombie_head_image_rect)
 
+    def showLevelInfo(self, surface):
+        fontPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources', 'freesansbold.ttf')
+        font = pg.font.Font(fontPath, 20)
+        if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
+            text_to_show = f"Adventure: {self.game_info[c.LEVEL_NUM]}th"
+        elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
+            text_to_show = f"Mini Games: {self.game_info[c.LITTLEGAME_NUM]}th"
+        msg_image = font.render(text_to_show, True, c.LIGHTYELLOW, c.NAVYBLUE)
+        msg_rect = msg_image.get_rect()
+
+        surface.blit(msg_image, (410, 565), (0, 0, msg_rect.w, msg_rect.h))
 
     def draw(self, surface):
         self.level.blit(self.background, self.viewport, self.viewport)
@@ -1554,5 +1566,6 @@ class Level(tool.State):
 
             if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
                 self.showLevelProgress(surface)
+                self.showLevelInfo(surface)
                 if self.current_time - self.showHugeWaveApprochingTime <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
