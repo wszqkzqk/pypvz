@@ -127,15 +127,16 @@ jobs:
 
       - name: Build pypvz with Nuitka
         run: |
-          yes | python -m nuitka --standalone \
+          yes | python -m nuitka \
                   --show-progress \
+                  --follow-imports \
                   --show-memory \
                   --output-dir=out \
                   --linux-onefile-icon=pypvz.ico \
-                  --include-data-dir=resources=resources \
                   -o ./out/pypvz \
                   --remove-output \
                   main.py
+          cp ./resources ./out/resources
           tar -cvpaf -C ./out out pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst
 
       - name: Release the version built by nuitka
