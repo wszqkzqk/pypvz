@@ -129,14 +129,14 @@ jobs:
 
       - name: Build pypvz with Nuitka
         run: |
-          echo y | python -m nuitka --standalone `
-                  --onefile `
-                  --show-progress `
-                  --show-memory `
-                  --output-dir=out `
-                  --linux-onefile-icon==pypvz.ico `
-                  --include-data-dir=resources=resources `
-                  -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.appimage `
+          echo y | python -m nuitka --standalone \
+                  --onefile \
+                  --show-progress \
+                  --show-memory \
+                  --output-dir=out \
+                  --linux-onefile-icon=pypvz.ico \
+                  --include-data-dir=resources=resources \
+                  -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.appimage \
                   main.py
 
       # artifact压缩包处上传包含运行环境的文件夹
