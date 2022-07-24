@@ -8,7 +8,7 @@
                         "BucketheadZombie", "SnorkelZombie",
                         "Zomboni"],
     "inevitable_zombie_list":{"30":["BucketheadZombie"]},
-    "card_pool":{   "Lilypad":200,
+    "card_pool":{   "LilyPad":200,
                     "TorchWood":100,
                     "TallNut":100,
                     "TangleKlep":100,
