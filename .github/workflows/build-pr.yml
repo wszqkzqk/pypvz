@@ -134,6 +134,7 @@ jobs:
                   --linux-onefile-icon=pypvz.ico \
                   --include-data-dir=resources=resources \
                   -o ./out/pypvz \
+                  --remove-output \
                   main.py
           tar -cvpaf -C ./out out pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst
 
