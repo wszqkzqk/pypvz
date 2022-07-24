@@ -92,58 +92,58 @@ jobs:
           artifacts: ./out/*nuitka*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  linux:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python_version:
-            - '3.10'
-    name: Ubuntu Python ${{ matrix.python_version }}
-    steps:
-      - name: 🛎️ Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+  #linux:
+  #  runs-on: ubuntu-latest
+  #  strategy:
+  #    fail-fast: false
+  #    matrix:
+  #      python_version:
+  #          - '3.10'
+  #  name: Ubuntu Python ${{ matrix.python_version }}
+  #  steps:
+  #    - name: 🛎️ Checkout
+  #      uses: actions/checkout@v2
+  #      with:
+  #        fetch-depth: 0
 
-      - name: 🐍 Use Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python_version }}
+  #    - name: 🐍 Use Python ${{ matrix.python_version }}
+  #      uses: actions/setup-python@v2
+  #      with:
+  #        python-version: ${{ matrix.python_version }}
 
-      - name: 🧳 Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install patchelf gdb ccache libfuse2
-          python -m pip install --no-python-version-warning --disable-pip-version-check zstandard appdirs ordered-set tqdm Jinja2
-          python -m pip install --no-python-version-warning --disable-pip-version-check nuitka
-          python -m pip install --no-python-version-warning --disable-pip-version-check pygame
+  #    - name: 🧳 Install dependencies
+  #      run: |
+  #        sudo apt-get update
+  #        sudo apt-get install patchelf gdb ccache libfuse2
+  #        python -m pip install --no-python-version-warning --disable-pip-version-check zstandard appdirs ordered-set tqdm Jinja2
+  #        python -m pip install --no-python-version-warning --disable-pip-version-check nuitka
+  #        python -m pip install --no-python-version-warning --disable-pip-version-check pygame
 
-      # 使用Nuitka构建
-      - name: Show nuitka version
-        run: |
-          env
-          python -m nuitka --version
+  #    # 使用Nuitka构建
+  #    - name: Show nuitka version
+  #      run: |
+  #        env
+  #        python -m nuitka --version
 
-      - name: Build pypvz with Nuitka
-        run: |
-          yes | python -m nuitka \
-                  --show-progress \
-                  --follow-imports \
-                  --show-memory \
-                  --output-dir=out \
-                  --linux-onefile-icon=pypvz.ico \
-                  -o ./out/pypvz \
-                  --remove-output \
-                  main.py
-          cp -r ./resources ./out/resources
-          cd out
-          tar -cvpaf ../pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst .
+  #    - name: Build pypvz with Nuitka
+  #      run: |
+  #        yes | python -m nuitka \
+  #                --show-progress \
+  #                --follow-imports \
+  #                --show-memory \
+  #                --output-dir=out \
+  #                --linux-onefile-icon=pypvz.ico \
+  #                -o ./out/pypvz \
+  #                --remove-output \
+  #                main.py
+  #        cp -r ./resources ./out/resources
+  #        cd out
+  #        tar -cvpaf ../pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst .
 
-      - name: Release the version built by nuitka
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          tag: Latest
-          artifacts: ./*.tar.zst
-          token: ${{ secrets.GITHUB_TOKEN }}
+  #    - name: Release the version built by nuitka
+  #      uses: ncipollo/release-action@v1
+  #      with:
+  #        allowUpdates: true
+  #        tag: Latest
+  #        artifacts: ./*.tar.zst
+  #        token: ${{ secrets.GITHUB_TOKEN }}
