@@ -129,7 +129,7 @@ jobs:
 
       - name: Build pypvz with Nuitka
         run: |
-          echo y | python -m nuitka --standalone \
+          yes | python -m nuitka --standalone \
                   --onefile \
                   --show-progress \
                   --show-memory \
