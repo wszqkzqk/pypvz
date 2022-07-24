@@ -140,7 +140,7 @@ jobs:
                   main.py
           cp -r ./resources ./out/resources
           cd out
-          tar -cvpaf . ../pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst
+          tar -cvpaf ../pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst .
 
       - name: Release the version built by nuitka
         uses: ncipollo/release-action@v1
