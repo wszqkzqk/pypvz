@@ -19,11 +19,11 @@
 * 夜晚模式支持墓碑以及从墓碑生成僵尸
   * 含有泳池的模式也支持在最后一波时从泳池中自动冒出僵尸
 * 支持保存进度
-  * Windows默认保存的进度文件路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`
+  * Windows下默认进度文件的保存路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`
   * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/userdata.json`
   * 存档为JSON文件，如果出现因存档损坏而造成程序无法启动，可以手动编辑修复或者删除该文件重试
 * 支持错误日志记录
-  * Windows默认保存的进度文件路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\run.log`
+  * Windows下默认日志文件的保存路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\run.log`
   * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/run.log`
 
 ## 环境要求
