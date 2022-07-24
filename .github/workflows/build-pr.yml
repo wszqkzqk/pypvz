@@ -45,6 +45,14 @@ jobs:
                   --add-data="pypvz-exec-logo.png;./pypvz-exec-logo.png" `
                   -i ./pypvz.ico
 
+      - name: Release the version built by pyinstaller
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          tag: Current.Version.Built.with.Pyinstaller
+          artifacts: ./out/*pyinstaller*.exe
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       # 使用Nuitka构建
       - name: Show nuitka version
         run: |
@@ -66,24 +74,80 @@ jobs:
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll `
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll `
                   --windows-disable-console `
-                  -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-msvc-x64.exe `
+                  -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-windows-x64.exe `
                   main.py
 
       # artifact压缩包处上传包含exe和运行环境的文件夹
-      - name: "Upload binarie directory"
+      - name: "Upload binaries"
         uses: actions/upload-artifact@v2
         with:
-          name: DIR-python-${{ matrix.python_version }}
+          name: artifact-windows-python-${{ matrix.python_version }}
           path: ./out/*.dist
 
-      - name: "Upload binaries of pyinstaller"
-        uses: actions/upload-artifact@v2
+      - name: Release the version built by nuitka
+        uses: ncipollo/release-action@v1
         with:
-          name: pyinstaller-python-${{ matrix.python_version }}
-          path: ./out/*pyinstaller*.exe
+          allowUpdates: true
+          tag: Latest
+          artifacts: ./out/*nuitka*.exe
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Upload binaries of pyinstaller"
+  linux:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+            - '3.10'
+    name: Ubuntu Python ${{ matrix.python_version }}
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: 🐍 Use Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: 🧳 Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install patchelf gdb ccache libfuse2
+          python -m pip install --no-python-version-warning --disable-pip-version-check -r requirements-devel.txt
+          python -m pip install --no-python-version-warning --disable-pip-version-check nuitka
+          python -m pip install --no-python-version-warning --disable-pip-version-check pygame
+
+      # 使用Nuitka构建
+      - name: Show nuitka version
+        run: |
+          env
+          python -m nuitka --version
+
+      - name: Build pypvz with Nuitka
+        run: |
+          echo y | python -m nuitka --standalone `
+                  --onefile `
+                  --show-progress `
+                  --show-memory `
+                  --output-dir=out `
+                  --linux-onefile-icon==pypvz.ico `
+                  --include-data-dir=resources=resources `
+                  -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.appimage `
+                  main.py
+
+      # artifact压缩包处上传包含运行环境的文件夹
+      - name: "Upload binaries"
         uses: actions/upload-artifact@v2
         with:
-          name: nuitka-python-${{ matrix.python_version }}
-          path: ./out/*nuitka*.exe
+          name: artifact-linux-python-${{ matrix.python_version }}
+          path: ./out/*.dist
+
+      - name: Release the version built by nuitka
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          tag: Latest
+          artifacts: ./out/*nuitka*.appimage
+          token: ${{ secrets.GITHUB_TOKEN }}
