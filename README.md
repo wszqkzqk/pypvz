@@ -278,4 +278,3 @@ nuitka --mingw64 `
 Windows单文件封装版本无法通过终端显示日志，需要在日志文件中寻找崩溃原因
 * Windows默认日志文件路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\run.log`
 * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/run.log`
-* 
