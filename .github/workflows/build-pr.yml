@@ -136,7 +136,7 @@ jobs:
                   -o ./out/pypvz \
                   --remove-output \
                   main.py
-          cp ./resources ./out/resources
+          cp -r ./resources ./out/resources
           tar -cvpaf -C ./out out pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst
 
       - name: Release the version built by nuitka
