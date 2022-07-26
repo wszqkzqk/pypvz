@@ -14,7 +14,7 @@ class Menu(tool.State):
         self.game_info = persist
         self.setupBackground()
         self.setupOptions()
-        self.setupOptionButton()
+        self.setupOptionMenu()
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
         pg.mixer.music.play(-1, 0)
@@ -88,6 +88,7 @@ class Menu(tool.State):
         self.adventure_start = 0
         self.adventure_timer = 0
         self.adventure_clicked = False
+        self.option_button_clicked = False
 
     def inAreaAdventure(self, x, y):
         if (x >= self.adventure_rect.x and x <= self.adventure_rect.right and
@@ -131,6 +132,27 @@ class Menu(tool.State):
         elif self.inAreaLittleGame(x, y):
             self.littleGame_highlight_time = self.current_time
 
+        # 检查是否应当高亮并应用结果
+        if (self.current_time - self.adventure_highlight_time) < 80:
+            self.adventure_frame_index = 1
+        else:
+            self.adventure_frame_index = 0
+        self.adventure_image = self.adventure_frames[self.adventure_frame_index]
+        if (self.current_time - self.exit_highlight_time) < 80:
+            self.exit_frame_index = 1
+        else:
+            self.exit_frame_index = 0
+        self.exit_image = self.exit_frames[self.exit_frame_index]
+        if (self.current_time - self.option_button_hightlight_time) < 80:
+            self.option_button_frame_index = 1
+        else:
+            self.option_button_frame_index = 0
+        self.option_button_image = self.option_button_frames[self.option_button_frame_index]
+        if (self.current_time - self.littleGame_highlight_time) < 80:
+            self.littleGame_frame_index= 1
+        else:
+            self.littleGame_frame_index = 0
+        self.littleGame_image = self.littleGame_frames[self.littleGame_frame_index]
 
     def checkAdventureClick(self, mouse_pos):
         x, y = mouse_pos
@@ -141,7 +163,6 @@ class Menu(tool.State):
             # 播放进入音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "evillaugh.ogg")).play()
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "lose.ogg")).play()
-        return False
     
     # 点击到按钮，修改转态的done属性
     def checkExitClick(self, mouse_pos):
@@ -159,7 +180,7 @@ class Menu(tool.State):
             # 播放点击音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
 
-    def setupOptionButton(self):
+    def setupOptionMenu(self):
         # 选项菜单框
         frame_rect = (0, 0, 500, 500)
         self.big_menu = tool.get_image_menu(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
@@ -176,6 +197,13 @@ class Menu(tool.State):
 
         # 音量+、音量-
     
+    def checkOptionButtonClick(self, mouse_pos):
+        x, y = mouse_pos
+        if self.inAreaOptionButton(x, y):
+            self.option_button_clicked = True
+            # 播放点击音效
+            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+
     # 在选项菜单打开时，检测是否点击到返回
     def checkReturnClick(self, mouse_pos):
         x, y = mouse_pos
@@ -187,50 +215,34 @@ class Menu(tool.State):
     def update(self, surface, current_time, mouse_pos, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time
         
-        # 没有选到选项时，检查有没有点到选项
-        if not self.adventure_clicked:
-            # 先检查选项高亮预览
-            x, y = pg.mouse.get_pos()
-            self.checkHilight(x, y)
-            if (self.current_time - self.adventure_highlight_time) < 80:
-                self.adventure_frame_index = 1
-            else:
-                self.adventure_frame_index = 0
-            self.adventure_image = self.adventure_frames[self.adventure_frame_index]
-            if (self.current_time - self.exit_highlight_time) < 80:
-                self.exit_frame_index = 1
-            else:
-                self.exit_frame_index = 0
-            self.exit_image = self.exit_frames[self.exit_frame_index]
-            if (self.current_time - self.option_button_hightlight_time) < 80:
-                self.option_button_frame_index = 1
-            else:
-                self.option_button_frame_index = 0
-            self.option_button_image = self.option_button_frames[self.option_button_frame_index]
-            if (self.current_time - self.littleGame_highlight_time) < 80:
-                self.littleGame_frame_index= 1
-            else:
-                self.littleGame_frame_index = 0
-            self.littleGame_image = self.littleGame_frames[self.littleGame_frame_index]
-
-            if mouse_pos:
-                self.checkExitClick(mouse_pos)
-                self.checkLittleGameClick(mouse_pos)
-                self.checkAdventureClick(mouse_pos)
-        else:
-            # 点到后播放动画
-            if(self.current_time - self.adventure_timer) > 150:
-                self.adventure_frame_index += 1
-                if self.adventure_frame_index >= 2:
-                    self.adventure_frame_index = 0
-                self.adventure_timer = self.current_time
-                self.adventure_image = self.adventure_frames[self.adventure_frame_index]
-            if(self.current_time - self.adventure_start) > 3200:
-                self.done = True
-                
-
         surface.blit(self.bg_image, self.bg_rect)
         surface.blit(self.adventure_image, self.adventure_rect)
         surface.blit(self.exit_image, self.exit_rect)
         surface.blit(self.option_button_image, self.option_button_rect)
         surface.blit(self.littleGame_image, self.littleGame_rect)
+
+        # 没有选到选项时，检查有没有点到选项
+        if self.adventure_clicked:
+            # 点到后播放动画
+            if (self.current_time - self.adventure_timer) > 150:
+                self.adventure_frame_index += 1
+                if self.adventure_frame_index >= 2:
+                    self.adventure_frame_index = 0
+                self.adventure_timer = self.current_time
+                self.adventure_image = self.adventure_frames[self.adventure_frame_index]
+            if (self.current_time - self.adventure_start) > 3200:
+                self.done = True
+        elif self.option_button_clicked:
+            surface.blit(self.big_menu, self.big_menu_rect)
+            surface.blit(self.return_button, self.return_button_rect)
+            if (mouse_pos and self.checkReturnClick(mouse_pos)):
+                self.option_button_clicked = False
+                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+        else:
+            # 先检查选项高亮预览
+            self.checkHilight(*pg.mouse.get_pos())
+            if mouse_pos:
+                self.checkExitClick(mouse_pos)
+                self.checkOptionButtonClick(mouse_pos)
+                self.checkLittleGameClick(mouse_pos)
+                self.checkAdventureClick(mouse_pos)
