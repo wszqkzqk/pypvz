@@ -229,8 +229,3 @@ except:
 GFX = load_all_gfx(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,os.path.join("resources","graphics")))
 ZOMBIE_RECT = loadZombieImageRect()
 PLANT_RECT = loadPlantImageRect()
-
-# 播放音乐
-pg.mixer.init()
-pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,"resources", "music", "intro.opus"))
-pg.mixer.music.play(-1, 0)

@@ -14,6 +14,10 @@ class Menu(tool.State):
         self.game_info = persist
         self.setupBackground()
         self.setupOptions()
+        self.setupOptionButton()
+        pg.mixer.music.stop()
+        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
+        pg.mixer.music.play(-1, 0)
         pg.display.set_caption(c.ORIGINAL_CAPTION)
 
     def setupBackground(self):
@@ -172,6 +176,7 @@ class Menu(tool.State):
 
         # 音量+、音量-
     
+    # 在选项菜单打开时，检测是否点击到返回
     def checkReturnClick(self, mouse_pos):
         x, y = mouse_pos
         if (x >= self.return_button_rect.x and x <= self.return_button_rect.right and

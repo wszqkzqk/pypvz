@@ -60,9 +60,6 @@ class Level(tool.State):
                 self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
             self.done = True
             self.next = c.MAIN_MENU
-            pg.mixer.music.stop()
-            pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
-            pg.mixer.music.play(-1, 0)
             with open(c.USERDATA_PATH, "w") as f:
                 userdata = {}
                 for i in self.game_info:
@@ -554,9 +551,6 @@ class Level(tool.State):
                 self.done = True
                 self.next = c.MAIN_MENU
                 self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:self.persist[c.LEVEL_NUM], c.LITTLEGAME_NUM:self.persist[c.LITTLEGAME_NUM]}
-                pg.mixer.music.stop()
-                pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
-                pg.mixer.music.play(-1, 0)
                 # 播放点击音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
 
