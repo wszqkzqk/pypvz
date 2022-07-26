@@ -53,10 +53,10 @@ class Level(tool.State):
         except FileNotFoundError:
             print("成功通关！")
             if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
-                self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
+                self.game_info[c.LEVEL_NUM] = 1
                 self.game_info[c.LEVEL_COMPLETIONS] += 1
             elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-                self.game_info[c.LITTLEGAME_NUM] = c.START_LITTLE_GAME_NUM
+                self.game_info[c.LITTLEGAME_NUM] = 1
                 self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
             self.done = True
             self.next = c.MAIN_MENU

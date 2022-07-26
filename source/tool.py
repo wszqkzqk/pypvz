@@ -50,10 +50,10 @@ class Control():
             self.game_info.update(userdata)
         except FileNotFoundError:
             # 不存在存档即新建
-            userdata = {c.LEVEL_NUM:c.START_LEVEL_NUM,
-                        c.LITTLEGAME_NUM:c.START_LITTLE_GAME_NUM,
-                        c.LEVEL_COMPLETIONS:c.START_LEVEL_COMPLETIONS,
-                        c.LITTLEGAME_COMPLETIONS:c.START_LITTLEGAME_COMPLETIONS
+            userdata = {c.LEVEL_NUM:1,
+                        c.LITTLEGAME_NUM:1,
+                        c.LEVEL_COMPLETIONS:0,
+                        c.LITTLEGAME_COMPLETIONS:0
                         }
             if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
                 os.makedirs(os.path.dirname(c.USERDATA_PATH))

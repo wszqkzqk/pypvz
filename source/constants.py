@@ -7,13 +7,6 @@ else:   # 非Windows系统存储路径
     USERDATA_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))
     USERLOG_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "run.log"))
 
-# 游戏起始关卡
-START_LEVEL_NUM = 1
-START_LITTLE_GAME_NUM = 1
-# 游戏模式完成次数
-START_LEVEL_COMPLETIONS = 0
-START_LITTLEGAME_COMPLETIONS = 0
-
 # 游戏速度倍率（调试用）
 GAME_RATE = 1
 
