@@ -30,7 +30,7 @@ class Menu(tool.State):
     def setupOptions(self):
         # 冒险模式
         self.adventure_frames = []
-        frame_names = (c.OPTION_ADVENTURE + '_0', c.OPTION_ADVENTURE + '_1')
+        frame_names = (f'{c.OPTION_ADVENTURE}_0', f'{c.OPTION_ADVENTURE}_1')
         frame_rect = (0, 0, 330, 144)
         
         for name in frame_names:
@@ -44,7 +44,7 @@ class Menu(tool.State):
         
         # 退出按钮
         self.exit_frames = []
-        exit_frame_names = (c.EXIT + '_0', c.EXIT + '_1')
+        exit_frame_names = (f'{c.EXIT}_0', f'{c.EXIT}_1')
         exit_frame_rect = (0, 0, 47, 27)
         for name in exit_frame_names:
             self.exit_frames.append(tool.get_image_menu(tool.GFX[name], *exit_frame_rect, c.BLACK, 1.1))
@@ -55,12 +55,25 @@ class Menu(tool.State):
         self.exit_rect.y = 507
         self.exit_highlight_time = 0
 
+        # 选项按钮
+        self.option_button_frames = []
+        option_button_frame_names = (f'{c.OPTION_BUTTON}_0', f'{c.OPTION_BUTTON}_1')
+        option_button_frame_rect = (0, 0, 81, 31)
+        for name in option_button_frame_names:
+            self.option_button_frames.append(tool.get_image_menu(tool.GFX[name], *option_button_frame_rect, c.BLACK))
+        self.option_button_frame_index = 0
+        self.option_button_image = self.option_button_frames[self.option_button_frame_index]
+        self.option_button_rect = self.option_button_image.get_rect()
+        self.option_button_rect.x = 560
+        self.option_button_rect.y = 490
+        self.option_button_hightlight_time = 0
+
         # 小游戏
         self.littleGame_frames = []
         littleGame_frame_names = (c.LITTLEGAME_BUTTON + '_0', c.LITTLEGAME_BUTTON + '_1')
         littleGame_frame_rect = (0, 7, 317, 135)
         for name in littleGame_frame_names:
-            self.littleGame_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1))
+            self.littleGame_frames.append(tool.get_image_menu(tool.GFX[name], *littleGame_frame_rect, c.BLACK, 1))
         self.littleGame_frame_index = 0
         self.littleGame_image = self.littleGame_frames[self.littleGame_frame_index]
         self.littleGame_rect = self.littleGame_image.get_rect()
@@ -86,6 +99,13 @@ class Menu(tool.State):
         else:
             return False
     
+    def inAreaOptionButton(self, x, y):
+        if (x >= self.option_button_rect.x and x <= self.option_button_rect.right and
+            y >= self.option_button_rect.y and y <= self.option_button_rect.bottom):
+            return True
+        else:
+            return False
+    
     def inAreaLittleGame(self, x, y):
         if (x >= self.littleGame_rect.x and x <= self.littleGame_rect.right and
             y >= self.littleGame_rect.y and y <= self.littleGame_rect.bottom):
@@ -100,6 +120,9 @@ class Menu(tool.State):
         # 高亮退出按钮
         elif self.inAreaExit(x, y):
             self.exit_highlight_time = self.current_time
+        # 高亮选项按钮
+        elif self.inAreaOptionButton(x, y):
+            self.option_button_hightlight_time = self.current_time
         # 高亮小游戏按钮
         elif self.inAreaLittleGame(x, y):
             self.littleGame_highlight_time = self.current_time
@@ -132,6 +155,30 @@ class Menu(tool.State):
             # 播放点击音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
 
+    def setupOptionButton(self):
+        # 选项菜单框
+        frame_rect = (0, 0, 500, 500)
+        self.big_menu = tool.get_image_menu(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
+        self.big_menu_rect = self.big_menu.get_rect()
+        self.big_menu_rect.x = 150
+        self.big_menu_rect.y = 0
+
+        # 返回按钮
+        frame_rect = (0, 0, 342, 87)
+        self.return_button = tool.get_image_menu(tool.GFX[c.RETURN_BUTTON], *frame_rect, c.BLACK, 1.1)
+        self.return_button_rect = self.return_button.get_rect()
+        self.return_button_rect.x = 220
+        self.return_button_rect.y = 440
+
+        # 音量+、音量-
+    
+    def checkReturnClick(self, mouse_pos):
+        x, y = mouse_pos
+        if (x >= self.return_button_rect.x and x <= self.return_button_rect.right and
+            y >= self.return_button_rect.y and y <= self.return_button_rect.bottom):
+            return True
+        return False
+
     def update(self, surface, current_time, mouse_pos, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time
         
@@ -150,6 +197,11 @@ class Menu(tool.State):
             else:
                 self.exit_frame_index = 0
             self.exit_image = self.exit_frames[self.exit_frame_index]
+            if (self.current_time - self.option_button_hightlight_time) < 80:
+                self.option_button_frame_index = 1
+            else:
+                self.option_button_frame_index = 0
+            self.option_button_image = self.option_button_frames[self.option_button_frame_index]
             if (self.current_time - self.littleGame_highlight_time) < 80:
                 self.littleGame_frame_index= 1
             else:
@@ -175,4 +227,5 @@ class Menu(tool.State):
         surface.blit(self.bg_image, self.bg_rect)
         surface.blit(self.adventure_image, self.adventure_rect)
         surface.blit(self.exit_image, self.exit_rect)
+        surface.blit(self.option_button_image, self.option_button_rect)
         surface.blit(self.littleGame_image, self.littleGame_rect)

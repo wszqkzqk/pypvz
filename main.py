@@ -13,12 +13,12 @@ if __name__=="__main__":
         os.makedirs(os.path.dirname(c.USERLOG_PATH))
     logger = logging.getLogger()
     formatter = logging.Formatter("%(asctime)s: %(message)s")
-    file_handler = RotatingFileHandler(c.USERLOG_PATH, "a", 1024*1024, 0, "utf-8")
-    file_handler.setFormatter(formatter)
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-    logger.addHandler(stream_handler)
+    fileHandler = RotatingFileHandler(c.USERLOG_PATH, "a", 1024*1024, 0, "utf-8")
+    fileHandler.setFormatter(formatter)
+    streamHandler = logging.StreamHandler()
+    streamHandler.setFormatter(formatter)
+    logger.addHandler(fileHandler)
+    logger.addHandler(streamHandler)
 
     try:
         # 控制状态机运行

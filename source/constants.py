@@ -75,6 +75,7 @@ RETURN_BUTTON = 'returnButton'
 RESTART_BUTTON = 'restartButton'
 MAINMENU_BUTTON = 'mainMenuButton'
 LITTLEGAME_BUTTON = 'littleGameButton'
+OPTION_BUTTON = 'optionButton'
 # 小铲子
 SHOVEL = 'shovel'
 SHOVEL_BOX = 'shovelBox'
