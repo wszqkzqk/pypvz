@@ -221,9 +221,8 @@ class Menu(tool.State):
         surface.blit(self.option_button_image, self.option_button_rect)
         surface.blit(self.littleGame_image, self.littleGame_rect)
 
-        # 没有选到选项时，检查有没有点到选项
+        # 点到冒险模式后播放动画
         if self.adventure_clicked:
-            # 点到后播放动画
             if (self.current_time - self.adventure_timer) > 150:
                 self.adventure_frame_index += 1
                 if self.adventure_frame_index >= 2:
@@ -232,12 +231,14 @@ class Menu(tool.State):
                 self.adventure_image = self.adventure_frames[self.adventure_frame_index]
             if (self.current_time - self.adventure_start) > 3200:
                 self.done = True
+        # 点到选项按钮后显示菜单
         elif self.option_button_clicked:
             surface.blit(self.big_menu, self.big_menu_rect)
             surface.blit(self.return_button, self.return_button_rect)
             if (mouse_pos and self.checkReturnClick(mouse_pos)):
                 self.option_button_clicked = False
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+        # 没有点到前两者时常规行检测所有按钮的点击和高亮
         else:
             # 先检查选项高亮预览
             self.checkHilight(*pg.mouse.get_pos())
