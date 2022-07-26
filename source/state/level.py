@@ -1422,8 +1422,6 @@ class Level(tool.State):
                 self.game_info[c.LEVEL_NUM] += 1
             self.next = c.GAME_VICTORY
             self.done = True
-            # 播放胜利音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "win.ogg")).play()
             with open(c.USERDATA_PATH, "w") as f:
                 userdata = {}
                 for i in self.game_info:
@@ -1434,9 +1432,6 @@ class Level(tool.State):
         elif self.checkLose():
             self.next = c.GAME_LOSE
             self.done = True
-            # 播放失败音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "lose.ogg")).play()
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "scream.ogg")).play()
 
     def drawMouseShow(self, surface):
         if self.hint_plant:
