@@ -45,6 +45,8 @@ class Control():
             # 存在存档即导入
             with open(c.USERDATA_PATH) as f:
                 userdata = json.load(f)
+            # 存档内不包含即时游戏时间信息，需要新建
+            self.game_info = {c.CURRENT_TIME:0}
             # 导入数据
             self.game_info.update(userdata)
         except FileNotFoundError:
@@ -55,8 +57,8 @@ class Control():
                 savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
                 f.write(savedata)
             self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
-        # 存档内不包含即时游戏时间信息，需要新建
-        self.game_info[c.CURRENT_TIME] = 0
+            # 存档内不包含即时游戏时间信息，需要新建
+            self.game_info[c.CURRENT_TIME] = 0
 
  
     def setup_states(self, state_dict, start_state):
