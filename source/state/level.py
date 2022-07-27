@@ -567,7 +567,7 @@ class Level(tool.State):
         self.level_progress_bar_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_BAR], *frame_rect, c.BLACK, 1)
         self.level_progress_bar_image_rect = self.level_progress_bar_image.get_rect()
         self.level_progress_bar_image_rect.x = 600
-        self.level_progress_bar_image_rect.y = 565
+        self.level_progress_bar_image_rect.y = 573
 
         # 僵尸头
         frame_rect = (0, 0, 23, 25)
