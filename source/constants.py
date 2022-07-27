@@ -23,7 +23,7 @@ SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # 字体路径
-FONT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)),'resources', 'DroidSansFallback.ttf')
+FONT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'DroidSansFallback.ttf')
 
 # 选卡数量
 # 最大数量
