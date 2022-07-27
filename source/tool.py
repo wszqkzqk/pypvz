@@ -50,15 +50,10 @@ class Control():
             self.game_info.update(userdata)
         except FileNotFoundError:
             # 不存在存档即新建
-            userdata = {c.LEVEL_NUM:1,
-                        c.LITTLEGAME_NUM:1,
-                        c.LEVEL_COMPLETIONS:0,
-                        c.LITTLEGAME_COMPLETIONS:0
-                        }
             if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
                 os.makedirs(os.path.dirname(c.USERDATA_PATH))
             with open(c.USERDATA_PATH, "w") as f:
-                savedata = json.dumps(userdata, sort_keys=True, indent=4)
+                savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
                 f.write(savedata)
             self.game_info = userdata
             self.game_info[c.CURRENT_TIME] = 0  # 时间信息需要新建

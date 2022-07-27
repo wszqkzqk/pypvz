@@ -64,7 +64,7 @@ class Level(tool.State):
             with open(c.USERDATA_PATH, "w") as f:
                 userdata = {}
                 for i in self.game_info:
-                    if i in c.USERDATA_KEYS:
+                    if i in c.INIT_USERDATA:
                         userdata[i] = self.game_info[i]
                 savedata = json.dumps(userdata, sort_keys=True, indent=4)
                 f.write(savedata)
@@ -1426,7 +1426,7 @@ class Level(tool.State):
             with open(c.USERDATA_PATH, "w") as f:
                 userdata = {}
                 for i in self.game_info:
-                    if i in c.USERDATA_KEYS:
+                    if i in c.INIT_USERDATA:
                         userdata[i] = self.game_info[i]
                 savedata = json.dumps(userdata, sort_keys=True, indent=4)
                 f.write(savedata)

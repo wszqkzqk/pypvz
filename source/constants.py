@@ -657,10 +657,11 @@ SLEEP = 'sleep'
 CHOOSE = 'choose'
 PLAY = 'play'
 
-# 记录本地存储文件需要记录哪些内容
-USERDATA_KEYS = {   LEVEL_NUM, LITTLEGAME_NUM,
-                    LEVEL_COMPLETIONS,
-                    LITTLEGAME_COMPLETIONS,
+# 记录本地存储文件初始值
+INIT_USERDATA = {   LEVEL_NUM:1,
+                    LITTLEGAME_NUM:1,
+                    LEVEL_COMPLETIONS:0,
+                    LITTLEGAME_COMPLETIONS:0,
                     }
 
 # 无穷大常量
