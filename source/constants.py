@@ -658,11 +658,12 @@ CHOOSE = 'choose'
 PLAY = 'play'
 
 # 记录本地存储文件初始值
-INIT_USERDATA = {   LEVEL_NUM:1,
-                    LITTLEGAME_NUM:1,
-                    LEVEL_COMPLETIONS:0,
-                    LITTLEGAME_COMPLETIONS:0,
-                    }
+INIT_USERDATA = {   
+                LEVEL_NUM:1,
+                LITTLEGAME_NUM:1,
+                LEVEL_COMPLETIONS:0,
+                LITTLEGAME_COMPLETIONS:0,
+                }
 
 # 无穷大常量
-INF = float("inf")  # python传递字符串性能较低，故在这里对inf声明一次，以后仅需调用即可
+INF = float("inf")  # python传递字符串性能较低，故在这里对inf声明一次，以后仅需调用即可，虽然真正的用处是可以自动补全（
