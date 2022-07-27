@@ -5,5 +5,5 @@
     "spawn_zombies":"auto",
     "included_zombies":["Zombie", "ConeheadZombie", "BucketheadZombie", "SnorkelZombie"],
     "inevitable_zombie_list":{"20":["BucketheadZombie"], "30":["SnorkelZombie"]},
-    "num_flags":4
+    "num_flags":3
 }
