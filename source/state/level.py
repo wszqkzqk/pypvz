@@ -23,18 +23,12 @@ class Level(tool.State):
         self.showLittleMenu = False
 
         # 导入地图参数
-        # 这些注释内容是将来增加通过界面后的容错设计，以保证直接通关时不会闪退
-        # 现在为了明确一开始就没有正确导入地图的错误，没有启用这些设定
-        # if self.loadMap():  # 表示导入成功
-        #     self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
-        #     self.map_y_len = self.map.height
-        #     self.setupBackground()
-        #     self.initState()
-        self.loadMap()
-        self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
-        self.map_y_len = self.map.height
-        self.setupBackground()
-        self.initState()
+        # 采用了容错设计，如果没有导入成功就不执行
+        if self.loadMap():  # 表示导入成功
+            self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
+            self.map_y_len = self.map.height
+            self.setupBackground()
+            self.initState()
 
     def loadMap(self):
         if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
@@ -93,6 +87,8 @@ class Level(tool.State):
             # 浓雾
             elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_FOG:
                 self.bgm = 'fogLevel.opus'
+        # 表示成功加载地图
+        return True
 
     def setupBackground(self):
         img_index = self.map_data[c.BACKGROUND_TYPE]
@@ -338,8 +334,8 @@ class Level(tool.State):
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
         # 这些注释内容是将来增加通过界面后的容错设计，以保证直接通关时不会闪退
-        # if self.done:
-        #     return
+        if self.done:
+            return
         self.current_time = self.game_info[c.CURRENT_TIME] = self.pvzTime(current_time)
         if self.state == c.CHOOSE:
             self.choose(mouse_pos, mouse_click)
