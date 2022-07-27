@@ -5,6 +5,7 @@ from .. import constants as c
 
 class Screen(tool.State):
     def __init__(self):
+        tool.State.__init__(self)
         self.end_time = 3000
 
     def startup(self, current_time, persist):
