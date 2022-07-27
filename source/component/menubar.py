@@ -36,6 +36,12 @@ class Card():
         self.rect.y = y
         # 计划以后以此坐标进行相对变化，用字体绘制阳光消耗大小，不再采用现在的图片包含阳光方法
         # 以便减小程序体积并增加可维护性
+        font = pg.font.Font(c.FONT_PATH, 12)
+        font.bold = True
+        self.sun_cost_img = font.render(str(c.PLANT_CARD_INFO[index][c.SUN_INDEX]), True, c.BLACK)
+        self.sun_cost_img_rect = self.sun_cost_img.get_rect()
+        sun_cost_img_x = 32 - self.sun_cost_img_rect.w
+        self.orig_image.blit(self.sun_cost_img, (sun_cost_img_x, 52, self.sun_cost_img_rect.w, self.sun_cost_img_rect.h))
         
         self.index = index
         self.sun_cost = c.PLANT_CARD_INFO[index][c.SUN_INDEX]
@@ -399,7 +405,7 @@ class MoveBar():
         x = self.card_end_x
         y = 6
         selected_card = random.choices(self.card_pool_name, self.card_pool_weight)[0]
-        self.card_list.append(MoveCard(x, y, selected_card[c.CARD_INDEX] + "_move", selected_card[c.PLANT_NAME_INDEX]))
+        self.card_list.append(MoveCard(x, y, selected_card[c.CARD_INDEX], selected_card[c.PLANT_NAME_INDEX]))
         return True
 
     def update(self, current_time):
