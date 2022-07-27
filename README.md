@@ -299,6 +299,8 @@ pyinstaller -F pypvz.py `
 ![截屏13](/demo/demo13.webp)
 ![截屏14](/demo/demo14.webp)
 ![截屏15](/demo/demo15.webp)
+![截屏16](/demo/demo16.webp)
+![截屏17](/demo/demo17.webp)
 
 ## 关于日志与反馈
 
