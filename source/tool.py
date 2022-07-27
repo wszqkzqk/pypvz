@@ -57,8 +57,7 @@ class Control():
                 with open(c.USERDATA_PATH, "w") as f:
                     savedata = json.dumps(self.game_info, sort_keys=True, indent=4)
                     f.write(savedata)
-        except FileNotFoundError:
-            # 不存在存档即新建
+        except: # 这里需要考虑多种情况，如文件不存在、文件不可读、文件不符合JSON语法要求，这些情况目前暂定统一进行新建文件操作
             if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
                 os.makedirs(os.path.dirname(c.USERDATA_PATH))
             with open(c.USERDATA_PATH, "w") as f:

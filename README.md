@@ -23,7 +23,7 @@
   * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/userdata.json`
   * 存档为JSON文件，如果出现因存档损坏而造成程序无法启动，可以手动编辑修复或者删除该文件重试
     * 0.8.12.0版本后理论上不可能因为存档损坏而无法启动，如果有，请在[issues](https://github.com/wszqkzqk/pypvz/issues)中报告bug
-    * 但是仍然有可能因为升级后变量名不同而丢失存档的进度信息，这种情况手动编辑恢复即可
+      * 仍然有可能因为升级后变量名不同而丢失存档的进度信息，这种情况手动编辑恢复即可
 * 支持错误日志记录
   * Windows下默认日志文件的保存路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\run.log`
   * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/run.log`
