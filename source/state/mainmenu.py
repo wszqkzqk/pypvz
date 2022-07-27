@@ -208,7 +208,7 @@ class Menu(tool.State):
                 self.sunflower_trophy = tool.get_image_menu(tool.GFX[c.SILVER_SUNFLOWER], *frame_rect, c.BLACK)
             self.sunflower_trophy_rect = self.sunflower_trophy.get_rect()
             self.sunflower_trophy_rect.x = 0
-            self.sunflower_trophy_rect.y = 300
+            self.sunflower_trophy_rect.y = 280
     
     def checkOptionButtonClick(self, mouse_pos):
         x, y = mouse_pos
