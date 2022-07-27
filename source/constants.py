@@ -22,6 +22,9 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
+# 字体路径
+FONT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)),'resources', 'DroidSansFallback.ttf')
+
 # 选卡数量
 # 最大数量
 CARD_MAX_NUM = 10   # 这里以后可以增加解锁功能，从最初的6格逐渐解锁到10格

@@ -7,8 +7,8 @@ from .. import constants as c
 
 def getSunValueImage(sun_value):
     # for pack, must include ttf
-    fontPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources', 'freesansbold.ttf')
-    font = pg.font.Font(fontPath, 14)
+    font = pg.font.Font(c.FONT_PATH, 14)
+    font.bold = True
     width = 35
     msg_image = font.render(str(sun_value), True, c.NAVYBLUE, c.LIGHTYELLOW)
     msg_rect = msg_image.get_rect()
@@ -188,7 +188,7 @@ class MenuBar():
         self.value_image = getSunValueImage(self.sun_value)
         self.value_rect = self.value_image.get_rect()
         self.value_rect.x = 21
-        self.value_rect.y = self.rect.bottom - 21
+        self.value_rect.y = self.rect.bottom - 24
         
         self.image.blit(self.value_image, self.value_rect)
 
@@ -228,7 +228,7 @@ class Panel():
         self.value_image = getSunValueImage(sun_value)
         self.value_rect = self.value_image.get_rect()
         self.value_rect.x = 21
-        self.value_rect.y = self.menu_rect.bottom - 21
+        self.value_rect.y = self.menu_rect.bottom - 24
 
         self.button_image =  self.loadFrame(c.START_BUTTON)
         self.button_rect = self.button_image.get_rect()
