@@ -66,7 +66,7 @@ python pypvz.py
 ## 方法
 
 * 使用鼠标收集阳光,种植植物
-* 你可以通过更改`source/constants.py`中的`START_LEVEL_NUM`的数值来更改冒险模式的起始关卡，更改`START_LITTLE_GAME_NUM`的数值来更改小游戏的起始关卡：
+* 对于已经存在存档的用户，可以在`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`（Windows）或`~/.config/wszqkzqk.dev/pypvz/userdata.json`（其他操作系统）中修改当前关卡：
   * 冒险模式：
     * 1——引入：白昼模式——单行草皮
     * 2——引入：白昼模式——三行草皮
@@ -80,7 +80,6 @@ python pypvz.py
     * 3：传送带模式（黑夜）
     * 4：传送带模式（泳池）
   * 目前暂时按照以上设定，未与原版相符
-* 对于已经存在存档的用户，可以在`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`（Windows）或`~/.config/wszqkzqk.dev/pypvz/userdata.json`（其他操作系统）中修改当前关卡
 * 可以通过修改`source/constants.py`中的`GAME_RATE`来调节游戏速度倍率
 * **注意：目前单文件发布版本不支持自定义速度倍率**
 
