@@ -34,6 +34,8 @@ class Card():
         self.rect = self.orig_image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        # 计划以后以此坐标进行相对变化，用字体绘制阳光消耗大小，不再采用现在的图片包含阳光方法
+        # 以便减小程序体积并增加可维护性
         
         self.index = index
         self.sun_cost = c.PLANT_CARD_INFO[index][c.SUN_INDEX]
