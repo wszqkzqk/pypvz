@@ -51,11 +51,12 @@ class Level(tool.State):
             with open(file_path) as f:
                 self.map_data = json.load(f)
         except FileNotFoundError:
-            print("成功通关！")
             if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
+                print("成功通关冒险模式！")
                 self.game_info[c.LEVEL_NUM] = 1
                 self.game_info[c.LEVEL_COMPLETIONS] += 1
             elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
+                print("成功通关玩玩小游戏！")
                 self.game_info[c.LITTLEGAME_NUM] = 1
                 self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
             self.done = True
