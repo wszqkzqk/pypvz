@@ -33,7 +33,6 @@ class Control():
         self.screen = pg.display.get_surface()
         self.done = False
         self.clock = pg.time.Clock()    # 创建一个对象来帮助跟踪时间
-        self.fps = 50 * c.GAME_RATE
         self.keys = pg.key.get_pressed()
         self.mouse_pos = None
         self.mouse_click = [False, False]  # value:[left mouse click, right mouse click]
@@ -45,10 +44,19 @@ class Control():
             # 存在存档即导入
             with open(c.USERDATA_PATH) as f:
                 userdata = json.load(f)
-            # 存档内不包含即时游戏时间信息，需要新建
-            self.game_info = {c.CURRENT_TIME:0}
-            # 导入数据
-            self.game_info.update(userdata)
+            self.game_info = {}
+            # 导入数据，保证了可运行性，但是放弃了数据向后兼容性，即假如某些变量在以后改名，在导入时可能会被重置
+            need_to_rewrite = False
+            for key in c.INIT_USERDATA:
+                if key in userdata:
+                    self.game_info[key] = userdata[key]
+                else:
+                    self.game_info[key] = c.INIT_USERDATA[key]
+                    need_to_rewrite = True
+            if need_to_rewrite:
+                with open(c.USERDATA_PATH, "w") as f:
+                    savedata = json.dumps(self.game_info, sort_keys=True, indent=4)
+                    f.write(savedata)
         except FileNotFoundError:
             # 不存在存档即新建
             if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
@@ -57,8 +65,9 @@ class Control():
                 savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
                 f.write(savedata)
             self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
-            # 存档内不包含即时游戏时间信息，需要新建
-            self.game_info[c.CURRENT_TIME] = 0
+        # 存档内不包含即时游戏时间信息，需要新建
+        self.game_info[c.CURRENT_TIME] = 0
+        self.fps = 50 * self.game_info[c.GAME_RATE]
 
  
     def setup_states(self, state_dict, start_state):
@@ -69,7 +78,7 @@ class Control():
 
     def update(self):
         # 返回自 pygame_init() 调用以来的毫秒数 * 游戏速度倍率
-        self.current_time = pg.time.get_ticks() * c.GAME_RATE
+        self.current_time = pg.time.get_ticks() * self.game_info[c.GAME_RATE]
 
         if self.state.done:
             self.flip_state()

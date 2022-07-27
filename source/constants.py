@@ -7,9 +7,6 @@ else:   # 非Windows系统存储路径
     USERDATA_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))
     USERLOG_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "run.log"))
 
-# 游戏速度倍率（调试用）
-GAME_RATE = 1
-
 # 窗口标题
 ORIGINAL_CAPTION = 'pypvz'
 # 窗口图标
@@ -86,6 +83,7 @@ LEVEL_NUM = 'level num'
 LITTLEGAME_NUM = 'littleGame num'
 LEVEL_COMPLETIONS = 'level completions'
 LITTLEGAME_COMPLETIONS = 'littleGame completions'
+GAME_RATE = 'game rate'
 
 # 整个游戏的状态
 MAIN_MENU = 'main menu'
@@ -663,6 +661,7 @@ INIT_USERDATA = {
                 LITTLEGAME_NUM:         1,
                 LEVEL_COMPLETIONS:      0,
                 LITTLEGAME_COMPLETIONS: 0,
+                GAME_RATE:              1,
                 }
 
 # 无穷大常量
