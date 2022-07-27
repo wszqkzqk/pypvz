@@ -39,7 +39,7 @@ jobs:
       # 使用pyinstaller构建
       - name: Build pypvz with pyinstaller
         run: |
-          pyinstaller -F main.py `
+          pyinstaller -F pypvz.py `
                   -n pypvz-with-python${{ matrix.python_version }}-pyinstaller-x64.exe `
                   --distpath ./out `
                   --noconsole `
@@ -77,7 +77,7 @@ jobs:
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll `
                   --windows-disable-console `
                   -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-windows-x64.exe `
-                  main.py
+                  pypvz.py
 
       # artifact压缩包处上传包含exe和运行环境的文件夹
       - name: "Upload binaries"

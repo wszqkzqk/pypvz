@@ -35,12 +35,12 @@
 
 ### 使用仓库源代码
 
-先克隆仓库内容，再运行`main.py`：
+先克隆仓库内容，再运行`pypvz.py`：
 
 ```shell
 git clone https://github.com/wszqkzqk/pypvz.git
 cd pypvz
-python main.py
+python pypvz.py
 ```
 
 ### 使用Windows可执行文件
@@ -126,7 +126,7 @@ nuitka --mingw64 --standalone `
         --windows-company-name=wszqkzqk.dev `
         --windows-file-description="pypvz" `
         --windows-product-version=0.8.2.0 `
-        main.py
+        pypvz.py
 ```
 
 * 其中`C:\Users\17265\AppData\Local\Programs\Python\Python310\Lib\site-packages\pygame\xxx.dll`应当替换为`xxx.dll`实际所在路径，`--output-dir=`后应当跟实际需要输出的路径，绝对路径或者相对路径均可
@@ -134,7 +134,7 @@ nuitka --mingw64 --standalone `
 * `--windows-product-version=`表示版本号信息，所跟内容格式必须为`x.x.x.x`
 * 建议开启`--lto=yes`选项优化链接，如果编译失败可以关闭此选项
 
-可执行文件生成路径为`./release/main.exe`
+可执行文件生成路径为`./release/pypvz.exe`
 
 如果只需要在本地生成编译文件测试，则只需要执行：
 
@@ -149,7 +149,7 @@ nuitka --mingw64 `
     --windows-file-description=pypvz `
     --windows-disable-console `
     --windows-product-version=0.8.2.0 `
-    main.py
+    pypvz.py
 ```
 
 这样生成的程序只能在具有相同python环境的机器上运行
@@ -167,7 +167,7 @@ nuitka --mingw64 `
 
 编译参考命令：
 ``` cmd
-pyinstaller -F main.py `
+pyinstaller -F pypvz.py `
                   --distpath ./release `
                   --noconsole `
                   --add-data="resources;./resources" `
@@ -175,7 +175,7 @@ pyinstaller -F main.py `
                   -i ./pypvz.ico
 ```
 
-可执行文件生成路径为`./release/main.exe`
+可执行文件生成路径为`./release/pypvz.exe`
 
 ### 使用Github Workflow进行自动构建
 
