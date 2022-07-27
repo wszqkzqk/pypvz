@@ -659,10 +659,10 @@ PLAY = 'play'
 
 # 记录本地存储文件初始值
 INIT_USERDATA = {   
-                LEVEL_NUM:1,
-                LITTLEGAME_NUM:1,
-                LEVEL_COMPLETIONS:0,
-                LITTLEGAME_COMPLETIONS:0,
+                LEVEL_NUM:              1,
+                LITTLEGAME_NUM:         1,
+                LEVEL_COMPLETIONS:      0,
+                LITTLEGAME_COMPLETIONS: 0,
                 }
 
 # 无穷大常量

@@ -97,9 +97,9 @@ class Control():
             elif event.type == pg.KEYDOWN:
                 self.keys = pg.key.get_pressed()
                 if event.key == pg.K_f:
-                    SCREEN = pg.display.set_mode(c.SCREEN_SIZE, pg.HWSURFACE|pg.FULLSCREEN)
+                    pg.display.set_mode(c.SCREEN_SIZE, pg.HWSURFACE|pg.FULLSCREEN)
                 elif event.key == pg.K_u:
-                    SCREEN = pg.display.set_mode(c.SCREEN_SIZE)
+                    pg.display.set_mode(c.SCREEN_SIZE)
             elif event.type == pg.KEYUP:
                 self.keys = pg.key.get_pressed()
             elif event.type == pg.MOUSEBUTTONDOWN:
@@ -116,7 +116,6 @@ class Control():
             self.update()
             pg.display.update()
             self.clock.tick(self.fps)
-        print('game over')
 
 def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
         image = pg.Surface([width, height])
