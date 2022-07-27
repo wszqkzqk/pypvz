@@ -25,6 +25,8 @@
 * 支持错误日志记录
   * Windows下默认日志文件的保存路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\run.log`
   * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/run.log`
+* 支持自定义游戏速度倍率
+  * 保存在游戏存档文件中，可以通过修改`game rate`值更改速度倍率
 
 ## 环境要求
 
@@ -80,8 +82,7 @@ python pypvz.py
     * 3：传送带模式（黑夜）
     * 4：传送带模式（泳池）
   * 目前暂时按照以上设定，未与原版相符
-* 可以通过修改`source/constants.py`中的`GAME_RATE`来调节游戏速度倍率
-* **注意：目前单文件发布版本不支持自定义速度倍率**
+* 可以通过修改存档JSON文件中的`game rate`值来调节游戏速度倍率
 
 ## Windows单文件封装
 
