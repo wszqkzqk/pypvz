@@ -66,6 +66,9 @@ RESTART_BUTTON = 'restartButton'
 MAINMENU_BUTTON = 'mainMenuButton'
 LITTLEGAME_BUTTON = 'littleGameButton'
 OPTION_BUTTON = 'optionButton'
+# 金银向日葵奖杯
+SILVER_SUNFLOWER = 'sunflowerSilver'
+GOLDEN_SUNFLOWER = 'sunflowerGolden'
 # 小铲子
 SHOVEL = 'shovel'
 SHOVEL_BOX = 'shovelBox'

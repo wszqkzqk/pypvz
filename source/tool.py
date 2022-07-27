@@ -66,6 +66,8 @@ class Control():
             self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
         # 存档内不包含即时游戏时间信息，需要新建
         self.game_info[c.CURRENT_TIME] = 0
+
+        # 50为目前的基础帧率，乘以倍率即是游戏帧率
         self.fps = 50 * self.game_info[c.GAME_RATE]
 
  

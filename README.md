@@ -17,7 +17,7 @@
 * 支持分波生成僵尸
 * 支持“关卡进程”进度条显示
 * 夜晚模式支持墓碑以及从墓碑生成僵尸
-  * 含有泳池的模式也支持在最后一波时从泳池中自动冒出僵尸
+* 含有泳池的模式支持在最后一波时从泳池中自动冒出僵尸
 * 支持保存进度
   * Windows下默认进度文件的保存路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`
   * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/userdata.json`

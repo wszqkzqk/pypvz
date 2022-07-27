@@ -15,6 +15,7 @@ class Menu(tool.State):
         self.setupBackground()
         self.setupOptions()
         self.setupOptionMenu()
+        self.setupSunflowerTrophy()
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
         pg.mixer.music.play(-1, 0)
@@ -196,6 +197,18 @@ class Menu(tool.State):
         self.return_button_rect.y = 440
 
         # 音量+、音量-
+
+    def setupSunflowerTrophy(self):
+        # 设置金银向日葵图片信息
+        frame_rect = (0, 0, 157, 269)
+        if self.game_info[c.LEVEL_COMPLETIONS]:
+            if self.game_info[c.LITTLEGAME_COMPLETIONS]:
+                self.sunflower_trophy = tool.get_image_menu(tool.GFX[c.GOLDEN_SUNFLOWER], *frame_rect, c.BLACK)
+            else:
+                self.sunflower_trophy = tool.get_image_menu(tool.GFX[c.SILVER_SUNFLOWER], *frame_rect, c.BLACK)
+            self.sunflower_trophy_rect = self.sunflower_trophy.get_rect()
+            self.sunflower_trophy_rect.x = 0
+            self.sunflower_trophy_rect.y = 300
     
     def checkOptionButtonClick(self, mouse_pos):
         x, y = mouse_pos
@@ -220,6 +233,8 @@ class Menu(tool.State):
         surface.blit(self.exit_image, self.exit_rect)
         surface.blit(self.option_button_image, self.option_button_rect)
         surface.blit(self.littleGame_image, self.littleGame_rect)
+        if self.game_info[c.LEVEL_COMPLETIONS]:
+            surface.blit(self.sunflower_trophy, self.sunflower_trophy_rect)
 
         # 点到冒险模式后播放动画
         if self.adventure_clicked:
