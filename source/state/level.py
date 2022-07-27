@@ -544,7 +544,8 @@ class Level(tool.State):
             elif self.checkMainMenuClick(mouse_pos):
                 self.done = True
                 self.next = c.MAIN_MENU
-                self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:self.persist[c.LEVEL_NUM], c.LITTLEGAME_NUM:self.persist[c.LITTLEGAME_NUM]}
+                self.persist = self.game_info
+                self.persist[c.CURRENT_TIME] = 0
                 # 播放点击音效
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
 
