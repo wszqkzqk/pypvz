@@ -318,10 +318,7 @@ class Level(tool.State):
 
         self.zombie_list = []
         for data in self.map_data[c.ZOMBIE_LIST]:
-            if 'map_y' in data:
-                self.zombie_list.append((data['time'], data['name'], data['map_y']))
-            else:
-                self.zombie_list.append((data['time'], data['name']))
+            self.zombie_list.append((data['time'], data['name'], data['map_y']))
         self.zombie_start_time = 0
         self.zombie_list.sort(key=takeTime)
 
@@ -333,7 +330,7 @@ class Level(tool.State):
 
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
-        # 这些注释内容是将来增加通过界面后的容错设计，以保证直接通关时不会闪退
+        # 这些内容是将来增加通过界面后的容错设计，以保证直接通关时不会闪退
         if self.done:
             return
         self.current_time = self.game_info[c.CURRENT_TIME] = self.pvzTime(current_time)
@@ -671,12 +668,8 @@ class Level(tool.State):
                 data = self.zombie_list[0]  # 因此要求僵尸列表按照时间顺序排列
                 # data内容排列：[0]:时间 [1]:名称 [2]:坐标
                 if  data[0] <= (self.current_time - self.zombie_start_time):
-                    if len(data) == 3:
-                        self.createZombie(data[1], data[2])
-                        self.zombie_list.remove(data)
-                    else:   # len(data) == 2 没有指定map_y
-                        self.createZombie(data[1])
-                        self.zombie_list.remove(data)
+                    self.createZombie(data[1], data[2])
+                    self.zombie_list.remove(data)
         else:
             # 新僵尸生成方式
             self.refreshWaves(self.current_time)
