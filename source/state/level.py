@@ -149,7 +149,7 @@ class Level(tool.State):
                     zombieList.append(newZombie)
                     volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
                 if volume < 0:
-                    print('警告：第{}波中手动设置的僵尸级别总数超过上限！'.format(wave))
+                    print(f'警告：第{wave}波中手动设置的僵尸级别总数超过上限！')
 
             # 防止因为僵尸最小等级过大，使得总容量无法完全利用，造成死循环的检查机制
             minCost = c.CREATE_ZOMBIE_DICT[min(useableZombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
