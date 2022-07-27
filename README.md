@@ -152,11 +152,34 @@ nuitka --mingw64 `
     main.py
 ```
 
-这样生成的程序只能在有python环境的机器上运行
+这样生成的程序只能在具有相同python环境的机器上运行
 
 ### 使用pyinstaller进行构建
 
+- 由于pyinstaller构建的程序运行效率显著较nuitka构建的程序低下，并且程序体积也往往比nuitka构建的程序大，因此本项目并不推荐使用pyinstaller构建
+- 但是因为pyinstaller直接封装了所导入的库中的全部内容，使用pyinstaller构建时不需要手动添加媒体解码库
+- pyinstaller并没有涉及python源代码优化、C源代码生成以及C源代码编译链接过程，因此编译速度显著快于nuitka
+
+编译依赖：
+- `Python3` （建议 >= 3.10，最好使用最新版）
+- `Python-Pygame` （建议 >= 2.0，最好使用最新版）
+- `Pyinstaller`
+
+编译参考命令：
+``` cmd
+pyinstaller -F main.py `
+                  --distpath ./release `
+                  --noconsole `
+                  --add-data="resources;./resources" `
+                  --add-data="pypvz-exec-logo.png;./pypvz-exec-logo.png" `
+                  -i ./pypvz.ico
+```
+
+可执行文件生成路径为`./release/main.exe`
+
 ### 使用Github Workflow进行自动构建
+
+直接复制本项目下的`.github/workflows`下的文件，进行少许改动即可满足大多数需求
 
 ## 已知bug
 
@@ -166,6 +189,7 @@ nuitka --mingw64 `
 * 魅惑的僵尸未用红色滤镜标识
   * 这个可能会作为一种“特性”
 * 南瓜头显示不正常
+  * 对于部分“长得比较长”的植物甚至可以在南瓜头存在的情况下优先被啃食
 * 墓碑吞噬者吞噬墓碑过程中被吞噬的墓碑顶端不会消失
 
 **欢迎提供[Pull requests](https://github.com/wszqkzqk/pypvz/pulls)或修复方法建议，也欢迎在这里反馈新的bug()**
