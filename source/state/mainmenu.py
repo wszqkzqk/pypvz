@@ -258,11 +258,10 @@ class Menu(tool.State):
             surface.blit(self.volume_minus_button, self.volume_minus_button_rect)
             self.showCurrentVolumeImage(surface)
             if mouse_pos:
-                playButtonClickedSound = False
                 # 返回
                 if self.inArea(self.return_button_rect, *mouse_pos):
                     self.option_button_clicked = False
-                    playButtonClickedSound = True
+                    c.SOUND_BUTTON_CLICK.play()
                 # 音量+
                 elif self.inArea(self.volume_plus_button_rect, *mouse_pos):
                     self.game_info[c.VOLUME] = min(self.game_info[c.VOLUME] + 0.1, 1)
@@ -270,7 +269,7 @@ class Menu(tool.State):
                     pg.mixer.music.set_volume(self.game_info[c.VOLUME])
                     for i in c.SOUNDS:
                         i.set_volume(self.game_info[c.VOLUME])
-                    playButtonClickedSound = True
+                    c.SOUND_BUTTON_CLICK.play()
                 # 音量-
                 elif self.inArea(self.volume_minus_button_rect, *mouse_pos):
                     self.game_info[c.VOLUME] = max(self.game_info[c.VOLUME] - 0.1, 0)
@@ -278,8 +277,6 @@ class Menu(tool.State):
                     pg.mixer.music.set_volume(self.game_info[c.VOLUME])
                     for i in c.SOUNDS:
                         i.set_volume(self.game_info[c.VOLUME])
-                    playButtonClickedSound = True
-                if playButtonClickedSound:
                     c.SOUND_BUTTON_CLICK.play()
         # 没有点到前两者时常规行检测所有按钮的点击和高亮
         else:

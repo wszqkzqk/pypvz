@@ -390,7 +390,7 @@ class Level(tool.State):
             self.panel.checkCardClick(mouse_pos)
             if self.panel.checkStartButtonClick(mouse_pos):
                 self.initPlay(self.panel.getSelectedCards())
-            elif self.checkLittleMenuClick(mouse_pos):
+            elif self.inArea(self.little_menu_rect, *mouse_pos):
                 self.showLittleMenu = True
                 c.SOUND_BUTTON_CLICK.play()
 
@@ -500,29 +500,58 @@ class Level(tool.State):
         self.little_menu_rect.x = 690
         self.little_menu_rect.y = 0 
 
+        # 弹出的菜单框
         frame_rect = (0, 0, 500, 500)
         self.big_menu = tool.get_image_menu(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
         self.big_menu_rect = self.big_menu.get_rect()
         self.big_menu_rect.x = 150
         self.big_menu_rect.y = 0
 
+        # 返回按钮
         frame_rect = (0, 0, 342, 87)
         self.return_button = tool.get_image_menu(tool.GFX[c.RETURN_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.return_button_rect = self.return_button.get_rect()
         self.return_button_rect.x = 220
         self.return_button_rect.y = 440
 
+        # 重新开始按钮
         frame_rect = (0, 0, 207, 45)
         self.restart_button = tool.get_image_menu(tool.GFX[c.RESTART_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.restart_button_rect = self.restart_button.get_rect()
         self.restart_button_rect.x = 295
         self.restart_button_rect.y = 325
 
+        # 主菜单按钮
         frame_rect = (0, 0, 206, 43)
         self.mainMenu_button = tool.get_image_menu(tool.GFX[c.MAINMENU_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.mainMenu_button_rect = self.mainMenu_button.get_rect()
         self.mainMenu_button_rect.x = 299
         self.mainMenu_button_rect.y = 372
+
+        # 音量+、音量-
+        frame_rect = (0, 0, 39, 41)
+        font = pg.font.Font(c.FONT_PATH, 35)
+        font.bold = True
+        # 音量+
+        self.volume_plus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
+        sign = font.render("+", True, c.YELLOWGREEN)
+        sign_rect = sign.get_rect()
+        sign_rect.x = 8
+        sign_rect.y = -4
+        self.volume_plus_button.blit(sign, sign_rect)
+        self.volume_plus_button_rect = self.volume_plus_button.get_rect()
+        self.volume_plus_button_rect.x = 500
+        # 音量-
+        self.volume_minus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
+        sign = font.render("-", True, c.YELLOWGREEN)
+        sign_rect = sign.get_rect()
+        sign_rect.x = 12
+        sign_rect.y = -6
+        self.volume_minus_button.blit(sign, sign_rect)
+        self.volume_minus_button_rect = self.volume_minus_button.get_rect()
+        self.volume_minus_button_rect.x = 450
+        # 音量+、-应当处于同一高度
+        self.volume_minus_button_rect.y = self.volume_plus_button_rect.y = 250
 
     def pauseAndCheckLittleMenuOptions(self, mouse_pos, mouse_click):
         # 设置暂停状态
@@ -530,7 +559,8 @@ class Level(tool.State):
         # 暂停播放音乐
         pg.mixer.music.pause()
         if mouse_click[0]:
-            if self.checkReturnClick(mouse_pos):
+            # 返回键
+            if self.inArea(self.return_button_rect, *mouse_pos):
                 # 终止暂停，停止显示菜单
                 self.pause = False
                 self.showLittleMenu = False
@@ -538,17 +568,34 @@ class Level(tool.State):
                 pg.mixer.music.unpause()
                 # 播放点击音效
                 c.SOUND_BUTTON_CLICK.play()
-            elif self.checkRestartClick(mouse_pos):
+            # 重新开始键
+            elif self.inArea(self.restart_button_rect, *mouse_pos):
                 self.done = True
                 self.next = c.LEVEL
                 # 播放点击音效
                 c.SOUND_BUTTON_CLICK.play()
-            elif self.checkMainMenuClick(mouse_pos):
+            # 主菜单键
+            elif self.inArea(self.mainMenu_button_rect, *mouse_pos):
                 self.done = True
                 self.next = c.MAIN_MENU
                 self.persist = self.game_info
                 self.persist[c.CURRENT_TIME] = 0
                 # 播放点击音效
+                c.SOUND_BUTTON_CLICK.play()
+            # 音量+
+            elif self.inArea(self.volume_plus_button_rect, *mouse_pos):
+                self.game_info[c.VOLUME] = min(self.game_info[c.VOLUME] + 0.1, 1)
+                # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
+                pg.mixer.music.set_volume(self.game_info[c.VOLUME])
+                for i in c.SOUNDS:
+                    i.set_volume(self.game_info[c.VOLUME])
+                c.SOUND_BUTTON_CLICK.play()
+            elif self.inArea(self.volume_minus_button_rect, *mouse_pos):
+                self.game_info[c.VOLUME] = max(self.game_info[c.VOLUME] - 0.1, 0)
+                # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
+                pg.mixer.music.set_volume(self.game_info[c.VOLUME])
+                for i in c.SOUNDS:
+                    i.set_volume(self.game_info[c.VOLUME])
                 c.SOUND_BUTTON_CLICK.play()
 
 
@@ -584,38 +631,13 @@ class Level(tool.State):
         self.level_progress_flag_rect = self.level_progress_flag.get_rect()
         self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x - 78
         self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3
-
-    # 检查小菜单有没有被点击
-    def checkLittleMenuClick(self, mouse_pos):
-        x, y = mouse_pos
-        if (x >= self.little_menu_rect.x and x <= self.little_menu_rect.right and
-            y >= self.little_menu_rect.y and y <= self.little_menu_rect.bottom):
-            return True
-        return False
-
-    # 检查小菜单的返回有没有被点击
-    def checkReturnClick(self, mouse_pos):
-        x, y = mouse_pos
-        if (x >= self.return_button_rect.x and x <= self.return_button_rect.right and
-            y >= self.return_button_rect.y and y <= self.return_button_rect.bottom):
-            return True
-        return False
-
-    # 检查小菜单的重新开始有没有被点击
-    def checkRestartClick(self, mouse_pos):
-        x, y = mouse_pos
-        if (x >= self.restart_button_rect.x and x <= self.restart_button_rect.right and
-            y >= self.restart_button_rect.y and y <= self.restart_button_rect.bottom):
-            return True
-        return False
     
-    # 检查小菜单的主菜单有没有被点击
-    def checkMainMenuClick(self, mouse_pos):
-        x, y = mouse_pos
-        if (x >= self.mainMenu_button_rect.x and x <= self.mainMenu_button_rect.right and
-            y >= self.mainMenu_button_rect.y and y <= self.mainMenu_button_rect.bottom):
+    def inArea(self, rect, x, y):
+        if (x >= rect.x and x <= rect.right and
+            y >= rect.y and y <= rect.bottom):
             return True
-        return False
+        else:
+            return False
 
     # 用小铲子移除植物
     def shovelRemovePlant(self, mouse_pos):
@@ -642,16 +664,6 @@ class Level(tool.State):
                 self.drag_shovel = not self.drag_shovel
                 self.removeMouseImagePlus()
                 return
-
-    # 检查小铲子的位置有没有被点击
-    # 方便放回去
-    def checkShovelClick(self, mouse_pos):
-        x, y = mouse_pos
-        if( self.hasShovel and
-            x >= self.shovel_box_rect.x and x <= self.shovel_box_rect.right and
-            y >= self.shovel_box_rect.y and y <= self.shovel_box_rect.bottom):
-            return True
-        return False
 
     def play(self, mouse_pos, mouse_click):
         # 原版阳光掉落机制需要
@@ -744,12 +756,12 @@ class Level(tool.State):
 
         # 检查是否点击菜单
         if mouse_click[0] and (not clickedSun) and (not clickedCardsOrMap):
-            if self.checkLittleMenuClick(mouse_pos):
+            if self.inArea(self.little_menu_rect, *mouse_pos):
                 # 暂停 显示菜单
                 self.showLittleMenu = True
                 # 播放点击音效
                 c.SOUND_BUTTON_CLICK.play()
-            elif self.checkShovelClick(mouse_pos):
+            elif self.inArea(self.shovel_box_rect, *mouse_pos):
                 self.drag_shovel = not self.drag_shovel
                 if not self.drag_shovel:
                     self.removeMouseImagePlus()
@@ -1492,6 +1504,14 @@ class Level(tool.State):
         # 画僵尸头
         surface.blit(self.level_progress_zombie_head_image, self.level_progress_zombie_head_image_rect)
 
+    def showCurrentVolumeImage(self, surface):
+        # 由于音量可变，因此这一内容不能在一开始就结束加载，而应当不断刷新不断显示
+        font = pg.font.Font(c.FONT_PATH, 30)
+        volume_tips = font.render(f"音量：{round(self.game_info[c.VOLUME]*100):3}%", True, c.LIGHTGRAY)
+        volume_tips_rect = volume_tips.get_rect()
+        volume_tips_rect.x = 275
+        volume_tips_rect.y = 247
+        surface.blit(volume_tips, volume_tips_rect)
 
     def draw(self, surface):
         self.level.blit(self.background, self.viewport, self.viewport)
@@ -1505,6 +1525,7 @@ class Level(tool.State):
                 surface.blit(self.return_button, self.return_button_rect)
                 surface.blit(self.restart_button, self.restart_button_rect)
                 surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
+                self.showCurrentVolumeImage()
         # 以后可能需要插入一个预备的状态（预览显示僵尸、返回战场）
         elif self.state == c.PLAY:
             if self.hasShovel:
@@ -1537,6 +1558,9 @@ class Level(tool.State):
                 surface.blit(self.return_button, self.return_button_rect)
                 surface.blit(self.restart_button, self.restart_button_rect)
                 surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
+                surface.blit(self.volume_minus_button, self.volume_minus_button_rect)
+                surface.blit(self.volume_plus_button, self.volume_plus_button_rect)
+                self.showCurrentVolumeImage(surface)
 
             if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
                 self.showLevelProgress(surface)
