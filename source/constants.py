@@ -9,10 +9,17 @@ else:   # 非Windows系统存储路径
     USERDATA_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))
     USERLOG_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "run.log"))
 
+# 窗口图标
+ORIGINAL_LOGO = os.path.join(os.path.dirname(os.path.dirname(__file__)), "pypvz-exec-logo.png")
+# 僵尸显示特殊定义文件路径
+JSON_PATH_ZOMBIE = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'zombie.json')
+# 植物显示特殊定义文件路径
+JSON_PATH_PLANTS = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'plant.json')
+# 游戏图片资源路径
+IMG_DIR_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources","graphics")
+
 # 窗口标题
 ORIGINAL_CAPTION = 'pypvz'
-# 窗口图标
-ORIGINAL_LOGO = "pypvz-exec-logo.png"
 
 # 游戏模式
 GAME_MODE = 'mode'
