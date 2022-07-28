@@ -223,44 +223,153 @@ CARD_MOVE_TIME = 60
 # 其他显示物
 CAR = 'car'
 SUN = 'Sun'
+
+# plant子类非植物对象
+NON_PLANT_OBJECTS = {
+                HOLE := 'Hole',
+                ICEFROZENPLOT := 'IceFrozenPlot',
+                GRAVE := 'Grave',
+                }
+
 # 植物相关信息
 PLANT_IMAGE_RECT = 'plant_image_rect'
-# 植物名称
-SUNFLOWER = 'SunFlower'
-PEASHOOTER = 'Peashooter'
-SNOWPEASHOOTER = 'SnowPea'
-WALLNUT = 'WallNut'
-CHERRYBOMB = 'CherryBomb'
-THREEPEASHOOTER = 'Threepeater'
-REPEATERPEA = 'RepeaterPea'
-CHOMPER = 'Chomper'
-CHERRY_BOOM_IMAGE = 'Boom'
-PUFFSHROOM = 'PuffShroom'
-POTATOMINE = 'PotatoMine'
-SQUASH = 'Squash'
-SPIKEWEED = 'Spikeweed'
-JALAPENO = 'Jalapeno'
-SCAREDYSHROOM = 'ScaredyShroom'
-SUNSHROOM = 'SunShroom'
-ICESHROOM = 'IceShroom'
-HYPNOSHROOM = 'HypnoShroom'
-WALLNUTBOWLING = 'WallNutBowling'
-REDWALLNUTBOWLING = 'RedWallNutBowling'
-LILYPAD = 'LilyPad'
-TORCHWOOD = 'TorchWood'
-STARFRUIT = 'StarFruit'
-COFFEEBEAN = 'CoffeeBean'
-SEASHROOM = 'SeaShroom'
-TALLNUT = 'TallNut'
-TANGLEKLEP = 'TangleKlep'
-DOOMSHROOM = 'DoomShroom'
-ICEFROZENPLOT = 'IceFrozenPlot'
-HOLE = 'Hole'
-GRAVE = 'Grave'
-GRAVEBUSTER = 'GraveBuster'
-FUMESHROOM = 'FumeShroom'
-GARLIC = 'Garlic'
-PUMPKINHEAD = 'PumpkinHead'
+
+# 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
+PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
+            (PEASHOOTER := 'Peashooter',
+                CARD_PEASHOOTER := 'card_peashooter',
+                100,
+                7500),
+            (SUNFLOWER := 'SunFlower',
+                CARD_SUNFLOWER := 'card_sunflower',
+                50,
+                7500),
+            (CHERRYBOMB := 'CherryBomb',
+                CARD_CHERRYBOMB := 'card_cherrybomb',
+                150,
+                50000),
+            (WALLNUT := 'WallNut',
+                CARD_WALLNUT := 'card_wallnut',
+                50,
+                30000),
+            (POTATOMINE := 'PotatoMine',
+                CARD_POTATOMINE := 'card_potatomine', 
+                25,
+                30000),
+            (SNOWPEASHOOTER := 'SnowPea',
+                CARD_SNOWPEASHOOTER := 'card_snowpea',
+                175,
+                7500),
+            (CHOMPER := 'Chomper',
+                CARD_CHOMPER := 'card_chomper',
+                150,
+                7500),
+            (REPEATERPEA := 'RepeaterPea',
+                CARD_REPEATERPEA := 'card_repeaterpea',
+                200,
+                7500),
+            (PUFFSHROOM := 'PuffShroom',
+                CARD_PUFFSHROOM := 'card_puffshroom',
+                0,
+                7500),
+            (SUNSHROOM := 'SunShroom',
+                CARD_SUNSHROOM := 'card_sunshroom',
+                25,
+                7500),
+            (FUMESHROOM := 'FumeShroom',
+                CARD_FUMESHROOM := 'card_fumeshroom',
+                75,
+                7500),
+            (GRAVEBUSTER := 'GraveBuster',
+                CARD_GRAVEBUSTER := 'card_gravebuster',
+                75,
+                7500),
+            (HYPNOSHROOM := 'HypnoShroom',
+                CARD_HYPNOSHROOM := 'card_hypnoshroom',
+                75,
+                30000),
+            (SCAREDYSHROOM := 'ScaredyShroom',
+                CARD_SCAREDYSHROOM := 'card_scaredyshroom',
+                25,
+                7500),
+            (ICESHROOM := 'IceShroom',
+                CARD_ICESHROOM := 'card_iceshroom',
+                75,
+                50000),
+            (DOOMSHROOM := 'DoomShroom',
+                CARD_DOOMSHROOM := 'card_doomshroom',
+                75,
+                50000),
+            (LILYPAD := 'LilyPad',
+                CARD_LILYPAD := 'card_lilypad',
+                25,
+                7500),
+            (SQUASH := 'Squash',
+                CARD_SQUASH := 'card_squash',
+                50,
+                30000),
+            (TANGLEKLEP := 'TangleKlep',
+                CARD_TANGLEKLEP := 'card_tangleklep',
+                25,
+                30000),
+            (THREEPEASHOOTER := 'Threepeater',
+                CARD_THREEPEASHOOTER := 'card_threepeashooter',
+                325,
+                7500),
+            (JALAPENO := 'Jalapeno',
+                CARD_JALAPENO := 'card_jalapeno',
+                125,
+                50000),
+            (SPIKEWEED := 'Spikeweed',
+                CARD_SPIKEWEED := 'card_spikeweed',
+                100,
+                7500),
+            (TORCHWOOD := 'TorchWood',
+                CARD_TORCHWOOD := 'card_torchwood',
+                175,
+                7500),
+            (TALLNUT := 'TallNut',
+                CARD_TALLNUT := 'card_tallnut',
+                125,
+                30000),
+            (SEASHROOM := 'SeaShroom',
+                CARD_SEASHROOM := 'card_seashroom',
+                0,
+                30000),
+            (STARFRUIT := 'StarFruit',
+                CARD_STARFRUIT := 'card_starfruit',
+                125,
+                7500),
+            (PUMPKINHEAD := 'PumpkinHead',
+                CARD_PUMPKINHEAD := 'card_pumpkinhead',
+                125,
+                30000),
+            (COFFEEBEAN := 'CoffeeBean',
+                CARD_COFFEEBEAN := 'card_coffeebean',
+                75,
+                7500),
+            (GARLIC := 'Garlic',
+                CARD_GARLIC := 'card_garlic',
+                50,
+                7500),
+            # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
+            (WALLNUTBOWLING := 'WallNutBowling',
+                CARD_WALLNUT := 'card_wallnut',
+                0,
+                0),
+            (REDWALLNUTBOWLING := 'RedWallNutBowling',
+                CARD_REDWALLNUT := 'card_redwallnut',
+                0,
+                0),
+            )
+
+# 卡片中的植物名称与索引序号的对应关系，指定名称以得到索引值
+PLANT_CARD_INDEX={}
+for i, item in enumerate(PLANT_CARD_INFO):
+    PLANT_CARD_INDEX[item[PLANT_NAME_INDEX]] = i
+
+# 指定了哪些卡可选（排除坚果保龄球特殊植物）
+CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 2)
 
 
 # 植物集体属性集合
@@ -271,12 +380,6 @@ SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING = {
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 JALAPENO, DOOMSHROOM,
                 POTATOMINE,
-                }
-
-# 非植物对象
-NON_PLANT_OBJECTS = {
-                HOLE, ICEFROZENPLOT,
-                GRAVE,
                 }
 
 # 所有可能不用与僵尸进行碰撞检测的对象
@@ -395,144 +498,6 @@ CARD_GRAVEBUSTER = 'card_gravebuster'
 CARD_FUMESHROOM = 'card_fumeshroom'
 CARD_GARLIC = 'card_garlic'
 CARD_PUMPKINHEAD = 'card_pumpkinhead'
-
-
-# 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
-PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
-            (PEASHOOTER,
-                CARD_PEASHOOTER,
-                100,
-                7500),
-            (SUNFLOWER,
-                CARD_SUNFLOWER,
-                50,
-                7500),
-            (CHERRYBOMB,
-                CARD_CHERRYBOMB,
-                150,
-                50000),
-            (WALLNUT,
-                CARD_WALLNUT,
-                50,
-                30000),
-            (POTATOMINE,
-                CARD_POTATOMINE, 
-                25,
-                30000),
-            (SNOWPEASHOOTER,
-                CARD_SNOWPEASHOOTER,
-                175,
-                7500),
-            (CHOMPER,
-                CARD_CHOMPER,
-                150,
-                7500),
-            (REPEATERPEA,
-                CARD_REPEATERPEA,
-                200,
-                7500),
-            (PUFFSHROOM,
-                CARD_PUFFSHROOM,
-                0,
-                7500),
-            (SUNSHROOM,
-                CARD_SUNSHROOM,
-                25,
-                7500),
-            (FUMESHROOM,
-                CARD_FUMESHROOM,
-                75,
-                7500),
-            (GRAVEBUSTER,
-                CARD_GRAVEBUSTER,
-                75,
-                7500),
-            (HYPNOSHROOM,
-                CARD_HYPNOSHROOM,
-                75,
-                30000),
-            (SCAREDYSHROOM,
-                CARD_SCAREDYSHROOM,
-                25,
-                7500),
-            (ICESHROOM,
-                CARD_ICESHROOM,
-                75,
-                50000),
-            (DOOMSHROOM,
-                CARD_DOOMSHROOM,
-                75,
-                50000),
-            (LILYPAD,
-                CARD_LILYPAD,
-                25,
-                7500),
-            (SQUASH,
-                CARD_SQUASH,
-                50,
-                30000),
-            (TANGLEKLEP,
-                CARD_TANGLEKLEP,
-                25,
-                30000),
-            (THREEPEASHOOTER,
-                CARD_THREEPEASHOOTER,
-                325,
-                7500),
-            (JALAPENO,
-                CARD_JALAPENO,
-                125,
-                50000),
-            (SPIKEWEED,
-                CARD_SPIKEWEED,
-                100,
-                7500),
-            (TORCHWOOD,
-                CARD_TORCHWOOD,
-                175,
-                7500),
-            (TALLNUT,
-                CARD_TALLNUT,
-                125,
-                30000),
-            (SEASHROOM,
-                CARD_SEASHROOM,
-                0,
-                30000),
-            (STARFRUIT,
-                CARD_STARFRUIT,
-                125,
-                7500),
-            (PUMPKINHEAD,
-                CARD_PUMPKINHEAD,
-                125,
-                30000),
-            (COFFEEBEAN,
-                CARD_COFFEEBEAN,
-                75,
-                7500),
-            (GARLIC,
-                CARD_GARLIC,
-                50,
-                7500),
-            # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
-            (WALLNUTBOWLING,
-                CARD_WALLNUT,
-                0,
-                0),
-            (REDWALLNUTBOWLING,
-                CARD_REDWALLNUT,
-                0,
-                0),
-            )
-
-# 卡片中的植物名称与索引序号的对应关系，指定名称以得到索引值
-PLANT_CARD_INDEX={}
-for i, item in enumerate(PLANT_CARD_INFO):
-    PLANT_CARD_INDEX[item[PLANT_NAME_INDEX]] = i
-
-# 指定了哪些卡可选（排除坚果保龄球特殊植物）
-CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 2)
 
 
 # 子弹信息
@@ -669,72 +634,52 @@ PLAY = 'play'
 # 音效
 def _getSound(filename):
     return pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,"resources", "sound", filename))
-# 程序交互等
-SOUND_TAPPING_CARD = _getSound("tap.ogg")
-# 植物
-SOUND_FIREPEA_EXPLODE = _getSound("firepea.ogg")
-SOUND_BULLET_EXPLODE = _getSound("bulletExplode.ogg")
-SOUND_SHOOT = _getSound("shoot.ogg")
-SOUND_SNOWPEA_SPARKLES = _getSound("snowPeaSparkles.ogg")
-SOUND_BOMB = _getSound("bomb.ogg")
-SOUND_BIGCHOMP = _getSound("bigchomp.ogg")
-SOUND_PUFF = _getSound("puff.ogg")
-SOUND_POTATOMINE = _getSound("potatomine.ogg")
-SOUND_SQUASHING = _getSound("squashing.ogg")
-SOUND_SQUASH_HMM = _getSound("squashHmm.ogg")
-SOUND_PLANT_GROW = _getSound("plantGrow.ogg")
-SOUND_MUSHROOM_WAKEUP = _getSound("mushroomWakeup.ogg")
-SOUND_TANGLE_KELP_DRAG = _getSound("tangleKelpDrag.ogg")
-SOUND_DOOMSHROOM = _getSound("doomshroom.ogg")
-SOUND_GRAVEBUSTER_CHOMP = _getSound("gravebusterchomp.ogg")
-SOUND_FUME = _getSound("fume.ogg")
-# 僵尸
-SOUND_ZOMBIE_ENTERING_WATER = _getSound("zombieEnteringWater.ogg")
-SOUND_ZOMBIE_ATTACKING = _getSound("zombieAttack.ogg")
-SOUND_FREEZE = _getSound("freeze.ogg")
-SOUND_HYPNOED = _getSound("hypnoed.ogg")
-SOUND_NEWSPAPER_RIP = _getSound("newspaperRip.ogg")
-SOUND_NEWSPAPER_ZOMBIE_ANGRY = _getSound("newspaperZombieAngry.ogg")
-SOUND_POLEVAULT_JUMP = _getSound("polevaultjump.ogg")
-SOUND_ZOMBONI = _getSound("zomboni.ogg")
-SOUND_ZOMBONI_EXPLOSION = _getSound("zomboniExplosion.ogg")
-# 关卡中
-SOUND_CAR_WALKING = _getSound("carWalking.ogg")
-SOUND_ZOMBIE_COMING = _getSound("zombieComing.ogg")
-SOUND_ZOMBIE_VOICE = _getSound("zombieVoice.ogg")
-SOUND_HUGE_WAVE_APPROCHING = _getSound("hugeWaveApproching.ogg")
-SOUND_BUTTON_CLICK = _getSound("buttonclick.ogg")
-SOUND_COLLECT_SUN = _getSound("collectSun.ogg")
-SOUND_CLICK_CARD = _getSound("clickCard.ogg")
-SOUND_SHOVEL = _getSound("shovel.ogg")
-SOUND_PLANT = _getSound("plant.ogg")
-SOUND_BOWLING_IMPACT = _getSound("bowlingimpact.ogg")
-SOUND_PLANT_DIE = _getSound("plantDie.ogg")
-SOUND_EVILLAUGH = _getSound("evillaugh.ogg")
-SOUND_LOSE = _getSound("lose.ogg")
-SOUND_WIN = _getSound("win.ogg")
-SOUND_SCREAM = _getSound("scream.ogg")
-# 所有音效的元组
-SOUNDS = (  SOUND_TAPPING_CARD, SOUND_CAR_WALKING,
-            SOUND_FIREPEA_EXPLODE, SOUND_BULLET_EXPLODE,
-            SOUND_BOMB, SOUND_BIGCHOMP,
-            SOUND_PUFF, SOUND_POTATOMINE,
-            SOUND_SQUASHING, SOUND_SQUASH_HMM,
-            SOUND_PLANT_GROW, SOUND_MUSHROOM_WAKEUP,
-            SOUND_TANGLE_KELP_DRAG, SOUND_DOOMSHROOM,
-            SOUND_GRAVEBUSTER_CHOMP, SOUND_FUME,
-            SOUND_ZOMBIE_ENTERING_WATER, SOUND_ZOMBIE_ATTACKING,
-            SOUND_FREEZE, SOUND_HYPNOED,
-            SOUND_NEWSPAPER_RIP, SOUND_NEWSPAPER_ZOMBIE_ANGRY,
-            SOUND_POLEVAULT_JUMP, SOUND_ZOMBONI,
-            SOUND_ZOMBONI_EXPLOSION, SOUND_ZOMBIE_COMING,
-            SOUND_ZOMBIE_VOICE, SOUND_HUGE_WAVE_APPROCHING,
-            SOUND_BUTTON_CLICK, SOUND_COLLECT_SUN,
-            SOUND_CLICK_CARD, SOUND_SHOVEL,
-            SOUND_PLANT, SOUND_BOWLING_IMPACT,
-            SOUND_PLANT_DIE, SOUND_EVILLAUGH,
-            SOUND_LOSE, SOUND_WIN,
-            SOUND_SCREAM,
+# 所有音效的元组，用一波海象算子表达（>= python 3.8），免得要维护两个
+SOUNDS = (  # 程序交互等
+            SOUND_TAPPING_CARD              := _getSound("tap.ogg"),
+            # 植物
+            SOUND_FIREPEA_EXPLODE           := _getSound("firepea.ogg"),
+            SOUND_BULLET_EXPLODE            := _getSound("bulletExplode.ogg"),
+            SOUND_SHOOT                     := _getSound("shoot.ogg"),
+            SOUND_SNOWPEA_SPARKLES          := _getSound("snowPeaSparkles.ogg"),
+            SOUND_BOMB                      := _getSound("bomb.ogg"),
+            SOUND_BIGCHOMP                  := _getSound("bigchomp.ogg"),
+            SOUND_PUFF                      := _getSound("puff.ogg"),
+            SOUND_POTATOMINE                := _getSound("potatomine.ogg"),
+            SOUND_SQUASHING                 := _getSound("squashing.ogg"),
+            SOUND_SQUASH_HMM                := _getSound("squashHmm.ogg"),
+            SOUND_PLANT_GROW                := _getSound("plantGrow.ogg"),
+            SOUND_MUSHROOM_WAKEUP           := _getSound("mushroomWakeup.ogg"),
+            SOUND_TANGLE_KELP_DRAG          := _getSound("tangleKelpDrag.ogg"),
+            SOUND_DOOMSHROOM                := _getSound("doomshroom.ogg"),
+            SOUND_GRAVEBUSTER_CHOMP         := _getSound("gravebusterchomp.ogg"),
+            SOUND_FUME                      := _getSound("fume.ogg"),
+            # 僵尸
+            SOUND_ZOMBIE_ENTERING_WATER     := _getSound("zombieEnteringWater.ogg"),
+            SOUND_ZOMBIE_ATTACKING          := _getSound("zombieAttack.ogg"),
+            SOUND_FREEZE                    := _getSound("freeze.ogg"),
+            SOUND_HYPNOED                   := _getSound("hypnoed.ogg"),
+            SOUND_NEWSPAPER_RIP             := _getSound("newspaperRip.ogg"),
+            SOUND_NEWSPAPER_ZOMBIE_ANGRY    := _getSound("newspaperZombieAngry.ogg"),
+            SOUND_POLEVAULT_JUMP            := _getSound("polevaultjump.ogg"),
+            SOUND_ZOMBONI                   := _getSound("zomboni.ogg"),
+            SOUND_ZOMBONI_EXPLOSION         := _getSound("zomboniExplosion.ogg"),
+            # 关卡中
+            SOUND_CAR_WALKING               := _getSound("carWalking.ogg"),
+            SOUND_ZOMBIE_COMING             := _getSound("zombieComing.ogg"),
+            SOUND_ZOMBIE_VOICE              := _getSound("zombieVoice.ogg"),
+            SOUND_HUGE_WAVE_APPROCHING      := _getSound("hugeWaveApproching.ogg"),
+            SOUND_BUTTON_CLICK              := _getSound("buttonclick.ogg"),
+            SOUND_COLLECT_SUN               := _getSound("collectSun.ogg"),
+            SOUND_CLICK_CARD                := _getSound("clickCard.ogg"),
+            SOUND_SHOVEL                    := _getSound("shovel.ogg"),
+            SOUND_PLANT                     := _getSound("plant.ogg"),
+            SOUND_BOWLING_IMPACT            := _getSound("bowlingimpact.ogg"),
+            SOUND_PLANT_DIE                 := _getSound("plantDie.ogg"),
+            SOUND_EVILLAUGH                 := _getSound("evillaugh.ogg"),
+            SOUND_LOSE                      := _getSound("lose.ogg"),
+            SOUND_WIN                       := _getSound("win.ogg"),
+            SOUND_SCREAM                    := _getSound("scream.ogg"),
             )
 
 # 记录本地存储文件初始值
