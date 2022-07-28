@@ -51,7 +51,7 @@ class GameVictoryScreen(Screen):
         self.next = self.set_next_state()
         pg.display.set_caption("pypvz: 战斗胜利！")
         # 播放胜利音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "win.ogg")).play()
+        c.SOUND_WIN.play()
 
 class GameLoseScreen(Screen):
     def __init__(self):
@@ -73,5 +73,5 @@ class GameLoseScreen(Screen):
         self.next = self.set_next_state()
         pg.display.set_caption("pypvz: 战斗失败！")
         # 播放失败音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "lose.ogg")).play()
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "scream.ogg")).play()
+        c.SOUND_LOSE.play()
+        c.SOUND_SCREAM.play()

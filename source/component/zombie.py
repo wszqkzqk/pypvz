@@ -117,7 +117,7 @@ class Zombie(pg.sprite.Sprite):
                         self.swimming = True
                         self.changeFrames(self.swim_frames)
                         # 播放入水音效
-                        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieEnteringWater.ogg")).play()
+                        c.SOUND_ZOMBIE_ENTERING_WATER.play()
                         # 同样没有兼容双防具
                         if self.helmet:
                             if self.helmetHealth <= 0:
@@ -256,7 +256,7 @@ class Zombie(pg.sprite.Sprite):
                     self.prey.setDamage(self.damage)
                 
                 # 播放啃咬音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieAttack.ogg")).play()
+                c.SOUND_ZOMBIE_ATTACKING.play()
             self.attack_timer = self.current_time
 
         if self.prey.health <= 0:
@@ -333,7 +333,7 @@ class Zombie(pg.sprite.Sprite):
     def setIceSlow(self):
         # 在转入冰冻减速状态时播放冰冻音效
         if self.ice_slow_ratio == 1:
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "freeze.ogg")).play()
+            c.SOUND_FREEZE.play()
 
         # when get a ice bullet damage, slow the attack or walk speed of the zombie
         self.ice_slow_timer = self.current_time
@@ -509,7 +509,7 @@ class Zombie(pg.sprite.Sprite):
         self.is_hypno = True
         self.setWalk()
         # 播放魅惑音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "hypnoed.ogg")).play()
+        c.SOUND_HYPNOED.play()
 
 
 class ZombieHead(Zombie):
@@ -712,7 +712,7 @@ class NewspaperZombie(Zombie):
             self.changeFrames(self.lostnewspaper_frames)
             self.helmetType2 = False
             # 触发报纸撕裂音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperRip.ogg")).play()
+            c.SOUND_NEWSPAPER_RIP.play()
         if ((self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio())):
             self.handleGarlicYChange()
             self.walk_timer = self.current_time
@@ -740,7 +740,7 @@ class NewspaperZombie(Zombie):
                     self.speed = 2.65
                     self.walk_animate_interval = 300
                     # 触发报纸僵尸暴走音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperZombieAngry.ogg")).play()
+                    c.SOUND_NEWSPAPER_ZOMBIE_ANGRY.play()
                     return
                 self.frame_index = 0
             self.animate_timer = self.current_time
@@ -983,7 +983,7 @@ class PoleVaultingZombie(Zombie):
             self.successfullyJumped = successfullyJumped
             self.jumpX = jumpX
             # 播放跳跃音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "polevaultjump.ogg")).play()
+            c.SOUND_POLEVAULT_JUMP.play()
 
     def animation(self):
         if self.state == c.FREEZE:
@@ -1051,7 +1051,7 @@ class Zomboni(Zombie):
         self.die_animate_interval = 70
         self.boomDie_animate_interval = 150
         # 播放冰车生成音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zomboni.ogg")).play()
+        c.SOUND_ZOMBONI.play()
 
     def loadImages(self):
         self.walk_frames = []
@@ -1126,7 +1126,7 @@ class Zomboni(Zombie):
         self.animate_interval = self.die_animate_interval
         self.changeFrames(self.die_frames)
         # 播放冰车爆炸音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zomboniExplosion.ogg")).play()
+        c.SOUND_ZOMBONI_EXPLOSION.play()
 
 
 class SnorkelZombie(Zombie):
@@ -1189,7 +1189,7 @@ class SnorkelZombie(Zombie):
                     self.swimming = True
                     self.changeFrames(self.jump_frames)
                     # 播放入水音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieEnteringWater.ogg")).play()
+                    c.SOUND_ZOMBIE_ENTERING_WATER.play()
             # 已经接近家门口并且上岸
             else:
                 if self.swimming:

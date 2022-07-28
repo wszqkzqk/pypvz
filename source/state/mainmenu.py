@@ -20,6 +20,7 @@ class Menu(tool.State):
         pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
         pg.mixer.music.play(-1, 0)
         pg.display.set_caption(c.ORIGINAL_CAPTION)
+        pg.mixer.music.set_volume(self.game_info[c.VOLUME])
 
     def setupBackground(self):
         frame_rect = (80, 0, 800, 600)
@@ -141,8 +142,8 @@ class Menu(tool.State):
             self.adventure_timer = self.adventure_start = self.current_time
             self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
             # 播放进入音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "evillaugh.ogg")).play()
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "lose.ogg")).play()
+            c.SOUND_EVILLAUGH.play()
+            c.SOUND_LOSE.play()
     
     # 点击到按钮，修改转态的done属性
     def checkExitClick(self, mouse_pos):
@@ -158,7 +159,7 @@ class Menu(tool.State):
             self.done = True
             self.persist[c.GAME_MODE] = c.MODE_LITTLEGAME
             # 播放点击音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+            c.SOUND_BUTTON_CLICK.play()
 
     def setupOptionMenu(self):
         # 选项菜单框
@@ -187,7 +188,7 @@ class Menu(tool.State):
         sign_rect.y = -4
         self.volume_plus_button.blit(sign, sign_rect)
         self.volume_plus_button_rect = self.volume_plus_button.get_rect()
-        self.volume_plus_button_rect.x = 480
+        self.volume_plus_button_rect.x = 500
         # 音量-
         self.volume_minus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("-", True, c.YELLOWGREEN)
@@ -196,7 +197,8 @@ class Menu(tool.State):
         sign_rect.y = -6
         self.volume_minus_button.blit(sign, sign_rect)
         self.volume_minus_button_rect = self.volume_minus_button.get_rect()
-        self.volume_minus_button_rect.x = 300
+        self.volume_minus_button_rect.x = 450
+        # 音量+、-应当处于同一高度
         self.volume_minus_button_rect.y = self.volume_plus_button_rect.y = 250
 
     def setupSunflowerTrophy(self):
@@ -210,21 +212,22 @@ class Menu(tool.State):
             self.sunflower_trophy_rect = self.sunflower_trophy.get_rect()
             self.sunflower_trophy_rect.x = 0
             self.sunflower_trophy_rect.y = 280
-    
+
     def checkOptionButtonClick(self, mouse_pos):
         x, y = mouse_pos
         if self.inArea(self.option_button_rect, x, y):
             self.option_button_clicked = True
             # 播放点击音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+            c.SOUND_BUTTON_CLICK.play()
 
-    # 在选项菜单打开时，检测是否点击到返回
-    def checkReturnClick(self, mouse_pos):
-        x, y = mouse_pos
-        if (x >= self.return_button_rect.x and x <= self.return_button_rect.right and
-            y >= self.return_button_rect.y and y <= self.return_button_rect.bottom):
-            return True
-        return False
+    def showCurrentVolumeImage(self, surface):
+        # 由于音量可变，因此这一内容不能在一开始就结束加载，而应当不断刷新不断显示
+        font = pg.font.Font(c.FONT_PATH, 30)
+        volume_tips = font.render(f"音量：{round(self.game_info[c.VOLUME]*100):3}%", True, c.LIGHTGRAY)
+        volume_tips_rect = volume_tips.get_rect()
+        volume_tips_rect.x = 275
+        volume_tips_rect.y = 247
+        surface.blit(volume_tips, volume_tips_rect)
 
     def update(self, surface, current_time, mouse_pos, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time
@@ -253,9 +256,31 @@ class Menu(tool.State):
             surface.blit(self.return_button, self.return_button_rect)
             surface.blit(self.volume_plus_button, self.volume_plus_button_rect)
             surface.blit(self.volume_minus_button, self.volume_minus_button_rect)
-            if (mouse_pos and self.checkReturnClick(mouse_pos)):
-                self.option_button_clicked = False
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+            self.showCurrentVolumeImage(surface)
+            if mouse_pos:
+                playButtonClickedSound = False
+                # 返回
+                if self.inArea(self.return_button_rect, *mouse_pos):
+                    self.option_button_clicked = False
+                    playButtonClickedSound = True
+                # 音量+
+                elif self.inArea(self.volume_plus_button_rect, *mouse_pos):
+                    self.game_info[c.VOLUME] = min(self.game_info[c.VOLUME] + 0.1, 1)
+                    # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
+                    pg.mixer.music.set_volume(self.game_info[c.VOLUME])
+                    for i in c.SOUNDS:
+                        i.set_volume(self.game_info[c.VOLUME])
+                    playButtonClickedSound = True
+                # 音量-
+                elif self.inArea(self.volume_minus_button_rect, *mouse_pos):
+                    self.game_info[c.VOLUME] = max(self.game_info[c.VOLUME] - 0.1, 0)
+                    # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
+                    pg.mixer.music.set_volume(self.game_info[c.VOLUME])
+                    for i in c.SOUNDS:
+                        i.set_volume(self.game_info[c.VOLUME])
+                    playButtonClickedSound = True
+                if playButtonClickedSound:
+                    c.SOUND_BUTTON_CLICK.play()
         # 没有点到前两者时常规行检测所有按钮的点击和高亮
         else:
             # 先检查选项高亮预览

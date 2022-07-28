@@ -1,4 +1,6 @@
 import os
+import pygame as pg
+
 # 用户数据及日志存储路径
 if os.name == 'nt': # Windows系统存储路径
     USERDATA_PATH = os.path.expandvars(os.path.join("%APPDATA%", "wszqkzqk.dev", "pypvz", "userdata.json"))
@@ -58,7 +60,8 @@ RED          = (255,   0,   0)
 PURPLE       = (255,   0, 255)
 GOLD         = (255, 215,   0)
 GREEN        = (  0, 255,   0)
-YELLOWGREEN  = (  55, 200,   0)
+YELLOWGREEN  = ( 55, 200,   0)
+LIGHTGRAY    = (107, 108, 145)
 
 # 退出游戏按钮
 EXIT = 'exit'
@@ -91,6 +94,7 @@ LITTLEGAME_NUM = 'littleGame num'
 LEVEL_COMPLETIONS = 'level completions'
 LITTLEGAME_COMPLETIONS = 'littleGame completions'
 GAME_RATE = 'game rate'
+VOLUME = 'volume'
 
 # 整个游戏的状态
 MAIN_MENU = 'main menu'
@@ -662,6 +666,77 @@ SLEEP = 'sleep'
 CHOOSE = 'choose'
 PLAY = 'play'
 
+# 音效
+def _getSound(filename):
+    return pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,"resources", "sound", filename))
+# 程序交互等
+SOUND_TAPPING_CARD = _getSound("tap.ogg")
+# 植物
+SOUND_FIREPEA_EXPLODE = _getSound("firepea.ogg")
+SOUND_BULLET_EXPLODE = _getSound("bulletExplode.ogg")
+SOUND_SHOOT = _getSound("shoot.ogg")
+SOUND_SNOWPEA_SPARKLES = _getSound("snowPeaSparkles.ogg")
+SOUND_BOMB = _getSound("bomb.ogg")
+SOUND_BIGCHOMP = _getSound("bigchomp.ogg")
+SOUND_PUFF = _getSound("puff.ogg")
+SOUND_POTATOMINE = _getSound("potatomine.ogg")
+SOUND_SQUASHING = _getSound("squashing.ogg")
+SOUND_SQUASH_HMM = _getSound("squashHmm.ogg")
+SOUND_PLANT_GROW = _getSound("plantGrow.ogg")
+SOUND_MUSHROOM_WAKEUP = _getSound("mushroomWakeup.ogg")
+SOUND_TANGLE_KELP_DRAG = _getSound("tangleKelpDrag.ogg")
+SOUND_DOOMSHROOM = _getSound("doomshroom.ogg")
+SOUND_GRAVEBUSTER_CHOMP = _getSound("gravebusterchomp.ogg")
+SOUND_FUME = _getSound("fume.ogg")
+# 僵尸
+SOUND_ZOMBIE_ENTERING_WATER = _getSound("zombieEnteringWater.ogg")
+SOUND_ZOMBIE_ATTACKING = _getSound("zombieAttack.ogg")
+SOUND_FREEZE = _getSound("freeze.ogg")
+SOUND_HYPNOED = _getSound("hypnoed.ogg")
+SOUND_NEWSPAPER_RIP = _getSound("newspaperRip.ogg")
+SOUND_NEWSPAPER_ZOMBIE_ANGRY = _getSound("newspaperZombieAngry.ogg")
+SOUND_POLEVAULT_JUMP = _getSound("polevaultjump.ogg")
+SOUND_ZOMBONI = _getSound("zomboni.ogg")
+SOUND_ZOMBONI_EXPLOSION = _getSound("zomboniExplosion.ogg")
+# 关卡中
+SOUND_CAR_WALKING = _getSound("carWalking.ogg")
+SOUND_ZOMBIE_COMING = _getSound("zombieComing.ogg")
+SOUND_ZOMBIE_VOICE = _getSound("zombieVoice.ogg")
+SOUND_HUGE_WAVE_APPROCHING = _getSound("hugeWaveApproching.ogg")
+SOUND_BUTTON_CLICK = _getSound("buttonclick.ogg")
+SOUND_COLLECT_SUN = _getSound("collectSun.ogg")
+SOUND_CLICK_CARD = _getSound("clickCard.ogg")
+SOUND_SHOVEL = _getSound("shovel.ogg")
+SOUND_PLANT = _getSound("plant.ogg")
+SOUND_BOWLING_IMPACT = _getSound("bowlingimpact.ogg")
+SOUND_PLANT_DIE = _getSound("plantDie.ogg")
+SOUND_EVILLAUGH = _getSound("evillaugh.ogg")
+SOUND_LOSE = _getSound("lose.ogg")
+SOUND_WIN = _getSound("win.ogg")
+SOUND_SCREAM = _getSound("scream.ogg")
+# 所有音效的元组
+SOUNDS = (  SOUND_TAPPING_CARD, SOUND_CAR_WALKING,
+            SOUND_FIREPEA_EXPLODE, SOUND_BULLET_EXPLODE,
+            SOUND_BOMB, SOUND_BIGCHOMP,
+            SOUND_PUFF, SOUND_POTATOMINE,
+            SOUND_SQUASHING, SOUND_SQUASH_HMM,
+            SOUND_PLANT_GROW, SOUND_MUSHROOM_WAKEUP,
+            SOUND_TANGLE_KELP_DRAG, SOUND_DOOMSHROOM,
+            SOUND_GRAVEBUSTER_CHOMP, SOUND_FUME,
+            SOUND_ZOMBIE_ENTERING_WATER, SOUND_ZOMBIE_ATTACKING,
+            SOUND_FREEZE, SOUND_HYPNOED,
+            SOUND_NEWSPAPER_RIP, SOUND_NEWSPAPER_ZOMBIE_ANGRY,
+            SOUND_POLEVAULT_JUMP, SOUND_ZOMBONI,
+            SOUND_ZOMBONI_EXPLOSION, SOUND_ZOMBIE_COMING,
+            SOUND_ZOMBIE_VOICE, SOUND_HUGE_WAVE_APPROCHING,
+            SOUND_BUTTON_CLICK, SOUND_COLLECT_SUN,
+            SOUND_CLICK_CARD, SOUND_SHOVEL,
+            SOUND_PLANT, SOUND_BOWLING_IMPACT,
+            SOUND_PLANT_DIE, SOUND_EVILLAUGH,
+            SOUND_LOSE, SOUND_WIN,
+            SOUND_SCREAM,
+            )
+
 # 记录本地存储文件初始值
 INIT_USERDATA = {   
                 LEVEL_NUM:              1,
@@ -669,6 +744,7 @@ INIT_USERDATA = {
                 LEVEL_COMPLETIONS:      0,
                 LITTLEGAME_COMPLETIONS: 0,
                 GAME_RATE:              1,
+                VOLUME:                 1.0,
                 }
 
 # 无穷大常量
