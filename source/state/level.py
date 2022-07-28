@@ -768,15 +768,16 @@ class Level(tool.State):
                 self.showLittleMenu = True
                 # 播放点击音效
                 c.SOUND_BUTTON_CLICK.play()
-            elif self.inArea(self.shovel_box_rect, *mouse_pos):
-                self.drag_shovel = not self.drag_shovel
-                if not self.drag_shovel:
-                    self.removeMouseImagePlus()
-                # 播放点击铲子的音效
-                c.SOUND_SHOVEL.play()
-            elif self.drag_shovel:
-                # 移出这地方的植物
-                self.shovelRemovePlant(mouse_pos)
+            elif self.hasShovel:
+                if self.inArea(self.shovel_box_rect, *mouse_pos):
+                    self.drag_shovel = not self.drag_shovel
+                    if not self.drag_shovel:
+                        self.removeMouseImagePlus()
+                    # 播放点击铲子的音效
+                    c.SOUND_SHOVEL.play()
+                elif self.drag_shovel:
+                    # 移出这地方的植物
+                    self.shovelRemovePlant(mouse_pos)
 
         for car in self.cars:
             if car:
