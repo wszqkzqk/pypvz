@@ -79,7 +79,6 @@ EXIT = 'exit'
 # 游戏界面可选的菜单
 LITTLE_MENU = 'littleMenu'
 BIG_MENU = 'bigMenu'
-RETURN_BUTTON = 'returnButton'
 RESTART_BUTTON = 'restartButton'
 MAINMENU_BUTTON = 'mainMenuButton'
 LITTLEGAME_BUTTON = 'littleGameButton'

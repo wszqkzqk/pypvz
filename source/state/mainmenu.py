@@ -167,12 +167,20 @@ class Menu(tool.State):
         self.big_menu_rect.x = 150
         self.big_menu_rect.y = 0
 
-        # 返回按钮
-        frame_rect = (0, 0, 342, 87)
-        self.return_button = tool.get_image_menu(tool.GFX[c.RETURN_BUTTON], *frame_rect, c.BLACK, 1.1)
+        # 返回按钮，用字体渲染实现，增强灵活性
+        # 建立一个按钮大小的surface对象
+        self.return_button = pg.Surface((376, 96))
+        self.return_button.set_colorkey(c.BLACK)    # 避免多余区域显示成黑色
         self.return_button_rect = self.return_button.get_rect()
         self.return_button_rect.x = 220
         self.return_button_rect.y = 440
+        font = pg.font.Font(c.FONT_PATH, 40)
+        font.bold = True
+        text = font.render("返回游戏", True, c.YELLOWGREEN)
+        text_rect = text.get_rect()
+        text_rect.x = 105
+        text_rect.y = 18
+        self.return_button.blit(text, text_rect)
 
         # 音量+、音量-
         frame_rect = (0, 0, 39, 41)

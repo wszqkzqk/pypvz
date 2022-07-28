@@ -13,7 +13,7 @@ def getSunValueImage(sun_value):
     msg_rect = msg_image.get_rect()
     msg_w = msg_rect.width
 
-    image = pg.Surface([width, 17])
+    image = pg.Surface((width, 17))
     x = width - msg_w
 
     image.fill(c.LIGHTYELLOW)
