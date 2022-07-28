@@ -58,6 +58,7 @@ RED          = (255,   0,   0)
 PURPLE       = (255,   0, 255)
 GOLD         = (255, 215,   0)
 GREEN        = (  0, 255,   0)
+YELLOWGREEN  = (  55, 200,   0)
 
 # 退出游戏按钮
 EXIT = 'exit'
