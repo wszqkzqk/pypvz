@@ -381,7 +381,7 @@ class Level(tool.State):
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, "chooseYourSeeds.opus"))
         pg.mixer.music.play(-1, 0)
-        pg.mixer.music.set_volume(self.game_info[c.VOLUME])
+        pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
 
     def choose(self, mouse_pos, mouse_click):
         # 如果暂停
@@ -403,7 +403,7 @@ class Level(tool.State):
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, self.bgm))
         pg.mixer.music.play(-1, 0)
-        pg.mixer.music.set_volume(self.game_info[c.VOLUME])
+        pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
 
         self.state = c.PLAY
         if self.bar_type == c.CHOOSEBAR_STATIC:
@@ -536,7 +536,7 @@ class Level(tool.State):
         font = pg.font.Font(c.FONT_PATH, 35)
         font.bold = True
         # 音量+
-        self.sound_volume_plus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
+        self.sound_volume_plus_button = tool.get_image_menu(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("+", True, c.YELLOWGREEN)
         sign_rect = sign.get_rect()
         sign_rect.x = 8
@@ -545,7 +545,7 @@ class Level(tool.State):
         self.sound_volume_plus_button_rect = self.sound_volume_plus_button.get_rect()
         self.sound_volume_plus_button_rect.x = 500
         # 音量-
-        self.sound_volume_minus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
+        self.sound_volume_minus_button = tool.get_image_menu(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("-", True, c.YELLOWGREEN)
         sign_rect = sign.get_rect()
         sign_rect.x = 12
@@ -587,20 +587,20 @@ class Level(tool.State):
                 c.SOUND_BUTTON_CLICK.play()
             # 音量+
             elif self.inArea(self.sound_volume_plus_button_rect, *mouse_pos):
-                self.game_info[c.VOLUME] = min(self.game_info[c.VOLUME] + 0.1, 1)
+                self.game_info[c.SOUND_VOLUME] = round(min(self.game_info[c.SOUND_VOLUME] + 0.05, 1), 2)
                 # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
-                pg.mixer.music.set_volume(self.game_info[c.VOLUME])
+                pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
                 for i in c.SOUNDS:
-                    i.set_volume(self.game_info[c.VOLUME])
+                    i.set_volume(self.game_info[c.SOUND_VOLUME])
                 c.SOUND_BUTTON_CLICK.play()
                 # 将音量信息存档
                 self.saveUserData()
             elif self.inArea(self.sound_volume_minus_button_rect, *mouse_pos):
-                self.game_info[c.VOLUME] = max(self.game_info[c.VOLUME] - 0.1, 0)
+                self.game_info[c.SOUND_VOLUME] = round(max(self.game_info[c.SOUND_VOLUME] - 0.05, 0), 2)
                 # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
-                pg.mixer.music.set_volume(self.game_info[c.VOLUME])
+                pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
                 for i in c.SOUNDS:
-                    i.set_volume(self.game_info[c.VOLUME])
+                    i.set_volume(self.game_info[c.SOUND_VOLUME])
                 c.SOUND_BUTTON_CLICK.play()
                 # 将音量信息存档
                 self.saveUserData()
@@ -1509,7 +1509,7 @@ class Level(tool.State):
     def showCurrentVolumeImage(self, surface):
         # 由于音量可变，因此这一内容不能在一开始就结束加载，而应当不断刷新不断显示
         font = pg.font.Font(c.FONT_PATH, 30)
-        volume_tips = font.render(f"音量：{round(self.game_info[c.VOLUME]*100):3}%", True, c.LIGHTGRAY)
+        volume_tips = font.render(f"音量：{round(self.game_info[c.SOUND_VOLUME]*100):3}%", True, c.LIGHTGRAY)
         volume_tips_rect = volume_tips.get_rect()
         volume_tips_rect.x = 275
         volume_tips_rect.y = 247

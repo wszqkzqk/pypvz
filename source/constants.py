@@ -84,7 +84,7 @@ RESTART_BUTTON = 'restartButton'
 MAINMENU_BUTTON = 'mainMenuButton'
 LITTLEGAME_BUTTON = 'littleGameButton'
 OPTION_BUTTON = 'optionButton'
-VOLUME_BUTTON = 'volumeButton'
+SOUND_VOLUME_BUTTON = 'volumeButton'
 # 金银向日葵奖杯
 TROPHY_SUNFLOWER = 'sunflowerTrophy'
 # 小铲子
@@ -105,7 +105,7 @@ LITTLEGAME_NUM = 'littleGame num'
 LEVEL_COMPLETIONS = 'level completions'
 LITTLEGAME_COMPLETIONS = 'littleGame completions'
 GAME_RATE = 'game rate'
-VOLUME = 'volume'
+SOUND_VOLUME = 'volume'
 
 # 整个游戏的状态
 MAIN_MENU = 'main menu'
@@ -667,7 +667,7 @@ INIT_USERDATA = {
                 LEVEL_COMPLETIONS:      0,
                 LITTLEGAME_COMPLETIONS: 0,
                 GAME_RATE:              1,
-                VOLUME:                 1.0,
+                SOUND_VOLUME:           1,
                 }
 
 # 无穷大常量
