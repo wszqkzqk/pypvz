@@ -250,7 +250,7 @@ class Plant(pg.sprite.Sprite):
         # 被铲子指向时间
         self.highlightTime = 0
 
-    def loadFrames(self, frames, name, scale, color=c.BLACK):
+    def loadFrames(self, frames, name, scale=1, color=c.BLACK):
         frame_list = tool.GFX[name]
         if name in tool.PLANT_RECT:
             data = tool.PLANT_RECT[name]
@@ -525,8 +525,8 @@ class WallNut(Plant):
         cracked1_frames_name = self.name + '_cracked1'
         cracked2_frames_name = self.name + '_cracked2'
 
-        self.loadFrames(self.cracked1_frames, cracked1_frames_name, 1)
-        self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name)
 
     def idling(self):
         if (not self.cracked1) and self.health <= c.WALLNUT_CRACKED1_HEALTH:
@@ -611,7 +611,7 @@ class Chomper(Plant):
         frame_list = [self.idle_frames, self.attack_frames, self.digest_frames]
         name_list = [idle_name, attack_name, digest_name]
         scale_list = [1, 1, 1]
-        rect_list = [(0, 0, 100, 114), None, None]
+        #rect_list = [(0, 0, 100, 114), None, None]
 
         for i, name in enumerate(name_list):
             self.loadFrames(frame_list[i], name, scale_list[i])
@@ -682,7 +682,7 @@ class PuffShroom(Plant):
         name_list = [idle_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -734,7 +734,7 @@ class PotatoMine(Plant):
         name_list = [init_name, idle_name, explode_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.init_frames
 
@@ -787,7 +787,7 @@ class Squash(Plant):
         name_list = [idle_name, aim_name, attack_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -837,12 +837,9 @@ class Squash(Plant):
 
 class Spikeweed(Plant):
     def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.SPIKEWEED, c.PLANT_HEALTH, None)
+        Plant.__init__(self, x, y, c.SPIKEWEED, c.PLANT_HEALTH, None, scale=0.9)
         self.animate_interval = 70
         self.attack_timer = 0
-
-    def loadImages(self, name, scale):
-        self.loadFrames(self.frames, name, 0.9, c.WHITE)
 
     def setIdle(self):
         self.animate_interval = 70
@@ -851,7 +848,7 @@ class Spikeweed(Plant):
     def canAttack(self, zombie):
         # 地刺能不能扎的判据：僵尸中心与地刺中心的距离或僵尸包括了地刺中心和右端（平衡得到合理的攻击范围,"僵尸包括了地刺中心和右端"是为以后巨人做准备）
         # 暂时不能用碰撞判断，平衡性不好
-        if ((-45 <= zombie.rect.x - self.rect.x <= 30) or (zombie.rect.left <= self.rect.x <= zombie.rect.right and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
+        if ((-40 <= zombie.rect.centerx - self.rect.centerx <= 40) or (zombie.rect.left <= self.rect.x <= zombie.rect.right and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
             return True
         return False
 
@@ -896,9 +893,9 @@ class Jalapeno(Plant):
     def loadImages(self, name, scale):
         self.explode_frames = []
         explode_name = name + 'Explode'
-        self.loadFrames(self.explode_frames, explode_name, 1, c.WHITE)
+        self.loadFrames(self.explode_frames, explode_name)
 
-        self.loadFrames(self.frames, name, 1, c.WHITE)
+        self.loadFrames(self.frames, name)
 
     def setExplode(self):
         self.changeFrames(self.explode_frames)
@@ -958,7 +955,7 @@ class ScaredyShroom(Plant):
         name_list = [idle_name, cry_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1015,7 +1012,7 @@ class SunShroom(Plant):
         name_list = [idle_name, big_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1060,7 +1057,7 @@ class IceShroom(Plant):
         scale_list = [1, 1.5, 1, 1]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, scale_list[i], c.WHITE)
+            self.loadFrames(frame_list[i], name, scale_list[i])
 
         self.frames = self.idle_frames
 
@@ -1123,7 +1120,7 @@ class HypnoShroom(Plant):
         name_list = [idle_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
     
@@ -1147,7 +1144,7 @@ class WallNutBowling(Plant):
         self.disable_hit_y = -1
 
     def loadImages(self, name, scale):
-        self.loadFrames(self.frames, name, 1, c.WHITE)
+        self.loadFrames(self.frames, name, 1)
 
     def idling(self):
         if self.move_timer == 0:
@@ -1407,7 +1404,7 @@ class SeaShroom(Plant):
         name_list = [idle_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1449,8 +1446,8 @@ class TallNut(Plant):
         cracked1_frames_name = self.name + '_cracked1'
         cracked2_frames_name = self.name + '_cracked2'
 
-        self.loadFrames(self.cracked1_frames, cracked1_frames_name, 1)
-        self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name)
 
     def idling(self):
         if not self.cracked1 and self.health <= c.TALLNUT_CRACKED1_HEALTH:
@@ -1478,7 +1475,7 @@ class TangleKlep(Plant):
         name_list = [idle_name, splash_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1538,7 +1535,7 @@ class DoomShroom(Plant):
         name_list = [idle_name, sleep_name, boom_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1619,7 +1616,7 @@ class Hole(Plant):
                         roof_name, roof2_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
         
         if self.plotType == c.MAP_TILE:
             self.frames = self.roof_frames
@@ -1708,7 +1705,7 @@ class FumeShroom(Plant):
         name_list = [idle_name, sleep_name, attack_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.BLACK)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1791,8 +1788,8 @@ class Garlic(Plant):
         cracked1_frames_name = self.name + '_cracked1'
         cracked2_frames_name = self.name + '_cracked2'
 
-        self.loadFrames(self.cracked1_frames, cracked1_frames_name, 1)
-        self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name)
 
     def idling(self):
         if (not self.cracked1) and self.health <= c.GARLIC_CRACKED1_HEALTH:
@@ -1817,8 +1814,8 @@ class PumpkinHead(Plant):
         cracked1_frames_name = self.name + '_cracked1'
         cracked2_frames_name = self.name + '_cracked2'
 
-        self.loadFrames(self.cracked1_frames, cracked1_frames_name, 1)
-        self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name)
 
     def idling(self):
         if not self.cracked1 and self.health <= c.WALLNUT_CRACKED1_HEALTH:

@@ -994,7 +994,7 @@ class Level(tool.State):
         else:
             self.hint_plant = False
 
-    def setupMouseImage(self, plant_name, select_plant):
+    def setupMouseImage(self, plant_name, select_plant, colorkey=c.BLACK):
         frame_list = tool.GFX[plant_name]
         if plant_name in tool.PLANT_RECT:
             data = tool.PLANT_RECT[plant_name]
@@ -1004,11 +1004,7 @@ class Level(tool.State):
             rect = frame_list[0].get_rect()
             width, height = rect.w, rect.h
 
-        if (plant_name in c.PLANT_COLOR_KEY_WHITE):
-            color = c.WHITE
-        else:
-            color = c.BLACK
-        self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, color, 1)
+        self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey, 1)
         self.mouse_rect = self.mouse_image.get_rect()
         self.drag_plant = True
         self.plant_name = plant_name

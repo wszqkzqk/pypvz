@@ -415,15 +415,6 @@ PLANT_DIE_SOUND_EXCEPTIONS = {
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 }
 
-# color_key为白色的对象
-PLANT_COLOR_KEY_WHITE = {
-                POTATOMINE, SPIKEWEED,
-                JALAPENO, SCAREDYSHROOM,
-                SUNSHROOM, ICESHROOM,
-                HYPNOSHROOM, SQUASH,
-                WALLNUTBOWLING,
-                }
-
 # 直接水生植物
 WATER_PLANTS = {
                 LILYPAD, SEASHROOM,
