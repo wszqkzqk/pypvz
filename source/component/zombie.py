@@ -1,5 +1,4 @@
 import pygame as pg
-import os
 import random
 from .. import tool
 from .. import constants as c

@@ -1,4 +1,3 @@
-import os
 import random
 import pygame as pg
 from .. import tool
