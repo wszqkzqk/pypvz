@@ -1506,7 +1506,16 @@ class Level(tool.State):
         # 画僵尸头
         surface.blit(self.level_progress_zombie_head_image, self.level_progress_zombie_head_image_rect)
 
-    def showCurrentVolumeImage(self, surface):
+    def showAllContentOfMenu(self, surface):
+        # 绘制不可变内容
+        surface.blit(self.big_menu, self.big_menu_rect)
+        surface.blit(self.return_button, self.return_button_rect)
+        surface.blit(self.restart_button, self.restart_button_rect)
+        surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
+        surface.blit(self.sound_volume_minus_button, self.sound_volume_minus_button_rect)
+        surface.blit(self.sound_volume_plus_button, self.sound_volume_plus_button_rect)
+        
+        # 显示当前音量
         # 由于音量可变，因此这一内容不能在一开始就结束加载，而应当不断刷新不断显示
         font = pg.font.Font(c.FONT_PATH, 30)
         volume_tips = font.render(f"音量：{round(self.game_info[c.SOUND_VOLUME]*100):3}%", True, c.LIGHTGRAY)
@@ -1523,11 +1532,7 @@ class Level(tool.State):
             # 画小菜单
             surface.blit(self.little_menu, self.little_menu_rect)
             if self.showLittleMenu:
-                surface.blit(self.big_menu, self.big_menu_rect)
-                surface.blit(self.return_button, self.return_button_rect)
-                surface.blit(self.restart_button, self.restart_button_rect)
-                surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
-                self.showCurrentVolumeImage()
+                self.showAllContentOfMenu(surface)
         # 以后可能需要插入一个预备的状态（预览显示僵尸、返回战场）
         elif self.state == c.PLAY:
             if self.hasShovel:
@@ -1556,13 +1561,7 @@ class Level(tool.State):
                 self.drawMouseShowPlus(surface)
 
             if self.showLittleMenu:
-                surface.blit(self.big_menu, self.big_menu_rect)
-                surface.blit(self.return_button, self.return_button_rect)
-                surface.blit(self.restart_button, self.restart_button_rect)
-                surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
-                surface.blit(self.sound_volume_minus_button, self.sound_volume_minus_button_rect)
-                surface.blit(self.sound_volume_plus_button, self.sound_volume_plus_button_rect)
-                self.showCurrentVolumeImage(surface)
+                self.showAllContentOfMenu(surface)
 
             if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
                 self.showLevelProgress(surface)

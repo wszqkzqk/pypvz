@@ -244,6 +244,7 @@ NON_PLANT_OBJECTS = {
 
 # 植物相关信息
 PLANT_IMAGE_RECT = 'plant_image_rect'
+BOOM_IMAGE = 'Boom'
 
 # 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
 PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
@@ -420,7 +421,7 @@ PLANT_COLOR_KEY_WHITE = {
                 JALAPENO, SCAREDYSHROOM,
                 SUNSHROOM, ICESHROOM,
                 HYPNOSHROOM, SQUASH,
-                WALLNUTBOWLING, REDWALLNUTBOWLING,
+                WALLNUTBOWLING,
                 }
 
 # 直接水生植物

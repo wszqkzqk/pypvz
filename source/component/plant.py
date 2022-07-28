@@ -548,7 +548,7 @@ class CherryBomb(Plant):
         self.explode_x_range = c.GRID_X_SIZE * 1.5
 
     def setBoom(self):
-        frame = tool.GFX[c.CHERRY_BOOM_IMAGE]
+        frame = tool.GFX[c.BOOM_IMAGE]
         rect = frame.get_rect()
         width, height = rect.w, rect.h
 
@@ -1232,16 +1232,12 @@ class RedWallNutBowling(Plant):
 
     def loadImages(self, name, scale):
         self.idle_frames = []
-        self.explode_frames = []
+        self.loadFrames(self.idle_frames, name, 1)
 
-        idle_name = name
-        explode_name = name + 'Explode'
-
-        frame_list = [self.idle_frames, self.explode_frames]
-        name_list = [idle_name, explode_name]
-
-        for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+        frame = tool.GFX[c.BOOM_IMAGE]
+        rect = frame.get_rect()
+        image = tool.get_image(frame, 0, 0, rect.w, rect.h)
+        self.explode_frames = (image, )
 
         self.frames = self.idle_frames
 
