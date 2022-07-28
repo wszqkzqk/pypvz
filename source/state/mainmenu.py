@@ -91,46 +91,25 @@ class Menu(tool.State):
         self.adventure_clicked = False
         self.option_button_clicked = False
 
-    def inAreaAdventure(self, x, y):
-        if (x >= self.adventure_rect.x and x <= self.adventure_rect.right and
-            y >= self.adventure_rect.y and y <= self.adventure_rect.bottom):
-            return True
-        else:
-            return False
-    
-    def inAreaExit(self, x, y):
-        if (x >= self.exit_rect.x and x <= self.exit_rect.right and
-            y >= self.exit_rect.y and y <= self.exit_rect.bottom):
-            return True
-        else:
-            return False
-    
-    def inAreaOptionButton(self, x, y):
-        if (x >= self.option_button_rect.x and x <= self.option_button_rect.right and
-            y >= self.option_button_rect.y and y <= self.option_button_rect.bottom):
-            return True
-        else:
-            return False
-    
-    def inAreaLittleGame(self, x, y):
-        if (x >= self.littleGame_rect.x and x <= self.littleGame_rect.right and
-            y >= self.littleGame_rect.y and y <= self.littleGame_rect.bottom):
+    def inArea(self, rect, x, y):
+        if (x >= rect.x and x <= rect.right and
+            y >= rect.y and y <= rect.bottom):
             return True
         else:
             return False
 
     def checkHilight(self, x, y):
         # 高亮冒险模式按钮
-        if self.inAreaAdventure(x, y):
+        if self.inArea(self.adventure_rect, x, y):
             self.adventure_highlight_time = self.current_time
         # 高亮退出按钮
-        elif self.inAreaExit(x, y):
+        elif self.inArea(self.exit_rect, x, y):
             self.exit_highlight_time = self.current_time
         # 高亮选项按钮
-        elif self.inAreaOptionButton(x, y):
+        elif self.inArea(self.option_button_rect, x, y):
             self.option_button_hightlight_time = self.current_time
         # 高亮小游戏按钮
-        elif self.inAreaLittleGame(x, y):
+        elif self.inArea(self.littleGame_rect, x, y):
             self.littleGame_highlight_time = self.current_time
 
         # 检查是否应当高亮并应用结果
@@ -157,7 +136,7 @@ class Menu(tool.State):
 
     def checkAdventureClick(self, mouse_pos):
         x, y = mouse_pos
-        if self.inAreaAdventure(x, y):
+        if self.inArea(self.adventure_rect, x, y):
             self.adventure_clicked = True
             self.adventure_timer = self.adventure_start = self.current_time
             self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
@@ -168,14 +147,14 @@ class Menu(tool.State):
     # 点击到按钮，修改转态的done属性
     def checkExitClick(self, mouse_pos):
         x, y = mouse_pos
-        if self.inAreaExit(x, y):
+        if self.inArea(self.exit_rect, x, y):
             self.done = True
             self.next = c.EXIT
 
     # 检查有没有按到小游戏
     def checkLittleGameClick(self, mouse_pos):
         x, y = mouse_pos
-        if self.inAreaLittleGame(x, y):
+        if self.inArea(self.littleGame_rect, x, y):
             self.done = True
             self.persist[c.GAME_MODE] = c.MODE_LITTLEGAME
             # 播放点击音效
@@ -197,22 +176,44 @@ class Menu(tool.State):
         self.return_button_rect.y = 440
 
         # 音量+、音量-
+        frame_rect = (0, 0, 39, 41)
+        font = pg.font.Font(c.FONT_PATH, 35)
+        font.bold = True
+        # 音量+
+        self.volume_plus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
+        sign = font.render("+", True, c.YELLOWGREEN)
+        sign_rect = sign.get_rect()
+        sign_rect.x = 8
+        sign_rect.y = -4
+        self.volume_plus_button.blit(sign, sign_rect)
+        self.volume_plus_button_rect = self.volume_plus_button.get_rect()
+        self.volume_plus_button_rect.x = 480
+        # 音量-
+        self.volume_minus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
+        sign = font.render("-", True, c.YELLOWGREEN)
+        sign_rect = sign.get_rect()
+        sign_rect.x = 12
+        sign_rect.y = -6
+        self.volume_minus_button.blit(sign, sign_rect)
+        self.volume_minus_button_rect = self.volume_minus_button.get_rect()
+        self.volume_minus_button_rect.x = 300
+        self.volume_minus_button_rect.y = self.volume_plus_button_rect.y = 250
 
     def setupSunflowerTrophy(self):
         # 设置金银向日葵图片信息
-        frame_rect = (0, 0, 157, 269)
         if self.game_info[c.LEVEL_COMPLETIONS]:
             if self.game_info[c.LITTLEGAME_COMPLETIONS]:
-                self.sunflower_trophy = tool.get_image_menu(tool.GFX[c.GOLDEN_SUNFLOWER], *frame_rect, c.BLACK)
+                frame_rect = (157, 0, 157, 269)
             else:
-                self.sunflower_trophy = tool.get_image_menu(tool.GFX[c.SILVER_SUNFLOWER], *frame_rect, c.BLACK)
+                frame_rect = (0, 0, 157, 269)
+            self.sunflower_trophy = tool.get_image_menu(tool.GFX[c.TROPHY_SUNFLOWER], *frame_rect, c.BLACK)
             self.sunflower_trophy_rect = self.sunflower_trophy.get_rect()
             self.sunflower_trophy_rect.x = 0
             self.sunflower_trophy_rect.y = 280
     
     def checkOptionButtonClick(self, mouse_pos):
         x, y = mouse_pos
-        if self.inAreaOptionButton(x, y):
+        if self.inArea(self.option_button_rect, x, y):
             self.option_button_clicked = True
             # 播放点击音效
             pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
@@ -250,6 +251,8 @@ class Menu(tool.State):
         elif self.option_button_clicked:
             surface.blit(self.big_menu, self.big_menu_rect)
             surface.blit(self.return_button, self.return_button_rect)
+            surface.blit(self.volume_plus_button, self.volume_plus_button_rect)
+            surface.blit(self.volume_minus_button, self.volume_minus_button_rect)
             if (mouse_pos and self.checkReturnClick(mouse_pos)):
                 self.option_button_clicked = False
                 pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
