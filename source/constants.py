@@ -467,39 +467,6 @@ ICE_SLOW_TIME = 10000
 MIN_FREEZE_TIME = 4000
 ICETRAP = 'IceTrap'
 
-# 植物卡片名称
-CARD_SUNFLOWER = 'card_sunflower'
-CARD_PEASHOOTER = 'card_peashooter'
-CARD_SNOWPEASHOOTER = 'card_snowpea'
-CARD_WALLNUT = 'card_wallnut'
-CARD_CHERRYBOMB = 'card_cherrybomb'
-CARD_THREEPEASHOOTER = 'card_threepeashooter'
-CARD_REPEATERPEA = 'card_repeaterpea'
-CARD_CHOMPER = 'card_chomper'
-CARD_PUFFSHROOM = 'card_puffshroom'
-CARD_POTATOMINE = 'card_potatomine'
-CARD_SQUASH = 'card_squash'
-CARD_SPIKEWEED = 'card_spikeweed'
-CARD_JALAPENO = 'card_jalapeno'
-CARD_SCAREDYSHROOM = 'card_scaredyshroom'
-CARD_SUNSHROOM = 'card_sunshroom'
-CARD_ICESHROOM = 'card_iceshroom'
-CARD_HYPNOSHROOM = 'card_hypnoshroom'
-CARD_REDWALLNUT = 'card_redwallnut'
-CARD_LILYPAD = 'card_lilypad'
-CARD_TORCHWOOD = 'card_torchwood'
-CARD_STARFRUIT = 'card_starfruit'
-CARD_COFFEEBEAN = 'card_coffeebean'
-CARD_SEASHROOM = 'card_seashroom'
-CARD_TALLNUT = 'card_tallnut'
-CARD_TANGLEKLEP = 'card_tangleklep'
-CARD_DOOMSHROOM = 'card_doomshroom'
-CARD_GRAVEBUSTER = 'card_gravebuster'
-CARD_FUMESHROOM = 'card_fumeshroom'
-CARD_GARLIC = 'card_garlic'
-CARD_PUMPKINHEAD = 'card_pumpkinhead'
-
-
 # 子弹信息
 # 子弹类型
 BULLET_PEA = 'PeaNormal'
