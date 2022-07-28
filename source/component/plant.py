@@ -505,7 +505,7 @@ class SnowPeaShooter(Plant):
             # 播放发射音效
             c.SOUND_SHOOT.play()
             # 播放冰子弹音效
-            c.SOUND_SNOWPEA_SPARKLES().play()
+            c.SOUND_SNOWPEA_SPARKLES.play()
 
     def setAttack(self):
         self.state = c.ATTACK
