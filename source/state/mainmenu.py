@@ -18,7 +18,7 @@ class Menu(tool.State):
         self.setupOptionMenu()
         self.setupSunflowerTrophy()
         pg.mixer.music.stop()
-        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
+        pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, "intro.opus"))
         pg.mixer.music.play(-1, 0)
         pg.display.set_caption(c.ORIGINAL_CAPTION)
         pg.mixer.music.set_volume(self.game_info[c.VOLUME])

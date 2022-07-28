@@ -48,7 +48,7 @@ class Level(tool.State):
             map_file = f'level_{self.game_info[c.LEVEL_NUM]}.json'
             # 设置标题
             pg.display.set_caption(f"pypvz: 冒险模式 第{self.game_info[c.LEVEL_NUM]}关")
-        file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
+        file_path = os.path.join(c.PATH_MAP_DIR, map_file)
         # 最后一关之后应该结束了
         try:
             with open(file_path) as f:
@@ -379,7 +379,7 @@ class Level(tool.State):
 
         # 播放选卡音乐
         pg.mixer.music.stop()
-        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "chooseYourSeeds.opus"))
+        pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, "chooseYourSeeds.opus"))
         pg.mixer.music.play(-1, 0)
         pg.mixer.music.set_volume(self.game_info[c.VOLUME])
 
@@ -401,7 +401,7 @@ class Level(tool.State):
 
         # 播放bgm
         pg.mixer.music.stop()
-        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", self.bgm))
+        pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, self.bgm))
         pg.mixer.music.play(-1, 0)
         pg.mixer.music.set_volume(self.game_info[c.VOLUME])
 

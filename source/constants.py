@@ -16,7 +16,11 @@ JSON_PATH_ZOMBIE = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'res
 # 植物显示特殊定义文件路径
 JSON_PATH_PLANTS = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'plant.json')
 # 游戏图片资源路径
-IMG_DIR_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources","graphics")
+PATH_IMG_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources","graphics")
+# 游戏关卡地图文件夹路径
+PATH_MAP_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources","map")
+# 游戏音乐文件夹路径
+PATH_MUSIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources","music")
 
 # 窗口标题
 ORIGINAL_CAPTION = 'pypvz'

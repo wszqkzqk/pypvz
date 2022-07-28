@@ -228,6 +228,6 @@ pg.mixer.set_num_channels(255)  # 设置可以同时播放的音频数量，默�
 if os.path.exists(c.ORIGINAL_LOGO):    # 设置窗口图标，仅对非Nuitka时生效，Nuitka不需要包括额外的图标文件，自动跳过这一过程即可
     pg.display.set_icon(pg.image.load(c.ORIGINAL_LOGO))
 
-GFX = load_all_gfx(c.IMG_DIR_PATH)
+GFX = load_all_gfx(c.PATH_IMG_DIR)
 ZOMBIE_RECT = loadZombieImageRect()
 PLANT_RECT = loadPlantImageRect()
