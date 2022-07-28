@@ -1,5 +1,6 @@
 import pygame as pg
 import os
+import json
 from .. import tool
 from .. import constants as c
 
@@ -21,6 +22,15 @@ class Menu(tool.State):
         pg.mixer.music.play(-1, 0)
         pg.display.set_caption(c.ORIGINAL_CAPTION)
         pg.mixer.music.set_volume(self.game_info[c.VOLUME])
+
+    def saveUserData(self):
+        with open(c.USERDATA_PATH, "w") as f:
+            userdata = {}
+            for i in self.game_info:
+                if i in c.INIT_USERDATA:
+                    userdata[i] = self.game_info[i]
+            dataToSave = json.dumps(userdata, sort_keys=True, indent=4)
+            f.write(dataToSave)
 
     def setupBackground(self):
         frame_rect = (80, 0, 800, 600)
@@ -270,6 +280,7 @@ class Menu(tool.State):
                     for i in c.SOUNDS:
                         i.set_volume(self.game_info[c.VOLUME])
                     c.SOUND_BUTTON_CLICK.play()
+                    self.saveUserData()
                 # 音量-
                 elif self.inArea(self.volume_minus_button_rect, *mouse_pos):
                     self.game_info[c.VOLUME] = max(self.game_info[c.VOLUME] - 0.1, 0)
@@ -278,6 +289,7 @@ class Menu(tool.State):
                     for i in c.SOUNDS:
                         i.set_volume(self.game_info[c.VOLUME])
                     c.SOUND_BUTTON_CLICK.play()
+                    self.saveUserData()
         # 没有点到前两者时常规行检测所有按钮的点击和高亮
         else:
             # 先检查选项高亮预览

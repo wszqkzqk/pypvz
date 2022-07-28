@@ -30,6 +30,15 @@ class Level(tool.State):
             self.setupBackground()
             self.initState()
 
+    def saveUserData(self):
+        with open(c.USERDATA_PATH, "w") as f:
+            userdata = {}
+            for i in self.game_info:
+                if i in c.INIT_USERDATA:
+                    userdata[i] = self.game_info[i]
+            dataToSave = json.dumps(userdata, sort_keys=True, indent=4)
+            f.write(dataToSave)
+
     def loadMap(self):
         if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
             map_file = f'littleGame_{self.game_info[c.LITTLEGAME_NUM]}.json'
@@ -55,13 +64,7 @@ class Level(tool.State):
                 self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
             self.done = True
             self.next = c.MAIN_MENU
-            with open(c.USERDATA_PATH, "w") as f:
-                userdata = {}
-                for i in self.game_info:
-                    if i in c.INIT_USERDATA:
-                        userdata[i] = self.game_info[i]
-                savedata = json.dumps(userdata, sort_keys=True, indent=4)
-                f.write(savedata)
+            self.saveUserData()
             return
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
         self.hasShovel = self.map_data[c.SHOVEL]
@@ -590,6 +593,8 @@ class Level(tool.State):
                 for i in c.SOUNDS:
                     i.set_volume(self.game_info[c.VOLUME])
                 c.SOUND_BUTTON_CLICK.play()
+                # 将音量信息存档
+                self.saveUserData()
             elif self.inArea(self.volume_minus_button_rect, *mouse_pos):
                 self.game_info[c.VOLUME] = max(self.game_info[c.VOLUME] - 0.1, 0)
                 # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
@@ -597,6 +602,8 @@ class Level(tool.State):
                 for i in c.SOUNDS:
                     i.set_volume(self.game_info[c.VOLUME])
                 c.SOUND_BUTTON_CLICK.play()
+                # 将音量信息存档
+                self.saveUserData()
 
 
     # 一大波僵尸来袭图片显示
@@ -1427,13 +1434,7 @@ class Level(tool.State):
                 self.game_info[c.LEVEL_NUM] += 1
             self.next = c.GAME_VICTORY
             self.done = True
-            with open(c.USERDATA_PATH, "w") as f:
-                userdata = {}
-                for i in self.game_info:
-                    if i in c.INIT_USERDATA:
-                        userdata[i] = self.game_info[i]
-                savedata = json.dumps(userdata, sort_keys=True, indent=4)
-                f.write(savedata)
+            self.saveUserData()
         elif self.checkLose():
             self.next = c.GAME_LOSE
             self.done = True
