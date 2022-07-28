@@ -536,25 +536,25 @@ class Level(tool.State):
         font = pg.font.Font(c.FONT_PATH, 35)
         font.bold = True
         # 音量+
-        self.volume_plus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
+        self.sound_volume_plus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("+", True, c.YELLOWGREEN)
         sign_rect = sign.get_rect()
         sign_rect.x = 8
         sign_rect.y = -4
-        self.volume_plus_button.blit(sign, sign_rect)
-        self.volume_plus_button_rect = self.volume_plus_button.get_rect()
-        self.volume_plus_button_rect.x = 500
+        self.sound_volume_plus_button.blit(sign, sign_rect)
+        self.sound_volume_plus_button_rect = self.sound_volume_plus_button.get_rect()
+        self.sound_volume_plus_button_rect.x = 500
         # 音量-
-        self.volume_minus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
+        self.sound_volume_minus_button = tool.get_image_menu(tool.GFX[c.VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("-", True, c.YELLOWGREEN)
         sign_rect = sign.get_rect()
         sign_rect.x = 12
-        sign_rect.y = -6
-        self.volume_minus_button.blit(sign, sign_rect)
-        self.volume_minus_button_rect = self.volume_minus_button.get_rect()
-        self.volume_minus_button_rect.x = 450
+        sign_rect.y = -8
+        self.sound_volume_minus_button.blit(sign, sign_rect)
+        self.sound_volume_minus_button_rect = self.sound_volume_minus_button.get_rect()
+        self.sound_volume_minus_button_rect.x = 450
         # 音量+、-应当处于同一高度
-        self.volume_minus_button_rect.y = self.volume_plus_button_rect.y = 250
+        self.sound_volume_minus_button_rect.y = self.sound_volume_plus_button_rect.y = 250
 
     def pauseAndCheckLittleMenuOptions(self, mouse_pos, mouse_click):
         # 设置暂停状态
@@ -586,7 +586,7 @@ class Level(tool.State):
                 # 播放点击音效
                 c.SOUND_BUTTON_CLICK.play()
             # 音量+
-            elif self.inArea(self.volume_plus_button_rect, *mouse_pos):
+            elif self.inArea(self.sound_volume_plus_button_rect, *mouse_pos):
                 self.game_info[c.VOLUME] = min(self.game_info[c.VOLUME] + 0.1, 1)
                 # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
                 pg.mixer.music.set_volume(self.game_info[c.VOLUME])
@@ -595,7 +595,7 @@ class Level(tool.State):
                 c.SOUND_BUTTON_CLICK.play()
                 # 将音量信息存档
                 self.saveUserData()
-            elif self.inArea(self.volume_minus_button_rect, *mouse_pos):
+            elif self.inArea(self.sound_volume_minus_button_rect, *mouse_pos):
                 self.game_info[c.VOLUME] = max(self.game_info[c.VOLUME] - 0.1, 0)
                 # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
                 pg.mixer.music.set_volume(self.game_info[c.VOLUME])
@@ -1560,8 +1560,8 @@ class Level(tool.State):
                 surface.blit(self.return_button, self.return_button_rect)
                 surface.blit(self.restart_button, self.restart_button_rect)
                 surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
-                surface.blit(self.volume_minus_button, self.volume_minus_button_rect)
-                surface.blit(self.volume_plus_button, self.volume_plus_button_rect)
+                surface.blit(self.sound_volume_minus_button, self.sound_volume_minus_button_rect)
+                surface.blit(self.sound_volume_plus_button, self.sound_volume_plus_button_rect)
                 self.showCurrentVolumeImage(surface)
 
             if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
