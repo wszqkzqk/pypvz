@@ -4,7 +4,7 @@ import traceback
 import os
 import pygame as pg
 from logging.handlers import RotatingFileHandler
-# 由于在后续本地模块中存在对pygame的调用，因此必须在这里完成pygame的初始化
+# 由于在后续本地模块中存在对pygame的调用，在此处必须完成pygame的初始化
 pg.init()
 
 from source import tool
