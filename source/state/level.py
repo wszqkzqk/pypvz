@@ -1,5 +1,4 @@
 import os
-import json
 import pygame as pg
 import random
 import logging
@@ -30,15 +29,6 @@ class Level(tool.State):
         self.map_y_len = self.map.height
         self.setupBackground()
         self.initState()
-
-    def saveUserData(self):
-        with open(c.USERDATA_PATH, "w") as f:
-            userdata = {}
-            for i in self.game_info:
-                if i in c.INIT_USERDATA:
-                    userdata[i] = self.game_info[i]
-            dataToSave = json.dumps(userdata, sort_keys=True, indent=4)
-            f.write(dataToSave)
 
     def loadMap(self):
         # 冒险模式

@@ -37,6 +37,16 @@ class State():
         else:
             return False
 
+    # 工具：用户数据保存函数
+    def saveUserData(self):
+        with open(c.USERDATA_PATH, "w") as f:
+            userdata = {}
+            for i in self.game_info:
+                if i in c.INIT_USERDATA:
+                    userdata[i] = self.game_info[i]
+            data_to_save = json.dumps(userdata, sort_keys=True, indent=4)
+            f.write(data_to_save)
+
 # control this game. do event loops
 class Control():
     def __init__(self):

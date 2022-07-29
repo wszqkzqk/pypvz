@@ -1,6 +1,5 @@
 import pygame as pg
 import os
-import json
 from .. import tool
 from .. import constants as c
 
@@ -24,15 +23,6 @@ class Menu(tool.State):
         pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
         for i in c.SOUNDS:
             i.set_volume(self.game_info[c.SOUND_VOLUME])
-
-    def saveUserData(self):
-        with open(c.USERDATA_PATH, "w") as f:
-            userdata = {}
-            for i in self.game_info:
-                if i in c.INIT_USERDATA:
-                    userdata[i] = self.game_info[i]
-            dataToSave = json.dumps(userdata, sort_keys=True, indent=4)
-            f.write(dataToSave)
 
     def setupBackground(self):
         frame_rect = (80, 0, 800, 600)
