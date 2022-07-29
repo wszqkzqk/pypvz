@@ -41,7 +41,7 @@ class Menu(tool.State):
         frame_names = (f"{c.OPTION_ADVENTURE}_0", f"{c.OPTION_ADVENTURE}_1")
         frame_rect = (0, 0, 330, 144)
         for name in frame_names:
-            self.adventure_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1))
+            self.adventure_frames.append(tool.get_image_alpha(tool.GFX[name], *frame_rect, c.BLACK, 1))
         self.adventure_image = self.adventure_frames[0]
         self.adventure_rect = self.adventure_image.get_rect()
         self.adventure_rect.x = 400
@@ -53,7 +53,7 @@ class Menu(tool.State):
         exit_frame_names = (f"{c.EXIT}_0", f"{c.EXIT}_1")
         exit_frame_rect = (0, 0, 47, 27)
         for name in exit_frame_names:
-            self.exit_frames.append(tool.get_image_menu(tool.GFX[name], *exit_frame_rect, c.BLACK, 1.1))
+            self.exit_frames.append(tool.get_image_alpha(tool.GFX[name], *exit_frame_rect, c.BLACK, 1.1))
         self.exit_image = self.exit_frames[0]
         self.exit_rect = self.exit_image.get_rect()
         self.exit_rect.x = 730
@@ -65,7 +65,7 @@ class Menu(tool.State):
         option_button_frame_names = (f"{c.OPTION_BUTTON}_0", f"{c.OPTION_BUTTON}_1")
         option_button_frame_rect = (0, 0, 81, 31)
         for name in option_button_frame_names:
-            self.option_button_frames.append(tool.get_image_menu(tool.GFX[name], *option_button_frame_rect, c.BLACK))
+            self.option_button_frames.append(tool.get_image_alpha(tool.GFX[name], *option_button_frame_rect, c.BLACK))
         self.option_button_image = self.option_button_frames[0]
         self.option_button_rect = self.option_button_image.get_rect()
         self.option_button_rect.x = 560
@@ -77,7 +77,7 @@ class Menu(tool.State):
         littleGame_frame_names = (c.LITTLEGAME_BUTTON + "_0", c.LITTLEGAME_BUTTON + "_1")
         littleGame_frame_rect = (0, 7, 317, 135)
         for name in littleGame_frame_names:
-            self.littleGame_frames.append(tool.get_image_menu(tool.GFX[name], *littleGame_frame_rect, c.BLACK, 1))
+            self.littleGame_frames.append(tool.get_image_alpha(tool.GFX[name], *littleGame_frame_rect, c.BLACK, 1))
         self.littleGame_image = self.littleGame_frames[0]
         self.littleGame_rect = self.littleGame_image.get_rect()
         self.littleGame_rect.x = 397
@@ -145,7 +145,7 @@ class Menu(tool.State):
     def setupOptionMenu(self):
         # 选项菜单框
         frame_rect = (0, 0, 500, 500)
-        self.big_menu = tool.get_image_menu(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
+        self.big_menu = tool.get_image_alpha(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
         self.big_menu_rect = self.big_menu.get_rect()
         self.big_menu_rect.x = 150
         self.big_menu_rect.y = 0
@@ -170,7 +170,7 @@ class Menu(tool.State):
         font = pg.font.Font(c.FONT_PATH, 35)
         font.bold = True
         # 音量+
-        self.sound_volume_plus_button = tool.get_image_menu(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
+        self.sound_volume_plus_button = tool.get_image_alpha(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("+", True, c.YELLOWGREEN)
         sign_rect = sign.get_rect()
         sign_rect.x = 8
@@ -179,7 +179,7 @@ class Menu(tool.State):
         self.sound_volume_plus_button_rect = self.sound_volume_plus_button.get_rect()
         self.sound_volume_plus_button_rect.x = 500
         # 音量-
-        self.sound_volume_minus_button = tool.get_image_menu(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
+        self.sound_volume_minus_button = tool.get_image_alpha(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("-", True, c.YELLOWGREEN)
         sign_rect = sign.get_rect()
         sign_rect.x = 12
@@ -197,7 +197,7 @@ class Menu(tool.State):
                 frame_rect = (157, 0, 157, 269)
             else:
                 frame_rect = (0, 0, 157, 269)
-            self.sunflower_trophy = tool.get_image_menu(tool.GFX[c.TROPHY_SUNFLOWER], *frame_rect, c.BLACK)
+            self.sunflower_trophy = tool.get_image_alpha(tool.GFX[c.TROPHY_SUNFLOWER], *frame_rect, c.BLACK)
             self.sunflower_trophy_rect = self.sunflower_trophy.get_rect()
             self.sunflower_trophy_rect.x = 0
             self.sunflower_trophy_rect.y = 280

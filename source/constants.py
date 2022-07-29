@@ -166,8 +166,8 @@ GRAVES_GRADE_INFO = (0, 4, 7, 11)
 
 # 僵尸生成方式
 SPAWN_ZOMBIES = "spawn_zombies"
-SPAWN_ZOMBIES_AUTO = "auto"
-SPAWN_ZOMBIES_LIST = "list"
+SPAWN_ZOMBIES_AUTO = 1
+SPAWN_ZOMBIES_LIST = 0
 INCLUDED_ZOMBIES = "included_zombies"
 NUM_FLAGS = "num_flags"
 INEVITABLE_ZOMBIE_DICT = "inevitable_zombie_list"

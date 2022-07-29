@@ -20,7 +20,7 @@ class Screen(tool.State):
         # 按钮
         frame_rect = (0, 0, 111, 26)
         ## 主菜单按钮
-        self.main_menu_button_image = tool.get_image_menu(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
+        self.main_menu_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
         self.main_menu_button_image_rect = self.main_menu_button_image.get_rect()
         self.main_menu_button_image_rect.x = 620
         ### 主菜单按钮上的文字
@@ -29,7 +29,7 @@ class Screen(tool.State):
         main_menu_text_rect = main_menu_text.get_rect()
         main_menu_text_rect.x = 29
         ## 继续按钮
-        self.next_button_image = tool.get_image_menu(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
+        self.next_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
         self.next_button_image_rect = self.next_button_image.get_rect()
         self.next_button_image_rect.x = 70
         ### 继续按钮上的文字
@@ -116,7 +116,7 @@ class AwardScreen(tool.State):
         frame_rect = (0, 0, 111, 26)
         if self.show_only_one_option:
             ## 主菜单按钮
-            self.main_menu_button_image = tool.get_image_menu(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
+            self.main_menu_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
             self.main_menu_button_image_rect = self.main_menu_button_image.get_rect()
             self.main_menu_button_image_rect.x = 343
             self.main_menu_button_image_rect.y = 520
@@ -129,7 +129,7 @@ class AwardScreen(tool.State):
             self.image.blit(self.main_menu_button_image, self.main_menu_button_image_rect)
         else:
             ## 继续按钮
-            self.next_button_image = tool.get_image_menu(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
+            self.next_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
             self.next_button_image_rect = self.next_button_image.get_rect()
             self.next_button_image_rect.x = 70
             ### 继续按钮上的文字
@@ -138,7 +138,7 @@ class AwardScreen(tool.State):
             next_text_rect = next_text.get_rect()
             next_text_rect.x = 37
             ## 主菜单按钮
-            self.main_menu_button_image = tool.get_image_menu(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
+            self.main_menu_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
             self.main_menu_button_image_rect = self.main_menu_button_image.get_rect()
             self.main_menu_button_image_rect.x = 620
             self.next_button_image_rect.y = self.main_menu_button_image_rect.y = 540
@@ -165,7 +165,7 @@ class AwardScreen(tool.State):
                     intro_content = "您已完成冒险模式，获得此奖励！"
                 else:
                     intro_content = "您已完成玩玩小游戏，获得此奖励！"
-            sunflower_trophy_image = tool.get_image_menu(tool.GFX[c.TROPHY_SUNFLOWER], *frame_rect, scale=0.7)
+            sunflower_trophy_image = tool.get_image_alpha(tool.GFX[c.TROPHY_SUNFLOWER], *frame_rect, scale=0.7)
             sunflower_trophy_rect = sunflower_trophy_image.get_rect()
             sunflower_trophy_rect.x = 348
             sunflower_trophy_rect.y = 108

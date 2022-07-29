@@ -433,11 +433,11 @@ class Level(tool.State):
         if self.hasShovel:
             #  导入小铲子
             frame_rect = [0, 0, 71, 67]
-            self.shovel = tool.get_image_menu(tool.GFX[c.SHOVEL], *frame_rect, c.BLACK, 1.1)
+            self.shovel = tool.get_image_alpha(tool.GFX[c.SHOVEL], *frame_rect, c.BLACK, 1.1)
             self.shovel_rect = self.shovel.get_rect()
             frame_rect = [0, 0, 77, 75]
             self.shovel_positon = (608, 1)
-            self.shovel_box = tool.get_image_menu(tool.GFX[c.SHOVEL_BOX], *frame_rect, c.BLACK, 1.1)
+            self.shovel_box = tool.get_image_alpha(tool.GFX[c.SHOVEL_BOX], *frame_rect, c.BLACK, 1.1)
             self.shovel_box_rect = self.shovel_box.get_rect()
             self.shovel_rect.x = self.shovel_box_rect.x = self.shovel_positon[0]
             self.shovel_rect.y = self.shovel_box_rect.y = self.shovel_positon[1] 
@@ -476,14 +476,14 @@ class Level(tool.State):
     def setupLittleMenu(self):
         # 具体运行游戏必定有个小菜单, 导入菜单和选项
         frame_rect = (0, 0, 108, 31)
-        self.little_menu = tool.get_image_menu(tool.GFX[c.LITTLE_MENU], *frame_rect, c.BLACK, 1.1)
+        self.little_menu = tool.get_image_alpha(tool.GFX[c.LITTLE_MENU], *frame_rect, c.BLACK, 1.1)
         self.little_menu_rect = self.little_menu.get_rect()
         self.little_menu_rect.x = 690
         self.little_menu_rect.y = 0 
 
         # 弹出的菜单框
         frame_rect = (0, 0, 500, 500)
-        self.big_menu = tool.get_image_menu(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
+        self.big_menu = tool.get_image_alpha(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
         self.big_menu_rect = self.big_menu.get_rect()
         self.big_menu_rect.x = 150
         self.big_menu_rect.y = 0
@@ -505,14 +505,14 @@ class Level(tool.State):
 
         # 重新开始按钮
         frame_rect = (0, 0, 207, 45)
-        self.restart_button = tool.get_image_menu(tool.GFX[c.RESTART_BUTTON], *frame_rect, c.BLACK, 1.1)
+        self.restart_button = tool.get_image_alpha(tool.GFX[c.RESTART_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.restart_button_rect = self.restart_button.get_rect()
         self.restart_button_rect.x = 295
         self.restart_button_rect.y = 325
 
         # 主菜单按钮
         frame_rect = (0, 0, 206, 43)
-        self.mainMenu_button = tool.get_image_menu(tool.GFX[c.MAINMENU_BUTTON], *frame_rect, c.BLACK, 1.1)
+        self.mainMenu_button = tool.get_image_alpha(tool.GFX[c.MAINMENU_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.mainMenu_button_rect = self.mainMenu_button.get_rect()
         self.mainMenu_button_rect.x = 299
         self.mainMenu_button_rect.y = 372
@@ -522,7 +522,7 @@ class Level(tool.State):
         font = pg.font.Font(c.FONT_PATH, 35)
         font.bold = True
         # 音量+
-        self.sound_volume_plus_button = tool.get_image_menu(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
+        self.sound_volume_plus_button = tool.get_image_alpha(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("+", True, c.YELLOWGREEN)
         sign_rect = sign.get_rect()
         sign_rect.x = 8
@@ -531,7 +531,7 @@ class Level(tool.State):
         self.sound_volume_plus_button_rect = self.sound_volume_plus_button.get_rect()
         self.sound_volume_plus_button_rect.x = 500
         # 音量-
-        self.sound_volume_minus_button = tool.get_image_menu(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
+        self.sound_volume_minus_button = tool.get_image_alpha(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("-", True, c.YELLOWGREEN)
         sign_rect = sign.get_rect()
         sign_rect.x = 12
@@ -595,7 +595,7 @@ class Level(tool.State):
     # 一大波僵尸来袭图片显示
     def setupHugeWaveApprochingImage(self):
         frame_rect = (0, 0, 492, 80)
-        self.huge_wave_approching_image = tool.get_image_menu(tool.GFX[c.HUGE_WAVE_APPROCHING], *frame_rect, c.BLACK, 1)
+        self.huge_wave_approching_image = tool.get_image_alpha(tool.GFX[c.HUGE_WAVE_APPROCHING], *frame_rect, c.BLACK, 1)
         self.huge_wave_approching_image_rect = self.huge_wave_approching_image.get_rect()
         self.huge_wave_approching_image_rect.x = 140    # 猜的
         self.huge_wave_approching_image_rect.y = 250    # 猜的
@@ -606,21 +606,21 @@ class Level(tool.State):
 
         # 主进度条
         frame_rect = (0, 0, 158, 26)
-        self.level_progress_bar_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_BAR], *frame_rect, c.BLACK, 1)
+        self.level_progress_bar_image = tool.get_image_alpha(tool.GFX[c.LEVEL_PROGRESS_BAR], *frame_rect, c.BLACK, 1)
         self.level_progress_bar_image_rect = self.level_progress_bar_image.get_rect()
         self.level_progress_bar_image_rect.x = 600
         self.level_progress_bar_image_rect.y = 574
 
         # 僵尸头
         frame_rect = (0, 0, 23, 25)
-        self.level_progress_zombie_head_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_ZOMBIE_HEAD], *frame_rect, c.BLACK, 1)
+        self.level_progress_zombie_head_image = tool.get_image_alpha(tool.GFX[c.LEVEL_PROGRESS_ZOMBIE_HEAD], *frame_rect, c.BLACK, 1)
         self.level_progress_zombie_head_image_rect = self.level_progress_zombie_head_image.get_rect()
         self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x + 75
         self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3
 
         # 旗帜（这里只包括最后一面）
         frame_rect = (0, 0, 20, 18)
-        self.level_progress_flag = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_FLAG], *frame_rect, c.BLACK, 1)
+        self.level_progress_flag = tool.get_image_alpha(tool.GFX[c.LEVEL_PROGRESS_FLAG], *frame_rect, c.BLACK, 1)
         self.level_progress_flag_rect = self.level_progress_flag.get_rect()
         self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x - 78
         self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3
