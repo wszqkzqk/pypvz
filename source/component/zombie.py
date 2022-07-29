@@ -61,7 +61,7 @@ class Zombie(pg.sprite.Sprite):
         width, height = rect.w, rect.h
         if name in c.ZOMBIE_RECT:
             data = c.ZOMBIE_RECT[name]
-            x, width = data['x'], data['width']
+            x, width = data["x"], data["width"]
         else:
             x = 0
         for frame in frame_list:
@@ -287,7 +287,7 @@ class Zombie(pg.sprite.Sprite):
             self.head_group.add(ZombieHead(self.rect.centerx, self.rect.bottom))
 
     def changeFrames(self, frames):
-        '''change image frames and modify rect position'''
+        """change image frames and modify rect position"""
         self.frames = frames
         self.frame_num = len(self.frames)
         self.frame_index = 0
@@ -431,7 +431,7 @@ class Zombie(pg.sprite.Sprite):
             else:   # 没有防具
                 self.health -= damage
         else:
-            print('警告：植物攻击类型错误，现在默认进行类豌豆射手型攻击')
+            print("警告：植物攻击类型错误，现在默认进行类豌豆射手型攻击")
             self.setDamage(damage, effect=effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
         
         # 记录攻击时间              
@@ -539,10 +539,10 @@ class NormalZombie(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        attack_name = self.name + 'Attack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = self.name + 'Die'
+        attack_name = self.name + "Attack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.walk_frames, self.attack_frames, self.losthead_walk_frames,
@@ -571,12 +571,12 @@ class ConeHeadZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.NORMAL_ZOMBIE
-        attack_name = c.NORMAL_ZOMBIE + 'Attack'
-        losthead_walk_name = c.NORMAL_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.NORMAL_ZOMBIE + 'LostHeadAttack'
-        die_name = c.NORMAL_ZOMBIE + 'Die'
+        attack_name = c.NORMAL_ZOMBIE + "Attack"
+        losthead_walk_name = c.NORMAL_ZOMBIE + "LostHead"
+        losthead_attack_name = c.NORMAL_ZOMBIE + "LostHeadAttack"
+        die_name = c.NORMAL_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -607,12 +607,12 @@ class BucketHeadZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.NORMAL_ZOMBIE
-        attack_name = c.NORMAL_ZOMBIE + 'Attack'
-        losthead_walk_name = c.NORMAL_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.NORMAL_ZOMBIE + 'LostHeadAttack'
-        die_name = c.NORMAL_ZOMBIE + 'Die'
+        attack_name = c.NORMAL_ZOMBIE + "Attack"
+        losthead_walk_name = c.NORMAL_ZOMBIE + "LostHead"
+        losthead_attack_name = c.NORMAL_ZOMBIE + "LostHeadAttack"
+        die_name = c.NORMAL_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -642,10 +642,10 @@ class FlagZombie(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        attack_name = self.name + 'Attack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = c.NORMAL_ZOMBIE + 'Die'
+        attack_name = self.name + "Attack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = c.NORMAL_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.walk_frames, self.attack_frames, self.losthead_walk_frames,
@@ -676,13 +676,13 @@ class NewspaperZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
-        walk_name = self.name + 'NoPaper'
-        attack_name = self.name + 'NoPaperAttack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        lostnewspaper_name = self.name + 'LostNewspaper'
-        die_name = self.name + 'Die'
+        helmet_attack_name = self.name + "Attack"
+        walk_name = self.name + "NoPaper"
+        attack_name = self.name + "NoPaperAttack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        lostnewspaper_name = self.name + "LostNewspaper"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -774,12 +774,12 @@ class FootballZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
-        walk_name = self.name + 'LostHelmet'
-        attack_name = self.name + 'LostHelmetAttack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = self.name + 'Die'
+        helmet_attack_name = self.name + "Attack"
+        walk_name = self.name + "LostHelmet"
+        attack_name = self.name + "LostHelmetAttack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -808,11 +808,11 @@ class DuckyTubeZombie(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        swim_name = self.name + 'Swim'
-        attack_name = self.name + 'Attack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHead'
-        die_name = self.name + 'Die'
+        swim_name = self.name + "Swim"
+        attack_name = self.name + "Attack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHead"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.walk_frames, self.swim_frames, self.attack_frames, self.losthead_walk_frames,
@@ -842,14 +842,14 @@ class ConeHeadDuckyTubeZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_swim_name = self.name + 'Swim'
-        helmet_attack_name = self.name + 'Attack'
+        helmet_swim_name = self.name + "Swim"
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.DUCKY_TUBE_ZOMBIE
-        swim_name = c.DUCKY_TUBE_ZOMBIE + 'Swim'
-        attack_name = c.DUCKY_TUBE_ZOMBIE + 'Attack'
-        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
-        die_name = c.DUCKY_TUBE_ZOMBIE + 'Die'
+        swim_name = c.DUCKY_TUBE_ZOMBIE + "Swim"
+        attack_name = c.DUCKY_TUBE_ZOMBIE + "Attack"
+        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + "LostHead"
+        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + "LostHead"
+        die_name = c.DUCKY_TUBE_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_swim_frames, self.helmet_attack_frames, self.walk_frames, self.swim_frames, self.attack_frames, self.losthead_walk_frames,
@@ -880,14 +880,14 @@ class BucketHeadDuckyTubeZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_swim_name = self.name + 'Swim'
-        helmet_attack_name = self.name + 'Attack'
+        helmet_swim_name = self.name + "Swim"
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.DUCKY_TUBE_ZOMBIE
-        swim_name = c.DUCKY_TUBE_ZOMBIE + 'Swim'
-        attack_name = c.DUCKY_TUBE_ZOMBIE + 'Attack'
-        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
-        die_name = c.DUCKY_TUBE_ZOMBIE + 'Die'
+        swim_name = c.DUCKY_TUBE_ZOMBIE + "Swim"
+        attack_name = c.DUCKY_TUBE_ZOMBIE + "Attack"
+        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + "LostHead"
+        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + "LostHead"
+        die_name = c.DUCKY_TUBE_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_swim_frames, self.helmet_attack_frames, self.walk_frames, self.swim_frames, self.attack_frames, self.losthead_walk_frames,
@@ -916,12 +916,12 @@ class ScreenDoorZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.NORMAL_ZOMBIE
-        attack_name = c.NORMAL_ZOMBIE + 'Attack'
-        losthead_walk_name = c.NORMAL_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.NORMAL_ZOMBIE + 'LostHeadAttack'
-        die_name = c.NORMAL_ZOMBIE + 'Die'
+        attack_name = c.NORMAL_ZOMBIE + "Attack"
+        losthead_walk_name = c.NORMAL_ZOMBIE + "LostHead"
+        losthead_attack_name = c.NORMAL_ZOMBIE + "LostHeadAttack"
+        die_name = c.NORMAL_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -954,14 +954,14 @@ class PoleVaultingZombie(Zombie):
         self.walk_before_jump_frames = []
         self.jump_frames = []
 
-        walk_name = self.name + 'WalkAfterJump'
-        attack_name = self.name + 'Attack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = self.name + 'Die'
+        walk_name = self.name + "WalkAfterJump"
+        attack_name = self.name + "Attack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
         walk_before_jump_name = self.name
-        jump_name = self.name + 'Jump'
+        jump_name = self.name + "Jump"
 
         frame_list = [self.walk_frames, self.attack_frames, self.losthead_walk_frames,
                       self.losthead_attack_frames, self.die_frames, self.boomdie_frames,
@@ -1061,11 +1061,11 @@ class Zomboni(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        walk_damaged1_name = self.name + 'Damaged1'
-        walk_damaged2_name = self.name + 'Damaged2'
-        losthead_walk_name = self.name + 'Damaged2'
-        die_name = self.name + 'Die'
-        boomdie_name = self.name + 'BoomDie'
+        walk_damaged1_name = self.name + "Damaged1"
+        walk_damaged2_name = self.name + "Damaged2"
+        losthead_walk_name = self.name + "Damaged2"
+        die_name = self.name + "Die"
+        boomdie_name = self.name + "BoomDie"
 
         frame_list = [  self.walk_frames, self.walk_damaged1_frames,
                         self.walk_damaged2_frames, self.losthead_walk_frames,
@@ -1148,14 +1148,14 @@ class SnorkelZombie(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        swim_name = self.name + 'Dive'
-        attack_name = self.name + 'Attack'
-        jump_name = self.name + 'Jump'
-        float_name = self.name + 'Float'
-        sink_name = self.name + 'Sink'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = self.name + 'Die'
+        swim_name = self.name + "Dive"
+        attack_name = self.name + "Attack"
+        jump_name = self.name + "Jump"
+        float_name = self.name + "Float"
+        sink_name = self.name + "Sink"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [  self.walk_frames, self.swim_frames,

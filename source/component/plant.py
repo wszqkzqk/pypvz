@@ -66,7 +66,7 @@ class Bullet(pg.sprite.Sprite):
         frame_list = tool.GFX[name]
         if name in c.PLANT_RECT:
             data = c.PLANT_RECT[name]
-            x, y, width, height = data['x'], data['y'], data['width'], data['height']
+            x, y, width, height = data["x"], data["y"], data["width"], data["height"]
         else:
             x, y = 0, 0
             rect = frame_list[0].get_rect()
@@ -81,15 +81,15 @@ class Bullet(pg.sprite.Sprite):
 
         fly_name = self.name
         if self.name == c.BULLET_MUSHROOM:
-            explode_name = 'BulletMushRoomExplode'
+            explode_name = "BulletMushRoomExplode"
         elif self.name == c.BULLET_PEA_ICE:
-            explode_name = 'PeaIceExplode'
+            explode_name = "PeaIceExplode"
         elif self.name == c.BULLET_SEASHROOM:
-            explode_name = 'BulletSeaShroomExplode'
+            explode_name = "BulletSeaShroomExplode"
         elif self.name == c.BULLET_STAR:
-            explode_name = 'StarBulletExplode'
+            explode_name = "StarBulletExplode"
         else:
-            explode_name = 'PeaNormalExplode'
+            explode_name = "PeaNormalExplode"
 
         self.loadFrames(self.fly_frames, fly_name)
         self.loadFrames(self.explode_frames, explode_name)
@@ -254,7 +254,7 @@ class Plant(pg.sprite.Sprite):
         frame_list = tool.GFX[name]
         if name in c.PLANT_RECT:
             data = c.PLANT_RECT[name]
-            x, y, width, height = data['x'], data['y'], data['width'], data['height']
+            x, y, width, height = data["x"], data["y"], data["width"], data["height"]
         else:
             x, y = 0, 0
             rect = frame_list[0].get_rect()
@@ -267,7 +267,7 @@ class Plant(pg.sprite.Sprite):
         self.loadFrames(self.frames, name, scale)
 
     def changeFrames(self, frames):
-        '''change image frames and modify rect position'''
+        """change image frames and modify rect position"""
         self.frames = frames
         self.frame_num = len(self.frames)
         self.frame_index = 0
@@ -522,8 +522,8 @@ class WallNut(Plant):
         self.cracked1_frames = []
         self.cracked2_frames = []
 
-        cracked1_frames_name = self.name + '_cracked1'
-        cracked2_frames_name = self.name + '_cracked2'
+        cracked1_frames_name = self.name + "_cracked1"
+        cracked2_frames_name = self.name + "_cracked2"
 
         self.loadFrames(self.cracked1_frames, cracked1_frames_name)
         self.loadFrames(self.cracked2_frames, cracked2_frames_name)
@@ -605,8 +605,8 @@ class Chomper(Plant):
         self.animate_interval = 100 # 本身动画播放较慢
 
         idle_name = name
-        attack_name = name + 'Attack'
-        digest_name = name + 'Digest'
+        attack_name = name + "Attack"
+        digest_name = name + "Digest"
 
         frame_list = [self.idle_frames, self.attack_frames, self.digest_frames]
         name_list = [idle_name, attack_name, digest_name]
@@ -676,7 +676,7 @@ class PuffShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.sleep_frames]
         name_list = [idle_name, sleep_name]
@@ -726,9 +726,9 @@ class PotatoMine(Plant):
         self.idle_frames = []
         self.explode_frames = []
 
-        init_name = name + 'Init'
+        init_name = name + "Init"
         idle_name = name
-        explode_name = name + 'Explode'
+        explode_name = name + "Explode"
 
         frame_list = [self.init_frames, self.idle_frames, self.explode_frames]
         name_list = [init_name, idle_name, explode_name]
@@ -780,8 +780,8 @@ class Squash(Plant):
         self.attack_frames = []
 
         idle_name = name
-        aim_name = name + 'Aim'
-        attack_name = name + 'Attack'
+        aim_name = name + "Aim"
+        attack_name = name + "Attack"
 
         frame_list = [self.idle_frames, self.aim_frames, self.attack_frames]
         name_list = [idle_name, aim_name, attack_name]
@@ -892,7 +892,7 @@ class Jalapeno(Plant):
 
     def loadImages(self, name, scale):
         self.explode_frames = []
-        explode_name = name + 'Explode'
+        explode_name = name + "Explode"
         self.loadFrames(self.explode_frames, explode_name)
 
         self.loadFrames(self.frames, name)
@@ -948,8 +948,8 @@ class ScaredyShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        cry_name = name + 'Cry'
-        sleep_name = name + 'Sleep'
+        cry_name = name + "Cry"
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.cry_frames, self.sleep_frames]
         name_list = [idle_name, cry_name, sleep_name]
@@ -1005,8 +1005,8 @@ class SunShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        big_name = name + 'Big'
-        sleep_name = name + 'Sleep'
+        big_name = name + "Big"
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.big_frames, self.sleep_frames]
         name_list = [idle_name, big_name, sleep_name]
@@ -1048,9 +1048,9 @@ class IceShroom(Plant):
         self.trap_frames = []
 
         idle_name = name
-        snow_name = name + 'Snow'
-        sleep_name = name + 'Sleep'
-        trap_name = name + 'Trap'
+        snow_name = name + "Snow"
+        sleep_name = name + "Sleep"
+        trap_name = name + "Trap"
 
         frame_list = [self.idle_frames, self.snow_frames, self.sleep_frames, self.trap_frames]
         name_list = [idle_name, snow_name, sleep_name, trap_name]
@@ -1114,7 +1114,7 @@ class HypnoShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.sleep_frames]
         name_list = [idle_name, sleep_name]
@@ -1398,7 +1398,7 @@ class SeaShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.sleep_frames]
         name_list = [idle_name, sleep_name]
@@ -1443,8 +1443,8 @@ class TallNut(Plant):
         self.cracked1_frames = []
         self.cracked2_frames = []
 
-        cracked1_frames_name = self.name + '_cracked1'
-        cracked2_frames_name = self.name + '_cracked2'
+        cracked1_frames_name = self.name + "_cracked1"
+        cracked2_frames_name = self.name + "_cracked2"
 
         self.loadFrames(self.cracked1_frames, cracked1_frames_name)
         self.loadFrames(self.cracked2_frames, cracked2_frames_name)
@@ -1469,7 +1469,7 @@ class TangleKlep(Plant):
         self.splash_frames = []
 
         idle_name = self.name
-        splash_name = self.name + 'Splash'
+        splash_name = self.name + "Splash"
 
         frame_list = [self.idle_frames, self.splash_frames]
         name_list = [idle_name, splash_name]
@@ -1528,8 +1528,8 @@ class DoomShroom(Plant):
         self.boom_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
-        boom_name = name + 'Boom'
+        sleep_name = name + "Sleep"
+        boom_name = name + "Boom"
 
         frame_list = [self.idle_frames, self.sleep_frames, self.boom_frames]
         name_list = [idle_name, sleep_name, boom_name]
@@ -1602,11 +1602,11 @@ class Hole(Plant):
         self.roof2_frames = []
 
         idle_name = name
-        idle2_name = name + 'Shallow'
-        water_name = name + 'Water'
-        water2_name = name + 'WaterShallow'
-        roof_name = name + 'Roof'
-        roof2_name = name + 'RoofShallow'
+        idle2_name = name + "Shallow"
+        water_name = name + "Water"
+        water2_name = name + "WaterShallow"
+        roof_name = name + "Roof"
+        roof2_name = name + "RoofShallow"
 
         frame_list = [  self.idle_frames, self.idle2_frames,
                         self.water_frames, self.water2_frames,
@@ -1698,8 +1698,8 @@ class FumeShroom(Plant):
         self.attack_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
-        attack_name = name + 'Attack'
+        sleep_name = name + "Sleep"
+        attack_name = name + "Attack"
 
         frame_list = [self.idle_frames, self.sleep_frames, self.attack_frames]
         name_list = [idle_name, sleep_name, attack_name]
@@ -1785,8 +1785,8 @@ class Garlic(Plant):
         self.cracked1_frames = []
         self.cracked2_frames = []
 
-        cracked1_frames_name = self.name + '_cracked1'
-        cracked2_frames_name = self.name + '_cracked2'
+        cracked1_frames_name = self.name + "_cracked1"
+        cracked2_frames_name = self.name + "_cracked2"
 
         self.loadFrames(self.cracked1_frames, cracked1_frames_name)
         self.loadFrames(self.cracked2_frames, cracked2_frames_name)
@@ -1811,8 +1811,8 @@ class PumpkinHead(Plant):
         self.cracked1_frames = []
         self.cracked2_frames = []
 
-        cracked1_frames_name = self.name + '_cracked1'
-        cracked2_frames_name = self.name + '_cracked2'
+        cracked1_frames_name = self.name + "_cracked1"
+        cracked2_frames_name = self.name + "_cracked2"
 
         self.loadFrames(self.cracked1_frames, cracked1_frames_name)
         self.loadFrames(self.cracked2_frames, cracked2_frames_name)

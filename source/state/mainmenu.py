@@ -48,7 +48,7 @@ class Menu(tool.State):
     def setupOptions(self):
         # 冒险模式
         self.adventure_frames = []
-        frame_names = (f'{c.OPTION_ADVENTURE}_0', f'{c.OPTION_ADVENTURE}_1')
+        frame_names = (f"{c.OPTION_ADVENTURE}_0", f"{c.OPTION_ADVENTURE}_1")
         frame_rect = (0, 0, 330, 144)
         for name in frame_names:
             self.adventure_frames.append(tool.get_image_menu(tool.GFX[name], *frame_rect, c.BLACK, 1))
@@ -60,7 +60,7 @@ class Menu(tool.State):
         
         # 退出按钮
         self.exit_frames = []
-        exit_frame_names = (f'{c.EXIT}_0', f'{c.EXIT}_1')
+        exit_frame_names = (f"{c.EXIT}_0", f"{c.EXIT}_1")
         exit_frame_rect = (0, 0, 47, 27)
         for name in exit_frame_names:
             self.exit_frames.append(tool.get_image_menu(tool.GFX[name], *exit_frame_rect, c.BLACK, 1.1))
@@ -72,7 +72,7 @@ class Menu(tool.State):
 
         # 选项按钮
         self.option_button_frames = []
-        option_button_frame_names = (f'{c.OPTION_BUTTON}_0', f'{c.OPTION_BUTTON}_1')
+        option_button_frame_names = (f"{c.OPTION_BUTTON}_0", f"{c.OPTION_BUTTON}_1")
         option_button_frame_rect = (0, 0, 81, 31)
         for name in option_button_frame_names:
             self.option_button_frames.append(tool.get_image_menu(tool.GFX[name], *option_button_frame_rect, c.BLACK))
@@ -84,7 +84,7 @@ class Menu(tool.State):
 
         # 小游戏
         self.littleGame_frames = []
-        littleGame_frame_names = (c.LITTLEGAME_BUTTON + '_0', c.LITTLEGAME_BUTTON + '_1')
+        littleGame_frame_names = (c.LITTLEGAME_BUTTON + "_0", c.LITTLEGAME_BUTTON + "_1")
         littleGame_frame_rect = (0, 7, 317, 135)
         for name in littleGame_frame_names:
             self.littleGame_frames.append(tool.get_image_menu(tool.GFX[name], *littleGame_frame_rect, c.BLACK, 1))

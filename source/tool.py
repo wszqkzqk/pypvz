@@ -157,7 +157,7 @@ def get_image_menu(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
 def load_image_frames(directory, image_name, colorkey, accept):
     frame_list = []
     tmp = {}
-    # image_name is "Peashooter", pic name is 'Peashooter_1', get the index 1
+    # image_name is "Peashooter", pic name is "Peashooter_1", get the index 1
     index_start = len(image_name) + 1 
     frame_num = 0
     for pic in os.listdir(directory):
@@ -178,7 +178,7 @@ def load_image_frames(directory, image_name, colorkey, accept):
     return frame_list
 
 # colorkeys 是设置图像中的某个颜色值为透明,这里用来消除白边
-def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.gif', 'webp')):
+def load_all_gfx(directory, colorkey=c.WHITE, accept=(".png", ".jpg", ".bmp", ".gif", "webp")):
     graphics = {}
     for name1 in os.listdir(directory):
         # subfolders under the folder resources\graphics
@@ -192,7 +192,7 @@ def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.
                         dir3 = os.path.join(dir2, name3)
                         # e.g. subfolders or pics under the folder resources\graphics\Zombies\ConeheadZombie
                         if os.path.isdir(dir3):
-                            # e.g. it's the folder resources\graphics\Zombies\ConeheadZombie\ConeheadZombieAttack
+                            # e.g. it"s the folder resources\graphics\Zombies\ConeheadZombie\ConeheadZombieAttack
                             image_name, _ = os.path.splitext(name3)
                             graphics[image_name] = load_image_frames(dir3, image_name, colorkey, accept)
                         else:

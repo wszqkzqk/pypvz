@@ -64,25 +64,25 @@ class Level(tool.State):
 
         # 同时指定音乐
         # 缺省音乐为进入的音乐，方便发现错误
-        self.bgm = 'intro.opus'
+        self.bgm = "intro.opus"
         if c.CHOOSEBAR_TYPE in self.map_data:  # 指定了choosebar_type的传送带关
             if self.map_data[c.CHOOSEBAR_TYPE] == c.CHOOSEBAR_BOWLING:   # 坚果保龄球
-                self.bgm = 'bowling.opus'
+                self.bgm = "bowling.opus"
             elif self.map_data[c.CHOOSEBAR_TYPE] == c.CHOOSEBAR_MOVE:  # 传送带
-                self.bgm = 'battle.opus'
+                self.bgm = "battle.opus"
         else:   # 一般选卡关，非传送带
             # 白天类
             if self.map_data[c.BACKGROUND_TYPE] in c.BACKGROUND_DAY_LIKE_BACKGROUNDS:
-                self.bgm = 'dayLevel.opus'
+                self.bgm = "dayLevel.opus"
             # 夜晚
             elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_NIGHT:
-                self.bgm = 'nightLevel.opus'
+                self.bgm = "nightLevel.opus"
             # 泳池
             elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_POOL:
-                self.bgm = 'poolLevel.opus'
+                self.bgm = "poolLevel.opus"
             # 浓雾
             elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_FOG:
-                self.bgm = 'fogLevel.opus'
+                self.bgm = "fogLevel.opus"
 
     def setupBackground(self):
         img_index = self.map_data[c.BACKGROUND_TYPE]
@@ -143,7 +143,7 @@ class Level(tool.State):
                     zombieList.append(newZombie)
                     volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
                 if volume < 0:
-                    logger.warning(f'第{wave}波中手动设置的僵尸级别总数超过上限！')
+                    logger.warning(f"第{wave}波中手动设置的僵尸级别总数超过上限！")
 
             # 防止因为僵尸最小等级过大，使得总容量无法完全利用，造成死循环的检查机制
             minCost = c.CREATE_ZOMBIE_DICT[min(useableZombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
@@ -312,7 +312,7 @@ class Level(tool.State):
 
         self.zombie_list = []
         for data in self.map_data[c.ZOMBIE_LIST]:
-            self.zombie_list.append((data['time'], data['name'], data['map_y']))
+            self.zombie_list.append((data["time"], data["name"], data["map_y"]))
         self.zombie_start_time = 0
         self.zombie_list.sort(key=takeTime)
 
@@ -659,8 +659,8 @@ class Level(tool.State):
                     if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
                         if i.name == c.LILYPAD:
                             continue
-                    elif '花盆（未实现）' in self.map.map[map_y][map_x][c.MAP_PLANT]:
-                        if i.name == '花盆（未实现）':
+                    elif "花盆（未实现）" in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                        if i.name == "花盆（未实现）":
                             continue
                 self.killPlant(i, shovel=True)
                 # 使用后默认铲子复原
@@ -799,7 +799,7 @@ class Level(tool.State):
             if self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS:
                 if name in c.WATER_ZOMBIE:
                     map_y = random.randint(2, 3)
-                elif name == '这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）':
+                elif name == "这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）":
                     map_y = random.randint(0, 5)
                 else:   # 陆生僵尸
                     map_y = random.randint(0, 3)
@@ -980,7 +980,7 @@ class Level(tool.State):
             self.hint_image = image
             self.hint_rect = image.get_rect()
             # 花盆、睡莲图片应当下移一些
-            if self.plant_name in {c.LILYPAD, '花盆（未实现）', c.TANGLEKLEP}:
+            if self.plant_name in {c.LILYPAD, "花盆（未实现）", c.TANGLEKLEP}:
                 self.hint_rect.centerx = pos[0]
                 self.hint_rect.bottom = pos[1] + 25
             else:
@@ -994,7 +994,7 @@ class Level(tool.State):
         frame_list = tool.GFX[plant_name]
         if plant_name in c.PLANT_RECT:
             data = c.PLANT_RECT[plant_name]
-            x, y, width, height = data['x'], data['y'], data['width'], data['height']
+            x, y, width, height = data["x"], data["y"], data["width"], data["height"]
         else:
             x, y = 0, 0
             rect = frame_list[0].get_rect()
@@ -1482,8 +1482,8 @@ class Level(tool.State):
                     if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
                         if i.name == c.LILYPAD:
                             continue
-                    elif '花盆（未实现）' in self.map.map[map_y][map_x][c.MAP_PLANT]:
-                        if i.name == '花盆（未实现）':
+                    elif "花盆（未实现）" in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                        if i.name == "花盆（未实现）":
                             continue
                 i.highlightTime = self.current_time
                 return
