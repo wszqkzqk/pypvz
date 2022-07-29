@@ -2,9 +2,11 @@ import os
 import json
 import pygame as pg
 import random
+import logging
 from .. import tool
 from .. import constants as c
 from ..component import map, plant, zombie, menubar
+logger = logging.getLogger("main")
 
 class Level(tool.State):
     def __init__(self):
@@ -42,19 +44,19 @@ class Level(tool.State):
     def loadMap(self):
         # 冒险模式
         if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
-            if self.game_info[c.LEVEL_NUM] < map.TOTAL_LEVEL:
+            if 0 <= self.game_info[c.LEVEL_NUM] < map.TOTAL_LEVEL:
                 self.map_data = map.LEVEL_MAP_DATA[self.game_info[c.LEVEL_NUM]]
             else:
                 print("成功通关冒险模式！")
                 self.game_info[c.LEVEL_NUM] = 1
                 self.game_info[c.LEVEL_COMPLETIONS] += 1
                 self.done = True
-                self.next = c.MAIN_MENU
+                self.next = c.LEVEL
                 self.saveUserData()
                 return
         # 小游戏模式
         elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-            if self.game_info[c.LITTLEGAME_NUM] < map.TOTAL_LITTLE_GAME:
+            if 0 <= self.game_info[c.LITTLEGAME_NUM] < map.TOTAL_LITTLE_GAME:
                 self.map_data = map.LITTLE_GAME_MAP_DATA[self.game_info[c.LITTLEGAME_NUM]]
             else:
                 print("成功通关玩玩小游戏！")
@@ -150,7 +152,7 @@ class Level(tool.State):
                     zombieList.append(newZombie)
                     volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
                 if volume < 0:
-                    print(f'警告：第{wave}波中手动设置的僵尸级别总数超过上限！')
+                    logger.warning(f'警告：第{wave}波中手动设置的僵尸级别总数超过上限！')
 
             # 防止因为僵尸最小等级过大，使得总容量无法完全利用，造成死循环的检查机制
             minCost = c.CREATE_ZOMBIE_DICT[min(useableZombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]

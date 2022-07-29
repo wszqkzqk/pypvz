@@ -67,6 +67,7 @@ GOLD         = (255, 215,   0)
 GREEN        = (  0, 255,   0)
 YELLOWGREEN  = ( 55, 200,   0)
 LIGHTGRAY    = (107, 108, 145)
+PARCHMENT_YELLOW = (207, 146, 83)
 
 # 退出游戏按钮
 EXIT = "exit"
@@ -78,6 +79,7 @@ MAINMENU_BUTTON = "mainMenuButton"
 LITTLEGAME_BUTTON = "littleGameButton"
 OPTION_BUTTON = "optionButton"
 SOUND_VOLUME_BUTTON = "volumeButton"
+UNIVERSAL_BUTTON = "universalButton"
 # 金银向日葵奖杯
 TROPHY_SUNFLOWER = "sunflowerTrophy"
 # 小铲子
@@ -103,9 +105,10 @@ SOUND_VOLUME = "volume"
 # 整个游戏的状态
 MAIN_MENU = "main menu"
 LOAD_SCREEN = "load screen"
-GAME_LOSE = "game los"
+GAME_LOSE = "game lose"
 GAME_VICTORY = "game victory"
 LEVEL = "level"
+AWARD_SCREEN = "award screen"
 
 # 界面图片文件名
 MAIN_MENU_IMAGE = "MainMenu"

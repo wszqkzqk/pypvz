@@ -15,7 +15,7 @@ if __name__=="__main__":
     # 日志设置
     if not os.path.exists(os.path.dirname(c.USERLOG_PATH)):
         os.makedirs(os.path.dirname(c.USERLOG_PATH))
-    logger = logging.getLogger()
+    logger = logging.getLogger("main")
     formatter = logging.Formatter("%(asctime)s: %(message)s")
     fileHandler = RotatingFileHandler(c.USERLOG_PATH, "a", 1024*1024, 0, "utf-8")
     fileHandler.setFormatter(formatter)
@@ -30,7 +30,8 @@ if __name__=="__main__":
         state_dict = {  c.MAIN_MENU:    mainmenu.Menu(),
                         c.GAME_VICTORY: screen.GameVictoryScreen(),
                         c.GAME_LOSE:    screen.GameLoseScreen(),
-                        c.LEVEL:        level.Level()
+                        c.LEVEL:        level.Level(),
+                        c.AWARD_SCREEN: screen.AwardScreen(),
                         }
         game.setup_states(state_dict, c.MAIN_MENU)
         game.run()
