@@ -1,3 +1,4 @@
+import os
 import pygame as pg
 from .. import tool
 from .. import constants as c
@@ -48,6 +49,8 @@ class GameVictoryScreen(Screen):
         self.setupImage(name)
         self.next = self.set_next_state()
         pg.display.set_caption("pypvz: 战斗胜利！")
+        # 停止播放原来关卡中的音乐
+        pg.mixer.music.stop()
 
 class GameLoseScreen(Screen):
     def __init__(self):
@@ -68,6 +71,8 @@ class GameLoseScreen(Screen):
         self.setupImage(name, (-15, 0, 800, 600))
         self.next = self.set_next_state()
         pg.display.set_caption("pypvz: 战斗失败！")
+        # 停止播放原来关卡中的音乐
+        pg.mixer.music.stop()
 
 class AwardScreen(tool.State):
     def __init__(self):
@@ -132,14 +137,17 @@ class AwardScreen(tool.State):
         # 显示向日葵奖杯的情况
         if self.show_only_one_option:
             # 绘制向日葵奖杯
-            if self.game_info[c.LITTLEGAME_COMPLETIONS]:
+            if (self.game_info[c.LEVEL_COMPLETIONS] and self.game_info[c.LITTLEGAME_COMPLETIONS]):
                 frame_rect = (157, 0, 157, 269)
                 intro_title = "金向日葵奖杯"
                 intro_content = "您已通过所有关卡，获得此奖励！"
             else:
                 frame_rect = (0, 0, 157, 269)
                 intro_title = "银向日葵奖杯"
-                intro_content = "您已完成冒险模式，获得此奖励！"
+                if self.game_info[c.LEVEL_COMPLETIONS]:
+                    intro_content = "您已完成冒险模式，获得此奖励！"
+                else:
+                    intro_content = "您已完成玩玩小游戏，获得此奖励！"
             sunflower_trophy_image = tool.get_image_menu(tool.GFX[c.TROPHY_SUNFLOWER], *frame_rect, scale=0.7)
             sunflower_trophy_rect = sunflower_trophy_image.get_rect()
             sunflower_trophy_rect.x = 348
@@ -173,6 +181,10 @@ class AwardScreen(tool.State):
             self.show_only_one_option = True
         self.setupImage()
         pg.display.set_caption("pypvz: 您获得了新的战利品！")
+        pg.mixer.music.stop()
+        pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, "zenGarden.opus"))
+        pg.mixer.music.play(-1, 0)
+        pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
 
     def update(self, surface, current_time, mouse_pos, mouse_click):
         surface.fill(c.WHITE)

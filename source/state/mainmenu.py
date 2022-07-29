@@ -209,8 +209,8 @@ class Menu(tool.State):
 
     def setupSunflowerTrophy(self):
         # 设置金银向日葵图片信息
-        if self.game_info[c.LEVEL_COMPLETIONS]:
-            if self.game_info[c.LITTLEGAME_COMPLETIONS]:
+        if (self.game_info[c.LEVEL_COMPLETIONS] or self.game_info[c.LITTLEGAME_COMPLETIONS]):
+            if (self.game_info[c.LEVEL_COMPLETIONS] and self.game_info[c.LITTLEGAME_COMPLETIONS]):
                 frame_rect = (157, 0, 157, 269)
             else:
                 frame_rect = (0, 0, 157, 269)
@@ -225,10 +225,12 @@ class Menu(tool.State):
             self.sunflower_trophy_show_info_time = self.current_time
         if (self.current_time - self.sunflower_trophy_show_info_time) < 80:
             font = pg.font.Font(c.FONT_PATH, 14)
-            if self.game_info[c.LITTLEGAME_COMPLETIONS]:
+            if (self.game_info[c.LEVEL_COMPLETIONS] and self.game_info[c.LITTLEGAME_COMPLETIONS]):
                 infoText = f"目前您一共完成了：冒险模式{self.game_info[c.LEVEL_COMPLETIONS]}轮，玩玩小游戏{self.game_info[c.LITTLEGAME_COMPLETIONS]}轮"
+            elif self.game_info[c.LEVEL_COMPLETIONS]:
+                infoText = f"目前您一共完成了：冒险模式{self.game_info[c.LEVEL_COMPLETIONS]}轮；完成其他所有游戏模式以获得金向日葵奖杯！"
             else:
-                infoText = f"目前您一共完成了：冒险模式{self.game_info[c.LEVEL_COMPLETIONS]}轮；完成其他所有游戏模式以获得金向日葵奖杯！"""
+                infoText = f"目前您一共完成了：玩玩小游戏{self.game_info[c.LITTLEGAME_COMPLETIONS]}轮；完成其他所有游戏模式以获得金向日葵奖杯！"
             infoImg = font.render(infoText , True, c.BLACK, c.LIGHTYELLOW)
             infoImg_rect = infoImg.get_rect()
             infoImg_rect.x = x
@@ -259,7 +261,7 @@ class Menu(tool.State):
         surface.blit(self.exit_image, self.exit_rect)
         surface.blit(self.option_button_image, self.option_button_rect)
         surface.blit(self.littleGame_image, self.littleGame_rect)
-        if self.game_info[c.LEVEL_COMPLETIONS]:
+        if self.game_info[c.LEVEL_COMPLETIONS] or self.game_info[c.LITTLEGAME_COMPLETIONS]:
             surface.blit(self.sunflower_trophy, self.sunflower_trophy_rect)
 
         # 点到冒险模式后播放动画
@@ -306,7 +308,7 @@ class Menu(tool.State):
             # 先检查选项高亮预览
             x, y = pg.mouse.get_pos()
             self.checkHilight(x, y)
-            if self.game_info[c.LEVEL_COMPLETIONS]:
+            if (self.game_info[c.LEVEL_COMPLETIONS] or self.game_info[c.LITTLEGAME_COMPLETIONS]):
                 self.checkSunflowerTrophyInfo(surface, x, y)
             if mouse_pos:
                 self.checkExitClick(mouse_pos)
