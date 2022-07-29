@@ -1421,24 +1421,30 @@ class Level(tool.State):
 
     def checkGameState(self):
         if self.checkVictory():
-            # 播放胜利音效
-            c.SOUND_WIN.play()
             if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
                 self.game_info[c.LEVEL_NUM] += 1
                 if self.game_info[c.LEVEL_NUM] >= map.TOTAL_LEVEL:
                     self.game_info[c.LEVEL_COMPLETIONS] += 1
                     self.game_info[c.LEVEL_NUM] = 1
                     self.next = c.AWARD_SCREEN
+                    # 播放大胜利音效
+                    c.SOUND_FINAL_FANFARE.play()
                 else:
                     self.next = c.GAME_VICTORY
+                    # 播放胜利音效
+                    c.SOUND_WIN.play()
             elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
                 self.game_info[c.LITTLEGAME_NUM] += 1
-                if self.game_info[c.LITTLEGAME_NUM] > map.TOTAL_LITTLE_GAME:
+                if self.game_info[c.LITTLEGAME_NUM] >= map.TOTAL_LITTLE_GAME:
                     self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
                     self.game_info[c.LITTLEGAME_NUM] = 1
                     self.next = c.AWARD_SCREEN
+                    # 播放大胜利音效
+                    c.SOUND_FINAL_FANFARE.play()
                 else:
-                    self.next = c.GAME_VICTORY 
+                    self.next = c.GAME_VICTORY
+                    # 播放胜利音效
+                    c.SOUND_WIN.play()
             self.done = True
             self.saveUserData()
         elif self.checkLose():

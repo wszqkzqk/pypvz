@@ -696,6 +696,7 @@ SOUNDS = (  # 程序交互等
             SOUND_WIN                       := _getSound("win.ogg"),
             SOUND_SCREAM                    := _getSound("scream.ogg"),
             SOUND_CANNOT_CHOOSE_WARNING     := _getSound("cannotChooseWarning.ogg"),
+            SOUND_FINAL_FANFARE             := _getSound("finalfanfare.ogg")
             )
 
 # 记录本地存储文件初始值
