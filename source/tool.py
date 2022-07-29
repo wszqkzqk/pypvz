@@ -130,6 +130,7 @@ class Control():
             self.clock.tick(self.fps)
 
 def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
+        # 不保留alpha通道的图片导入
         image = pg.Surface([width, height])
         rect = image.get_rect()
 
@@ -142,7 +143,7 @@ def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
         return image
 
 def get_image_menu(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
-        # 一定要保留阿尔法通道，修复主菜单bug，游戏中car显示又有bug
+        # 保留alpha通道的图片导入
         image = pg.Surface([width, height], SRCALPHA)
         rect = image.get_rect()
 

@@ -16,7 +16,7 @@ if __name__=="__main__":
     if not os.path.exists(os.path.dirname(c.USERLOG_PATH)):
         os.makedirs(os.path.dirname(c.USERLOG_PATH))
     logger = logging.getLogger("main")
-    formatter = logging.Formatter("%(asctime)s: %(message)s")
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s: %(message)s")
     fileHandler = RotatingFileHandler(c.USERLOG_PATH, "a", 1024*1024, 0, "utf-8")
     fileHandler.setFormatter(formatter)
     streamHandler = logging.StreamHandler()

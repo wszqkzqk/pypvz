@@ -95,6 +95,7 @@ LEVEL_PROGRESS_FLAG = "LevelProgressFlag"
 
 # GAME INFO字典键值
 CURRENT_TIME = "current time"
+PASSED_ALL = "passed all"   # 已完成该模式下的所有游戏，应当显示向日葵奖杯获得界面
 LEVEL_NUM = "level num"
 LITTLEGAME_NUM = "littleGame num"
 LEVEL_COMPLETIONS = "level completions"
