@@ -41,8 +41,8 @@ class Map():
     # 地图单元格状态
     # 注意是可变对象，不能直接引用
     # 由于同一格显然不可能种两个相同的植物，所以用集合
-    def initMapGrid(PLOT_TYPE):
-        return {c.MAP_PLANT:set(), c.MAP_SLEEP:False, c.MAP_PLOT_TYPE:PLOT_TYPE}
+    def initMapGrid(self, plot_type):
+        return {c.MAP_PLANT:set(), c.MAP_SLEEP:False, c.MAP_PLOT_TYPE:plot_type}
 
     # 判断位置是否可用
     # 暂时没有写紫卡植物的判断方法
