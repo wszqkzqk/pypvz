@@ -64,8 +64,8 @@ class Bullet(pg.sprite.Sprite):
 
     def loadFrames(self, frames, name):
         frame_list = tool.GFX[name]
-        if name in tool.PLANT_RECT:
-            data = tool.PLANT_RECT[name]
+        if name in c.PLANT_RECT:
+            data = c.PLANT_RECT[name]
             x, y, width, height = data['x'], data['y'], data['width'], data['height']
         else:
             x, y = 0, 0
@@ -252,8 +252,8 @@ class Plant(pg.sprite.Sprite):
 
     def loadFrames(self, frames, name, scale=1, color=c.BLACK):
         frame_list = tool.GFX[name]
-        if name in tool.PLANT_RECT:
-            data = tool.PLANT_RECT[name]
+        if name in c.PLANT_RECT:
+            data = c.PLANT_RECT[name]
             x, y, width, height = data['x'], data['y'], data['width'], data['height']
         else:
             x, y = 0, 0

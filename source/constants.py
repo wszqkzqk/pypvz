@@ -2,7 +2,7 @@ import os
 import pygame as pg
 
 # 用户数据及日志存储路径
-if os.name == 'nt': # Windows系统存储路径
+if os.name == "nt": # Windows系统存储路径
     USERDATA_PATH = os.path.expandvars(os.path.join("%APPDATA%", "wszqkzqk.dev", "pypvz", "userdata.json"))
     USERLOG_PATH = os.path.expandvars(os.path.join("%APPDATA%", "wszqkzqk.dev", "pypvz", "run.log"))
 else:   # 非Windows系统存储路径
@@ -11,24 +11,18 @@ else:   # 非Windows系统存储路径
 
 # 窗口图标
 ORIGINAL_LOGO = os.path.join(os.path.dirname(os.path.dirname(__file__)), "pypvz-exec-logo.png")
-# 僵尸显示特殊定义文件路径
-JSON_PATH_ZOMBIE = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'zombie.json')
-# 植物显示特殊定义文件路径
-JSON_PATH_PLANTS = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'plant.json')
 # 游戏图片资源路径
 PATH_IMG_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "graphics")
-# 游戏关卡地图文件夹路径
-PATH_MAP_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", 'data', "map")
 # 游戏音乐文件夹路径
 PATH_MUSIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources","music")
 
 # 窗口标题
-ORIGINAL_CAPTION = 'pypvz'
+ORIGINAL_CAPTION = "pypvz"
 
 # 游戏模式
-GAME_MODE = 'mode'
-MODE_ADVENTURE = 'adventure'
-MODE_LITTLEGAME = 'littleGame'
+GAME_MODE = "mode"
+MODE_ADVENTURE = "adventure"
+MODE_LITTLEGAME = "littleGame"
 
 # 窗口大小
 SCREEN_WIDTH = 800
@@ -36,7 +30,7 @@ SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # 字体路径
-FONT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'DroidSansFallback.ttf')
+FONT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "DroidSansFallback.ttf")
 
 # 选卡数量
 # 最大数量
@@ -75,56 +69,56 @@ YELLOWGREEN  = ( 55, 200,   0)
 LIGHTGRAY    = (107, 108, 145)
 
 # 退出游戏按钮
-EXIT = 'exit'
+EXIT = "exit"
 # 游戏界面可选的菜单
-LITTLE_MENU = 'littleMenu'
-BIG_MENU = 'bigMenu'
-RESTART_BUTTON = 'restartButton'
-MAINMENU_BUTTON = 'mainMenuButton'
-LITTLEGAME_BUTTON = 'littleGameButton'
-OPTION_BUTTON = 'optionButton'
-SOUND_VOLUME_BUTTON = 'volumeButton'
+LITTLE_MENU = "littleMenu"
+BIG_MENU = "bigMenu"
+RESTART_BUTTON = "restartButton"
+MAINMENU_BUTTON = "mainMenuButton"
+LITTLEGAME_BUTTON = "littleGameButton"
+OPTION_BUTTON = "optionButton"
+SOUND_VOLUME_BUTTON = "volumeButton"
 # 金银向日葵奖杯
-TROPHY_SUNFLOWER = 'sunflowerTrophy'
+TROPHY_SUNFLOWER = "sunflowerTrophy"
 # 小铲子
-SHOVEL = 'shovel'
-SHOVEL_BOX = 'shovelBox'
+SHOVEL = "shovel"
+SHOVEL_BOX = "shovelBox"
 # 一大波僵尸来袭图片
-HUGE_WAVE_APPROCHING = 'Approching'
+HUGE_WAVE_APPROCHING = "Approching"
 # 关卡进程图片
-LEVEL_PROGRESS_BAR = 'LevelProgressBar'
-LEVEL_PROGRESS_ZOMBIE_HEAD = 'LevelProgressZombieHead'
-LEVEL_PROGRESS_FLAG = 'LevelProgressFlag'
+LEVEL_PROGRESS_BAR = "LevelProgressBar"
+LEVEL_PROGRESS_ZOMBIE_HEAD = "LevelProgressZombieHead"
+LEVEL_PROGRESS_FLAG = "LevelProgressFlag"
 
 
 # GAME INFO字典键值
-CURRENT_TIME = 'current time'
-LEVEL_NUM = 'level num'
-LITTLEGAME_NUM = 'littleGame num'
-LEVEL_COMPLETIONS = 'level completions'
-LITTLEGAME_COMPLETIONS = 'littleGame completions'
-GAME_RATE = 'game rate'
-SOUND_VOLUME = 'volume'
+CURRENT_TIME = "current time"
+LEVEL_NUM = "level num"
+LITTLEGAME_NUM = "littleGame num"
+LEVEL_COMPLETIONS = "level completions"
+LITTLEGAME_COMPLETIONS = "littleGame completions"
+GAME_RATE = "game rate"
+SOUND_VOLUME = "volume"
 
 # 整个游戏的状态
-MAIN_MENU = 'main menu'
-LOAD_SCREEN = 'load screen'
-GAME_LOSE = 'game los'
-GAME_VICTORY = 'game victory'
-LEVEL = 'level'
+MAIN_MENU = "main menu"
+LOAD_SCREEN = "load screen"
+GAME_LOSE = "game los"
+GAME_VICTORY = "game victory"
+LEVEL = "level"
 
 # 界面图片文件名
-MAIN_MENU_IMAGE = 'MainMenu'
-OPTION_ADVENTURE = 'Adventure'
-GAME_LOSE_IMAGE = 'GameLose'
-GAME_VICTORY_IMAGE = 'GameVictory'
-AWARD_SCREEN_IMAGE = 'AwardScreen'
+MAIN_MENU_IMAGE = "MainMenu"
+OPTION_ADVENTURE = "Adventure"
+GAME_LOSE_IMAGE = "GameLose"
+GAME_VICTORY_IMAGE = "GameVictory"
+AWARD_SCREEN_IMAGE = "AwardScreen"
 
 # 地图相关内容
-BACKGROUND_NAME = 'Background'
-BACKGROUND_TYPE = 'background_type'
-INIT_SUN_NAME = 'init_sun_value'
-ZOMBIE_LIST = 'zombie_list'
+BACKGROUND_NAME = "Background"
+BACKGROUND_TYPE = "background_type"
+INIT_SUN_NAME = "init_sun_value"
+ZOMBIE_LIST = "zombie_list"
 
 # 地图类型
 BACKGROUND_DAY = 0
@@ -162,28 +156,28 @@ BACKGROUND_DAY_LIKE_BACKGROUNDS = {
                 }
 
 # 夜晚地图的墓碑数量等级
-GRADE_GRAVES = 'grade_graves'
+GRADE_GRAVES = "grade_graves"
 # 不同墓碑等级对应的信息，列表位置对应的是墓碑等级
 GRAVES_GRADE_INFO = (0, 4, 7, 11)
 
 # 僵尸生成方式
-SPAWN_ZOMBIES = 'spawn_zombies'
-SPAWN_ZOMBIES_AUTO = 'auto'
-SPAWN_ZOMBIES_LIST = 'list'
-INCLUDED_ZOMBIES = 'included_zombies'
-NUM_FLAGS = 'num_flags'
-INEVITABLE_ZOMBIE_DICT = 'inevitable_zombie_list'
-SURVIVAL_ROUNDS = 'survival_rounds'
+SPAWN_ZOMBIES = "spawn_zombies"
+SPAWN_ZOMBIES_AUTO = "auto"
+SPAWN_ZOMBIES_LIST = "list"
+INCLUDED_ZOMBIES = "included_zombies"
+NUM_FLAGS = "num_flags"
+INEVITABLE_ZOMBIE_DICT = "inevitable_zombie_list"
+SURVIVAL_ROUNDS = "survival_rounds"
 
 # 地图单元格属性
-MAP_PLANT = 'plantnames'
-MAP_SLEEP = 'sleep' # 有没有休眠的蘑菇，作是否能种植咖啡豆的判断
-MAP_PLOT_TYPE = 'plotType'
+MAP_PLANT = "plantnames"
+MAP_SLEEP = "sleep" # 有没有休眠的蘑菇，作是否能种植咖啡豆的判断
+MAP_PLOT_TYPE = "plotType"
 # 地图单元格区域类型
-MAP_GRASS = 'grass'
-MAP_WATER = 'water'
-MAP_TILE = 'tile'  # 指屋顶上的瓦片
-MAP_UNAVAILABLE = 'unavailable' # 指完全不能种植物的地方，包括无草皮的荒地和坚果保龄球等红线右侧
+MAP_GRASS = "grass"
+MAP_WATER = "water"
+MAP_TILE = "tile"  # 指屋顶上的瓦片
+MAP_UNAVAILABLE = "unavailable" # 指完全不能种植物的地方，包括无草皮的荒地和坚果保龄球等红线右侧
 # 地图单元格状态
 # 注意是可变对象，不能直接引用
 # 不喜欢用深拷贝，直接改用函数表示，需要时直接调用该函数生成即可
@@ -204,15 +198,15 @@ MAP_ROOF_OFFSET_Y = 105 # 暂时还不清楚数据
 MAP_POOL_FRONT_X = SCREEN_WIDTH - 15
 
 # 植物选择菜单栏、传送带菜单栏等类型设定
-CHOOSEBAR_TYPE = 'choosebar_type'
+CHOOSEBAR_TYPE = "choosebar_type"
 CHOOSEBAR_STATIC = 0
 CHOOSEBAR_MOVE = 1
 CHOOSEBAR_BOWLING = 2
-MENUBAR_BACKGROUND = 'ChooserBackground'
-MOVEBAR_BACKGROUND = 'MoveBackground'
-PANEL_BACKGROUND = 'PanelBackground'
-START_BUTTON = 'StartButton'
-CARD_POOL = 'card_pool'
+MENUBAR_BACKGROUND = "ChooserBackground"
+MOVEBAR_BACKGROUND = "MoveBackground"
+PANEL_BACKGROUND = "PanelBackground"
+START_BUTTON = "StartButton"
+CARD_POOL = "card_pool"
 
 # 关于植物栏的像素设置
 PANEL_Y_START = 87
@@ -232,145 +226,145 @@ MOVEBAR_CARD_FRESH_TIME = 6000
 CARD_MOVE_TIME = 60
 
 # 其他显示物
-CAR = 'car'
-SUN = 'Sun'
+CAR = "car"
+SUN = "Sun"
 
 # plant子类非植物对象
 NON_PLANT_OBJECTS = {
-                HOLE := 'Hole',
-                ICEFROZENPLOT := 'IceFrozenPlot',
-                GRAVE := 'Grave',
+                HOLE := "Hole",
+                ICEFROZENPLOT := "IceFrozenPlot",
+                GRAVE := "Grave",
                 }
 
 # 植物相关信息
-PLANT_IMAGE_RECT = 'plant_image_rect'
-BOOM_IMAGE = 'Boom'
+PLANT_IMAGE_RECT = "plant_image_rect"
+BOOM_IMAGE = "Boom"
 
 # 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
 PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
-            (PEASHOOTER := 'Peashooter',
-                CARD_PEASHOOTER := 'card_peashooter',
+            (PEASHOOTER := "Peashooter",
+                CARD_PEASHOOTER := "card_peashooter",
                 100,
                 7500),
-            (SUNFLOWER := 'SunFlower',
-                CARD_SUNFLOWER := 'card_sunflower',
+            (SUNFLOWER := "SunFlower",
+                CARD_SUNFLOWER := "card_sunflower",
                 50,
                 7500),
-            (CHERRYBOMB := 'CherryBomb',
-                CARD_CHERRYBOMB := 'card_cherrybomb',
+            (CHERRYBOMB := "CherryBomb",
+                CARD_CHERRYBOMB := "card_cherrybomb",
                 150,
                 50000),
-            (WALLNUT := 'WallNut',
-                CARD_WALLNUT := 'card_wallnut',
+            (WALLNUT := "WallNut",
+                CARD_WALLNUT := "card_wallnut",
                 50,
                 30000),
-            (POTATOMINE := 'PotatoMine',
-                CARD_POTATOMINE := 'card_potatomine', 
+            (POTATOMINE := "PotatoMine",
+                CARD_POTATOMINE := "card_potatomine", 
                 25,
                 30000),
-            (SNOWPEASHOOTER := 'SnowPea',
-                CARD_SNOWPEASHOOTER := 'card_snowpea',
+            (SNOWPEASHOOTER := "SnowPea",
+                CARD_SNOWPEASHOOTER := "card_snowpea",
                 175,
                 7500),
-            (CHOMPER := 'Chomper',
-                CARD_CHOMPER := 'card_chomper',
+            (CHOMPER := "Chomper",
+                CARD_CHOMPER := "card_chomper",
                 150,
                 7500),
-            (REPEATERPEA := 'RepeaterPea',
-                CARD_REPEATERPEA := 'card_repeaterpea',
+            (REPEATERPEA := "RepeaterPea",
+                CARD_REPEATERPEA := "card_repeaterpea",
                 200,
                 7500),
-            (PUFFSHROOM := 'PuffShroom',
-                CARD_PUFFSHROOM := 'card_puffshroom',
+            (PUFFSHROOM := "PuffShroom",
+                CARD_PUFFSHROOM := "card_puffshroom",
                 0,
                 7500),
-            (SUNSHROOM := 'SunShroom',
-                CARD_SUNSHROOM := 'card_sunshroom',
+            (SUNSHROOM := "SunShroom",
+                CARD_SUNSHROOM := "card_sunshroom",
                 25,
                 7500),
-            (FUMESHROOM := 'FumeShroom',
-                CARD_FUMESHROOM := 'card_fumeshroom',
+            (FUMESHROOM := "FumeShroom",
+                CARD_FUMESHROOM := "card_fumeshroom",
                 75,
                 7500),
-            (GRAVEBUSTER := 'GraveBuster',
-                CARD_GRAVEBUSTER := 'card_gravebuster',
+            (GRAVEBUSTER := "GraveBuster",
+                CARD_GRAVEBUSTER := "card_gravebuster",
                 75,
                 7500),
-            (HYPNOSHROOM := 'HypnoShroom',
-                CARD_HYPNOSHROOM := 'card_hypnoshroom',
+            (HYPNOSHROOM := "HypnoShroom",
+                CARD_HYPNOSHROOM := "card_hypnoshroom",
                 75,
                 30000),
-            (SCAREDYSHROOM := 'ScaredyShroom',
-                CARD_SCAREDYSHROOM := 'card_scaredyshroom',
+            (SCAREDYSHROOM := "ScaredyShroom",
+                CARD_SCAREDYSHROOM := "card_scaredyshroom",
                 25,
                 7500),
-            (ICESHROOM := 'IceShroom',
-                CARD_ICESHROOM := 'card_iceshroom',
+            (ICESHROOM := "IceShroom",
+                CARD_ICESHROOM := "card_iceshroom",
                 75,
                 50000),
-            (DOOMSHROOM := 'DoomShroom',
-                CARD_DOOMSHROOM := 'card_doomshroom',
+            (DOOMSHROOM := "DoomShroom",
+                CARD_DOOMSHROOM := "card_doomshroom",
                 75,
                 50000),
-            (LILYPAD := 'LilyPad',
-                CARD_LILYPAD := 'card_lilypad',
+            (LILYPAD := "LilyPad",
+                CARD_LILYPAD := "card_lilypad",
                 25,
                 7500),
-            (SQUASH := 'Squash',
-                CARD_SQUASH := 'card_squash',
+            (SQUASH := "Squash",
+                CARD_SQUASH := "card_squash",
                 50,
                 30000),
-            (TANGLEKLEP := 'TangleKlep',
-                CARD_TANGLEKLEP := 'card_tangleklep',
+            (TANGLEKLEP := "TangleKlep",
+                CARD_TANGLEKLEP := "card_tangleklep",
                 25,
                 30000),
-            (THREEPEASHOOTER := 'Threepeater',
-                CARD_THREEPEASHOOTER := 'card_threepeashooter',
+            (THREEPEASHOOTER := "Threepeater",
+                CARD_THREEPEASHOOTER := "card_threepeashooter",
                 325,
                 7500),
-            (JALAPENO := 'Jalapeno',
-                CARD_JALAPENO := 'card_jalapeno',
+            (JALAPENO := "Jalapeno",
+                CARD_JALAPENO := "card_jalapeno",
                 125,
                 50000),
-            (SPIKEWEED := 'Spikeweed',
-                CARD_SPIKEWEED := 'card_spikeweed',
+            (SPIKEWEED := "Spikeweed",
+                CARD_SPIKEWEED := "card_spikeweed",
                 100,
                 7500),
-            (TORCHWOOD := 'TorchWood',
-                CARD_TORCHWOOD := 'card_torchwood',
+            (TORCHWOOD := "TorchWood",
+                CARD_TORCHWOOD := "card_torchwood",
                 175,
                 7500),
-            (TALLNUT := 'TallNut',
-                CARD_TALLNUT := 'card_tallnut',
+            (TALLNUT := "TallNut",
+                CARD_TALLNUT := "card_tallnut",
                 125,
                 30000),
-            (SEASHROOM := 'SeaShroom',
-                CARD_SEASHROOM := 'card_seashroom',
+            (SEASHROOM := "SeaShroom",
+                CARD_SEASHROOM := "card_seashroom",
                 0,
                 30000),
-            (STARFRUIT := 'StarFruit',
-                CARD_STARFRUIT := 'card_starfruit',
+            (STARFRUIT := "StarFruit",
+                CARD_STARFRUIT := "card_starfruit",
                 125,
                 7500),
-            (PUMPKINHEAD := 'PumpkinHead',
-                CARD_PUMPKINHEAD := 'card_pumpkinhead',
+            (PUMPKINHEAD := "PumpkinHead",
+                CARD_PUMPKINHEAD := "card_pumpkinhead",
                 125,
                 30000),
-            (COFFEEBEAN := 'CoffeeBean',
-                CARD_COFFEEBEAN := 'card_coffeebean',
+            (COFFEEBEAN := "CoffeeBean",
+                CARD_COFFEEBEAN := "card_coffeebean",
                 75,
                 7500),
-            (GARLIC := 'Garlic',
-                CARD_GARLIC := 'card_garlic',
+            (GARLIC := "Garlic",
+                CARD_GARLIC := "card_garlic",
                 50,
                 7500),
             # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
-            (WALLNUTBOWLING := 'WallNutBowling',
-                CARD_WALLNUT := 'card_wallnut',
+            (WALLNUTBOWLING := "WallNutBowling",
+                CARD_WALLNUT := "card_wallnut",
                 0,
                 0),
-            (REDWALLNUTBOWLING := 'RedWallNutBowling',
-                CARD_REDWALLNUT := 'card_redwallnut',
+            (REDWALLNUTBOWLING := "RedWallNutBowling",
+                CARD_REDWALLNUT := "card_redwallnut",
                 0,
                 0),
             )
@@ -468,61 +462,61 @@ SUN_VALUE = 25
 # 僵尸冷冻
 ICE_SLOW_TIME = 10000
 MIN_FREEZE_TIME = 4000
-ICETRAP = 'IceTrap'
+ICETRAP = "IceTrap"
 
 # 子弹信息
 # 子弹类型
-BULLET_PEA = 'PeaNormal'
-BULLET_PEA_ICE = 'PeaIce'
-BULLET_FIREBALL = 'Fireball'
-BULLET_MUSHROOM = 'BulletMushRoom'
-BULLET_SEASHROOM = 'BulletSeaShroom'
-FUME = 'Fume'
+BULLET_PEA = "PeaNormal"
+BULLET_PEA_ICE = "PeaIce"
+BULLET_FIREBALL = "Fireball"
+BULLET_MUSHROOM = "BulletMushRoom"
+BULLET_SEASHROOM = "BulletSeaShroom"
+FUME = "Fume"
 # 子弹伤害
 BULLET_DAMAGE_NORMAL = 20
 BULLET_DAMAGE_FIREBALL_BODY = 27 # 这是火球本体的伤害，注意不是40，本体(27) + 溅射(13)才是40
 BULLET_DAMAGE_FIREBALL_RANGE = 13
 # 子弹效果
-BULLET_EFFECT_ICE = 'ice'
-BULLET_EFFECT_UNICE = 'unice'
+BULLET_EFFECT_ICE = "ice"
+BULLET_EFFECT_UNICE = "unice"
 
 # 特殊子弹
 # 杨桃子弹
 # 子弹名称
-BULLET_STAR = 'StarBullet'
+BULLET_STAR = "StarBullet"
 # 子弹方向
-STAR_FORWARD_UP = 'forwardUp'   # 向前上方
-STAR_FORWARD_DOWN = 'forwardDown'   #向前下方
-STAR_BACKWARD = 'backward'  #向后
-STAR_UPWARD = 'upward'  # 向上
-STAR_DOWNWARD = 'downward'  # 向下
+STAR_FORWARD_UP = "forwardUp"   # 向前上方
+STAR_FORWARD_DOWN = "forwardDown"   #向前下方
+STAR_BACKWARD = "backward"  #向后
+STAR_UPWARD = "upward"  # 向上
+STAR_DOWNWARD = "downward"  # 向下
 
 # 僵尸信息
-ZOMBIE_IMAGE_RECT = 'zombie_image_rect'
-ZOMBIE_HEAD = 'ZombieHead'
-NORMAL_ZOMBIE = 'Zombie'
-CONEHEAD_ZOMBIE = 'ConeheadZombie'
-BUCKETHEAD_ZOMBIE = 'BucketheadZombie'
-FLAG_ZOMBIE = 'FlagZombie'
-NEWSPAPER_ZOMBIE = 'NewspaperZombie'
-FOOTBALL_ZOMBIE = 'FootballZombie'
-DUCKY_TUBE_ZOMBIE = 'DuckyTubeZombie'
-CONEHEAD_DUCKY_TUBE_ZOMBIE = 'ConeheadDuckyTubeZombie'
-BUCKETHEAD_DUCKY_TUBE_ZOMBIE = 'BucketheadDuckyTubeZombie'
-SCREEN_DOOR_ZOMBIE = 'ScreenDoorZombie'
-POLE_VAULTING_ZOMBIE = 'PoleVaultingZombie'
-ZOMBONI = 'Zomboni'
-SNORKELZOMBIE = 'SnorkelZombie'
+ZOMBIE_IMAGE_RECT = "zombie_image_rect"
+ZOMBIE_HEAD = "ZombieHead"
+NORMAL_ZOMBIE = "Zombie"
+CONEHEAD_ZOMBIE = "ConeheadZombie"
+BUCKETHEAD_ZOMBIE = "BucketheadZombie"
+FLAG_ZOMBIE = "FlagZombie"
+NEWSPAPER_ZOMBIE = "NewspaperZombie"
+FOOTBALL_ZOMBIE = "FootballZombie"
+DUCKY_TUBE_ZOMBIE = "DuckyTubeZombie"
+CONEHEAD_DUCKY_TUBE_ZOMBIE = "ConeheadDuckyTubeZombie"
+BUCKETHEAD_DUCKY_TUBE_ZOMBIE = "BucketheadDuckyTubeZombie"
+SCREEN_DOOR_ZOMBIE = "ScreenDoorZombie"
+POLE_VAULTING_ZOMBIE = "PoleVaultingZombie"
+ZOMBONI = "Zomboni"
+SNORKELZOMBIE = "SnorkelZombie"
 
-BOOMDIE = 'BoomDie'
+BOOMDIE = "BoomDie"
 
 # 对僵尸的攻击类型设置
-ZOMBIE_DEAFULT_DAMAGE = 'helmet2First'
-ZOMBIE_HELMET_2_FIRST = 'helmet2First'  # 优先攻击二类防具
-ZOMBIE_COMMON_DAMAGE = 'commonDamage'   # 优先攻击僵尸与一类防具的整体
-ZOMBIE_RANGE_DAMAGE = 'rangeDamage' # 范围攻击，同时伤害二类防具与(僵尸与一类防具的整体)
-ZOMBIE_ASH_DAMAGE = 'ashDamage' # 灰烬植物攻击，直接伤害本体
-ZOMBIE_WALLNUT_BOWLING_DANMAGE = 'wallnutBowlingDamage' # 坚果保龄球冲撞伤害
+ZOMBIE_DEAFULT_DAMAGE = "helmet2First"
+ZOMBIE_HELMET_2_FIRST = "helmet2First"  # 优先攻击二类防具
+ZOMBIE_COMMON_DAMAGE = "commonDamage"   # 优先攻击僵尸与一类防具的整体
+ZOMBIE_RANGE_DAMAGE = "rangeDamage" # 范围攻击，同时伤害二类防具与(僵尸与一类防具的整体)
+ZOMBIE_ASH_DAMAGE = "ashDamage" # 灰烬植物攻击，直接伤害本体
+ZOMBIE_WALLNUT_BOWLING_DANMAGE = "wallnutBowlingDamage" # 坚果保龄球冲撞伤害
 
 # 僵尸生命值设置
 # 有关本体
@@ -585,21 +579,68 @@ WATER_ZOMBIE = {
 
 
 # 状态类型
-IDLE = 'idle'
-FLY = 'fly'
-EXPLODE = 'explode'
-ATTACK = 'attack'
-ATTACKED = 'attacked'
-DIGEST = 'digest'
-WALK = 'walk'
-DIE = 'die'
-CRY = 'cry'
-FREEZE = 'freeze'
-SLEEP = 'sleep'
+IDLE = "idle"
+FLY = "fly"
+EXPLODE = "explode"
+ATTACK = "attack"
+ATTACKED = "attacked"
+DIGEST = "digest"
+WALK = "walk"
+DIE = "die"
+CRY = "cry"
+FREEZE = "freeze"
+SLEEP = "sleep"
 
 # 关卡状态
-CHOOSE = 'choose'
-PLAY = 'play'
+CHOOSE = "choose"
+PLAY = "play"
+
+# 加载矩形碰撞范围 用于消除文件边框影响
+# 植物
+PLANT_RECT = {
+        BULLET_PEA:             {"x":28, "y":0, "width":28, "height":34},
+        BULLET_PEA_ICE:         {"x":26, "y":0, "width":30, "height":34},
+        CHOMPER:                {"x":0, "y":0, "width":100, "height":114},
+        PUFFSHROOM:             {"x":0, "y":28, "width":35, "height":38},
+        f"{PUFFSHROOM}Sleep":   {"x":1, "y":0, "width":39, "height":65},
+        BULLET_MUSHROOM:        {"x":0, "y":1, "width":55, "height":21},
+        BULLET_SEASHROOM:       {"x":0, "y":1, "width":55, "height":21},
+        POTATOMINE:             {"x":0, "y":0, "width":75, "height":55},
+        SQUASH:                 {"x":10, "y":140, "width":80, "height":86},
+        f"{SQUASH}Aim":         {"x":10, "y":140, "width":80, "height":86},
+        SPIKEWEED:              {"x":3, "y":0, "width":80, "height":35}
+}
+# 僵尸
+ZOMBIE_RECT = {
+        NORMAL_ZOMBIE:                  {"x":62, "width":90},
+        f"{NORMAL_ZOMBIE}Attack":       {"x":62, "width":90},
+        f"{NORMAL_ZOMBIE}LostHead":     {"x":62, "width":90},
+        f"{NORMAL_ZOMBIE}LostHeadAttack":{"x":62, "width":90},
+        f"{NORMAL_ZOMBIE}Die":          {"x":0, "width":164},
+        BOOMDIE:                        {"x":68, "width":80},
+        CONEHEAD_ZOMBIE:                {"x":80, "width":80},
+        f"{CONEHEAD_ZOMBIE}Attack":     {"x":79, "width":87},
+        BUCKETHEAD_ZOMBIE:              {"x":54, "width":90},
+        f"{BUCKETHEAD_ZOMBIE}Attack":   {"x":46, "width":90},
+        FLAG_ZOMBIE:                    {"x":56, "width":110},
+        f"{FLAG_ZOMBIE}Attack":         {"x":60, "width":100},
+        f"{FLAG_ZOMBIE}LostHead":       {"x":55, "width":110},
+        f"{FLAG_ZOMBIE}LostHeadAttack": {"x":55, "width":110},
+        NEWSPAPER_ZOMBIE:               {"x":48, "width":92},
+        f"{NEWSPAPER_ZOMBIE}Attack":    {"x":48, "width":92},
+        f"{NEWSPAPER_ZOMBIE}NoPaper":   {"x":40, "width":98},
+        f"{NEWSPAPER_ZOMBIE}NoPaperAttack":{"x":48, "width":92},
+        f"{NEWSPAPER_ZOMBIE}LostHead":  {"x":44, "width":96},
+        f"{NEWSPAPER_ZOMBIE}LostHeadAttack":{"x":48, "width":92},
+        f"{NEWSPAPER_ZOMBIE}Die":       {"x":0, "width":100},
+        f"{DUCKY_TUBE_ZOMBIE}Die":      {"x":55, "width":105},
+        f"{DUCKY_TUBE_ZOMBIE}LostHead": {"x":55, "width":105},
+        SCREEN_DOOR_ZOMBIE:             {"x":41, "width":100},
+        f"{SCREEN_DOOR_ZOMBIE}Attack":  {"x":41, "width":100},
+}   # 这里还有懒得写代码的补加，用循环实现
+for _part1 in (DUCKY_TUBE_ZOMBIE, CONEHEAD_DUCKY_TUBE_ZOMBIE, BUCKETHEAD_DUCKY_TUBE_ZOMBIE):
+    for _part2 in ("", "Attack", "Swim"):
+        ZOMBIE_RECT[f"{_part1}{_part2}"] = {"x":55, "width":105}
 
 # 音效
 def _getSound(filename):

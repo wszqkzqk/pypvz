@@ -1002,8 +1002,8 @@ class Level(tool.State):
 
     def setupMouseImage(self, plant_name, select_plant, colorkey=c.BLACK):
         frame_list = tool.GFX[plant_name]
-        if plant_name in tool.PLANT_RECT:
-            data = tool.PLANT_RECT[plant_name]
+        if plant_name in c.PLANT_RECT:
+            data = c.PLANT_RECT[plant_name]
             x, y, width, height = data['x'], data['y'], data['width'], data['height']
         else:
             x, y = 0, 0

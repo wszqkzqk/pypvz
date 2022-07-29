@@ -212,18 +212,6 @@ def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.
                         graphics[name] = img
     return graphics
 
-# 从文件加载矩形碰撞范围
-# 用于消除文件边框影响
-def loadZombieImageRect():
-    with open(c.JSON_PATH_ZOMBIE) as f:
-        data = json.load(f)
-    return data[c.ZOMBIE_IMAGE_RECT]
-
-def loadPlantImageRect():
-    with open(c.JSON_PATH_PLANTS) as f:
-        data = json.load(f)
-    return data[c.PLANT_IMAGE_RECT]
-
 pg.display.set_caption(c.ORIGINAL_CAPTION)  # 设置标题
 SCREEN = pg.display.set_mode(c.SCREEN_SIZE) # 设置初始屏幕
 pg.mixer.set_num_channels(255)  # 设置可以同时播放的音频数量，默认为8，经常不够用
@@ -231,5 +219,3 @@ if os.path.exists(c.ORIGINAL_LOGO):    # 设置窗口图标，仅对非Nuitka时
     pg.display.set_icon(pg.image.load(c.ORIGINAL_LOGO))
 
 GFX = load_all_gfx(c.PATH_IMG_DIR)
-ZOMBIE_RECT = loadZombieImageRect()
-PLANT_RECT = loadPlantImageRect()
