@@ -84,7 +84,7 @@ class AwardScreen(tool.State):
         # 文字
         # 标题处文字
         font = pg.font.Font(c.FONT_PATH, 37)
-        title_text = font.render("您得到了新的战利品！", True, c.PARCHMENT_YELLOW)
+        title_text = font.render("您获得了新的战利品！", True, c.PARCHMENT_YELLOW)
         title_text_rect = title_text.get_rect()
         title_text_rect.x = 220
         title_text_rect.y = 23
@@ -131,15 +131,37 @@ class AwardScreen(tool.State):
 
         # 显示向日葵奖杯的情况
         if self.show_only_one_option:
+            # 绘制向日葵奖杯
             if self.game_info[c.LITTLEGAME_COMPLETIONS]:
                 frame_rect = (157, 0, 157, 269)
+                intro_title = "金向日葵奖杯"
+                intro_content = "您已通关所有关卡，获得此奖励！"
             else:
                 frame_rect = (0, 0, 157, 269)
+                intro_title = "银向日葵奖杯"
+                intro_content = "您已完成冒险模式，获得此奖励！"
             sunflower_trophy_image = tool.get_image_menu(tool.GFX[c.TROPHY_SUNFLOWER], *frame_rect, scale=0.7)
             sunflower_trophy_rect = sunflower_trophy_image.get_rect()
             sunflower_trophy_rect.x = 348
-            sunflower_trophy_rect.y = 110
+            sunflower_trophy_rect.y = 108
             self.image.blit(sunflower_trophy_image, sunflower_trophy_rect)
+
+            # 绘制介绍标题
+            font = pg.font.Font(c.FONT_PATH, 22)
+            intro_title_img = font.render(intro_title, True, c.PARCHMENT_YELLOW)
+            intro_title_rect = intro_title_img.get_rect()
+            intro_title_rect.x = 333
+            intro_title_rect.y = 305
+            self.image.blit(intro_title_img, intro_title_rect)
+
+            # 绘制介绍内容
+            font = pg.font.Font(c.FONT_PATH, 15)
+            intro_content_img = font.render(intro_content, True, c.NAVYBLUE)
+            intro_content_rect = intro_content_img.get_rect()
+            intro_content_rect.x = 290
+            intro_content_rect.y = 370
+            self.image.blit(intro_content_img, intro_content_rect)
+
 
     def startup(self, current_time, persist):
         self.start_time = current_time
