@@ -10,9 +10,9 @@ class Screen(tool.State):
     def startup(self, current_time, persist):
         pass
 
-    def setupImage(self, name, frame_rect=(0, 0, 800, 600)):
+    def setupImage(self, name, frame_rect=(0, 0, 800, 600), color_key=c.BLACK):
         # 背景图本身
-        self.image = tool.get_image(tool.GFX[name], *frame_rect)
+        self.image = tool.get_image(tool.GFX[name], *frame_rect, colorkey=color_key)
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = 0
@@ -86,7 +86,7 @@ class GameLoseScreen(Screen):
         self.start_time = current_time
         self.persist = persist
         self.game_info = persist
-        self.setupImage(self.image_name, (-15, 0, 800, 600))
+        self.setupImage(self.image_name, (-118, -40, 800, 600), c.WHITE)
         pg.display.set_caption("pypvz: 战斗失败！")
         # 停止播放原来关卡中的音乐
         pg.mixer.music.stop()
