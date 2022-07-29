@@ -72,8 +72,10 @@ class GameVictoryScreen(Screen):
         self.game_info = persist
         self.setupImage(self.image_name)
         pg.display.set_caption("pypvz: 战斗胜利！")
-        # 停止播放原来关卡中的音乐
         pg.mixer.music.stop()
+        pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, "zenGarden.opus"))
+        pg.mixer.music.play(-1, 0)
+        pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
 
 class GameLoseScreen(Screen):
     def __init__(self):
