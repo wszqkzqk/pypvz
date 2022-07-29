@@ -1,6 +1,5 @@
 import os
 import json
-import sys
 from abc import abstractmethod
 import pygame as pg
 from pygame.locals import *
@@ -18,7 +17,8 @@ class State():
     # 当从其他状态进入这个状态时，需要进行的初始化操作
     @abstractmethod
     def startup(self, current_time, persist):
-        '''abstract method'''
+        # abstract method
+        pass
     # 当从这个状态退出时，需要进行的清除操作
     def cleanup(self):
         self.done = False
@@ -26,7 +26,26 @@ class State():
     # 在这个状态运行时进行的更新操作
     @abstractmethod
     def update(self, surface, keys, current_time):
-        '''abstract method'''
+        # abstract method
+        pass
+
+    # 工具：范围判断函数，用于判断点击
+    def inArea(self, rect, x, y):
+        if (x >= rect.x and x <= rect.right and
+            y >= rect.y and y <= rect.bottom):
+            return True
+        else:
+            return False
+
+    # 工具：用户数据保存函数
+    def saveUserData(self):
+        with open(c.USERDATA_PATH, "w") as f:
+            userdata = {}
+            for i in self.game_info:
+                if i in c.INIT_USERDATA:
+                    userdata[i] = self.game_info[i]
+            data_to_save = json.dumps(userdata, sort_keys=True, indent=4)
+            f.write(data_to_save)
 
 # control this game. do event loops
 class Control():
@@ -34,7 +53,6 @@ class Control():
         self.screen = pg.display.get_surface()
         self.done = False
         self.clock = pg.time.Clock()    # 创建一个对象来帮助跟踪时间
-        self.fps = 50 * c.GAME_RATE
         self.keys = pg.key.get_pressed()
         self.mouse_pos = None
         self.mouse_click = [False, False]  # value:[left mouse click, right mouse click]
@@ -42,27 +60,37 @@ class Control():
         self.state_dict = {}
         self.state_name = None
         self.state = None
+        # 这里需要考虑多种情况，如文件不存在、文件不可读、文件不符合JSON语法要求，这些情况目前暂定统一进行新建文件操作
+        # 因此仍然采用try-except实现而非if-else实现
         try:
             # 存在存档即导入
             with open(c.USERDATA_PATH) as f:
                 userdata = json.load(f)
-            # 导入数据
-            self.game_info = {c.CURRENT_TIME:0} # 时间信息需要新建
-            self.game_info.update(userdata)
-        except FileNotFoundError:
-            # 不存在存档即新建
-            userdata = {c.LEVEL_NUM:c.START_LEVEL_NUM,
-                        c.LITTLEGAME_NUM:c.START_LITTLE_GAME_NUM,
-                        c.LEVEL_COMPLETIONS:c.START_LEVEL_COMPLETIONS,
-                        c.LITTLEGAME_COMPLETIONS:c.START_LITTLEGAME_COMPLETIONS
-                        }
+            self.game_info = {}
+            # 导入数据，保证了可运行性，但是放弃了数据向后兼容性，即假如某些变量在以后改名，在导入时可能会被重置
+            need_to_rewrite = False
+            for key in c.INIT_USERDATA:
+                if key in userdata:
+                    self.game_info[key] = userdata[key]
+                else:
+                    self.game_info[key] = c.INIT_USERDATA[key]
+                    need_to_rewrite = True
+            if need_to_rewrite:
+                with open(c.USERDATA_PATH, "w") as f:
+                    savedata = json.dumps(self.game_info, sort_keys=True, indent=4)
+                    f.write(savedata)
+        except:
             if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
                 os.makedirs(os.path.dirname(c.USERDATA_PATH))
             with open(c.USERDATA_PATH, "w") as f:
-                savedata = json.dumps(userdata, sort_keys=True, indent=4)
+                savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
                 f.write(savedata)
-            self.game_info = userdata
-            self.game_info[c.CURRENT_TIME] = 0  # 时间信息需要新建
+            self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
+        # 存档内不包含即时游戏时间信息，需要新建
+        self.game_info[c.CURRENT_TIME] = 0
+
+        # 50为目前的基础帧率，乘以倍率即是游戏帧率
+        self.fps = 50 * self.game_info[c.GAME_RATE]
 
  
     def setup_states(self, state_dict, start_state):
@@ -73,7 +101,7 @@ class Control():
 
     def update(self):
         # 返回自 pygame_init() 调用以来的毫秒数 * 游戏速度倍率
-        self.current_time = pg.time.get_ticks() * c.GAME_RATE
+        self.current_time = pg.time.get_ticks() * self.game_info[c.GAME_RATE]
 
         if self.state.done:
             self.flip_state()
@@ -101,9 +129,9 @@ class Control():
             elif event.type == pg.KEYDOWN:
                 self.keys = pg.key.get_pressed()
                 if event.key == pg.K_f:
-                    SCREEN = pg.display.set_mode(c.SCREEN_SIZE, pg.HWSURFACE|pg.FULLSCREEN)
+                    pg.display.set_mode(c.SCREEN_SIZE, pg.HWSURFACE|pg.FULLSCREEN)
                 elif event.key == pg.K_u:
-                    SCREEN = pg.display.set_mode(c.SCREEN_SIZE)
+                    pg.display.set_mode(c.SCREEN_SIZE)
             elif event.type == pg.KEYUP:
                 self.keys = pg.key.get_pressed()
             elif event.type == pg.MOUSEBUTTONDOWN:
@@ -120,9 +148,9 @@ class Control():
             self.update()
             pg.display.flip()
             self.clock.tick(self.fps)
-        print('game over')
 
 def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
+        # 不保留alpha通道的图片导入
         image = pg.Surface([width, height])
         rect = image.get_rect()
 
@@ -135,7 +163,7 @@ def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
         return image
 
 def get_image_menu(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
-        # 一定要保留阿尔法通道，修复主菜单bug，游戏中car显示又有bug
+        # 保留alpha通道的图片导入
         image = pg.Surface([width, height], SRCALPHA)
         rect = image.get_rect()
 
@@ -149,7 +177,7 @@ def get_image_menu(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
 def load_image_frames(directory, image_name, colorkey, accept):
     frame_list = []
     tmp = {}
-    # image_name is "Peashooter", pic name is 'Peashooter_1', get the index 1
+    # image_name is "Peashooter", pic name is "Peashooter_1", get the index 1
     index_start = len(image_name) + 1 
     frame_num = 0
     for pic in os.listdir(directory):
@@ -170,7 +198,7 @@ def load_image_frames(directory, image_name, colorkey, accept):
     return frame_list
 
 # colorkeys 是设置图像中的某个颜色值为透明,这里用来消除白边
-def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.gif', 'webp')):
+def load_all_gfx(directory, colorkey=c.WHITE, accept=(".png", ".jpg", ".bmp", ".gif", "webp")):
     graphics = {}
     for name1 in os.listdir(directory):
         # subfolders under the folder resources\graphics
@@ -184,7 +212,7 @@ def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.
                         dir3 = os.path.join(dir2, name3)
                         # e.g. subfolders or pics under the folder resources\graphics\Zombies\ConeheadZombie
                         if os.path.isdir(dir3):
-                            # e.g. it's the folder resources\graphics\Zombies\ConeheadZombie\ConeheadZombieAttack
+                            # e.g. it"s the folder resources\graphics\Zombies\ConeheadZombie\ConeheadZombieAttack
                             image_name, _ = os.path.splitext(name3)
                             graphics[image_name] = load_image_frames(dir3, image_name, colorkey, accept)
                         else:
@@ -205,33 +233,10 @@ def load_all_gfx(directory, colorkey=c.WHITE, accept=('.png', '.jpg', '.bmp', '.
                         graphics[name] = img
     return graphics
 
-# 从文件加载矩形碰撞范围
-# 用于消除文件边框影响
-def loadZombieImageRect():
-    file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'zombie.json')
-    with open(file_path) as f:
-        data = json.load(f)
-    return data[c.ZOMBIE_IMAGE_RECT]
-
-def loadPlantImageRect():
-    file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'data', 'entity', 'plant.json')
-    with open(file_path) as f:
-        data = json.load(f)
-    return data[c.PLANT_IMAGE_RECT]
-
-pg.init()
 pg.display.set_caption(c.ORIGINAL_CAPTION)  # 设置标题
 SCREEN = pg.display.set_mode(c.SCREEN_SIZE) # 设置初始屏幕
-try:    # 设置窗口图标，仅对非Nuitka时生效，Nuitka不需要包括额外的图标文件，自动跳过这一过程即可
-    pg.display.set_icon(pg.image.load(os.path.join(os.path.dirname(os.path.dirname(__file__)), c.ORIGINAL_LOGO)))
-except:
-    pass
+pg.mixer.set_num_channels(255)  # 设置可以同时播放的音频数量，默认为8，经常不够用
+if os.path.exists(c.ORIGINAL_LOGO):    # 设置窗口图标，仅对非Nuitka时生效，Nuitka不需要包括额外的图标文件，自动跳过这一过程即可
+    pg.display.set_icon(pg.image.load(c.ORIGINAL_LOGO))
 
-GFX = load_all_gfx(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,os.path.join("resources","graphics")))
-ZOMBIE_RECT = loadZombieImageRect()
-PLANT_RECT = loadPlantImageRect()
-
-# 播放音乐
-pg.mixer.init()
-pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,"resources", "music", "intro.opus"))
-pg.mixer.music.play(-1, 0)
+GFX = load_all_gfx(c.PATH_IMG_DIR)

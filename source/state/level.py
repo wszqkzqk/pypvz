@@ -1,11 +1,11 @@
 import os
-import json
-import sys
 import pygame as pg
 import random
+import logging
 from .. import tool
 from .. import constants as c
 from ..component import map, plant, zombie, menubar
+logger = logging.getLogger("main")
 
 class Level(tool.State):
     def __init__(self):
@@ -24,13 +24,6 @@ class Level(tool.State):
         self.showLittleMenu = False
 
         # 导入地图参数
-        # 这些注释内容是将来增加通过界面后的容错设计，以保证直接通关时不会闪退
-        # 现在为了明确一开始就没有正确导入地图的错误，没有启用这些设定
-        # if self.loadMap():  # 表示导入成功
-        #     self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
-        #     self.map_y_len = self.map.height
-        #     self.setupBackground()
-        #     self.initState()
         self.loadMap()
         self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
         self.map_y_len = self.map.height
@@ -38,60 +31,48 @@ class Level(tool.State):
         self.initState()
 
     def loadMap(self):
-        if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-            map_file = f'littleGame_{self.game_info[c.LITTLEGAME_NUM]}.json'
-        elif self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
-            map_file = f'level_{self.game_info[c.LEVEL_NUM]}.json'
-        file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources' , 'data', 'map', map_file)
-        # 最后一关之后应该结束了
-        try:
-            with open(file_path) as f:
-                self.map_data = json.load(f)
-        except FileNotFoundError:
-            print("成功通关！")
-            if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-                self.game_info[c.LEVEL_NUM] = c.START_LEVEL_NUM
-                self.game_info[c.LEVEL_COMPLETIONS] += 1
-            elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-                self.game_info[c.LITTLEGAME_NUM] = c.START_LITTLE_GAME_NUM
-                self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
-            self.done = True
-            self.next = c.MAIN_MENU
-            pg.mixer.music.stop()
-            pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
-            pg.mixer.music.play(-1, 0)
-            with open(c.USERDATA_PATH, "w") as f:
-                userdata = {}
-                for i in self.game_info:
-                    if i in c.USERDATA_KEYS:
-                        userdata[i] = self.game_info[i]
-                savedata = json.dumps(userdata, sort_keys=True, indent=4)
-                f.write(savedata)
-            return
+        # 冒险模式
+        if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
+            if 0 <= self.game_info[c.LEVEL_NUM] < map.TOTAL_LEVEL:
+                self.map_data = map.LEVEL_MAP_DATA[self.game_info[c.LEVEL_NUM]]
+            else:
+                self.game_info[c.LEVEL_NUM] = 1
+                self.saveUserData()
+                self.map_data = map.LEVEL_MAP_DATA[self.game_info[c.LEVEL_NUM]]
+                logger.warning("关卡数设定错误！进入默认的第一关！")
+        # 小游戏模式
+        elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
+            if 0 <= self.game_info[c.LITTLEGAME_NUM] < map.TOTAL_LITTLE_GAME:
+                self.map_data = map.LITTLE_GAME_MAP_DATA[self.game_info[c.LITTLEGAME_NUM]]
+            else:
+                self.game_info[c.LITTLEGAME_NUM] = 1
+                self.saveUserData()
+                self.map_data = map.LITTLE_GAME_MAP_DATA[self.game_info[c.LITTLEGAME_NUM]]
+                logger.warning("关卡数设定错误！进入默认的第一关！")
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
         self.hasShovel = self.map_data[c.SHOVEL]
 
         # 同时指定音乐
         # 缺省音乐为进入的音乐，方便发现错误
-        self.bgm = 'intro.opus'
+        self.bgm = "intro.opus"
         if c.CHOOSEBAR_TYPE in self.map_data:  # 指定了choosebar_type的传送带关
-            if self.map_data[c.CHOOSEBAR_TYPE] == c.CHOSSEBAR_BOWLING:   # 坚果保龄球
-                self.bgm = 'bowling.opus'
+            if self.map_data[c.CHOOSEBAR_TYPE] == c.CHOOSEBAR_BOWLING:   # 坚果保龄球
+                self.bgm = "bowling.opus"
             elif self.map_data[c.CHOOSEBAR_TYPE] == c.CHOOSEBAR_MOVE:  # 传送带
-                self.bgm = 'battle.opus'
+                self.bgm = "battle.opus"
         else:   # 一般选卡关，非传送带
             # 白天类
             if self.map_data[c.BACKGROUND_TYPE] in c.BACKGROUND_DAY_LIKE_BACKGROUNDS:
-                self.bgm = 'dayLevel.opus'
+                self.bgm = "dayLevel.opus"
             # 夜晚
             elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_NIGHT:
-                self.bgm = 'nightLevel.opus'
+                self.bgm = "nightLevel.opus"
             # 泳池
             elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_POOL:
-                self.bgm = 'poolLevel.opus'
+                self.bgm = "poolLevel.opus"
             # 浓雾
             elif self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_FOG:
-                self.bgm = 'fogLevel.opus'
+                self.bgm = "fogLevel.opus"
 
     def setupBackground(self):
         img_index = self.map_data[c.BACKGROUND_TYPE]
@@ -147,12 +128,12 @@ class Level(tool.State):
             if (self.bar_type != c.CHOOSEBAR_STATIC):
                 volume += 2
 
-            if inevitableZombieDict and (str(wave) in inevitableZombieDict):
+            if inevitableZombieDict and (wave in inevitableZombieDict):
                 for newZombie in inevitableZombieDict[str(wave)]:
                     zombieList.append(newZombie)
                     volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
                 if volume < 0:
-                    print('警告：第{}波中手动设置的僵尸级别总数超过上限！'.format(wave))
+                    logger.warning(f"第{wave}波中手动设置的僵尸级别总数超过上限！")
 
             # 防止因为僵尸最小等级过大，使得总容量无法完全利用，造成死循环的检查机制
             minCost = c.CREATE_ZOMBIE_DICT[min(useableZombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
@@ -273,14 +254,14 @@ class Level(tool.State):
                         self.waveTime = current_time
                         self.waveZombies = self.waves[self.waveNum - 1]
                         self.numZombie = len(self.waveZombies)
-                        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieComing.ogg")).play()
+                        c.SOUND_ZOMBIE_COMING.play()
                 else:
                     if (current_time - self.waveTime >= 6000):
                         self.waveNum += 1
                         self.waveTime = current_time
                         self.waveZombies = self.waves[self.waveNum - 1]
                         self.numZombie = len(self.waveZombies)
-                        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieComing.ogg")).play()
+                        c.SOUND_ZOMBIE_COMING.play()
             return
         if (self.waveNum % 10 != 9):
             if ((current_time - self.waveTime >= 25000 + random.randint(0, 6000)) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 12500 + random.randint(0, 3000))):
@@ -288,7 +269,7 @@ class Level(tool.State):
                 self.waveTime = current_time
                 self.waveZombies = self.waves[self.waveNum - 1]
                 self.numZombie = len(self.waveZombies)
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieVoice.ogg")).play()
+                c.SOUND_ZOMBIE_VOICE.play()
         else:
             if ((current_time - self.waveTime >= 45000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 25000)):
                 self.waveNum += 1
@@ -296,7 +277,7 @@ class Level(tool.State):
                 self.waveZombies = self.waves[self.waveNum - 1]
                 self.numZombie = len(self.waveZombies)
                 # 一大波时播放音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "hugeWaveApproching.ogg")).play()
+                c.SOUND_HUGE_WAVE_APPROCHING.play()
                 return
             elif ((current_time - self.waveTime >= 43000) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.waveTime >= 23000)):
                 self.showHugeWaveApprochingTime = current_time
@@ -321,10 +302,7 @@ class Level(tool.State):
 
         self.zombie_list = []
         for data in self.map_data[c.ZOMBIE_LIST]:
-            if 'map_y' in data:
-                self.zombie_list.append((data['time'], data['name'], data['map_y']))
-            else:
-                self.zombie_list.append((data['time'], data['name']))
+            self.zombie_list.append((data["time"], data["name"], data["map_y"]))
         self.zombie_start_time = 0
         self.zombie_list.sort(key=takeTime)
 
@@ -336,9 +314,6 @@ class Level(tool.State):
 
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
-        # 这些注释内容是将来增加通过界面后的容错设计，以保证直接通关时不会闪退
-        # if self.done:
-        #     return
         self.current_time = self.game_info[c.CURRENT_TIME] = self.pvzTime(current_time)
         if self.state == c.CHOOSE:
             self.choose(mouse_pos, mouse_click)
@@ -371,7 +346,7 @@ class Level(tool.State):
         else:
             card_pool = menubar.getCardPool(self.map_data[c.CARD_POOL])
             self.initPlay(card_pool)
-            if self.bar_type == c.CHOSSEBAR_BOWLING:
+            if self.bar_type == c.CHOOSEBAR_BOWLING:
                 self.initBowlingMap()
 
         self.setupLittleMenu()
@@ -382,8 +357,9 @@ class Level(tool.State):
 
         # 播放选卡音乐
         pg.mixer.music.stop()
-        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "chooseYourSeeds.opus"))
+        pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, "chooseYourSeeds.opus"))
         pg.mixer.music.play(-1, 0)
+        pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
 
     def choose(self, mouse_pos, mouse_click):
         # 如果暂停
@@ -395,16 +371,17 @@ class Level(tool.State):
             self.panel.checkCardClick(mouse_pos)
             if self.panel.checkStartButtonClick(mouse_pos):
                 self.initPlay(self.panel.getSelectedCards())
-            elif self.checkLittleMenuClick(mouse_pos):
+            elif self.inArea(self.little_menu_rect, *mouse_pos):
                 self.showLittleMenu = True
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+                c.SOUND_BUTTON_CLICK.play()
 
     def initPlay(self, card_list):
 
         # 播放bgm
         pg.mixer.music.stop()
-        pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", self.bgm))
+        pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, self.bgm))
         pg.mixer.music.play(-1, 0)
+        pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
 
         self.state = c.PLAY
         if self.bar_type == c.CHOOSEBAR_STATIC:
@@ -504,29 +481,66 @@ class Level(tool.State):
         self.little_menu_rect.x = 690
         self.little_menu_rect.y = 0 
 
+        # 弹出的菜单框
         frame_rect = (0, 0, 500, 500)
         self.big_menu = tool.get_image_menu(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
         self.big_menu_rect = self.big_menu.get_rect()
         self.big_menu_rect.x = 150
         self.big_menu_rect.y = 0
 
-        frame_rect = (0, 0, 342, 87)
-        self.return_button = tool.get_image_menu(tool.GFX[c.RETURN_BUTTON], *frame_rect, c.BLACK, 1.1)
+        # 返回按钮，用字体渲染实现，增强灵活性
+        # 建立一个按钮大小的surface对象
+        self.return_button = pg.Surface((376, 96))
+        self.return_button.set_colorkey(c.BLACK)    # 避免多余区域显示成黑色
         self.return_button_rect = self.return_button.get_rect()
         self.return_button_rect.x = 220
         self.return_button_rect.y = 440
+        font = pg.font.Font(c.FONT_PATH, 40)
+        font.bold = True
+        text = font.render("返回游戏", True, c.YELLOWGREEN)
+        text_rect = text.get_rect()
+        text_rect.x = 105
+        text_rect.y = 18
+        self.return_button.blit(text, text_rect)
 
+        # 重新开始按钮
         frame_rect = (0, 0, 207, 45)
         self.restart_button = tool.get_image_menu(tool.GFX[c.RESTART_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.restart_button_rect = self.restart_button.get_rect()
         self.restart_button_rect.x = 295
         self.restart_button_rect.y = 325
 
+        # 主菜单按钮
         frame_rect = (0, 0, 206, 43)
         self.mainMenu_button = tool.get_image_menu(tool.GFX[c.MAINMENU_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.mainMenu_button_rect = self.mainMenu_button.get_rect()
         self.mainMenu_button_rect.x = 299
         self.mainMenu_button_rect.y = 372
+
+        # 音量+、音量-
+        frame_rect = (0, 0, 39, 41)
+        font = pg.font.Font(c.FONT_PATH, 35)
+        font.bold = True
+        # 音量+
+        self.sound_volume_plus_button = tool.get_image_menu(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
+        sign = font.render("+", True, c.YELLOWGREEN)
+        sign_rect = sign.get_rect()
+        sign_rect.x = 8
+        sign_rect.y = -4
+        self.sound_volume_plus_button.blit(sign, sign_rect)
+        self.sound_volume_plus_button_rect = self.sound_volume_plus_button.get_rect()
+        self.sound_volume_plus_button_rect.x = 500
+        # 音量-
+        self.sound_volume_minus_button = tool.get_image_menu(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
+        sign = font.render("-", True, c.YELLOWGREEN)
+        sign_rect = sign.get_rect()
+        sign_rect.x = 12
+        sign_rect.y = -8
+        self.sound_volume_minus_button.blit(sign, sign_rect)
+        self.sound_volume_minus_button_rect = self.sound_volume_minus_button.get_rect()
+        self.sound_volume_minus_button_rect.x = 450
+        # 音量+、-应当处于同一高度
+        self.sound_volume_minus_button_rect.y = self.sound_volume_plus_button_rect.y = 250
 
     def pauseAndCheckLittleMenuOptions(self, mouse_pos, mouse_click):
         # 设置暂停状态
@@ -534,28 +548,48 @@ class Level(tool.State):
         # 暂停播放音乐
         pg.mixer.music.pause()
         if mouse_click[0]:
-            if self.checkReturnClick(mouse_pos):
+            # 返回键
+            if self.inArea(self.return_button_rect, *mouse_pos):
                 # 终止暂停，停止显示菜单
                 self.pause = False
                 self.showLittleMenu = False
                 # 继续播放音乐
                 pg.mixer.music.unpause()
                 # 播放点击音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
-            elif self.checkRestartClick(mouse_pos):
+                c.SOUND_BUTTON_CLICK.play()
+            # 重新开始键
+            elif self.inArea(self.restart_button_rect, *mouse_pos):
                 self.done = True
                 self.next = c.LEVEL
                 # 播放点击音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
-            elif self.checkMainMenuClick(mouse_pos):
+                c.SOUND_BUTTON_CLICK.play()
+            # 主菜单键
+            elif self.inArea(self.mainMenu_button_rect, *mouse_pos):
                 self.done = True
                 self.next = c.MAIN_MENU
-                self.persist = {c.CURRENT_TIME:0, c.LEVEL_NUM:self.persist[c.LEVEL_NUM], c.LITTLEGAME_NUM:self.persist[c.LITTLEGAME_NUM]}
-                pg.mixer.music.stop()
-                pg.mixer.music.load(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "music", "intro.opus"))
-                pg.mixer.music.play(-1, 0)
+                self.persist = self.game_info
+                self.persist[c.CURRENT_TIME] = 0
                 # 播放点击音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
+                c.SOUND_BUTTON_CLICK.play()
+            # 音量+
+            elif self.inArea(self.sound_volume_plus_button_rect, *mouse_pos):
+                self.game_info[c.SOUND_VOLUME] = round(min(self.game_info[c.SOUND_VOLUME] + 0.05, 1), 2)
+                # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
+                pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
+                for i in c.SOUNDS:
+                    i.set_volume(self.game_info[c.SOUND_VOLUME])
+                c.SOUND_BUTTON_CLICK.play()
+                # 将音量信息存档
+                self.saveUserData()
+            elif self.inArea(self.sound_volume_minus_button_rect, *mouse_pos):
+                self.game_info[c.SOUND_VOLUME] = round(max(self.game_info[c.SOUND_VOLUME] - 0.05, 0), 2)
+                # 一般不会有人想把音乐和音效分开设置，故pg.mixer.Sound.set_volume()和pg.mixer.music.set_volume()需要一起用
+                pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
+                for i in c.SOUNDS:
+                    i.set_volume(self.game_info[c.SOUND_VOLUME])
+                c.SOUND_BUTTON_CLICK.play()
+                # 将音量信息存档
+                self.saveUserData()
 
 
     # 一大波僵尸来袭图片显示
@@ -574,54 +608,22 @@ class Level(tool.State):
         frame_rect = (0, 0, 158, 26)
         self.level_progress_bar_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_BAR], *frame_rect, c.BLACK, 1)
         self.level_progress_bar_image_rect = self.level_progress_bar_image.get_rect()
-        self.level_progress_bar_image_rect.x = 600      # 猜的
-        self.level_progress_bar_image_rect.y = 565      # 猜的
+        self.level_progress_bar_image_rect.x = 600
+        self.level_progress_bar_image_rect.y = 574
 
         # 僵尸头
         frame_rect = (0, 0, 23, 25)
         self.level_progress_zombie_head_image = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_ZOMBIE_HEAD], *frame_rect, c.BLACK, 1)
         self.level_progress_zombie_head_image_rect = self.level_progress_zombie_head_image.get_rect()
-        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x + 75      # 猜的
-        self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
+        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x + 75
+        self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3
 
         # 旗帜（这里只包括最后一面）
         frame_rect = (0, 0, 20, 18)
         self.level_progress_flag = tool.get_image_menu(tool.GFX[c.LEVEL_PROGRESS_FLAG], *frame_rect, c.BLACK, 1)
         self.level_progress_flag_rect = self.level_progress_flag.get_rect()
-        self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x - 78     # 猜的
-        self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3      # 猜的
-
-    # 检查小菜单有没有被点击
-    def checkLittleMenuClick(self, mouse_pos):
-        x, y = mouse_pos
-        if (x >= self.little_menu_rect.x and x <= self.little_menu_rect.right and
-            y >= self.little_menu_rect.y and y <= self.little_menu_rect.bottom):
-            return True
-        return False
-
-    # 检查小菜单的返回有没有被点击
-    def checkReturnClick(self, mouse_pos):
-        x, y = mouse_pos
-        if (x >= self.return_button_rect.x and x <= self.return_button_rect.right and
-            y >= self.return_button_rect.y and y <= self.return_button_rect.bottom):
-            return True
-        return False
-
-    # 检查小菜单的重新开始有没有被点击
-    def checkRestartClick(self, mouse_pos):
-        x, y = mouse_pos
-        if (x >= self.restart_button_rect.x and x <= self.restart_button_rect.right and
-            y >= self.restart_button_rect.y and y <= self.restart_button_rect.bottom):
-            return True
-        return False
-    
-    # 检查小菜单的主菜单有没有被点击
-    def checkMainMenuClick(self, mouse_pos):
-        x, y = mouse_pos
-        if (x >= self.mainMenu_button_rect.x and x <= self.mainMenu_button_rect.right and
-            y >= self.mainMenu_button_rect.y and y <= self.mainMenu_button_rect.bottom):
-            return True
-        return False
+        self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x - 78
+        self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3
 
     # 用小铲子移除植物
     def shovelRemovePlant(self, mouse_pos):
@@ -640,24 +642,14 @@ class Level(tool.State):
                     if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
                         if i.name == c.LILYPAD:
                             continue
-                    elif '花盆（未实现）' in self.map.map[map_y][map_x][c.MAP_PLANT]:
-                        if i.name == '花盆（未实现）':
+                    elif "花盆（未实现）" in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                        if i.name == "花盆（未实现）":
                             continue
                 self.killPlant(i, shovel=True)
                 # 使用后默认铲子复原
                 self.drag_shovel = not self.drag_shovel
                 self.removeMouseImagePlus()
                 return
-
-    # 检查小铲子的位置有没有被点击
-    # 方便放回去
-    def checkShovelClick(self, mouse_pos):
-        x, y = mouse_pos
-        if( self.hasShovel and
-            x >= self.shovel_box_rect.x and x <= self.shovel_box_rect.right and
-            y >= self.shovel_box_rect.y and y <= self.shovel_box_rect.bottom):
-            return True
-        return False
 
     def play(self, mouse_pos, mouse_click):
         # 原版阳光掉落机制需要
@@ -677,12 +669,8 @@ class Level(tool.State):
                 data = self.zombie_list[0]  # 因此要求僵尸列表按照时间顺序排列
                 # data内容排列：[0]:时间 [1]:名称 [2]:坐标
                 if  data[0] <= (self.current_time - self.zombie_start_time):
-                    if len(data) == 3:
-                        self.createZombie(data[1], data[2])
-                        self.zombie_list.remove(data)
-                    else:   # len(data) == 2 没有指定map_y
-                        self.createZombie(data[1])
-                        self.zombie_list.remove(data)
+                    self.createZombie(data[1], data[2])
+                    self.zombie_list.remove(data)
         else:
             # 新僵尸生成方式
             self.refreshWaves(self.current_time)
@@ -724,7 +712,7 @@ class Level(tool.State):
                     self.menubar.increaseSunValue(sun.sun_value)
                     clickedSun = True
                     # 播放收集阳光的音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "collectSun.ogg")).play()
+                    c.SOUND_COLLECT_SUN.play()
 
         # 拖动植物或者铲子
         if not self.drag_plant and mouse_pos and mouse_click[0] and not clickedSun:
@@ -734,7 +722,7 @@ class Level(tool.State):
                 self.clickResult[1].clicked = True
                 clickedCardsOrMap = True
                 # 播放音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "clickCard.ogg")).play()
+                c.SOUND_CLICK_CARD.play()
         elif self.drag_plant:
             if mouse_click[1]:
                 self.removeMouseImage()
@@ -754,20 +742,21 @@ class Level(tool.State):
 
         # 检查是否点击菜单
         if mouse_click[0] and (not clickedSun) and (not clickedCardsOrMap):
-            if self.checkLittleMenuClick(mouse_pos):
+            if self.inArea(self.little_menu_rect, *mouse_pos):
                 # 暂停 显示菜单
                 self.showLittleMenu = True
                 # 播放点击音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "buttonclick.ogg")).play()
-            elif self.checkShovelClick(mouse_pos):
-                self.drag_shovel = not self.drag_shovel
-                if not self.drag_shovel:
-                    self.removeMouseImagePlus()
-                # 播放点击铲子的音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shovel.ogg")).play()
-            elif self.drag_shovel:
-                # 移出这地方的植物
-                self.shovelRemovePlant(mouse_pos)
+                c.SOUND_BUTTON_CLICK.play()
+            elif self.hasShovel:
+                if self.inArea(self.shovel_box_rect, *mouse_pos):
+                    self.drag_shovel = not self.drag_shovel
+                    if not self.drag_shovel:
+                        self.removeMouseImagePlus()
+                    # 播放点击铲子的音效
+                    c.SOUND_SHOVEL.play()
+                elif self.drag_shovel:
+                    # 移出这地方的植物
+                    self.shovelRemovePlant(mouse_pos)
 
         for car in self.cars:
             if car:
@@ -793,7 +782,7 @@ class Level(tool.State):
             if self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS:
                 if name in c.WATER_ZOMBIE:
                     map_y = random.randint(2, 3)
-                elif name == '这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）':
+                elif name == "这里应该换成气球僵尸的名字（最好写调用的变量名，最好不要直接写，保持风格统一）":
                     map_y = random.randint(0, 5)
                 else:   # 陆生僵尸
                     map_y = random.randint(0, 3)
@@ -817,35 +806,35 @@ class Level(tool.State):
         x, y = self.map.getMapGridPos(0, map_y)
 
         # 新增的僵尸也需要在这里声明
-        match name:
-            case c.NORMAL_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-            case c.CONEHEAD_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.ConeHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-            case c.BUCKETHEAD_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.BucketHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-            case c.FLAG_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.FlagZombie(c.ZOMBIE_START_X, y, self.head_group))
-            case c.NEWSPAPER_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-            case c.FOOTBALL_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-            case c.DUCKY_TUBE_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-            case c.CONEHEAD_DUCKY_TUBE_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-            case c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-            case c.SCREEN_DOOR_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
-            case c.POLE_VAULTING_ZOMBIE:
-                # 本来撑杆跳生成位置不同，对齐左端可认为修正了一部分（看作移动了70），只需要相对修改即可
-                self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
-            case c.ZOMBONI:
-                # 冰车僵尸生成位置不同
-                self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
-            case c.SNORKELZOMBIE:
-                self.zombie_groups[map_y].add(zombie.SnorkelZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
+        if name == c.NORMAL_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.NormalZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.CONEHEAD_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.ConeHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.BUCKETHEAD_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.BucketHeadZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.FLAG_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.FlagZombie(c.ZOMBIE_START_X, y, self.head_group))
+        elif name == c.NEWSPAPER_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.NewspaperZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.FOOTBALL_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.FootballZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.DUCKY_TUBE_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.CONEHEAD_DUCKY_TUBE_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.SCREEN_DOOR_ZOMBIE:
+            self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(c.ZOMBIE_START_X + random.randint(-20, 20) + hugeWaveMove, y, self.head_group))
+        elif name == c.POLE_VAULTING_ZOMBIE:
+            # 本来撑杆跳生成位置不同，对齐左端可认为修正了一部分（看作移动了70），只需要相对修改即可
+            self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
+        elif name == c.ZOMBONI:
+            # 冰车僵尸生成位置不同
+            self.zombie_groups[map_y].add(zombie.Zomboni(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
+        elif name == c.SNORKELZOMBIE:
+            # 潜水僵尸生成位置不同
+            self.zombie_groups[map_y].add(zombie.SnorkelZombie(c.ZOMBIE_START_X + random.randint(0, 10) + hugeWaveMove, y, self.head_group))
 
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)
@@ -869,71 +858,71 @@ class Level(tool.State):
         map_x, map_y = self.map.getMapIndex(x, y)
 
         # 新植物也需要在这里声明
-        match self.plant_name:
-            case c.SUNFLOWER:
-                new_plant = plant.SunFlower(x, y, self.sun_group)
-            case c.PEASHOOTER:
-                new_plant = plant.PeaShooter(x, y, self.bullet_groups[map_y])
-            case c.SNOWPEASHOOTER:
-                new_plant = plant.SnowPeaShooter(x, y, self.bullet_groups[map_y])
-            case c.WALLNUT:
-                new_plant = plant.WallNut(x, y)
-            case c.CHERRYBOMB:
-                new_plant = plant.CherryBomb(x, y)
-            case c.THREEPEASHOOTER:
-                new_plant = plant.ThreePeaShooter(x, y, self.bullet_groups, map_y, self.map.background_type)
-            case c.REPEATERPEA:
-                new_plant = plant.RepeaterPea(x, y, self.bullet_groups[map_y])
-            case c.CHOMPER:
-                new_plant = plant.Chomper(x, y)
-            case c.PUFFSHROOM:
-                new_plant = plant.PuffShroom(x, y, self.bullet_groups[map_y])
-            case c.POTATOMINE:
-                new_plant = plant.PotatoMine(x, y)
-            case c.SQUASH:
-                new_plant = plant.Squash(x, y, self.map.map[map_y][map_x][c.MAP_PLANT])
-            case c.SPIKEWEED:
-                new_plant = plant.Spikeweed(x, y)
-            case c.JALAPENO:
-                new_plant = plant.Jalapeno(x, y)
-            case c.SCAREDYSHROOM:
-                new_plant = plant.ScaredyShroom(x, y, self.bullet_groups[map_y])
-            case c.SUNSHROOM:
-                new_plant = plant.SunShroom(x, y, self.sun_group)
-            case c.ICESHROOM:
-                new_plant = plant.IceShroom(x, y)
-            case c.HYPNOSHROOM:
-                new_plant = plant.HypnoShroom(x, y)
-            case c.WALLNUTBOWLING:
-                new_plant = plant.WallNutBowling(x, y, map_y, self)
-            case c.REDWALLNUTBOWLING:
-                new_plant = plant.RedWallNutBowling(x, y)
-            case c.LILYPAD:
-                new_plant = plant.LilyPad(x, y)
-            case c.TORCHWOOD:
-                new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y])
-            case c.STARFRUIT:
-                new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self)
-            case c.COFFEEBEAN:
-                new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x], self.map, map_x)
-            case c.SEASHROOM:
-                new_plant = plant.SeaShroom(x, y, self.bullet_groups[map_y])
-            case c.TALLNUT:
-                new_plant = plant.TallNut(x, y)
-            case c.TANGLEKLEP:
-                new_plant = plant.TangleKlep(x, y)
-            case c.DOOMSHROOM:
-                if self.map.gridHeightSize == c.GRID_Y_SIZE:
-                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2)
-                else:
-                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
-            case c.GRAVEBUSTER:
-                new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
-            case c.FUMESHROOM:
-                new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
-            case c.GARLIC:
-                new_plant = plant.Garlic(x, y)
-
+        if self.plant_name == c.SUNFLOWER:
+            new_plant = plant.SunFlower(x, y, self.sun_group)
+        elif self.plant_name == c.PEASHOOTER:
+            new_plant = plant.PeaShooter(x, y, self.bullet_groups[map_y])
+        elif self.plant_name == c.SNOWPEASHOOTER:
+            new_plant = plant.SnowPeaShooter(x, y, self.bullet_groups[map_y])
+        elif self.plant_name == c.WALLNUT:
+            new_plant = plant.WallNut(x, y)
+        elif self.plant_name == c.CHERRYBOMB:
+            new_plant = plant.CherryBomb(x, y)
+        elif self.plant_name == c.THREEPEASHOOTER:
+            new_plant = plant.ThreePeaShooter(x, y, self.bullet_groups, map_y, self.map.background_type)
+        elif self.plant_name == c.REPEATERPEA:
+            new_plant = plant.RepeaterPea(x, y, self.bullet_groups[map_y])
+        elif self.plant_name == c.CHOMPER:
+            new_plant = plant.Chomper(x, y)
+        elif self.plant_name == c.PUFFSHROOM:
+            new_plant = plant.PuffShroom(x, y, self.bullet_groups[map_y])
+        elif self.plant_name == c.POTATOMINE:
+            new_plant = plant.PotatoMine(x, y)
+        elif self.plant_name == c.SQUASH:
+            new_plant = plant.Squash(x, y, self.map.map[map_y][map_x][c.MAP_PLANT])
+        elif self.plant_name == c.SPIKEWEED:
+            new_plant = plant.Spikeweed(x, y)
+        elif self.plant_name == c.JALAPENO:
+            new_plant = plant.Jalapeno(x, y)
+        elif self.plant_name == c.SCAREDYSHROOM:
+            new_plant = plant.ScaredyShroom(x, y, self.bullet_groups[map_y])
+        elif self.plant_name == c.SUNSHROOM:
+            new_plant = plant.SunShroom(x, y, self.sun_group)
+        elif self.plant_name == c.ICESHROOM:
+            new_plant = plant.IceShroom(x, y)
+        elif self.plant_name == c.HYPNOSHROOM:
+            new_plant = plant.HypnoShroom(x, y)
+        elif self.plant_name == c.WALLNUTBOWLING:
+            new_plant = plant.WallNutBowling(x, y, map_y, self)
+        elif self.plant_name == c.REDWALLNUTBOWLING:
+            new_plant = plant.RedWallNutBowling(x, y)
+        elif self.plant_name == c.LILYPAD:
+            new_plant = plant.LilyPad(x, y)
+        elif self.plant_name == c.TORCHWOOD:
+            new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y])
+        elif self.plant_name == c.STARFRUIT:
+            new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self)
+        elif self.plant_name == c.COFFEEBEAN:
+            new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x], self.map, map_x)
+        elif self.plant_name == c.SEASHROOM:
+            new_plant = plant.SeaShroom(x, y, self.bullet_groups[map_y])
+        elif self.plant_name == c.TALLNUT:
+            new_plant = plant.TallNut(x, y)
+        elif self.plant_name == c.TANGLEKLEP:
+            new_plant = plant.TangleKlep(x, y)
+        elif self.plant_name == c.DOOMSHROOM:
+            if self.map.gridHeightSize == c.GRID_Y_SIZE:
+                new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2)
+            else:
+                new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
+        elif self.plant_name == c.GRAVEBUSTER:
+            new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
+        elif self.plant_name == c.FUMESHROOM:
+            new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
+        elif self.plant_name == c.GARLIC:
+            new_plant = plant.Garlic(x, y)
+        elif self.plant_name == c.PUMPKINHEAD:
+            new_plant = plant.PumpkinHead(x, y)
 
 
         if new_plant.can_sleep and self.background_type in c.DAYTIME_BACKGROUNDS:
@@ -951,14 +940,14 @@ class Level(tool.State):
         else:
             self.menubar.deleateCard(self.select_plant)
 
-        if self.bar_type != c.CHOSSEBAR_BOWLING:    # 坚果保龄球关卡无需考虑格子被占用的情况
+        if self.bar_type != c.CHOOSEBAR_BOWLING:    # 坚果保龄球关卡无需考虑格子被占用的情况
             self.map.addMapPlant(map_x, map_y, self.plant_name, sleep=mushroomSleep)
         self.removeMouseImage()
 
         # print(self.newPlantAndPositon)
 
         # 播放种植音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg")).play()
+        c.SOUND_PLANT.play()
 
     def setupHintImage(self):
         pos = self.canSeedPlant(self.plant_name)
@@ -974,7 +963,7 @@ class Level(tool.State):
             self.hint_image = image
             self.hint_rect = image.get_rect()
             # 花盆、睡莲图片应当下移一些
-            if self.plant_name in {c.LILYPAD, '花盆（未实现）', c.TANGLEKLEP}:
+            if self.plant_name in {c.LILYPAD, "花盆（未实现）", c.TANGLEKLEP}:
                 self.hint_rect.centerx = pos[0]
                 self.hint_rect.bottom = pos[1] + 25
             else:
@@ -984,21 +973,17 @@ class Level(tool.State):
         else:
             self.hint_plant = False
 
-    def setupMouseImage(self, plant_name, select_plant):
+    def setupMouseImage(self, plant_name, select_plant, colorkey=c.BLACK):
         frame_list = tool.GFX[plant_name]
-        if plant_name in tool.PLANT_RECT:
-            data = tool.PLANT_RECT[plant_name]
-            x, y, width, height = data['x'], data['y'], data['width'], data['height']
+        if plant_name in c.PLANT_RECT:
+            data = c.PLANT_RECT[plant_name]
+            x, y, width, height = data["x"], data["y"], data["width"], data["height"]
         else:
             x, y = 0, 0
             rect = frame_list[0].get_rect()
             width, height = rect.w, rect.h
 
-        if (plant_name in c.PLANT_COLOR_KEY_WHITE):
-            color = c.WHITE
-        else:
-            color = c.BLACK
-        self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, color, 1)
+        self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey, 1)
         self.mouse_rect = self.mouse_image.get_rect()
         self.drag_plant = True
         self.plant_name = plant_name
@@ -1063,7 +1048,7 @@ class Level(tool.State):
                             # 如果被攻击植物是睡莲和花盆，同一格种了植物必然刷新
                             # 如果被攻击植物不是睡莲和花盆，同一格种了南瓜头才刷新
                             if ((zombie.prey.name not in {c.LILYPAD, "花盆（未实现）"})
-                            and (self.newPlantAndPositon[0] != "南瓜头（未实现）")):
+                            and (self.newPlantAndPositon[0] != c.PUMPKINHEAD)):
                                 continue
                         else:
                             continue
@@ -1079,7 +1064,7 @@ class Level(tool.State):
                 for plant in self.plant_groups[i]:
                     if collided_func(plant, zombie):
                         # 优先攻击南瓜头
-                        if plant.name == "南瓜头（未实现）":
+                        if plant.name == c.PUMPKINHEAD:
                             targetPlant = plant
                             break
                         # 衬底植物情形
@@ -1104,7 +1089,7 @@ class Level(tool.State):
                             for actualTargetPlant in self.plant_groups[i]:
                                 # 检测同一格的其他植物
                                 if self.map.getMapIndex(actualTargetPlant.rect.centerx, actualTargetPlant.rect.bottom) == (map_x, map_y):
-                                    if actualTargetPlant.name == "南瓜头（未实现）":
+                                    if actualTargetPlant.name == c.PUMPKINHEAD:
                                         targetPlant = actualTargetPlant
                                         break
                                     elif actualTargetPlant.name not in {c.LILYPAD, "花盆（未实现）"}:
@@ -1142,7 +1127,7 @@ class Level(tool.State):
                                 zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
                             targetPlant.changeDirection(i)
                             # 播放撞击音效
-                            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bowlingimpact.ogg")).play()
+                            c.SOUND_BOWLING_IMPACT.play()
                     elif targetPlant.name == c.REDWALLNUTBOWLING:
                         if targetPlant.state == c.IDLE:
                             targetPlant.setAttack()
@@ -1171,6 +1156,7 @@ class Level(tool.State):
             for hypno_zombie in self.hypno_zombie_groups[i]:
                 if hypno_zombie.health <= 0:
                     continue
+                collided_func = pg.sprite.collide_mask
                 zombie_list = pg.sprite.spritecollide(  hypno_zombie, self.zombie_groups[i],
                                                         False, collided_func)
                 for zombie in zombie_list:
@@ -1211,7 +1197,7 @@ class Level(tool.State):
 
     def freezeZombies(self, plant):
         # 播放冻结音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "freeze.ogg")).play()
+        c.SOUND_FREEZE.play()
 
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
@@ -1242,13 +1228,13 @@ class Level(tool.State):
                     self.plant_groups[map_y].add(plant.Hole(targetPlant.originalX, targetPlant.originalY, self.map.map[map_y][map_x][c.MAP_PLOT_TYPE]))
             elif targetPlant.name not in c.PLANT_DIE_SOUND_EXCEPTIONS:
                 # 触发植物死亡音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantDie.ogg")).play()
+                c.SOUND_PLANT_DIE.play()
         else:
             # 用铲子移除植物时播放音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plant.ogg")).play()
+            c.SOUND_PLANT.play()
 
         # 整理地图信息
-        if self.bar_type != c.CHOSSEBAR_BOWLING:
+        if self.bar_type != c.CHOOSEBAR_BOWLING:
             self.map.removeMapPlant(map_x, map_y, targetPlant.name)
         # 将睡眠植物移除后更新睡眠状态
         if targetPlant.state == c.SLEEP:
@@ -1418,27 +1404,38 @@ class Level(tool.State):
 
     def checkGameState(self):
         if self.checkVictory():
-            if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-                self.game_info[c.LITTLEGAME_NUM] += 1
-            elif self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
+            if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
                 self.game_info[c.LEVEL_NUM] += 1
-            self.next = c.GAME_VICTORY
+                if self.game_info[c.LEVEL_NUM] >= map.TOTAL_LEVEL:
+                    self.game_info[c.LEVEL_COMPLETIONS] += 1
+                    self.game_info[c.LEVEL_NUM] = 1
+                    self.next = c.AWARD_SCREEN
+                    # 播放大胜利音效
+                    c.SOUND_FINAL_FANFARE.play()
+                else:
+                    self.next = c.GAME_VICTORY
+                    # 播放胜利音效
+                    c.SOUND_WIN.play()
+            elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
+                self.game_info[c.LITTLEGAME_NUM] += 1
+                if self.game_info[c.LITTLEGAME_NUM] >= map.TOTAL_LITTLE_GAME:
+                    self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
+                    self.game_info[c.LITTLEGAME_NUM] = 1
+                    self.next = c.AWARD_SCREEN
+                    # 播放大胜利音效
+                    c.SOUND_FINAL_FANFARE.play()
+                else:
+                    self.next = c.GAME_VICTORY
+                    # 播放胜利音效
+                    c.SOUND_WIN.play()
             self.done = True
-            # 播放胜利音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "win.ogg")).play()
-            with open(c.USERDATA_PATH, "w") as f:
-                userdata = {}
-                for i in self.game_info:
-                    if i in c.USERDATA_KEYS:
-                        userdata[i] = self.game_info[i]
-                savedata = json.dumps(userdata, sort_keys=True, indent=4)
-                f.write(savedata)
+            self.saveUserData()
         elif self.checkLose():
+            # 播放失败音效
+            c.SOUND_LOSE.play()
+            c.SOUND_SCREAM.play()
             self.next = c.GAME_LOSE
             self.done = True
-            # 播放失败音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "lose.ogg")).play()
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "scream.ogg")).play()
 
     def drawMouseShow(self, surface):
         if self.hint_plant:
@@ -1468,8 +1465,8 @@ class Level(tool.State):
                     if c.LILYPAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
                         if i.name == c.LILYPAD:
                             continue
-                    elif '花盆（未实现）' in self.map.map[map_y][map_x][c.MAP_PLANT]:
-                        if i.name == '花盆（未实现）':
+                    elif "花盆（未实现）" in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                        if i.name == "花盆（未实现）":
                             continue
                 i.highlightTime = self.current_time
                 return
@@ -1484,14 +1481,14 @@ class Level(tool.State):
         surface.blit(self.level_progress_bar_image, self.level_progress_bar_image_rect)
 
         # 按照当前波数生成僵尸头位置
-        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x - int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 145      # 常数为预计值
-        self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 常数为预计值
+        self.level_progress_zombie_head_image_rect.x = self.level_progress_bar_image_rect.x - int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 145      # 常数为拟合值
+        self.level_progress_zombie_head_image_rect.y = self.level_progress_bar_image_rect.y - 3      # 常数为拟合值
 
         # 填充的进度条信息
-        # 常数为预计值
+        # 常数为拟合值
         filledBarRect = (self.level_progress_zombie_head_image_rect.x + 3, self.level_progress_bar_image_rect.y + 6, int((150 * self.waveNum) / (self.map_data[c.NUM_FLAGS] * 10)) + 5, 9)
         # 画填充的进度条
-        pg.draw.rect(surface, c.GREEN, filledBarRect)
+        pg.draw.rect(surface, c.YELLOWGREEN, filledBarRect)
         
         # 画旗帜
         for i in range(self.numFlags):
@@ -1506,6 +1503,23 @@ class Level(tool.State):
         # 画僵尸头
         surface.blit(self.level_progress_zombie_head_image, self.level_progress_zombie_head_image_rect)
 
+    def showAllContentOfMenu(self, surface):
+        # 绘制不可变内容
+        surface.blit(self.big_menu, self.big_menu_rect)
+        surface.blit(self.return_button, self.return_button_rect)
+        surface.blit(self.restart_button, self.restart_button_rect)
+        surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
+        surface.blit(self.sound_volume_minus_button, self.sound_volume_minus_button_rect)
+        surface.blit(self.sound_volume_plus_button, self.sound_volume_plus_button_rect)
+        
+        # 显示当前音量
+        # 由于音量可变，因此这一内容不能在一开始就结束加载，而应当不断刷新不断显示
+        font = pg.font.Font(c.FONT_PATH, 30)
+        volume_tips = font.render(f"音量：{round(self.game_info[c.SOUND_VOLUME]*100):3}%", True, c.LIGHTGRAY)
+        volume_tips_rect = volume_tips.get_rect()
+        volume_tips_rect.x = 275
+        volume_tips_rect.y = 247
+        surface.blit(volume_tips, volume_tips_rect)
 
     def draw(self, surface):
         self.level.blit(self.background, self.viewport, self.viewport)
@@ -1515,10 +1529,7 @@ class Level(tool.State):
             # 画小菜单
             surface.blit(self.little_menu, self.little_menu_rect)
             if self.showLittleMenu:
-                surface.blit(self.big_menu, self.big_menu_rect)
-                surface.blit(self.return_button, self.return_button_rect)
-                surface.blit(self.restart_button, self.restart_button_rect)
-                surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
+                self.showAllContentOfMenu(surface)
         # 以后可能需要插入一个预备的状态（预览显示僵尸、返回战场）
         elif self.state == c.PLAY:
             if self.hasShovel:
@@ -1547,10 +1558,7 @@ class Level(tool.State):
                 self.drawMouseShowPlus(surface)
 
             if self.showLittleMenu:
-                surface.blit(self.big_menu, self.big_menu_rect)
-                surface.blit(self.return_button, self.return_button_rect)
-                surface.blit(self.restart_button, self.restart_button_rect)
-                surface.blit(self.mainMenu_button, self.mainMenu_button_rect)
+                self.showAllContentOfMenu(surface)
 
             if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
                 self.showLevelProgress(surface)

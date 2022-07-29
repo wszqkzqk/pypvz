@@ -1,6 +1,4 @@
-import os
 import random
-from select import select
 import pygame as pg
 from .. import tool
 from .. import constants as c
@@ -8,14 +6,14 @@ from .. import constants as c
 
 def getSunValueImage(sun_value):
     # for pack, must include ttf
-    fontPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),'resources', 'freesansbold.ttf')
-    font = pg.font.Font(fontPath, 14)
+    font = pg.font.Font(c.FONT_PATH, 14)
+    font.bold = True
     width = 35
     msg_image = font.render(str(sun_value), True, c.NAVYBLUE, c.LIGHTYELLOW)
     msg_rect = msg_image.get_rect()
     msg_w = msg_rect.width
 
-    image = pg.Surface([width, 17])
+    image = pg.Surface((width, 17))
     x = width - msg_w
 
     image.fill(c.LIGHTYELLOW)
@@ -35,6 +33,12 @@ class Card():
         self.rect = self.orig_image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        # 绘制植物阳光消耗大小
+        font = pg.font.Font(c.FONT_PATH, 12)
+        self.sun_cost_img = font.render(str(c.PLANT_CARD_INFO[index][c.SUN_INDEX]), True, c.BLACK)
+        self.sun_cost_img_rect = self.sun_cost_img.get_rect()
+        sun_cost_img_x = 32 - self.sun_cost_img_rect.w
+        self.orig_image.blit(self.sun_cost_img, (sun_cost_img_x, 52, self.sun_cost_img_rect.w, self.sun_cost_img_rect.h))
         
         self.index = index
         self.sun_cost = c.PLANT_CARD_INFO[index][c.SUN_INDEX]
@@ -161,6 +165,9 @@ class MenuBar():
             if card.checkMouseClick(mouse_pos):
                 if card.canClick(self.sun_value, self.current_time):
                     result = (c.PLANT_CARD_INFO[card.index][c.PLANT_NAME_INDEX], card)
+                else:
+                    # 播放无法使用该卡片的警告音
+                    c.SOUND_CANNOT_CHOOSE_WARNING.play()
                 break
         return result
     
@@ -189,7 +196,7 @@ class MenuBar():
         self.value_image = getSunValueImage(self.sun_value)
         self.value_rect = self.value_image.get_rect()
         self.value_rect.x = 21
-        self.value_rect.y = self.rect.bottom - 21
+        self.value_rect.y = self.rect.bottom - 24
         
         self.image.blit(self.value_image, self.value_rect)
 
@@ -229,7 +236,7 @@ class Panel():
         self.value_image = getSunValueImage(sun_value)
         self.value_rect = self.value_image.get_rect()
         self.value_rect.x = 21
-        self.value_rect.y = self.menu_rect.bottom - 21
+        self.value_rect.y = self.menu_rect.bottom - 24
 
         self.button_image =  self.loadFrame(c.START_BUTTON)
         self.button_rect = self.button_image.get_rect()
@@ -260,7 +267,7 @@ class Panel():
             self.selected_cards.remove(delete_card)
             self.selected_num -= 1
             # 播放点击音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "tap.ogg")).play()
+            c.SOUND_TAPPING_CARD.play()
 
         if self.selected_num >= c.CARD_MAX_NUM:
             return
@@ -270,7 +277,7 @@ class Panel():
                 if card.canSelect():
                     self.addCard(card)
                     # 播放点击音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "tap.ogg")).play()
+                    c.SOUND_TAPPING_CARD.play()
                 break
 
     def addCard(self, card):
@@ -398,7 +405,7 @@ class MoveBar():
         x = self.card_end_x
         y = 6
         selected_card = random.choices(self.card_pool_name, self.card_pool_weight)[0]
-        self.card_list.append(MoveCard(x, y, selected_card[c.CARD_INDEX] + "_move", selected_card[c.PLANT_NAME_INDEX]))
+        self.card_list.append(MoveCard(x, y, selected_card[c.CARD_INDEX], selected_card[c.PLANT_NAME_INDEX]))
         return True
 
     def update(self, current_time):

@@ -1,5 +1,4 @@
 import pygame as pg
-import os
 import random
 from .. import tool
 from .. import constants as c
@@ -60,9 +59,9 @@ class Zombie(pg.sprite.Sprite):
         frame_list = tool.GFX[name]
         rect = frame_list[0].get_rect()
         width, height = rect.w, rect.h
-        if name in tool.ZOMBIE_RECT:
-            data = tool.ZOMBIE_RECT[name]
-            x, width = data['x'], data['width']
+        if name in c.ZOMBIE_RECT:
+            data = c.ZOMBIE_RECT[name]
+            x, width = data["x"], data["width"]
         else:
             x = 0
         for frame in frame_list:
@@ -117,7 +116,7 @@ class Zombie(pg.sprite.Sprite):
                         self.swimming = True
                         self.changeFrames(self.swim_frames)
                         # 播放入水音效
-                        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieEnteringWater.ogg")).play()
+                        c.SOUND_ZOMBIE_ENTERING_WATER.play()
                         # 同样没有兼容双防具
                         if self.helmet:
                             if self.helmetHealth <= 0:
@@ -256,7 +255,7 @@ class Zombie(pg.sprite.Sprite):
                     self.prey.setDamage(self.damage)
                 
                 # 播放啃咬音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieAttack.ogg")).play()
+                c.SOUND_ZOMBIE_ATTACKING.play()
             self.attack_timer = self.current_time
 
         if self.prey.health <= 0:
@@ -288,7 +287,7 @@ class Zombie(pg.sprite.Sprite):
             self.head_group.add(ZombieHead(self.rect.centerx, self.rect.bottom))
 
     def changeFrames(self, frames):
-        '''change image frames and modify rect position'''
+        """change image frames and modify rect position"""
         self.frames = frames
         self.frame_num = len(self.frames)
         self.frame_index = 0
@@ -333,7 +332,7 @@ class Zombie(pg.sprite.Sprite):
     def setIceSlow(self):
         # 在转入冰冻减速状态时播放冰冻音效
         if self.ice_slow_ratio == 1:
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "freeze.ogg")).play()
+            c.SOUND_FREEZE.play()
 
         # when get a ice bullet damage, slow the attack or walk speed of the zombie
         self.ice_slow_timer = self.current_time
@@ -432,7 +431,7 @@ class Zombie(pg.sprite.Sprite):
             else:   # 没有防具
                 self.health -= damage
         else:
-            print('警告：植物攻击类型错误，现在默认进行类豌豆射手型攻击')
+            print("警告：植物攻击类型错误，现在默认进行类豌豆射手型攻击")
             self.setDamage(damage, effect=effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
         
         # 记录攻击时间              
@@ -509,7 +508,7 @@ class Zombie(pg.sprite.Sprite):
         self.is_hypno = True
         self.setWalk()
         # 播放魅惑音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "hypnoed.ogg")).play()
+        c.SOUND_HYPNOED.play()
 
 
 class ZombieHead(Zombie):
@@ -540,10 +539,10 @@ class NormalZombie(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        attack_name = self.name + 'Attack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = self.name + 'Die'
+        attack_name = self.name + "Attack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.walk_frames, self.attack_frames, self.losthead_walk_frames,
@@ -572,12 +571,12 @@ class ConeHeadZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.NORMAL_ZOMBIE
-        attack_name = c.NORMAL_ZOMBIE + 'Attack'
-        losthead_walk_name = c.NORMAL_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.NORMAL_ZOMBIE + 'LostHeadAttack'
-        die_name = c.NORMAL_ZOMBIE + 'Die'
+        attack_name = c.NORMAL_ZOMBIE + "Attack"
+        losthead_walk_name = c.NORMAL_ZOMBIE + "LostHead"
+        losthead_attack_name = c.NORMAL_ZOMBIE + "LostHeadAttack"
+        die_name = c.NORMAL_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -608,12 +607,12 @@ class BucketHeadZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.NORMAL_ZOMBIE
-        attack_name = c.NORMAL_ZOMBIE + 'Attack'
-        losthead_walk_name = c.NORMAL_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.NORMAL_ZOMBIE + 'LostHeadAttack'
-        die_name = c.NORMAL_ZOMBIE + 'Die'
+        attack_name = c.NORMAL_ZOMBIE + "Attack"
+        losthead_walk_name = c.NORMAL_ZOMBIE + "LostHead"
+        losthead_attack_name = c.NORMAL_ZOMBIE + "LostHeadAttack"
+        die_name = c.NORMAL_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -643,10 +642,10 @@ class FlagZombie(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        attack_name = self.name + 'Attack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = c.NORMAL_ZOMBIE + 'Die'
+        attack_name = self.name + "Attack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = c.NORMAL_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.walk_frames, self.attack_frames, self.losthead_walk_frames,
@@ -677,13 +676,13 @@ class NewspaperZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
-        walk_name = self.name + 'NoPaper'
-        attack_name = self.name + 'NoPaperAttack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        lostnewspaper_name = self.name + 'LostNewspaper'
-        die_name = self.name + 'Die'
+        helmet_attack_name = self.name + "Attack"
+        walk_name = self.name + "NoPaper"
+        attack_name = self.name + "NoPaperAttack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        lostnewspaper_name = self.name + "LostNewspaper"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -712,7 +711,7 @@ class NewspaperZombie(Zombie):
             self.changeFrames(self.lostnewspaper_frames)
             self.helmetType2 = False
             # 触发报纸撕裂音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperRip.ogg")).play()
+            c.SOUND_NEWSPAPER_RIP.play()
         if ((self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio())):
             self.handleGarlicYChange()
             self.walk_timer = self.current_time
@@ -740,7 +739,7 @@ class NewspaperZombie(Zombie):
                     self.speed = 2.65
                     self.walk_animate_interval = 300
                     # 触发报纸僵尸暴走音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "newspaperZombieAngry.ogg")).play()
+                    c.SOUND_NEWSPAPER_ZOMBIE_ANGRY.play()
                     return
                 self.frame_index = 0
             self.animate_timer = self.current_time
@@ -775,12 +774,12 @@ class FootballZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
-        walk_name = self.name + 'LostHelmet'
-        attack_name = self.name + 'LostHelmetAttack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = self.name + 'Die'
+        helmet_attack_name = self.name + "Attack"
+        walk_name = self.name + "LostHelmet"
+        attack_name = self.name + "LostHelmetAttack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -809,11 +808,11 @@ class DuckyTubeZombie(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        swim_name = self.name + 'Swim'
-        attack_name = self.name + 'Attack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHead'
-        die_name = self.name + 'Die'
+        swim_name = self.name + "Swim"
+        attack_name = self.name + "Attack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHead"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.walk_frames, self.swim_frames, self.attack_frames, self.losthead_walk_frames,
@@ -843,14 +842,14 @@ class ConeHeadDuckyTubeZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_swim_name = self.name + 'Swim'
-        helmet_attack_name = self.name + 'Attack'
+        helmet_swim_name = self.name + "Swim"
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.DUCKY_TUBE_ZOMBIE
-        swim_name = c.DUCKY_TUBE_ZOMBIE + 'Swim'
-        attack_name = c.DUCKY_TUBE_ZOMBIE + 'Attack'
-        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
-        die_name = c.DUCKY_TUBE_ZOMBIE + 'Die'
+        swim_name = c.DUCKY_TUBE_ZOMBIE + "Swim"
+        attack_name = c.DUCKY_TUBE_ZOMBIE + "Attack"
+        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + "LostHead"
+        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + "LostHead"
+        die_name = c.DUCKY_TUBE_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_swim_frames, self.helmet_attack_frames, self.walk_frames, self.swim_frames, self.attack_frames, self.losthead_walk_frames,
@@ -881,14 +880,14 @@ class BucketHeadDuckyTubeZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_swim_name = self.name + 'Swim'
-        helmet_attack_name = self.name + 'Attack'
+        helmet_swim_name = self.name + "Swim"
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.DUCKY_TUBE_ZOMBIE
-        swim_name = c.DUCKY_TUBE_ZOMBIE + 'Swim'
-        attack_name = c.DUCKY_TUBE_ZOMBIE + 'Attack'
-        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + 'LostHead'
-        die_name = c.DUCKY_TUBE_ZOMBIE + 'Die'
+        swim_name = c.DUCKY_TUBE_ZOMBIE + "Swim"
+        attack_name = c.DUCKY_TUBE_ZOMBIE + "Attack"
+        losthead_walk_name = c.DUCKY_TUBE_ZOMBIE + "LostHead"
+        losthead_attack_name = c.DUCKY_TUBE_ZOMBIE + "LostHead"
+        die_name = c.DUCKY_TUBE_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_swim_frames, self.helmet_attack_frames, self.walk_frames, self.swim_frames, self.attack_frames, self.losthead_walk_frames,
@@ -917,12 +916,12 @@ class ScreenDoorZombie(Zombie):
         self.boomdie_frames = []
 
         helmet_walk_name = self.name
-        helmet_attack_name = self.name + 'Attack'
+        helmet_attack_name = self.name + "Attack"
         walk_name = c.NORMAL_ZOMBIE
-        attack_name = c.NORMAL_ZOMBIE + 'Attack'
-        losthead_walk_name = c.NORMAL_ZOMBIE + 'LostHead'
-        losthead_attack_name = c.NORMAL_ZOMBIE + 'LostHeadAttack'
-        die_name = c.NORMAL_ZOMBIE + 'Die'
+        attack_name = c.NORMAL_ZOMBIE + "Attack"
+        losthead_walk_name = c.NORMAL_ZOMBIE + "LostHead"
+        losthead_attack_name = c.NORMAL_ZOMBIE + "LostHeadAttack"
+        die_name = c.NORMAL_ZOMBIE + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [self.helmet_walk_frames, self.helmet_attack_frames,
@@ -955,14 +954,14 @@ class PoleVaultingZombie(Zombie):
         self.walk_before_jump_frames = []
         self.jump_frames = []
 
-        walk_name = self.name + 'WalkAfterJump'
-        attack_name = self.name + 'Attack'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = self.name + 'Die'
+        walk_name = self.name + "WalkAfterJump"
+        attack_name = self.name + "Attack"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
         walk_before_jump_name = self.name
-        jump_name = self.name + 'Jump'
+        jump_name = self.name + "Jump"
 
         frame_list = [self.walk_frames, self.attack_frames, self.losthead_walk_frames,
                       self.losthead_attack_frames, self.die_frames, self.boomdie_frames,
@@ -983,7 +982,7 @@ class PoleVaultingZombie(Zombie):
             self.successfullyJumped = successfullyJumped
             self.jumpX = jumpX
             # 播放跳跃音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "polevaultjump.ogg")).play()
+            c.SOUND_POLEVAULT_JUMP.play()
 
     def animation(self):
         if self.state == c.FREEZE:
@@ -1051,7 +1050,7 @@ class Zomboni(Zombie):
         self.die_animate_interval = 70
         self.boomDie_animate_interval = 150
         # 播放冰车生成音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zomboni.ogg")).play()
+        c.SOUND_ZOMBONI.play()
 
     def loadImages(self):
         self.walk_frames = []
@@ -1062,11 +1061,11 @@ class Zomboni(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        walk_damaged1_name = self.name + 'Damaged1'
-        walk_damaged2_name = self.name + 'Damaged2'
-        losthead_walk_name = self.name + 'Damaged2'
-        die_name = self.name + 'Die'
-        boomdie_name = self.name + 'BoomDie'
+        walk_damaged1_name = self.name + "Damaged1"
+        walk_damaged2_name = self.name + "Damaged2"
+        losthead_walk_name = self.name + "Damaged2"
+        die_name = self.name + "Die"
+        boomdie_name = self.name + "BoomDie"
 
         frame_list = [  self.walk_frames, self.walk_damaged1_frames,
                         self.walk_damaged2_frames, self.losthead_walk_frames,
@@ -1126,7 +1125,7 @@ class Zomboni(Zombie):
         self.animate_interval = self.die_animate_interval
         self.changeFrames(self.die_frames)
         # 播放冰车爆炸音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zomboniExplosion.ogg")).play()
+        c.SOUND_ZOMBONI_EXPLOSION.play()
 
 
 class SnorkelZombie(Zombie):
@@ -1149,14 +1148,14 @@ class SnorkelZombie(Zombie):
         self.boomdie_frames = []
 
         walk_name = self.name
-        swim_name = self.name + 'Dive'
-        attack_name = self.name + 'Attack'
-        jump_name = self.name + 'Jump'
-        float_name = self.name + 'Float'
-        sink_name = self.name + 'Sink'
-        losthead_walk_name = self.name + 'LostHead'
-        losthead_attack_name = self.name + 'LostHeadAttack'
-        die_name = self.name + 'Die'
+        swim_name = self.name + "Dive"
+        attack_name = self.name + "Attack"
+        jump_name = self.name + "Jump"
+        float_name = self.name + "Float"
+        sink_name = self.name + "Sink"
+        losthead_walk_name = self.name + "LostHead"
+        losthead_attack_name = self.name + "LostHeadAttack"
+        die_name = self.name + "Die"
         boomdie_name = c.BOOMDIE
 
         frame_list = [  self.walk_frames, self.swim_frames,
@@ -1189,7 +1188,7 @@ class SnorkelZombie(Zombie):
                     self.swimming = True
                     self.changeFrames(self.jump_frames)
                     # 播放入水音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "zombieEnteringWater.ogg")).play()
+                    c.SOUND_ZOMBIE_ENTERING_WATER.play()
             # 已经接近家门口并且上岸
             else:
                 if self.swimming:

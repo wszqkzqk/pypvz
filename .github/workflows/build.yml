@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-            - '3.10'
+            - "3.10"
     name: Windows Python ${{ matrix.python_version }}
     steps:
       - uses: actions/checkout@v2
@@ -39,7 +39,7 @@ jobs:
       # 使用pyinstaller构建
       - name: Build pypvz with pyinstaller
         run: |
-          pyinstaller -F main.py `
+          pyinstaller -F pypvz.py `
                   -n pypvz-with-python${{ matrix.python_version }}-pyinstaller-x64.exe `
                   --distpath ./out `
                   --noconsole `
@@ -76,14 +76,14 @@ jobs:
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll `
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll `
                   --windows-disable-console `
-                  -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-msvc-x64.exe `
-                  main.py
+                  -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-windows-x64.exe `
+                  pypvz.py
 
       # artifact压缩包处上传包含exe和运行环境的文件夹
       - name: "Upload binaries"
         uses: actions/upload-artifact@v2
         with:
-          name: artifact-python-${{ matrix.python_version }}
+          name: artifact-windows-python-${{ matrix.python_version }}
           path: ./out/*.dist
 
       - name: Release the version built by nuitka
@@ -93,3 +93,59 @@ jobs:
           tag: Latest
           artifacts: ./out/*nuitka*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  #linux:
+  #  runs-on: ubuntu-latest
+  #  strategy:
+  #    fail-fast: false
+  #    matrix:
+  #      python_version:
+  #          - "3.10"
+  #  name: Ubuntu Python ${{ matrix.python_version }}
+  #  steps:
+  #    - name: 🛎️ Checkout
+  #      uses: actions/checkout@v2
+  #      with:
+  #        fetch-depth: 0
+
+  #    - name: 🐍 Use Python ${{ matrix.python_version }}
+  #      uses: actions/setup-python@v2
+  #      with:
+  #        python-version: ${{ matrix.python_version }}
+
+  #    - name: 🧳 Install dependencies
+  #      run: |
+  #        sudo apt-get update
+  #        sudo apt-get install patchelf gdb ccache libfuse2 zstd tar
+  #        python -m pip install --no-python-version-warning --disable-pip-version-check zstandard appdirs ordered-set tqdm Jinja2
+  #        python -m pip install --no-python-version-warning --disable-pip-version-check nuitka
+  #        python -m pip install --no-python-version-warning --disable-pip-version-check pygame
+
+  #    # 使用Nuitka构建
+  #    - name: Show nuitka version
+  #      run: |
+  #        env
+  #        python -m nuitka --version
+
+  #    - name: Build pypvz with Nuitka
+  #      run: |
+  #        yes | python -m nuitka \
+  #                --show-progress \
+  #                --follow-imports \
+  #                --show-memory \
+  #                --output-dir=out \
+  #                --linux-onefile-icon=pypvz.ico \
+  #                -o ./out/pypvz \
+  #                --remove-output \
+  #                main.py
+  #        cp -r ./resources ./out/resources
+  #        cd out
+  #        tar -cvpaf ../pypvz-with-python${{ matrix.python_version }}-nuitka-linux-x64.tar.zst .
+
+  #    - name: Release the version built by nuitka
+  #      uses: ncipollo/release-action@v1
+  #      with:
+  #        allowUpdates: true
+  #        tag: Latest
+  #        artifacts: ./*.tar.zst
+  #        token: ${{ secrets.GITHUB_TOKEN }}

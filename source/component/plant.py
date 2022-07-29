@@ -1,6 +1,5 @@
 import random
 import pygame as pg
-import os
 from .. import tool
 from .. import constants as c
 
@@ -31,7 +30,7 @@ class Car(pg.sprite.Sprite):
         if self.state == c.IDLE:
             self.state = c.WALK
             # 播放音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "carWalking.ogg")).play()
+            c.SOUND_CAR_WALKING.play()
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -65,9 +64,9 @@ class Bullet(pg.sprite.Sprite):
 
     def loadFrames(self, frames, name):
         frame_list = tool.GFX[name]
-        if name in tool.PLANT_RECT:
-            data = tool.PLANT_RECT[name]
-            x, y, width, height = data['x'], data['y'], data['width'], data['height']
+        if name in c.PLANT_RECT:
+            data = c.PLANT_RECT[name]
+            x, y, width, height = data["x"], data["y"], data["width"], data["height"]
         else:
             x, y = 0, 0
             rect = frame_list[0].get_rect()
@@ -82,15 +81,15 @@ class Bullet(pg.sprite.Sprite):
 
         fly_name = self.name
         if self.name == c.BULLET_MUSHROOM:
-            explode_name = 'BulletMushRoomExplode'
+            explode_name = "BulletMushRoomExplode"
         elif self.name == c.BULLET_PEA_ICE:
-            explode_name = 'PeaIceExplode'
+            explode_name = "PeaIceExplode"
         elif self.name == c.BULLET_SEASHROOM:
-            explode_name = 'BulletSeaShroomExplode'
+            explode_name = "BulletSeaShroomExplode"
         elif self.name == c.BULLET_STAR:
-            explode_name = 'StarBulletExplode'
+            explode_name = "StarBulletExplode"
         else:
-            explode_name = 'PeaNormalExplode'
+            explode_name = "PeaNormalExplode"
 
         self.loadFrames(self.fly_frames, fly_name)
         self.loadFrames(self.explode_frames, explode_name)
@@ -127,9 +126,9 @@ class Bullet(pg.sprite.Sprite):
 
         # 播放子弹爆炸音效
         if self.name == c.BULLET_FIREBALL:
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "firepea.ogg")).play()
+            c.SOUND_FIREPEA_EXPLODE.play()
         else:
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bulletExplode.ogg")).play()
+            c.SOUND_BULLET_EXPLODE.play()
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -251,11 +250,11 @@ class Plant(pg.sprite.Sprite):
         # 被铲子指向时间
         self.highlightTime = 0
 
-    def loadFrames(self, frames, name, scale, color=c.BLACK):
+    def loadFrames(self, frames, name, scale=1, color=c.BLACK):
         frame_list = tool.GFX[name]
-        if name in tool.PLANT_RECT:
-            data = tool.PLANT_RECT[name]
-            x, y, width, height = data['x'], data['y'], data['width'], data['height']
+        if name in c.PLANT_RECT:
+            data = c.PLANT_RECT[name]
+            x, y, width, height = data["x"], data["y"], data["width"], data["height"]
         else:
             x, y = 0, 0
             rect = frame_list[0].get_rect()
@@ -268,7 +267,7 @@ class Plant(pg.sprite.Sprite):
         self.loadFrames(self.frames, name, scale)
 
     def changeFrames(self, frames):
-        '''change image frames and modify rect position'''
+        """change image frames and modify rect position"""
         self.frames = frames
         self.frame_num = len(self.frames)
         self.frame_index = 0
@@ -417,7 +416,7 @@ class PeaShooter(Plant):
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
+            c.SOUND_SHOOT.play()
 
     def setAttack(self):
         self.state = c.ATTACK
@@ -441,13 +440,13 @@ class RepeaterPea(Plant):
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
+            c.SOUND_SHOOT.play()
         elif self.firstShot and (self.current_time - self.shoot_timer) > 100:
             self.firstShot = False
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             # 播放发射音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
+            c.SOUND_SHOOT.play()
 
     def setAttack(self):
         self.state = c.ATTACK
@@ -483,7 +482,7 @@ class ThreePeaShooter(Plant):
                                                      c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
+            c.SOUND_SHOOT.play()
 
     def setAttack(self):
         self.state = c.ATTACK
@@ -503,9 +502,9 @@ class SnowPeaShooter(Plant):
                                          c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, effect=c.BULLET_EFFECT_ICE))
             self.shoot_timer = self.current_time
             # 播放发射音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
+            c.SOUND_SHOOT.play()
             # 播放冰子弹音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "snowPeaSparkles.ogg")).play()
+            c.SOUND_SNOWPEA_SPARKLES.play()
 
     def setAttack(self):
         self.state = c.ATTACK
@@ -523,11 +522,11 @@ class WallNut(Plant):
         self.cracked1_frames = []
         self.cracked2_frames = []
 
-        cracked1_frames_name = self.name + '_cracked1'
-        cracked2_frames_name = self.name + '_cracked2'
+        cracked1_frames_name = self.name + "_cracked1"
+        cracked2_frames_name = self.name + "_cracked2"
 
-        self.loadFrames(self.cracked1_frames, cracked1_frames_name, 1)
-        self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name)
 
     def idling(self):
         if (not self.cracked1) and self.health <= c.WALLNUT_CRACKED1_HEALTH:
@@ -549,7 +548,7 @@ class CherryBomb(Plant):
         self.explode_x_range = c.GRID_X_SIZE * 1.5
 
     def setBoom(self):
-        frame = tool.GFX[c.CHERRY_BOOM_IMAGE]
+        frame = tool.GFX[c.BOOM_IMAGE]
         rect = frame.get_rect()
         width, height = rect.w, rect.h
 
@@ -567,7 +566,7 @@ class CherryBomb(Plant):
             if self.bomb_timer == 0:
                 self.bomb_timer = self.current_time
                 # 播放爆炸音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
+                c.SOUND_BOMB.play()
             elif (self.current_time - self.bomb_timer) > 500:
                 self.health = 0
         else:
@@ -606,13 +605,13 @@ class Chomper(Plant):
         self.animate_interval = 100 # 本身动画播放较慢
 
         idle_name = name
-        attack_name = name + 'Attack'
-        digest_name = name + 'Digest'
+        attack_name = name + "Attack"
+        digest_name = name + "Digest"
 
         frame_list = [self.idle_frames, self.attack_frames, self.digest_frames]
         name_list = [idle_name, attack_name, digest_name]
         scale_list = [1, 1, 1]
-        rect_list = [(0, 0, 100, 114), None, None]
+        #rect_list = [(0, 0, 100, 114), None, None]
 
         for i, name in enumerate(name_list):
             self.loadFrames(frame_list[i], name, scale_list[i])
@@ -647,7 +646,7 @@ class Chomper(Plant):
     def attacking(self):
         if self.frame_index == (self.frame_num - 3):
             # 播放吞的音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bigchomp.ogg")).play()
+            c.SOUND_BIGCHOMP.play()
             if self.attack_zombie.alive():
                 self.shouldDiggest = True
                 self.attack_zombie.kill()
@@ -677,13 +676,13 @@ class PuffShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.sleep_frames]
         name_list = [idle_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -695,7 +694,7 @@ class PuffShroom(Plant):
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
+            c.SOUND_PUFF.play()
 
     def canAttack(self, zombie):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
@@ -727,15 +726,15 @@ class PotatoMine(Plant):
         self.idle_frames = []
         self.explode_frames = []
 
-        init_name = name + 'Init'
+        init_name = name + "Init"
         idle_name = name
-        explode_name = name + 'Explode'
+        explode_name = name + "Explode"
 
         frame_list = [self.init_frames, self.idle_frames, self.explode_frames]
         name_list = [init_name, idle_name, explode_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.init_frames
 
@@ -760,7 +759,7 @@ class PotatoMine(Plant):
         if self.bomb_timer == 0:
             self.bomb_timer = self.current_time
             # 播放音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "potatomine.ogg")).play()
+            c.SOUND_POTATOMINE.play()
             self.changeFrames(self.explode_frames)
             self.start_boom = True
         elif (self.current_time - self.bomb_timer) > 500:
@@ -781,14 +780,14 @@ class Squash(Plant):
         self.attack_frames = []
 
         idle_name = name
-        aim_name = name + 'Aim'
-        attack_name = name + 'Attack'
+        aim_name = name + "Aim"
+        attack_name = name + "Attack"
 
         frame_list = [self.idle_frames, self.aim_frames, self.attack_frames]
         name_list = [idle_name, aim_name, attack_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -820,10 +819,10 @@ class Squash(Plant):
                 self.mapPlantsSet.remove(c.SQUASH)
                 self.kill()
                 # 播放碾压音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "squashing.ogg")).play()
+                c.SOUND_SQUASHING.play()
         elif self.aim_timer == 0:
             # 锁定目标时播放音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "squashHmm.ogg")).play()
+            c.SOUND_SQUASH_HMM.play()
             self.aim_timer = self.current_time
             self.changeFrames(self.aim_frames)
         elif (self.current_time - self.aim_timer) > 1000:
@@ -838,12 +837,9 @@ class Squash(Plant):
 
 class Spikeweed(Plant):
     def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.SPIKEWEED, c.PLANT_HEALTH, None)
+        Plant.__init__(self, x, y, c.SPIKEWEED, c.PLANT_HEALTH, None, scale=0.9)
         self.animate_interval = 70
         self.attack_timer = 0
-
-    def loadImages(self, name, scale):
-        self.loadFrames(self.frames, name, 0.9, c.WHITE)
 
     def setIdle(self):
         self.animate_interval = 70
@@ -852,7 +848,7 @@ class Spikeweed(Plant):
     def canAttack(self, zombie):
         # 地刺能不能扎的判据：僵尸中心与地刺中心的距离或僵尸包括了地刺中心和右端（平衡得到合理的攻击范围,"僵尸包括了地刺中心和右端"是为以后巨人做准备）
         # 暂时不能用碰撞判断，平衡性不好
-        if ((-45 <= zombie.rect.x - self.rect.x <= 30) or (zombie.rect.left <= self.rect.x <= zombie.rect.right and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
+        if ((-40 <= zombie.rect.centerx - self.rect.centerx <= 40) or (zombie.rect.left <= self.rect.x <= zombie.rect.right and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
             return True
         return False
 
@@ -881,7 +877,7 @@ class Spikeweed(Plant):
             if killSelf:
                 self.health = 0
             # 播放攻击音效，同子弹打击
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bulletExplode.ogg")).play()
+            c.SOUND_BULLET_EXPLODE.play()
 
 
 class Jalapeno(Plant):
@@ -896,10 +892,10 @@ class Jalapeno(Plant):
 
     def loadImages(self, name, scale):
         self.explode_frames = []
-        explode_name = name + 'Explode'
-        self.loadFrames(self.explode_frames, explode_name, 1, c.WHITE)
+        explode_name = name + "Explode"
+        self.loadFrames(self.explode_frames, explode_name)
 
-        self.loadFrames(self.frames, name, 1, c.WHITE)
+        self.loadFrames(self.frames, name)
 
     def setExplode(self):
         self.changeFrames(self.explode_frames)
@@ -912,7 +908,7 @@ class Jalapeno(Plant):
             if (self.current_time - self.animate_timer) > 100:
                 if self.frame_index == 1:
                     # 播放爆炸音效
-                    pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
+                    c.SOUND_BOMB.play()
                 self.frame_index += 1
                 if self.frame_index >= self.frame_num:
                     self.health = 0
@@ -952,14 +948,14 @@ class ScaredyShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        cry_name = name + 'Cry'
-        sleep_name = name + 'Sleep'
+        cry_name = name + "Cry"
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.cry_frames, self.sleep_frames]
         name_list = [idle_name, cry_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -990,7 +986,7 @@ class ScaredyShroom(Plant):
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
+            c.SOUND_PUFF.play()
 
 
 class SunShroom(Plant):
@@ -1009,14 +1005,14 @@ class SunShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        big_name = name + 'Big'
-        sleep_name = name + 'Sleep'
+        big_name = name + "Big"
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.big_frames, self.sleep_frames]
         name_list = [idle_name, big_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1028,7 +1024,7 @@ class SunShroom(Plant):
                 self.changeFrames(self.big_frames)
                 self.is_big = True
                 # 播放长大音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "plantGrow.ogg")).play()
+                c.SOUND_PLANT_GROW.play()
         if self.sun_timer == 0:
             self.sun_timer = self.current_time - (c.FLOWER_SUN_INTERVAL - 6000)
         elif (self.current_time - self.sun_timer) > c.FLOWER_SUN_INTERVAL:
@@ -1052,16 +1048,16 @@ class IceShroom(Plant):
         self.trap_frames = []
 
         idle_name = name
-        snow_name = name + 'Snow'
-        sleep_name = name + 'Sleep'
-        trap_name = name + 'Trap'
+        snow_name = name + "Snow"
+        sleep_name = name + "Sleep"
+        trap_name = name + "Trap"
 
         frame_list = [self.idle_frames, self.snow_frames, self.sleep_frames, self.trap_frames]
         name_list = [idle_name, snow_name, sleep_name, trap_name]
         scale_list = [1, 1.5, 1, 1]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, scale_list[i], c.WHITE)
+            self.loadFrames(frame_list[i], name, scale_list[i])
 
         self.frames = self.idle_frames
 
@@ -1118,13 +1114,13 @@ class HypnoShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.sleep_frames]
         name_list = [idle_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
     
@@ -1148,7 +1144,7 @@ class WallNutBowling(Plant):
         self.disable_hit_y = -1
 
     def loadImages(self, name, scale):
-        self.loadFrames(self.frames, name, 1, c.WHITE)
+        self.loadFrames(self.frames, name, 1)
 
     def idling(self):
         if self.move_timer == 0:
@@ -1233,16 +1229,12 @@ class RedWallNutBowling(Plant):
 
     def loadImages(self, name, scale):
         self.idle_frames = []
-        self.explode_frames = []
+        self.loadFrames(self.idle_frames, name, 1)
 
-        idle_name = name
-        explode_name = name + 'Explode'
-
-        frame_list = [self.idle_frames, self.explode_frames]
-        name_list = [idle_name, explode_name]
-
-        for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.WHITE)
+        frame = tool.GFX[c.BOOM_IMAGE]
+        rect = frame.get_rect()
+        image = tool.get_image(frame, 0, 0, rect.w, rect.h)
+        self.explode_frames = (image, )
 
         self.frames = self.idle_frames
 
@@ -1262,7 +1254,7 @@ class RedWallNutBowling(Plant):
             self.explode_timer = self.current_time
             self.changeFrames(self.explode_frames)
             # 播放爆炸音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "bomb.ogg")).play()
+            c.SOUND_BOMB.play()
         elif (self.current_time - self.explode_timer) > 500:
             self.health = 0
 
@@ -1347,7 +1339,7 @@ class StarFruit(Plant):
             self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.y - 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_UP, self.level))
             self.shoot_timer = self.current_time
             # 播放发射音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "shoot.ogg")).play()
+            c.SOUND_SHOOT.play()
 
     def setAttack(self):
         self.state = c.ATTACK
@@ -1378,7 +1370,7 @@ class CoffeeBean(Plant):
                                 plant.setIdle()
                                 plant.changeFrames(plant.idle_frames)
                 # 播放唤醒音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "mushroomWakeup.ogg")).play()
+                c.SOUND_MUSHROOM_WAKEUP.play()
                 self.mapContent[c.MAP_PLANT].remove(self.name)
                 self.kill()
                 self.frame_index = self.frame_num - 1
@@ -1406,13 +1398,13 @@ class SeaShroom(Plant):
         self.sleep_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
+        sleep_name = name + "Sleep"
 
         frame_list = [self.idle_frames, self.sleep_frames]
         name_list = [idle_name, sleep_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1424,7 +1416,7 @@ class SeaShroom(Plant):
                                          c.BULLET_SEASHROOM, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "puff.ogg")).play()
+            c.SOUND_PUFF.play()
 
     def canAttack(self, zombie):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
@@ -1451,11 +1443,11 @@ class TallNut(Plant):
         self.cracked1_frames = []
         self.cracked2_frames = []
 
-        cracked1_frames_name = self.name + '_cracked1'
-        cracked2_frames_name = self.name + '_cracked2'
+        cracked1_frames_name = self.name + "_cracked1"
+        cracked2_frames_name = self.name + "_cracked2"
 
-        self.loadFrames(self.cracked1_frames, cracked1_frames_name, 1)
-        self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name)
 
     def idling(self):
         if not self.cracked1 and self.health <= c.TALLNUT_CRACKED1_HEALTH:
@@ -1477,13 +1469,13 @@ class TangleKlep(Plant):
         self.splash_frames = []
 
         idle_name = self.name
-        splash_name = self.name + 'Splash'
+        splash_name = self.name + "Splash"
 
         frame_list = [self.idle_frames, self.splash_frames]
         name_list = [idle_name, splash_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1505,7 +1497,7 @@ class TangleKlep(Plant):
             self.changeFrames(self.splash_frames)
             self.attack_zombie.kill()
             # 播放拖拽音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "tangleKelpDrag.ogg")).play()
+            c.SOUND_TANGLE_KELP_DRAG.play()
         # 这里必须用elif排除尚未进入splash阶段，以免误触
         elif (self.frame_index + 1) >= self.frame_num:
             self.health = 0
@@ -1536,14 +1528,14 @@ class DoomShroom(Plant):
         self.boom_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
-        boom_name = name + 'Boom'
+        sleep_name = name + "Sleep"
+        boom_name = name + "Boom"
 
         frame_list = [self.idle_frames, self.sleep_frames, self.boom_frames]
         name_list = [idle_name, sleep_name, boom_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1558,7 +1550,7 @@ class DoomShroom(Plant):
                 self.rect.x -= 80
                 self.rect.y += 30
                 # 播放爆炸音效
-                pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "doomshroom.ogg")).play()
+                c.SOUND_DOOMSHROOM.play()
             if (self.current_time - self.animate_timer) > self.animate_interval:
                 self.frame_index += 1
             if self.frame_index >= self.frame_num:
@@ -1610,11 +1602,11 @@ class Hole(Plant):
         self.roof2_frames = []
 
         idle_name = name
-        idle2_name = name + 'Shallow'
-        water_name = name + 'Water'
-        water2_name = name + 'WaterShallow'
-        roof_name = name + 'Roof'
-        roof2_name = name + 'RoofShallow'
+        idle2_name = name + "Shallow"
+        water_name = name + "Water"
+        water2_name = name + "WaterShallow"
+        roof_name = name + "Roof"
+        roof2_name = name + "RoofShallow"
 
         frame_list = [  self.idle_frames, self.idle2_frames,
                         self.water_frames, self.water2_frames,
@@ -1624,7 +1616,7 @@ class Hole(Plant):
                         roof_name, roof2_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1)
+            self.loadFrames(frame_list[i], name)
         
         if self.plotType == c.MAP_TILE:
             self.frames = self.roof_frames
@@ -1667,8 +1659,7 @@ class GraveBuster(Plant):
         self.plant_group = plant_group
         self.animate_interval = 100
         # 播放吞噬音效
-        pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "gravebusterchomp.ogg")).play()
-
+        c.SOUND_GRAVEBUSTER_CHOMP.play()
 
     def animation(self):
         if (self.current_time - self.animate_timer) > self.animate_interval:
@@ -1707,14 +1698,14 @@ class FumeShroom(Plant):
         self.attack_frames = []
 
         idle_name = name
-        sleep_name = name + 'Sleep'
-        attack_name = name + 'Attack'
+        sleep_name = name + "Sleep"
+        attack_name = name + "Attack"
 
         frame_list = [self.idle_frames, self.sleep_frames, self.attack_frames]
         name_list = [idle_name, sleep_name, attack_name]
 
         for i, name in enumerate(name_list):
-            self.loadFrames(frame_list[i], name, 1, c.BLACK)
+            self.loadFrames(frame_list[i], name)
 
         self.frames = self.idle_frames
 
@@ -1748,7 +1739,7 @@ class FumeShroom(Plant):
             self.shoot_timer = self.current_time
             self.showAttackFrames = True
             # 播放发射音效
-            pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))) ,"resources", "sound", "fume.ogg")).play()
+            c.SOUND_FUME.play()
         
     def animation(self):
         if (self.current_time - self.animate_timer) > self.animate_interval:
@@ -1794,16 +1785,42 @@ class Garlic(Plant):
         self.cracked1_frames = []
         self.cracked2_frames = []
 
-        cracked1_frames_name = self.name + '_cracked1'
-        cracked2_frames_name = self.name + '_cracked2'
+        cracked1_frames_name = self.name + "_cracked1"
+        cracked2_frames_name = self.name + "_cracked2"
 
-        self.loadFrames(self.cracked1_frames, cracked1_frames_name, 1)
-        self.loadFrames(self.cracked2_frames, cracked2_frames_name, 1)
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name)
 
     def idling(self):
         if (not self.cracked1) and self.health <= c.GARLIC_CRACKED1_HEALTH:
             self.changeFrames(self.cracked1_frames)
             self.cracked1 = True
         elif (not self.cracked2) and self.health <= c.GARLIC_CRACKED2_HEALTH:
+            self.changeFrames(self.cracked2_frames)
+            self.cracked2 = True
+
+class PumpkinHead(Plant):
+    def __init__(self, x, y):
+        Plant.__init__(self, x, y, c.PUMPKINHEAD, c.WALLNUT_HEALTH, None)
+        self.load_images()
+        self.cracked1 = False
+        self.cracked2 = False
+        self.animate_interval = 160
+
+    def load_images(self):
+        self.cracked1_frames = []
+        self.cracked2_frames = []
+
+        cracked1_frames_name = self.name + "_cracked1"
+        cracked2_frames_name = self.name + "_cracked2"
+
+        self.loadFrames(self.cracked1_frames, cracked1_frames_name)
+        self.loadFrames(self.cracked2_frames, cracked2_frames_name)
+
+    def idling(self):
+        if not self.cracked1 and self.health <= c.WALLNUT_CRACKED1_HEALTH:
+            self.changeFrames(self.cracked1_frames)
+            self.cracked1 = True
+        elif not self.cracked2 and self.health <= c.WALLNUT_CRACKED2_HEALTH:
             self.changeFrames(self.cracked2_frames)
             self.cracked2 = True

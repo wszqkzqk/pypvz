@@ -1,8 +1,7 @@
 import random
-import pygame as pg
-from .. import tool
 from .. import constants as c
 
+# 记录植物种植情况的地图管理工具
 class Map():
     def __init__(self, background_type):
         self.background_type = background_type
@@ -11,33 +10,39 @@ class Map():
             self.width = c.GRID_POOL_X_LEN
             self.height = c.GRID_POOL_Y_LEN
             self.gridHeightSize = c.GRID_POOL_Y_SIZE
-            self.map = [[(c.INIT_MAP_GRID(c.MAP_GRASS), c.INIT_MAP_GRID(c.MAP_WATER))[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(self.initMapGrid(c.MAP_GRASS), self.initMapGrid(c.MAP_WATER))[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
         elif self.background_type in c.ON_ROOF_BACKGROUNDS:
             self.width = c.GRID_ROOF_X_LEN
             self.height = c.GRID_ROOF_Y_LEN
             self.gridHeightSize = c.GRID_ROOF_Y_SIZE
-            self.map = [[c.INIT_MAP_GRID(c.MAP_TILE) for x in range(self.width)] for y in range(self.height)]
+            self.map = [[self.initMapGrid(c.MAP_TILE) for x in range(self.width)] for y in range(self.height)]
         elif self.background_type == c.BACKGROUND_SINGLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[(c.INIT_MAP_GRID(c.MAP_UNAVAILABLE), c.INIT_MAP_GRID(c.MAP_GRASS))[y == 2] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(self.initMapGrid(c.MAP_UNAVAILABLE), self.initMapGrid(c.MAP_GRASS))[y == 2] for x in range(self.width)] for y in range(self.height)]
         elif self.background_type == c.BACKGROUND_TRIPLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[(c.INIT_MAP_GRID(c.MAP_UNAVAILABLE), c.INIT_MAP_GRID(c.MAP_GRASS))[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(self.initMapGrid(c.MAP_UNAVAILABLE), self.initMapGrid(c.MAP_GRASS))[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
         else:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[c.INIT_MAP_GRID(c.MAP_GRASS) for x in range(self.width)] for y in range(self.height)]
+            self.map = [[self.initMapGrid(c.MAP_GRASS) for x in range(self.width)] for y in range(self.height)]
 
     def isValid(self, map_x, map_y):
         if (map_x < 0 or map_x >= self.width or
             map_y < 0 or map_y >= self.height):
             return False
         return True
+
+    # 地图单元格状态
+    # 注意是可变对象，不能直接引用
+    # 由于同一格显然不可能种两个相同的植物，所以用集合
+    def initMapGrid(self, plot_type):
+        return {c.MAP_PLANT:set(), c.MAP_SLEEP:False, c.MAP_PLOT_TYPE:plot_type}
 
     # 判断位置是否可用
     # 暂时没有写紫卡植物的判断方法
@@ -62,8 +67,10 @@ class Map():
             if plantName not in c.WATER_PLANTS:
                 if not self.map[map_y][map_x][c.MAP_PLANT]: # 没有植物肯定可以种植
                     return True
-                elif (all((i in {'花盆（未实现）', '南瓜头（未实现）'}) for i in self.map[map_y][map_x][c.MAP_PLANT])
-                and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                elif (all((i in {"花盆（未实现）", c.PUMPKINHEAD}) for i in self.map[map_y][map_x][c.MAP_PLANT])
+                and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植
+                    return True
+                elif (plantName == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 没有南瓜头就能种南瓜头
                     return True
                 else:
                     return False
@@ -72,14 +79,18 @@ class Map():
         elif self.map[map_y][map_x][c.MAP_PLOT_TYPE] == c.MAP_TILE: # 屋顶
             # 首先需要判断植物是否是水生植物，水生植物不能种植在陆地上
             if plantName not in c.WATER_PLANTS:
-                if '花盆（未实现）' in self.map[map_y][map_x][c.MAP_PLANT]:
-                    if (all((i in {'花盆（未实现）', '南瓜头（未实现）'}) for i in self.map[map_y][map_x][c.MAP_PLANT])
-                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植；判断方法：并集
+                if "花盆（未实现）" in self.map[map_y][map_x][c.MAP_PLANT]:
+                    if (all((i in {"花盆（未实现）", c.PUMPKINHEAD}) for i in self.map[map_y][map_x][c.MAP_PLANT])
+                    and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植
                         if plantName in {c.SPIKEWEED}: # 不能在花盆上种植的植物
                             return False
                         else:
                             return True
-                elif plantName == '花盆（未实现）': # 这一格本来没有花盆而且新来的植物是花盆，可以种
+                    elif (plantName == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 有花盆且没有南瓜头就能种南瓜头
+                        return True
+                    else:
+                        return False
+                elif plantName == "花盆（未实现）": # 这一格本来没有花盆而且新来的植物是花盆，可以种
                     return True
                 else:
                     return False
@@ -93,12 +104,14 @@ class Map():
                     return False
             else:   # 非水生植物，依赖睡莲
                 if c.LILYPAD in self.map[map_y][map_x][c.MAP_PLANT]:
-                    if (all((i in {c.LILYPAD, '南瓜头（未实现）'}) for i in self.map[map_y][map_x][c.MAP_PLANT])
+                    if (all((i in {c.LILYPAD, c.PUMPKINHEAD}) for i in self.map[map_y][map_x][c.MAP_PLANT])
                     and (plantName not in self.map[map_y][map_x][c.MAP_PLANT])):
-                        if plantName in {c.SPIKEWEED, c.POTATOMINE, '花盆（未实现）'}: # 不能在睡莲上种植的植物
+                        if plantName in {c.SPIKEWEED, c.POTATOMINE, "花盆（未实现）"}: # 不能在睡莲上种植的植物
                             return False
                         else:
                             return True
+                    elif (plantName == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 在睡莲上且没有南瓜头就能种南瓜头
+                        return True
                     else:
                         return False
                 else:
@@ -157,3 +170,252 @@ class Map():
         if self.isValid(map_x, map_y) and self.isAvailable(map_x, map_y, plantName):
             pos = self.getMapGridPos(map_x, map_y)
         return pos
+
+
+
+# 保存具体关卡地图信息常数
+# 冒险模式地图
+LEVEL_MAP_DATA = (
+# 第0关：测试模式地图
+{
+    c.BACKGROUND_TYPE:  2,
+    c.INIT_SUN_NAME:    5000,
+    c.SHOVEL:           1,
+    c.SPAWN_ZOMBIES:    c.SPAWN_ZOMBIES_LIST,
+    c.ZOMBIE_LIST:[
+        {"time":0, "map_y":5, "name":"Zomboni"},
+        {"time":1000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":2000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":3100, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":4500, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":5000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":6000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":7000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":8000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":0, "map_y":1, "name":"NewspaperZombie"},
+        {"time":0, "map_y":0, "name":"PoleVaultingZombie"},
+        {"time":6000, "map_y":0, "name":"FootballZombie"},
+        {"time":0, "map_y":3, "name":"ConeheadDuckyTubeZombie"},
+        {"time":0, "map_y":2, "name":"SnorkelZombie"},
+        {"time":90000, "map_y":2, "name":"ConeheadDuckyTubeZombie"}
+    ]
+},
+# 第1关：单行草皮
+{
+    c.BACKGROUND_TYPE: 7,
+    c.INIT_SUN_NAME: 150,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES:(c.NORMAL_ZOMBIE,),
+    c.NUM_FLAGS:1
+},
+# 第2关：三行草皮
+{
+    c.BACKGROUND_TYPE: 8,
+    c.INIT_SUN_NAME: 150,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES:(c.NORMAL_ZOMBIE,),
+    c.NUM_FLAGS:1
+},
+# 第3关
+{
+    c.BACKGROUND_TYPE: 0,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES:(c.NORMAL_ZOMBIE,),
+    c.NUM_FLAGS:2
+},
+# 第4关
+{
+    c.BACKGROUND_TYPE: 0,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE, c.POLE_VAULTING_ZOMBIE),
+    c.NUM_FLAGS:2
+},
+# 第5关 目前白天最后一关
+{
+    c.BACKGROUND_TYPE: 0,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE, c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    c.NUM_FLAGS:3
+},
+# 第6关 目前夜晚第一关
+{
+    c.BACKGROUND_TYPE: 1,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE,
+                            c.NEWSPAPER_ZOMBIE),
+    c.NUM_FLAGS:2
+},
+# 第7关
+{
+    c.BACKGROUND_TYPE: 1,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE,
+                            c.SCREEN_DOOR_ZOMBIE,),
+    c.NUM_FLAGS: 2,
+    c.GRADE_GRAVES: 2,
+},
+# 第8关 目前为夜晚最后一关
+{
+    c.BACKGROUND_TYPE: 1,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.NEWSPAPER_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.SCREEN_DOOR_ZOMBIE, c.FOOTBALL_ZOMBIE),
+    c.INEVITABLE_ZOMBIE_DICT:   {   # 这里改用python实现了以后，键不再用字符串，改用数字
+                                    # 仍然要注意字典值是元组
+                                    10: (c.NEWSPAPER_ZOMBIE,),
+                                    20: (c.SCREEN_DOOR_ZOMBIE,),
+                                    30: (c.FOOTBALL_ZOMBIE,),
+                                    },
+    c.NUM_FLAGS: 3,
+    c.GRADE_GRAVES: 3,
+},
+# 第9关 目前为泳池模式第一关
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE,),
+    c.NUM_FLAGS:2
+},
+# 第10关
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.SNORKELZOMBIE),
+    c.INEVITABLE_ZOMBIE_DICT: {30: (c.SNORKELZOMBIE,)},
+    c.NUM_FLAGS:3
+},
+# 第11关
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (c.NORMAL_ZOMBIE, c.ZOMBONI),
+    c.INEVITABLE_ZOMBIE_DICT: {30: (c.ZOMBONI,)},
+    c.NUM_FLAGS:3
+},
+# 第12关 目前为泳池最后一关
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.ZOMBONI,
+                            c.BUCKETHEAD_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.SNORKELZOMBIE),
+    c.INEVITABLE_ZOMBIE_DICT: {40: (c.ZOMBONI,)},
+    c.NUM_FLAGS:4
+},
+# 第13关 目前为浓雾第一关 尚未完善
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.NEWSPAPER_ZOMBIE,
+                            c.ZOMBONI, c.FOOTBALL_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_HEALTH),
+    c.NUM_FLAGS:4
+},
+)
+
+
+
+# 玩玩小游戏地图
+LITTLE_GAME_MAP_DATA = (
+# 第0关 测试 目前空缺
+{},
+# 第1关 坚果保龄球
+{
+    c.BACKGROUND_TYPE: 6,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_BOWLING,
+    c.SHOVEL: 0,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.NEWSPAPER_ZOMBIE),
+    c.NUM_FLAGS:3,
+    c.CARD_POOL: {  c.WALLNUTBOWLING: 300,
+                    c.REDWALLNUTBOWLING: 100,}
+},
+# 第2关 白天 大决战
+{
+    c.BACKGROUND_TYPE: 0,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_MOVE,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE,),
+    c.NUM_FLAGS:3,
+    c.CARD_POOL: {  c.PEASHOOTER: 200,
+                    c.SNOWPEASHOOTER: 100,
+                    c.WALLNUT: 100,
+                    c.CHERRYBOMB: 100,
+                    c.REPEATERPEA: 200,
+                    c.CHOMPER: 100,
+                    c.POTATOMINE: 100,}
+},
+# 第3关 夜晚 大决战
+{
+    c.BACKGROUND_TYPE: 1,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_MOVE,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.FOOTBALL_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.NEWSPAPER_ZOMBIE, c.SCREEN_DOOR_ZOMBIE),
+    c.NUM_FLAGS:3,
+    c.CARD_POOL: {  c.PUFFSHROOM: 100,
+                    c.SCAREDYSHROOM: 100,
+                    c.ICESHROOM: 100,
+                    c.HYPNOSHROOM: 100,
+                    c.DOOMSHROOM: 100,
+                    c.GRAVEBUSTER: 100,
+                    c.FUMESHROOM: 200},
+    c.GRADE_GRAVES:3
+},
+# 第4关 泳池 大决战
+{
+    c.BACKGROUND_TYPE: 2,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_MOVE,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.SNORKELZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.ZOMBONI,),
+    c.NUM_FLAGS:4,
+    c.CARD_POOL: {  c.LILYPAD: 300,
+                    c.TORCHWOOD: 100,
+                    c.TALLNUT: 100,
+                    c.TANGLEKLEP: 100,
+                    c.SPIKEWEED: 100,
+                    c.SQUASH: 100,
+                    c.JALAPENO: 50,
+                    c.THREEPEASHOOTER: 400,}
+},
+)
+
+# 总关卡数
+TOTAL_LEVEL = len(LEVEL_MAP_DATA)
+TOTAL_LITTLE_GAME = len(LITTLE_GAME_MAP_DATA)
