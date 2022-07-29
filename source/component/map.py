@@ -10,33 +10,39 @@ class Map():
             self.width = c.GRID_POOL_X_LEN
             self.height = c.GRID_POOL_Y_LEN
             self.gridHeightSize = c.GRID_POOL_Y_SIZE
-            self.map = [[(c.INIT_MAP_GRID(c.MAP_GRASS), c.INIT_MAP_GRID(c.MAP_WATER))[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(self.initMapGrid(c.MAP_GRASS), self.initMapGrid(c.MAP_WATER))[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
         elif self.background_type in c.ON_ROOF_BACKGROUNDS:
             self.width = c.GRID_ROOF_X_LEN
             self.height = c.GRID_ROOF_Y_LEN
             self.gridHeightSize = c.GRID_ROOF_Y_SIZE
-            self.map = [[c.INIT_MAP_GRID(c.MAP_TILE) for x in range(self.width)] for y in range(self.height)]
+            self.map = [[self.initMapGrid(c.MAP_TILE) for x in range(self.width)] for y in range(self.height)]
         elif self.background_type == c.BACKGROUND_SINGLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[(c.INIT_MAP_GRID(c.MAP_UNAVAILABLE), c.INIT_MAP_GRID(c.MAP_GRASS))[y == 2] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(self.initMapGrid(c.MAP_UNAVAILABLE), self.initMapGrid(c.MAP_GRASS))[y == 2] for x in range(self.width)] for y in range(self.height)]
         elif self.background_type == c.BACKGROUND_TRIPLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[(c.INIT_MAP_GRID(c.MAP_UNAVAILABLE), c.INIT_MAP_GRID(c.MAP_GRASS))[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map = [[(self.initMapGrid(c.MAP_UNAVAILABLE), self.initMapGrid(c.MAP_GRASS))[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
         else:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.gridHeightSize = c.GRID_Y_SIZE
-            self.map = [[c.INIT_MAP_GRID(c.MAP_GRASS) for x in range(self.width)] for y in range(self.height)]
+            self.map = [[self.initMapGrid(c.MAP_GRASS) for x in range(self.width)] for y in range(self.height)]
 
     def isValid(self, map_x, map_y):
         if (map_x < 0 or map_x >= self.width or
             map_y < 0 or map_y >= self.height):
             return False
         return True
+
+    # 地图单元格状态
+    # 注意是可变对象，不能直接引用
+    # 由于同一格显然不可能种两个相同的植物，所以用集合
+    def initMapGrid(PLOT_TYPE):
+        return {c.MAP_PLANT:set(), c.MAP_SLEEP:False, c.MAP_PLOT_TYPE:PLOT_TYPE}
 
     # 判断位置是否可用
     # 暂时没有写紫卡植物的判断方法
