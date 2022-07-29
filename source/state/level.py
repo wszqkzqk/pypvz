@@ -40,32 +40,30 @@ class Level(tool.State):
             f.write(dataToSave)
 
     def loadMap(self):
-        if self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-            map_file = f'littleGame_{self.game_info[c.LITTLEGAME_NUM]}.json'
-            # 设置标题
-            pg.display.set_caption(f"pypvz: 玩玩小游戏 第{self.game_info[c.LITTLEGAME_NUM]}关")
-        elif self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
-            map_file = f'level_{self.game_info[c.LEVEL_NUM]}.json'
-            # 设置标题
-            pg.display.set_caption(f"pypvz: 冒险模式 第{self.game_info[c.LEVEL_NUM]}关")
-        file_path = os.path.join(c.PATH_MAP_DIR, map_file)
-        # 最后一关之后应该结束了
-        try:
-            with open(file_path) as f:
-                self.map_data = json.load(f)
-        except FileNotFoundError:
-            if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
+        # 冒险模式
+        if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
+            if self.game_info[c.LEVEL_NUM] < map.TOTAL_LEVEL:
+                self.map_data = map.LEVEL_MAP_DATA[self.game_info[c.LEVEL_NUM]]
+            else:
                 print("成功通关冒险模式！")
                 self.game_info[c.LEVEL_NUM] = 1
                 self.game_info[c.LEVEL_COMPLETIONS] += 1
-            elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
+                self.done = True
+                self.next = c.MAIN_MENU
+                self.saveUserData()
+                return
+        # 小游戏模式
+        elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
+            if self.game_info[c.LITTLEGAME_NUM] < map.TOTAL_LITTLE_GAME:
+                self.map_data = map.LITTLE_GAME_MAP_DATA[self.game_info[c.LITTLEGAME_NUM]]
+            else:
                 print("成功通关玩玩小游戏！")
                 self.game_info[c.LITTLEGAME_NUM] = 1
                 self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
-            self.done = True
-            self.next = c.MAIN_MENU
-            self.saveUserData()
-            return
+                self.done = True
+                self.next = c.MAIN_MENU
+                self.saveUserData()
+                return
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
         self.hasShovel = self.map_data[c.SHOVEL]
 
@@ -73,7 +71,7 @@ class Level(tool.State):
         # 缺省音乐为进入的音乐，方便发现错误
         self.bgm = 'intro.opus'
         if c.CHOOSEBAR_TYPE in self.map_data:  # 指定了choosebar_type的传送带关
-            if self.map_data[c.CHOOSEBAR_TYPE] == c.CHOSSEBAR_BOWLING:   # 坚果保龄球
+            if self.map_data[c.CHOOSEBAR_TYPE] == c.CHOOSEBAR_BOWLING:   # 坚果保龄球
                 self.bgm = 'bowling.opus'
             elif self.map_data[c.CHOOSEBAR_TYPE] == c.CHOOSEBAR_MOVE:  # 传送带
                 self.bgm = 'battle.opus'
@@ -147,7 +145,7 @@ class Level(tool.State):
             if (self.bar_type != c.CHOOSEBAR_STATIC):
                 volume += 2
 
-            if inevitableZombieDict and (str(wave) in inevitableZombieDict):
+            if inevitableZombieDict and (wave in inevitableZombieDict):
                 for newZombie in inevitableZombieDict[str(wave)]:
                     zombieList.append(newZombie)
                     volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
@@ -368,7 +366,7 @@ class Level(tool.State):
         else:
             card_pool = menubar.getCardPool(self.map_data[c.CARD_POOL])
             self.initPlay(card_pool)
-            if self.bar_type == c.CHOSSEBAR_BOWLING:
+            if self.bar_type == c.CHOOSEBAR_BOWLING:
                 self.initBowlingMap()
 
         self.setupLittleMenu()
@@ -969,7 +967,7 @@ class Level(tool.State):
         else:
             self.menubar.deleateCard(self.select_plant)
 
-        if self.bar_type != c.CHOSSEBAR_BOWLING:    # 坚果保龄球关卡无需考虑格子被占用的情况
+        if self.bar_type != c.CHOOSEBAR_BOWLING:    # 坚果保龄球关卡无需考虑格子被占用的情况
             self.map.addMapPlant(map_x, map_y, self.plant_name, sleep=mushroomSleep)
         self.removeMouseImage()
 
@@ -1263,7 +1261,7 @@ class Level(tool.State):
             c.SOUND_PLANT.play()
 
         # 整理地图信息
-        if self.bar_type != c.CHOSSEBAR_BOWLING:
+        if self.bar_type != c.CHOOSEBAR_BOWLING:
             self.map.removeMapPlant(map_x, map_y, targetPlant.name)
         # 将睡眠植物移除后更新睡眠状态
         if targetPlant.state == c.SLEEP:

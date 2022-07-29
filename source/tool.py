@@ -17,7 +17,8 @@ class State():
     # 当从其他状态进入这个状态时，需要进行的初始化操作
     @abstractmethod
     def startup(self, current_time, persist):
-        '''abstract method'''
+        # abstract method
+        pass
     # 当从这个状态退出时，需要进行的清除操作
     def cleanup(self):
         self.done = False
@@ -25,7 +26,8 @@ class State():
     # 在这个状态运行时进行的更新操作
     @abstractmethod
     def update(self, surface, keys, current_time):
-        '''abstract method'''
+        # abstract method
+        pass
 
 # control this game. do event loops
 class Control():

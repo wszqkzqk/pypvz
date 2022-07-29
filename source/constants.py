@@ -118,6 +118,7 @@ MAIN_MENU_IMAGE = 'MainMenu'
 OPTION_ADVENTURE = 'Adventure'
 GAME_LOSE_IMAGE = 'GameLose'
 GAME_VICTORY_IMAGE = 'GameVictory'
+AWARD_SCREEN_IMAGE = 'AwardScreen'
 
 # 地图相关内容
 BACKGROUND_NAME = 'Background'
@@ -206,7 +207,7 @@ MAP_POOL_FRONT_X = SCREEN_WIDTH - 15
 CHOOSEBAR_TYPE = 'choosebar_type'
 CHOOSEBAR_STATIC = 0
 CHOOSEBAR_MOVE = 1
-CHOSSEBAR_BOWLING = 2
+CHOOSEBAR_BOWLING = 2
 MENUBAR_BACKGROUND = 'ChooserBackground'
 MOVEBAR_BACKGROUND = 'MoveBackground'
 PANEL_BACKGROUND = 'PanelBackground'
@@ -649,6 +650,7 @@ SOUNDS = (  # 程序交互等
             SOUND_LOSE                      := _getSound("lose.ogg"),
             SOUND_WIN                       := _getSound("win.ogg"),
             SOUND_SCREAM                    := _getSound("scream.ogg"),
+            SOUND_CANNOT_CHOOSE_WARNING     := _getSound("cannotChooseWarning.ogg"),
             )
 
 # 记录本地存储文件初始值

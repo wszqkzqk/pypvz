@@ -165,6 +165,9 @@ class MenuBar():
             if card.checkMouseClick(mouse_pos):
                 if card.canClick(self.sun_value, self.current_time):
                     result = (c.PLANT_CARD_INFO[card.index][c.PLANT_NAME_INDEX], card)
+                else:
+                    # 播放无法使用该卡片的警告音
+                    c.SOUND_CANNOT_CHOOSE_WARNING.play()
                 break
         return result
     

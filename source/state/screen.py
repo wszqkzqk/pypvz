@@ -74,3 +74,11 @@ class GameLoseScreen(Screen):
         # 播放失败音效
         c.SOUND_LOSE.play()
         c.SOUND_SCREAM.play()
+
+class AwardScreen(Screen):
+    def __init__(self):
+        Screen.__init__()
+
+    def getImageName(self):
+        return c.AWARD_SCREEN_IMAGE
+

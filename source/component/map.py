@@ -1,6 +1,7 @@
 import random
 from .. import constants as c
 
+# 记录植物种植情况的地图管理工具
 class Map():
     def __init__(self, background_type):
         self.background_type = background_type
@@ -163,3 +164,252 @@ class Map():
         if self.isValid(map_x, map_y) and self.isAvailable(map_x, map_y, plantName):
             pos = self.getMapGridPos(map_x, map_y)
         return pos
+
+
+
+# 保存具体关卡地图信息常数
+# 冒险模式地图
+LEVEL_MAP_DATA = (
+# 第0关：测试模式地图
+{
+    c.BACKGROUND_TYPE:  2,
+    c.INIT_SUN_NAME:    5000,
+    c.SHOVEL:           1,
+    c.SPAWN_ZOMBIES:    c.SPAWN_ZOMBIES_LIST,
+    c.ZOMBIE_LIST:[
+        {"time":0, "map_y":5, "name":"Zomboni"},
+        {"time":1000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":2000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":3100, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":4500, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":5000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":6000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":7000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":8000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":0, "map_y":1, "name":"NewspaperZombie"},
+        {"time":0, "map_y":0, "name":"PoleVaultingZombie"},
+        {"time":6000, "map_y":0, "name":"FootballZombie"},
+        {"time":0, "map_y":3, "name":"ConeheadDuckyTubeZombie"},
+        {"time":0, "map_y":2, "name":"SnorkelZombie"},
+        {"time":90000, "map_y":2, "name":"ConeheadDuckyTubeZombie"}
+    ]
+},
+# 第1关：单行草皮
+{
+    c.BACKGROUND_TYPE: 7,
+    c.INIT_SUN_NAME: 150,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES:(c.NORMAL_ZOMBIE,),
+    c.NUM_FLAGS:1
+},
+# 第2关：三行草皮
+{
+    c.BACKGROUND_TYPE: 8,
+    c.INIT_SUN_NAME: 150,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES:(c.NORMAL_ZOMBIE,),
+    c.NUM_FLAGS:1
+},
+# 第3关
+{
+    c.BACKGROUND_TYPE: 0,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES:(c.NORMAL_ZOMBIE,),
+    c.NUM_FLAGS:2
+},
+# 第4关
+{
+    c.BACKGROUND_TYPE: 0,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE, c.POLE_VAULTING_ZOMBIE),
+    c.NUM_FLAGS:2
+},
+# 第5关 目前白天最后一关
+{
+    c.BACKGROUND_TYPE: 0,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE, c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    c.NUM_FLAGS:3
+},
+# 第6关 目前夜晚第一关
+{
+    c.BACKGROUND_TYPE: 1,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE,
+                            c.NEWSPAPER_ZOMBIE),
+    c.NUM_FLAGS:2
+},
+# 第7关
+{
+    c.BACKGROUND_TYPE: 1,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE,
+                            c.SCREEN_DOOR_ZOMBIE,),
+    c.NUM_FLAGS: 2,
+    c.GRADE_GRAVES: 2,
+},
+# 第8关 目前为夜晚最后一关
+{
+    c.BACKGROUND_TYPE: 1,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.NEWSPAPER_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.SCREEN_DOOR_ZOMBIE, c.FOOTBALL_ZOMBIE),
+    c.INEVITABLE_ZOMBIE_DICT:   {   # 这里改用python实现了以后，键不再用字符串，改用数字
+                                    # 仍然要注意字典值是元组
+                                    10: (c.NEWSPAPER_ZOMBIE,),
+                                    20: (c.SCREEN_DOOR_ZOMBIE,),
+                                    30: (c.FOOTBALL_ZOMBIE,),
+                                    },
+    c.NUM_FLAGS: 3,
+    c.GRADE_GRAVES: 3,
+},
+# 第9关 目前为泳池模式第一关
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE,),
+    c.NUM_FLAGS:2
+},
+# 第10关
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.SNORKELZOMBIE),
+    c.INEVITABLE_ZOMBIE_DICT: {30: (c.SNORKELZOMBIE,)},
+    c.NUM_FLAGS:3
+},
+# 第11关
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (c.NORMAL_ZOMBIE, c.ZOMBONI),
+    c.INEVITABLE_ZOMBIE_DICT: {30: (c.ZOMBONI,)},
+    c.NUM_FLAGS:3
+},
+# 第12关 目前为泳池最后一关
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.ZOMBONI,
+                            c.BUCKETHEAD_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.SNORKELZOMBIE),
+    c.INEVITABLE_ZOMBIE_DICT: {40: (c.ZOMBONI,)},
+    c.NUM_FLAGS:4
+},
+# 第13关 目前为浓雾第一关 尚未完善
+{
+    c.BACKGROUND_TYPE: 2,
+    c.INIT_SUN_NAME: 50,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.NEWSPAPER_ZOMBIE,
+                            c.ZOMBONI, c.FOOTBALL_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_HEALTH),
+    c.NUM_FLAGS:4
+},
+)
+
+
+
+# 玩玩小游戏地图
+LITTLE_GAME_MAP_DATA = (
+# 第0关 测试 目前空缺
+{},
+# 第1关 坚果保龄球
+{
+    c.BACKGROUND_TYPE: 6,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_BOWLING,
+    c.SHOVEL: 0,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.NEWSPAPER_ZOMBIE),
+    c.NUM_FLAGS:3,
+    c.CARD_POOL: {  c.WALLNUTBOWLING: 300,
+                    c.REDWALLNUTBOWLING: 100,}
+},
+# 第2关 白天 大决战
+{
+    c.BACKGROUND_TYPE: 0,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_MOVE,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE,),
+    c.NUM_FLAGS:3,
+    c.CARD_POOL: {  c.PEASHOOTER: 200,
+                    c.SNOWPEASHOOTER: 100,
+                    c.WALLNUT: 100,
+                    c.CHERRYBOMB: 100,
+                    c.REPEATERPEA: 200,
+                    c.CHOMPER: 100,
+                    c.POTATOMINE: 100,}
+},
+# 第3关 夜晚 大决战
+{
+    c.BACKGROUND_TYPE: 1,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_MOVE,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.FOOTBALL_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.NEWSPAPER_ZOMBIE, c.SCREEN_DOOR_ZOMBIE),
+    c.NUM_FLAGS:3,
+    c.CARD_POOL: {  c.PUFFSHROOM: 100,
+                    c.SCAREDYSHROOM: 100,
+                    c.ICESHROOM: 100,
+                    c.HYPNOSHROOM: 100,
+                    c.DOOMSHROOM: 100,
+                    c.GRAVEBUSTER: 100,
+                    c.FUMESHROOM: 200},
+    c.GRADE_GRAVES:3
+},
+# 第4关 泳池 大决战
+{
+    c.BACKGROUND_TYPE: 2,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_MOVE,
+    c.SHOVEL: 1,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.SNORKELZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.ZOMBONI,),
+    c.NUM_FLAGS:4,
+    c.CARD_POOL: {  c.LILYPAD: 300,
+                    c.TORCHWOOD: 100,
+                    c.TALLNUT: 100,
+                    c.TANGLEKLEP: 100,
+                    c.SPIKEWEED: 100,
+                    c.SQUASH: 100,
+                    c.JALAPENO: 50,
+                    c.THREEPEASHOOTER: 400,}
+},
+)
+
+# 总关卡数
+TOTAL_LEVEL = len(LEVEL_MAP_DATA)
+TOTAL_LITTLE_GAME = len(LITTLE_GAME_MAP_DATA)
