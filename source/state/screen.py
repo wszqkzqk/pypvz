@@ -135,7 +135,7 @@ class AwardScreen(tool.State):
             if self.game_info[c.LITTLEGAME_COMPLETIONS]:
                 frame_rect = (157, 0, 157, 269)
                 intro_title = "金向日葵奖杯"
-                intro_content = "您已通关所有关卡，获得此奖励！"
+                intro_content = "您已通过所有关卡，获得此奖励！"
             else:
                 frame_rect = (0, 0, 157, 269)
                 intro_title = "银向日葵奖杯"
