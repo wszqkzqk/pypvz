@@ -29,6 +29,14 @@ class State():
         # abstract method
         pass
 
+    # 工具：范围判断函数，用于判断点击
+    def inArea(self, rect, x, y):
+        if (x >= rect.x and x <= rect.right and
+            y >= rect.y and y <= rect.bottom):
+            return True
+        else:
+            return False
+
 # control this game. do event loops
 class Control():
     def __init__(self):

@@ -634,13 +634,6 @@ class Level(tool.State):
         self.level_progress_flag_rect = self.level_progress_flag.get_rect()
         self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x - 78
         self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 3
-    
-    def inArea(self, rect, x, y):
-        if (x >= rect.x and x <= rect.right and
-            y >= rect.y and y <= rect.bottom):
-            return True
-        else:
-            return False
 
     # 用小铲子移除植物
     def shovelRemovePlant(self, mouse_pos):

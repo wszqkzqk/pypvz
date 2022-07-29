@@ -99,13 +99,6 @@ class Menu(tool.State):
         self.adventure_clicked = False
         self.option_button_clicked = False
 
-    def inArea(self, rect, x, y):
-        if (x >= rect.x and x <= rect.right and
-            y >= rect.y and y <= rect.bottom):
-            return True
-        else:
-            return False
-
     def checkHilight(self, x, y):
         # 高亮冒险模式按钮
         if self.inArea(self.adventure_rect, x, y):
