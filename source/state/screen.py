@@ -127,32 +127,7 @@ class AwardScreen(tool.State):
             main_menu_text_rect.x = 29
             self.main_menu_button_image.blit(main_menu_text, main_menu_text_rect)
             self.image.blit(self.main_menu_button_image, self.main_menu_button_image_rect)
-        else:
-            ## 继续按钮
-            self.next_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
-            self.next_button_image_rect = self.next_button_image.get_rect()
-            self.next_button_image_rect.x = 70
-            ### 继续按钮上的文字
-            font = pg.font.Font(c.FONT_PATH, 18)
-            next_text = font.render("继续", True, c.NAVYBLUE)
-            next_text_rect = next_text.get_rect()
-            next_text_rect.x = 37
-            ## 主菜单按钮
-            self.main_menu_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
-            self.main_menu_button_image_rect = self.main_menu_button_image.get_rect()
-            self.main_menu_button_image_rect.x = 620
-            self.next_button_image_rect.y = self.main_menu_button_image_rect.y = 540
-            ### 主菜单按钮上的文字
-            main_menu_text = font.render("主菜单", True, c.NAVYBLUE)
-            main_menu_text_rect = main_menu_text.get_rect()
-            main_menu_text_rect.x = 29
-            self.next_button_image.blit(next_text, next_text_rect)
-            self.main_menu_button_image.blit(main_menu_text, main_menu_text_rect)
-            self.image.blit(self.next_button_image, self.next_button_image_rect)
-            self.image.blit(self.main_menu_button_image, self.main_menu_button_image_rect)
 
-        # 显示向日葵奖杯的情况
-        if self.show_only_one_option:
             # 绘制向日葵奖杯
             if (self.game_info[c.LEVEL_COMPLETIONS] and self.game_info[c.LITTLEGAME_COMPLETIONS]):
                 frame_rect = (157, 0, 157, 269)
@@ -186,7 +161,29 @@ class AwardScreen(tool.State):
             intro_content_rect.x = 290
             intro_content_rect.y = 370
             self.image.blit(intro_content_img, intro_content_rect)
-
+        else:
+            ## 继续按钮
+            self.next_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
+            self.next_button_image_rect = self.next_button_image.get_rect()
+            self.next_button_image_rect.x = 70
+            ### 继续按钮上的文字
+            font = pg.font.Font(c.FONT_PATH, 18)
+            next_text = font.render("继续", True, c.NAVYBLUE)
+            next_text_rect = next_text.get_rect()
+            next_text_rect.x = 37
+            ## 主菜单按钮
+            self.main_menu_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
+            self.main_menu_button_image_rect = self.main_menu_button_image.get_rect()
+            self.main_menu_button_image_rect.x = 620
+            self.next_button_image_rect.y = self.main_menu_button_image_rect.y = 540
+            ### 主菜单按钮上的文字
+            main_menu_text = font.render("主菜单", True, c.NAVYBLUE)
+            main_menu_text_rect = main_menu_text.get_rect()
+            main_menu_text_rect.x = 29
+            self.next_button_image.blit(next_text, next_text_rect)
+            self.main_menu_button_image.blit(main_menu_text, main_menu_text_rect)
+            self.image.blit(self.next_button_image, self.next_button_image_rect)
+            self.image.blit(self.main_menu_button_image, self.main_menu_button_image_rect)
 
     def startup(self, current_time, persist):
         self.start_time = current_time
@@ -214,3 +211,44 @@ class AwardScreen(tool.State):
                 if self.inArea(self.next_button_image_rect, *mouse_pos):
                     self.next = c.LEVEL
                     self.done = True
+
+class HelpScreen(tool.State):
+    def __init__(self):
+        tool.State.__init__(self)
+
+    def startup(self, current_time, persist):
+        self.start_time = current_time
+        self.persist = persist
+        self.game_info = persist
+        self.setupImage()
+        pg.mixer.music.stop()
+
+    def setupImage(self):
+        # 主体
+        frame_rect = (-100, -50, 800, 600)
+        self.image = tool.get_image(tool.GFX[c.HELP_SCREEN_IMAGE], *frame_rect, colorkey=None)
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = 0
+        
+        # 主菜单按钮
+        frame_rect = (0, 0, 111, 26)
+        self.main_menu_button_image = tool.get_image_alpha(tool.GFX[c.UNIVERSAL_BUTTON], *frame_rect)
+        self.main_menu_button_image_rect = self.main_menu_button_image.get_rect()
+        self.main_menu_button_image_rect.x = 343
+        self.main_menu_button_image_rect.y = 500
+        ### 主菜单按钮上的文字
+        font = pg.font.Font(c.FONT_PATH, 18)
+        main_menu_text = font.render("主菜单", True, c.NAVYBLUE)
+        main_menu_text_rect = main_menu_text.get_rect()
+        main_menu_text_rect.x = 29
+        self.main_menu_button_image.blit(main_menu_text, main_menu_text_rect)
+        self.image.blit(self.main_menu_button_image, self.main_menu_button_image_rect)
+
+    def update(self, surface, current_time, mouse_pos, mouse_click):
+        surface.blit(self.image, self.rect)
+        if mouse_pos:
+            # 检查主菜单点击
+            if self.inArea(self.main_menu_button_image_rect, *mouse_pos):
+                self.next = c.MAIN_MENU
+                self.done = True

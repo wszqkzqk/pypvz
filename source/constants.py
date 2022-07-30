@@ -71,6 +71,7 @@ PARCHMENT_YELLOW = (207, 146, 83)
 
 # 退出游戏按钮
 EXIT = "exit"
+HELP = "help"
 # 游戏界面可选的菜单
 LITTLE_MENU = "littleMenu"
 BIG_MENU = "bigMenu"
@@ -110,6 +111,7 @@ GAME_LOSE = "game lose"
 GAME_VICTORY = "game victory"
 LEVEL = "level"
 AWARD_SCREEN = "award screen"
+HELP_SCREEN = "help screen"
 
 # 界面图片文件名
 MAIN_MENU_IMAGE = "MainMenu"
@@ -117,6 +119,7 @@ OPTION_ADVENTURE = "Adventure"
 GAME_LOSE_IMAGE = "GameLose"
 GAME_VICTORY_IMAGE = "GameVictory"
 AWARD_SCREEN_IMAGE = "AwardScreen"
+HELP_SCREEN_IMAGE = "HelpScreen"
 
 # 地图相关内容
 BACKGROUND_NAME = "Background"
@@ -509,8 +512,7 @@ SNORKELZOMBIE = "SnorkelZombie"
 BOOMDIE = "BoomDie"
 
 # 对僵尸的攻击类型设置
-ZOMBIE_DEAFULT_DAMAGE = "helmet2First"
-ZOMBIE_HELMET_2_FIRST = "helmet2First"  # 优先攻击二类防具
+ZOMBIE_DEAFULT_DAMAGE = ZOMBIE_HELMET_2_FIRST = "helmet2First"  # 优先攻击二类防具
 ZOMBIE_COMMON_DAMAGE = "commonDamage"   # 优先攻击僵尸与一类防具的整体
 ZOMBIE_RANGE_DAMAGE = "rangeDamage" # 范围攻击，同时伤害二类防具与(僵尸与一类防具的整体)
 ZOMBIE_ASH_DAMAGE = "ashDamage" # 灰烬植物攻击，直接伤害本体

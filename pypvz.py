@@ -32,6 +32,7 @@ if __name__=="__main__":
                         c.GAME_LOSE:    screen.GameLoseScreen(),
                         c.LEVEL:        level.Level(),
                         c.AWARD_SCREEN: screen.AwardScreen(),
+                        c.HELP_SCREEN: screen.HelpScreen(),
                         }
         game.setup_states(state_dict, c.MAIN_MENU)
         game.run()

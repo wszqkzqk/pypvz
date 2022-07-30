@@ -34,26 +34,30 @@ class Menu(tool.State):
         self.bg_rect = self.bg_image.get_rect()
         self.bg_rect.x = 0
         self.bg_rect.y = 0
-        
+
     def setupOptions(self):
         # 冒险模式
-        self.adventure_frames = []
-        frame_names = (f"{c.OPTION_ADVENTURE}_0", f"{c.OPTION_ADVENTURE}_1")
         frame_rect = (0, 0, 330, 144)
-        for name in frame_names:
-            self.adventure_frames.append(tool.get_image_alpha(tool.GFX[name], *frame_rect, c.BLACK, 1))
+        # 写成列表生成器方便IDE识别与自动补全
+        self.adventure_frames = [tool.get_image_alpha(tool.GFX[f"{c.OPTION_ADVENTURE}_{i}"], *frame_rect) for i in range(2)]
         self.adventure_image = self.adventure_frames[0]
         self.adventure_rect = self.adventure_image.get_rect()
         self.adventure_rect.x = 400
         self.adventure_rect.y = 60
         self.adventure_highlight_time = 0
-        
+
+        # 小游戏
+        littleGame_frame_rect = (0, 7, 317, 135)
+        self.littleGame_frames = [tool.get_image_alpha(tool.GFX[f"{c.LITTLEGAME_BUTTON}_{i}"], *littleGame_frame_rect) for i in range(2)]
+        self.littleGame_image = self.littleGame_frames[0]
+        self.littleGame_rect = self.littleGame_image.get_rect()
+        self.littleGame_rect.x = 397
+        self.littleGame_rect.y = 175
+        self.littleGame_highlight_time = 0
+
         # 退出按钮
-        self.exit_frames = []
-        exit_frame_names = (f"{c.EXIT}_0", f"{c.EXIT}_1")
         exit_frame_rect = (0, 0, 47, 27)
-        for name in exit_frame_names:
-            self.exit_frames.append(tool.get_image_alpha(tool.GFX[name], *exit_frame_rect, c.BLACK, 1.1))
+        self.exit_frames = [tool.get_image_alpha(tool.GFX[f"{c.EXIT}_{i}"], *exit_frame_rect, scale=1.1) for i in range(2)]
         self.exit_image = self.exit_frames[0]
         self.exit_rect = self.exit_image.get_rect()
         self.exit_rect.x = 730
@@ -61,29 +65,24 @@ class Menu(tool.State):
         self.exit_highlight_time = 0
 
         # 选项按钮
-        self.option_button_frames = []
-        option_button_frame_names = (f"{c.OPTION_BUTTON}_0", f"{c.OPTION_BUTTON}_1")
         option_button_frame_rect = (0, 0, 81, 31)
-        for name in option_button_frame_names:
-            self.option_button_frames.append(tool.get_image_alpha(tool.GFX[name], *option_button_frame_rect, c.BLACK))
+        self.option_button_frames = [tool.get_image_alpha(tool.GFX[f"{c.OPTION_BUTTON}_{i}"], *option_button_frame_rect) for i in range(2)]
         self.option_button_image = self.option_button_frames[0]
         self.option_button_rect = self.option_button_image.get_rect()
         self.option_button_rect.x = 560
         self.option_button_rect.y = 490
-        self.option_button_hightlight_time = 0
+        self.option_button_highlight_time = 0
 
-        # 小游戏
-        self.littleGame_frames = []
-        littleGame_frame_names = (c.LITTLEGAME_BUTTON + "_0", c.LITTLEGAME_BUTTON + "_1")
-        littleGame_frame_rect = (0, 7, 317, 135)
-        for name in littleGame_frame_names:
-            self.littleGame_frames.append(tool.get_image_alpha(tool.GFX[name], *littleGame_frame_rect, c.BLACK, 1))
-        self.littleGame_image = self.littleGame_frames[0]
-        self.littleGame_rect = self.littleGame_image.get_rect()
-        self.littleGame_rect.x = 397
-        self.littleGame_rect.y = 175
-        self.littleGame_highlight_time = 0
-
+        # 帮助菜单
+        help_frame_rect = (0, 0, 48, 22)
+        self.help_frames = [tool.get_image_alpha(tool.GFX[f"{c.HELP}_{i}"], *help_frame_rect) for i in range(2)]
+        self.help_image = self.help_frames[0]
+        self.help_rect = self.help_image.get_rect()
+        self.help_rect.x = 653
+        self.help_rect.y = 520
+        self.help_hilight_time = 0
+        
+        # 计时器与点击信号记录器
         self.adventure_start = 0
         self.adventure_timer = 0
         self.adventure_clicked = False
@@ -93,21 +92,25 @@ class Menu(tool.State):
         # 高亮冒险模式按钮
         if self.inArea(self.adventure_rect, x, y):
             self.adventure_highlight_time = self.current_time
+        # 高亮小游戏按钮
+        elif self.inArea(self.littleGame_rect, x, y):
+            self.littleGame_highlight_time = self.current_time
         # 高亮退出按钮
         elif self.inArea(self.exit_rect, x, y):
             self.exit_highlight_time = self.current_time
         # 高亮选项按钮
         elif self.inArea(self.option_button_rect, x, y):
-            self.option_button_hightlight_time = self.current_time
-        # 高亮小游戏按钮
-        elif self.inArea(self.littleGame_rect, x, y):
-            self.littleGame_highlight_time = self.current_time
+            self.option_button_highlight_time = self.current_time
+        # 高亮帮助按钮
+        elif self.inArea(self.help_rect, x, y):
+            self.help_hilight_time = self.current_time
 
         # 处理按钮高亮情况
         self.adventure_image = self.chooseHilightImage(self.adventure_highlight_time, self.adventure_frames)
         self.exit_image = self.chooseHilightImage(self.exit_highlight_time, self.exit_frames)
-        self.option_button_image = self.chooseHilightImage(self.option_button_hightlight_time, self.option_button_frames)
+        self.option_button_image = self.chooseHilightImage(self.option_button_highlight_time, self.option_button_frames)
         self.littleGame_image = self.chooseHilightImage(self.littleGame_highlight_time, self.littleGame_frames)
+        self.help_image = self.chooseHilightImage(self.help_hilight_time, self.help_frames)
 
     def chooseHilightImage(self, hilightTime, frames):
         if (self.current_time - hilightTime) < 80:
@@ -116,31 +119,30 @@ class Menu(tool.State):
             index = 0
         return frames[index]
 
-    def checkAdventureClick(self, mouse_pos):
-        x, y = mouse_pos
-        if self.inArea(self.adventure_rect, x, y):
-            self.adventure_clicked = True
-            self.adventure_timer = self.adventure_start = self.current_time
-            self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
-            # 播放进入音效
-            c.SOUND_EVILLAUGH.play()
-            c.SOUND_LOSE.play()
-    
-    # 点击到按钮，修改转态的done属性
-    def checkExitClick(self, mouse_pos):
-        x, y = mouse_pos
-        if self.inArea(self.exit_rect, x, y):
-            self.done = True
-            self.next = c.EXIT
+    def respondAdventureClick(self):
+        self.adventure_clicked = True
+        self.adventure_timer = self.adventure_start = self.current_time
+        self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
+        # 播放进入音效
+        c.SOUND_EVILLAUGH.play()
+        c.SOUND_LOSE.play()
 
-    # 检查有没有按到小游戏
-    def checkLittleGameClick(self, mouse_pos):
-        x, y = mouse_pos
-        if self.inArea(self.littleGame_rect, x, y):
-            self.done = True
-            self.persist[c.GAME_MODE] = c.MODE_LITTLEGAME
-            # 播放点击音效
-            c.SOUND_BUTTON_CLICK.play()
+    # 按到小游戏
+    def respondLittleGameClick(self):
+        self.done = True
+        self.persist[c.GAME_MODE] = c.MODE_LITTLEGAME
+        # 播放点击音效
+        c.SOUND_BUTTON_CLICK.play()
+
+    # 点击到退出按钮，修改转态的done属性
+    def respondExitClick(self):
+        self.done = True
+        self.next = c.EXIT
+
+    # 帮助按钮点击
+    def respondHelpClick(self):
+        self.done = True
+        self.next = c.HELP_SCREEN
 
     def setupOptionMenu(self):
         # 选项菜单框
@@ -220,12 +222,10 @@ class Menu(tool.State):
             infoImg_rect.y = y
             surface.blit(infoImg, infoImg_rect)
 
-    def checkOptionButtonClick(self, mouse_pos):
-        x, y = mouse_pos
-        if self.inArea(self.option_button_rect, x, y):
-            self.option_button_clicked = True
-            # 播放点击音效
-            c.SOUND_BUTTON_CLICK.play()
+    def respondOptionButtonClick(self):
+        self.option_button_clicked = True
+        # 播放点击音效
+        c.SOUND_BUTTON_CLICK.play()
 
     def showCurrentVolumeImage(self, surface):
         # 由于音量可变，因此这一内容不能在一开始就结束加载，而应当不断刷新不断显示
@@ -241,9 +241,10 @@ class Menu(tool.State):
         
         surface.blit(self.bg_image, self.bg_rect)
         surface.blit(self.adventure_image, self.adventure_rect)
+        surface.blit(self.littleGame_image, self.littleGame_rect)
         surface.blit(self.exit_image, self.exit_rect)
         surface.blit(self.option_button_image, self.option_button_rect)
-        surface.blit(self.littleGame_image, self.littleGame_rect)
+        surface.blit(self.help_image, self.help_rect)
         if self.game_info[c.LEVEL_COMPLETIONS] or self.game_info[c.LITTLEGAME_COMPLETIONS]:
             surface.blit(self.sunflower_trophy, self.sunflower_trophy_rect)
 
@@ -294,7 +295,13 @@ class Menu(tool.State):
             if (self.game_info[c.LEVEL_COMPLETIONS] or self.game_info[c.LITTLEGAME_COMPLETIONS]):
                 self.checkSunflowerTrophyInfo(surface, x, y)
             if mouse_pos:
-                self.checkExitClick(mouse_pos)
-                self.checkOptionButtonClick(mouse_pos)
-                self.checkLittleGameClick(mouse_pos)
-                self.checkAdventureClick(mouse_pos)
+                if self.inArea(self.adventure_rect, *mouse_pos):
+                    self.respondAdventureClick()
+                elif self.inArea(self.littleGame_rect, *mouse_pos):
+                    self.respondLittleGameClick()
+                elif self.inArea(self.option_button_rect, *mouse_pos):
+                    self.respondOptionButtonClick()
+                elif self.inArea(self.exit_rect, *mouse_pos):
+                    self.respondExitClick()
+                elif self.inArea(self.help_rect, *mouse_pos):
+                    self.respondHelpClick()
