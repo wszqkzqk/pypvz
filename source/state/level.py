@@ -35,6 +35,7 @@ class Level(tool.State):
         if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
             if 0 <= self.game_info[c.LEVEL_NUM] < map.TOTAL_LEVEL:
                 self.map_data = map.LEVEL_MAP_DATA[self.game_info[c.LEVEL_NUM]]
+                pg.display.set_caption(f"pypvz: 冒险模式 第{self.game_info[c.LEVEL_NUM]}关")
             else:
                 self.game_info[c.LEVEL_NUM] = 1
                 self.saveUserData()
@@ -44,6 +45,7 @@ class Level(tool.State):
         elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
             if 0 <= self.game_info[c.LITTLEGAME_NUM] < map.TOTAL_LITTLE_GAME:
                 self.map_data = map.LITTLE_GAME_MAP_DATA[self.game_info[c.LITTLEGAME_NUM]]
+                pg.display.set_caption(f"pypvz: 玩玩小游戏 第{self.game_info[c.LITTLEGAME_NUM]}关")
             else:
                 self.game_info[c.LITTLEGAME_NUM] = 1
                 self.saveUserData()
