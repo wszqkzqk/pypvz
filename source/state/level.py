@@ -218,8 +218,8 @@ class Level(tool.State):
                     if current_time - self.waveTime > 1500:
                         for item in self.graveSet:
                             itemX, itemY = self.map.getMapGridPos(*item)
-                            # 目前设定：2/3概率普通僵尸，1/3概率路障僵尸
-                            if random.randint(0, 2):
+                            # 目前设定：1/2概率普通僵尸，1/2概率路障僵尸
+                            if random.randint(0, 1):
                                 self.zombie_groups[item[1]].add(zombie.NormalZombie(itemX, itemY, self.head_group))
                             else:
                                 self.zombie_groups[item[1]].add(zombie.ConeHeadZombie(itemX, itemY, self.head_group))
@@ -232,11 +232,11 @@ class Level(tool.State):
                             mapX, mapY = random.randint(5, 8), random.randint(2, 3)
                             itemX, itemY = self.map.getMapGridPos(mapX, mapY)
                             # 用随机数指定产生的僵尸类型
-                            # 带有权重
-                            zombieType = random.randint(1, 6)
+                            # 暂时设定为生成概率相同
+                            zombieType = random.randint(1, 3)
                             if zombieType == 1:
                                 self.zombie_groups[mapY].add(zombie.BucketHeadDuckyTubeZombie(itemX, itemY, self.head_group))
-                            elif zombieType <= 3:
+                            elif zombieType == 2:
                                 self.zombie_groups[mapY].add(zombie.ConeHeadDuckyTubeZombie(itemX, itemY, self.head_group))
                             else:
                                 self.zombie_groups[mapY].add(zombie.DuckyTubeZombie(itemX, itemY, self.head_group))
