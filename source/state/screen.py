@@ -221,6 +221,7 @@ class HelpScreen(tool.State):
         self.persist = persist
         self.game_info = persist
         self.setupImage()
+        pg.display.set_caption("pypvz: 帮助")
         pg.mixer.music.stop()
 
     def setupImage(self):
