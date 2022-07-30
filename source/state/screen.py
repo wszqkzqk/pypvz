@@ -226,7 +226,7 @@ class HelpScreen(tool.State):
     def setupImage(self):
         # 主体
         frame_rect = (-100, -50, 800, 600)
-        self.image = tool.get_image(tool.GFX[c.HELP_SCREEN_IMAGE], *frame_rect, colorkey=None)
+        self.image = tool.get_image(tool.GFX[c.HELP_SCREEN_IMAGE], *frame_rect, colorkey=(0, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = 0
@@ -246,6 +246,7 @@ class HelpScreen(tool.State):
         self.image.blit(self.main_menu_button_image, self.main_menu_button_image_rect)
 
     def update(self, surface, current_time, mouse_pos, mouse_click):
+        surface.fill(c.BLACK)
         surface.blit(self.image, self.rect)
         if mouse_pos:
             # 检查主菜单点击
