@@ -104,7 +104,7 @@ class Bullet(pg.sprite.Sprite):
                 if self.y_vel * (self.dest_y - self.rect.y) < 0:
                     self.rect.y = self.dest_y
             self.rect.x += self.x_vel
-            if self.rect.x >= c.SCREEN_WIDTH + 60:
+            if self.rect.x >= c.SCREEN_WIDTH + 20:
                 self.kill()
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
@@ -206,7 +206,7 @@ class StarBullet(Bullet):
             else:
                 self.rect.x -= 10
             self.handleMapYPosition()
-            if ((self.rect.x > c.SCREEN_WIDTH + 60) or (self.rect.x < -60)
+            if ((self.rect.x > c.SCREEN_WIDTH + 20) or (self.rect.right < -20)
                 or (self.rect.y > c.SCREEN_HEIGHT) or (self.rect.y < 0)):
                 self.kill()
         elif self.state == c.EXPLODE:
@@ -322,7 +322,7 @@ class Plant(pg.sprite.Sprite):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         if (self.state != c.SLEEP and zombie.state != c.DIE and
-            self.rect.x <= zombie.rect.right and zombie.rect.left <= c.SCREEN_WIDTH):
+            self.rect.x <= zombie.rect.right and zombie.rect.x <= c.SCREEN_WIDTH):
             return True
         return False
 

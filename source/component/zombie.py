@@ -15,8 +15,8 @@ class Zombie(pg.sprite.Sprite):
         self.frame_num = len(self.frames)
 
         self.image = self.frames[self.frame_index]
-        self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
+        self.mask = pg.mask.from_surface(self.image)
         self.rect.x = x
         self.rect.bottom = y
         # 大蒜换行移动像素值，< 0时向上，= 0时不变，> 0时向上
