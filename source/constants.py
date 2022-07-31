@@ -305,7 +305,7 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 50000),
             (DOOMSHROOM := "DoomShroom",
                 CARD_DOOMSHROOM := "card_doomshroom",
-                75,
+                125,
                 50000),
             (LILYPAD := "LilyPad",
                 CARD_LILYPAD := "card_lilypad",
