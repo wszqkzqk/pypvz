@@ -218,8 +218,8 @@ class Menu(tool.State):
                 infoText = f"目前您一共完成了：玩玩小游戏{self.game_info[c.LITTLEGAME_COMPLETIONS]}轮；完成其他所有游戏模式以获得金向日葵奖杯！"
             infoImg = font.render(infoText , True, c.BLACK, c.LIGHTYELLOW)
             infoImg_rect = infoImg.get_rect()
-            infoImg_rect.x = x
-            infoImg_rect.y = y
+            infoImg_rect.x = self.sunflower_trophy_rect.x
+            infoImg_rect.y = self.sunflower_trophy_rect.bottom - 14
             surface.blit(infoImg, infoImg_rect)
 
     def respondOptionButtonClick(self):
