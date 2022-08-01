@@ -647,14 +647,14 @@ class Chomper(Plant):
 
     def attacking(self):
         if self.frame_index == (self.frame_num - 3):
-            # 播放吞的音效 由于一帧在这个循环中执行了若干次，可能被设置播放若干次导致声音重叠，所以用if保护
-            if not self.should_diggest:
-                # 在尚未检测到需要消化时播放音效
-                c.SOUND_BIGCHOMP.play()
             # 对活着的僵尸才需要吞下去消化
             if self.attack_zombie.alive():
-                self.should_diggest = True
-                self.attack_zombie.kill()
+                if not self.should_diggest:
+                    # 播放吞的音效 由于一帧在这个循环中执行了若干次，可能被设置播放若干次导致声音重叠，所以用if保护
+                    # 在尚未检测到需要消化时播放音效
+                    c.SOUND_BIGCHOMP.play()
+                    self.should_diggest = True
+                    self.attack_zombie.kill()
         if (self.frame_index + 1) == self.frame_num:
             if self.should_diggest:
                 self.setDigest()
