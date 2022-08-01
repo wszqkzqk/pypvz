@@ -21,7 +21,7 @@ class Level(tool.State):
         self.pause_time = 0
 
         # 默认显然不用显示菜单
-        self.show_little_menu = False
+        self.show_game_menu = False
 
         # 导入地图参数
         self.loadMap()
@@ -52,7 +52,7 @@ class Level(tool.State):
                 self.map_data = map.LITTLE_GAME_MAP_DATA[self.game_info[c.LITTLEGAME_NUM]]
                 logger.warning("关卡数设定错误！进入默认的第一关！")
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
-        self.hasShovel = self.map_data[c.SHOVEL]
+        self.has_shovel = self.map_data[c.SHOVEL]
 
         # 同时指定音乐
         # 缺省音乐为进入的音乐，方便发现错误
@@ -365,7 +365,7 @@ class Level(tool.State):
 
     def choose(self, mouse_pos, mouse_click):
         # 如果暂停
-        if self.show_little_menu:
+        if self.show_game_menu:
             self.pauseAndCheckLittleMenuOptions(mouse_pos, mouse_click)
             return
 
@@ -374,7 +374,7 @@ class Level(tool.State):
             if self.panel.checkStartButtonClick(mouse_pos):
                 self.initPlay(self.panel.getSelectedCards())
             elif self.inArea(self.little_menu_rect, *mouse_pos):
-                self.show_little_menu = True
+                self.show_game_menu = True
                 c.SOUND_BUTTON_CLICK.play()
 
     def initPlay(self, card_list):
@@ -432,7 +432,7 @@ class Level(tool.State):
         self.setupCars()
 
         # 地图有铲子才添加铲子
-        if self.hasShovel:
+        if self.has_shovel:
             #  导入小铲子
             frame_rect = [0, 0, 71, 67]
             self.shovel = tool.get_image_alpha(tool.GFX[c.SHOVEL], *frame_rect, c.BLACK, 1.1)
@@ -554,7 +554,7 @@ class Level(tool.State):
             if self.inArea(self.return_button_rect, *mouse_pos):
                 # 终止暂停，停止显示菜单
                 self.pause = False
-                self.show_little_menu = False
+                self.show_game_menu = False
                 # 继续播放音乐
                 pg.mixer.music.unpause()
                 # 播放点击音效
@@ -659,7 +659,7 @@ class Level(tool.State):
         self.fallen_sun = 0
 
         # 如果暂停
-        if self.show_little_menu:
+        if self.show_game_menu:
             self.pauseAndCheckLittleMenuOptions(mouse_pos, mouse_click)
             return
 
@@ -746,10 +746,10 @@ class Level(tool.State):
         if mouse_click[0] and (not clicked_sun) and (not clicked_cards_or_map):
             if self.inArea(self.little_menu_rect, *mouse_pos):
                 # 暂停 显示菜单
-                self.show_little_menu = True
+                self.show_game_menu = True
                 # 播放点击音效
                 c.SOUND_BUTTON_CLICK.play()
-            elif self.hasShovel:
+            elif self.has_shovel:
                 if self.inArea(self.shovel_box_rect, *mouse_pos):
                     self.drag_shovel = not self.drag_shovel
                     if not self.drag_shovel:
@@ -1530,11 +1530,11 @@ class Level(tool.State):
             self.panel.draw(surface)
             # 画小菜单
             surface.blit(self.little_menu, self.little_menu_rect)
-            if self.show_little_menu:
+            if self.show_game_menu:
                 self.showAllContentOfMenu(surface)
         # 以后可能需要插入一个预备的状态（预览显示僵尸、返回战场）
         elif self.state == c.PLAY:
-            if self.hasShovel:
+            if self.has_shovel:
                 # 画铲子
                 surface.blit(self.shovel_box, self.shovel_box_rect)
                 surface.blit(self.shovel, self.shovel_rect)
@@ -1556,10 +1556,10 @@ class Level(tool.State):
             if self.drag_plant:
                 self.drawMouseShow(surface)
 
-            if self.hasShovel and self.drag_shovel:
+            if self.has_shovel and self.drag_shovel:
                 self.drawMouseShowPlus(surface)
 
-            if self.show_little_menu:
+            if self.show_game_menu:
                 self.showAllContentOfMenu(surface)
 
             if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
