@@ -366,7 +366,7 @@ class Level(tool.State):
     def choose(self, mouse_pos, mouse_click):
         # 如果暂停
         if self.show_game_menu:
-            self.pauseAndCheckLittleMenuOptions(mouse_pos, mouse_click)
+            self.pauseAndCheckMenuOptions(mouse_pos, mouse_click)
             return
 
         elif mouse_pos and mouse_click[0]:
@@ -544,7 +544,7 @@ class Level(tool.State):
         # 音量+、-应当处于同一高度
         self.sound_volume_minus_button_rect.y = self.sound_volume_plus_button_rect.y = 250
 
-    def pauseAndCheckLittleMenuOptions(self, mouse_pos, mouse_click):
+    def pauseAndCheckMenuOptions(self, mouse_pos, mouse_click):
         # 设置暂停状态
         self.pause = True
         # 暂停播放音乐
@@ -660,7 +660,7 @@ class Level(tool.State):
 
         # 如果暂停
         if self.show_game_menu:
-            self.pauseAndCheckLittleMenuOptions(mouse_pos, mouse_click)
+            self.pauseAndCheckMenuOptions(mouse_pos, mouse_click)
             return
 
         if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
