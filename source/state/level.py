@@ -841,9 +841,9 @@ class Level(tool.State):
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)
     # 再判断位置是否可用 isMovable(map_x, map_y)
-    def canSeedPlant(self, plantName):
+    def canSeedPlant(self, plant_name):
         x, y = pg.mouse.get_pos()
-        return self.map.checkPlantToSeed(x, y, plantName)
+        return self.map.checkPlantToSeed(x, y, plant_name)
 
     # 种植物
     def addPlant(self):
@@ -913,7 +913,7 @@ class Level(tool.State):
         elif self.plant_name == c.TANGLEKLEP:
             new_plant = plant.TangleKlep(x, y)
         elif self.plant_name == c.DOOMSHROOM:
-            if self.map.gridHeightSize == c.GRID_Y_SIZE:
+            if self.map.grid_height_size == c.GRID_Y_SIZE:
                 new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2)
             else:
                 new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
@@ -1150,7 +1150,7 @@ class Level(tool.State):
                             if self.map.map[i][0][c.MAP_PLOT_TYPE] != self.map.map[i + _move][0][c.MAP_PLOT_TYPE]:
                                 _move = -(_move)
                         zombie.target_map_y = i + _move
-                        zombie.target_y_change = _move * self.map.gridHeightSize
+                        zombie.target_y_change = _move * self.map.grid_height_size
                     else:
                         zombie.setAttack(target_plant)
 
