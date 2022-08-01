@@ -37,7 +37,9 @@ class Car(pg.sprite.Sprite):
 
 # 豌豆及孢子类普通子弹
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, x, start_y, dest_y, name, damage, effect=None, passedTorchWood=None, damageType=c.ZOMBIE_DEAFULT_DAMAGE):
+    def __init__(   self, x, start_y, dest_y, name, damage,
+                    effect=None, passed_torchwood_x=None,
+                    damageType=c.ZOMBIE_DEAFULT_DAMAGE):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -60,7 +62,7 @@ class Bullet(pg.sprite.Sprite):
         self.current_time = 0
         self.animate_timer = 0
         self.animate_interval = 70
-        self.passedTorchWood = passedTorchWood  # 记录最近通过的火炬树横坐标，如果没有缺省为None
+        self.passed_torchwood_x = passed_torchwood_x  # 记录最近通过的火炬树横坐标，如果没有缺省为None
 
     def loadFrames(self, frames, name):
         frame_list = tool.GFX[name]
@@ -248,7 +250,7 @@ class Plant(pg.sprite.Sprite):
         self.animate_interval = 70  # 帧播放间隔
         self.hit_timer = 0
         # 被铲子指向时间
-        self.highlightTime = 0
+        self.highlight_time = 0
 
     def loadFrames(self, frames, name, scale=1, color=c.BLACK):
         frame_list = tool.GFX[name]
@@ -267,7 +269,7 @@ class Plant(pg.sprite.Sprite):
         self.loadFrames(self.frames, name, scale)
 
     def changeFrames(self, frames):
-        """change image frames and modify rect position"""
+        # change image frames and modify rect position
         self.frames = frames
         self.frame_num = len(self.frames)
         self.frame_index = 0
@@ -311,7 +313,7 @@ class Plant(pg.sprite.Sprite):
 
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
-        if  (self.current_time - self.highlightTime < 100):
+        if  (self.current_time - self.highlight_time < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -338,7 +340,7 @@ class Plant(pg.sprite.Sprite):
         self.changeFrames(self.sleep_frames)
 
     def setDamage(self, damage, zombie):
-        if not zombie.lostHead:
+        if not zombie.losthead:
             self.health -= damage
         self.hit_timer = self.current_time
         if ((self.name == c.HYPNOSHROOM) and
@@ -429,20 +431,20 @@ class RepeaterPea(Plant):
         self.shoot_timer = 0
 
         # 是否发射第一颗
-        self.firstShot = False
+        self.first_shot = False
 
     def attacking(self):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer >= 1400):
-            self.firstShot = True
+            self.first_shot = True
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
-        elif self.firstShot and (self.current_time - self.shoot_timer) > 100:
-            self.firstShot = False
+        elif self.first_shot and (self.current_time - self.shoot_timer) > 100:
+            self.first_shot = False
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
             # 播放发射音效
@@ -580,7 +582,7 @@ class CherryBomb(Plant):
             self.image = self.frames[self.frame_index]
             self.mask = pg.mask.from_surface(self.image)
 
-        if  (self.current_time - self.highlightTime < 100):
+        if  (self.current_time - self.highlight_time < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -596,7 +598,7 @@ class Chomper(Plant):
         self.digest_interval = 15000
         self.attack_zombie = None
         self.zombie_group = None
-        self.shouldDiggest = False
+        self.should_diggest = False
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -624,7 +626,7 @@ class Chomper(Plant):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         elif (self.state == c.IDLE and zombie.state != c.DIGEST and
-            self.rect.x <= zombie.rect.centerx and (not zombie.lostHead) and
+            self.rect.x <= zombie.rect.centerx and (not zombie.losthead) and
             (self.rect.x + c.GRID_X_SIZE*2.7 >= zombie.rect.centerx)):
             return True
         return False
@@ -648,12 +650,12 @@ class Chomper(Plant):
             # 播放吞的音效
             c.SOUND_BIGCHOMP.play()
             if self.attack_zombie.alive():
-                self.shouldDiggest = True
+                self.should_diggest = True
                 self.attack_zombie.kill()
         if (self.frame_index + 1) == self.frame_num:
-            if self.shouldDiggest:
+            if self.should_diggest:
                 self.setDigest()
-                self.shouldDiggest = False
+                self.should_diggest = False
             else:
                 self.setIdle()
 
@@ -751,7 +753,7 @@ class PotatoMine(Plant):
             return False
         # 这里碰撞应当比碰撞一般更容易，就设置成圆形或矩形模式，不宜采用mask
         elif (pg.sprite.collide_circle_ratio(0.7)(zombie, self) and
-            (not self.is_init) and (not zombie.lostHead)):
+            (not self.is_init) and (not zombie.losthead)):
             return True
         return False
 
@@ -767,12 +769,12 @@ class PotatoMine(Plant):
 
 
 class Squash(Plant):
-    def __init__(self, x, y, mapPlantsSet):
+    def __init__(self, x, y, map_plant_set):
         Plant.__init__(self, x, y, c.SQUASH, c.PLANT_HEALTH, None)
         self.orig_pos = (x, y)
         self.aim_timer = 0
         self.start_boom = False # 和灰烬等植物统一变量名，在这里表示倭瓜是否跳起
-        self.mapPlantsSet = mapPlantsSet
+        self.map_plant_set = map_plant_set
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -816,7 +818,7 @@ class Squash(Plant):
                     if self.canAttack(zombie):
                         zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
                 self.health = 0 # 避免僵尸在原位啃食
-                self.mapPlantsSet.remove(c.SQUASH)
+                self.map_plant_set.remove(c.SQUASH)
                 self.kill()
                 # 播放碾压音效
                 c.SOUND_SQUASHING.play()
@@ -870,7 +872,7 @@ class Spikeweed(Plant):
                 if self.canAttack(zombie):
                     # 有车的僵尸
                     if zombie.name in {c.ZOMBONI}:
-                        zombie.health = zombie.lostHeadHealth
+                        zombie.health = zombie.losthead_health
                         killSelf = True
                     else:
                         zombie.setDamage(20, damageType=c.ZOMBIE_COMMON_DAMAGE)
@@ -924,7 +926,7 @@ class Jalapeno(Plant):
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
 
-        if  (self.current_time - self.highlightTime < 100):
+        if  (self.current_time - self.highlight_time < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -1091,7 +1093,7 @@ class IceShroom(Plant):
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
 
-        if  (self.current_time - self.highlightTime < 100):
+        if  (self.current_time - self.highlight_time < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -1288,16 +1290,16 @@ class TorchWood(Plant):
     def idling(self):
         for i in self.bullet_group:
             if i.name == c.BULLET_PEA:
-                if i.passedTorchWood != self.rect.centerx:
+                if i.passed_torchwood_x != self.rect.centerx:
                     if abs(i.rect.centerx - self.rect.centerx) <= 20:
                         self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
-                                                c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, effect=c.BULLET_EFFECT_UNICE, passedTorchWood=self.rect.centerx))
+                                                c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, effect=c.BULLET_EFFECT_UNICE, passed_torchwood_x=self.rect.centerx))
                         i.kill()
             elif i.name == c.BULLET_PEA_ICE:
-                if i.passedTorchWood != self.rect.centerx:
+                if i.passed_torchwood_x != self.rect.centerx:
                     if abs(i.rect.centerx - self.rect.centerx) <= 20:
                         self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
-                                                c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None, passedTorchWood=self.rect.centerx))
+                                                c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None, passed_torchwood_x=self.rect.centerx))
                         i.kill()
 
 class StarFruit(Plant):
@@ -1311,8 +1313,8 @@ class StarFruit(Plant):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         if zombie.state != c.DIE:
-            zombieMapY = self.level.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)[1]
-            if (self.rect.x >= zombie.rect.x) and (self.map_y == zombieMapY):  # 对于同行且在杨桃后的僵尸
+            zombie_map_y = self.level.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)[1]
+            if (self.rect.x >= zombie.rect.x) and (self.map_y == zombie_map_y):  # 对于同行且在杨桃后的僵尸
                 return True
             # 斜向上，理想直线方程为：f(zombie.rect.x) = -0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10
             # 注意实际上为射线
@@ -1348,10 +1350,10 @@ class StarFruit(Plant):
 
 
 class CoffeeBean(Plant):
-    def __init__(self, x, y, plant_group, mapContent, map, map_x):
+    def __init__(self, x, y, plant_group, map_content, map, map_x):
         Plant.__init__(self, x, y, c.COFFEEBEAN, c.PLANT_HEALTH, None)
         self.plant_group = plant_group
-        self.mapContent = mapContent
+        self.map_content = map_content
         self.map = map
         self.map_x = map_x
 
@@ -1360,7 +1362,7 @@ class CoffeeBean(Plant):
             self.frame_index += 1
             
             if self.frame_index >= self.frame_num:
-                self.mapContent[c.MAP_SLEEP] = False
+                self.map_content[c.MAP_SLEEP] = False
                 for plant in self.plant_group:
                     if plant.can_sleep:
                         if plant.state == c.SLEEP:
@@ -1371,7 +1373,7 @@ class CoffeeBean(Plant):
                                 plant.changeFrames(plant.idle_frames)
                 # 播放唤醒音效
                 c.SOUND_MUSHROOM_WAKEUP.play()
-                self.mapContent[c.MAP_PLANT].remove(self.name)
+                self.map_content[c.MAP_PLANT].remove(self.name)
                 self.kill()
                 self.frame_index = self.frame_num - 1
             
@@ -1379,7 +1381,7 @@ class CoffeeBean(Plant):
 
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
-        if  (self.current_time - self.highlightTime < 100):
+        if  (self.current_time - self.highlight_time < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -1480,7 +1482,7 @@ class TangleKlep(Plant):
         self.frames = self.idle_frames
 
     def canAttack(self, zombie):
-        if zombie.state != c.DIE and (not zombie.lostHead):
+        if zombie.state != c.DIE and (not zombie.losthead):
             # 这里碰撞应当比碰撞一般更容易，就设置成圆形或矩形模式，不宜采用mask
             if pg.sprite.collide_circle_ratio(0.7)(zombie, self):
                 return True
@@ -1510,17 +1512,17 @@ class TangleKlep(Plant):
 # 坑形态的毁灭菇同地刺一样不可以被啃食
 # 爆炸时杀死同一格的所有植物
 class DoomShroom(Plant):
-    def __init__(self, x, y, mapPlantsSet, explode_y_range):
+    def __init__(self, x, y, map_plant_set, explode_y_range):
         Plant.__init__(self, x, y, c.DOOMSHROOM, c.PLANT_HEALTH, None)
         self.can_sleep = True
-        self.mapPlantSet = mapPlantsSet
+        self.map_plant_set = map_plant_set
         self.bomb_timer = 0
         self.explode_y_range = explode_y_range
         self.explode_x_range = 250
         self.start_boom = False
         self.boomed = False
-        self.originalX = x
-        self.originalY = y
+        self.original_x = x
+        self.original_y = y
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -1556,7 +1558,7 @@ class DoomShroom(Plant):
             if self.frame_index >= self.frame_num:
                 self.health = 0
                 self.frame_index = self.frame_num - 1
-                self.mapPlantSet.add(c.HOLE)
+                self.map_plant_set.add(c.HOLE)
         # 睡觉状态
         elif self.state == c.SLEEP:
             if (self.current_time - self.animate_timer) > self.animate_interval:
@@ -1576,7 +1578,7 @@ class DoomShroom(Plant):
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
 
-        if  (self.current_time - self.highlightTime < 100):
+        if  (self.current_time - self.highlight_time < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -1668,8 +1670,8 @@ class GraveBuster(Plant):
                 self.frame_index = self.frame_num - 1
                 for item in self.plant_group:
                     if item.name == c.GRAVE:
-                        itemMapX, _ = self.map.getMapIndex(item.rect.centerx, item.rect.bottom)
-                        if itemMapX == self.map_x:
+                        item_map_x, _ = self.map.getMapIndex(item.rect.centerx, item.rect.bottom)
+                        if item_map_x == self.map_x:
                             item.health = 0
                             self.health = 0
             self.animate_timer = self.current_time
@@ -1677,7 +1679,7 @@ class GraveBuster(Plant):
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
 
-        if  (self.current_time - self.highlightTime < 100):
+        if  (self.current_time - self.highlight_time < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)
@@ -1689,7 +1691,7 @@ class FumeShroom(Plant):
         Plant.__init__(self, x, y, c.FUMESHROOM, c.PLANT_HEALTH, bullet_group)
         self.can_sleep = True
         self.shoot_timer = 0
-        self.showAttackFrames = True
+        self.show_attack_frames = True
         self.zombie_group = zombie_group
 
     def loadImages(self, name, scale):
@@ -1726,18 +1728,18 @@ class FumeShroom(Plant):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
         elif self.current_time - self.shoot_timer >= 1100:
-            if self.showAttackFrames:
-                self.showAttackFrames = False
+            if self.show_attack_frames:
+                self.show_attack_frames = False
                 self.changeFrames(self.attack_frames)
         
         if self.current_time - self.shoot_timer >= 1400:
             self.bullet_group.add(Fume(self.rect.right - 35, self.rect.y))
             # 烟雾只是个动画，实际伤害由本身完成
-            for targetZombie in self.zombie_group:
-                if self.canAttack(targetZombie):
-                    targetZombie.setDamage(c.BULLET_DAMAGE_NORMAL, damageType=c.ZOMBIE_RANGE_DAMAGE)
+            for target_zombie in self.zombie_group:
+                if self.canAttack(target_zombie):
+                    target_zombie.setDamage(c.BULLET_DAMAGE_NORMAL, damageType=c.ZOMBIE_RANGE_DAMAGE)
             self.shoot_timer = self.current_time
-            self.showAttackFrames = True
+            self.show_attack_frames = True
             # 播放发射音效
             c.SOUND_FUME.play()
         
@@ -1754,7 +1756,7 @@ class FumeShroom(Plant):
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
 
-        if  (self.current_time - self.highlightTime < 100):
+        if  (self.current_time - self.highlight_time < 100):
             self.image.set_alpha(150)
         elif ((self.current_time - self.hit_timer) < 200):
             self.image.set_alpha(192)

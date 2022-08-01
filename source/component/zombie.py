@@ -5,7 +5,10 @@ from .. import constants as c
 
 
 class Zombie(pg.sprite.Sprite):
-    def __init__(self, x, y, name, head_group=None, helmetHealth=0, helmetType2Health=0, bodyHealth=c.NORMAL_HEALTH, lostHeadHealth=c.LOSTHEAD_HEALTH, damage=c.ZOMBIE_ATTACK_DAMAGE, canSwim=False):
+    def __init__(   self, x, y, name, head_group=None,
+                    helmet_health=0,                helmet_type2_health=0,
+                    body_health=c.NORMAL_HEALTH,    losthead_health=c.LOSTHEAD_HEALTH,
+                    damage=c.ZOMBIE_ATTACK_DAMAGE,  can_swim=False):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -20,21 +23,21 @@ class Zombie(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.bottom = y
         # 大蒜换行移动像素值，< 0时向上，= 0时不变，> 0时向上
-        self.targetYChange = 0
-        self.originalY = y
-        self.toChangeGroup = False
+        self.target_y_change = 0
+        self.original_y = y
+        self.to_change_group = False
 
-        self.helmetHealth = helmetHealth
-        self.helmetType2Health = helmetType2Health
-        self.health = bodyHealth + lostHeadHealth
-        self.lostHeadHealth = lostHeadHealth
+        self.helmet_health = helmet_health
+        self.helmet_type2_health = helmet_type2_health
+        self.health = body_health + losthead_health
+        self.losthead_health = losthead_health
         self.damage = damage
         self.dead = False
-        self.lostHead = False
-        self.canSwim = canSwim
+        self.losthead = False
+        self.can_swim = can_swim
         self.swimming = False
-        self.helmet = (self.helmetHealth > 0)
-        self.helmetType2 = (self.helmetType2Health > 0)
+        self.helmet = (self.helmet_health > 0)
+        self.helmet_type2 = (self.helmet_type2_health > 0)
         self.head_group = head_group
 
         self.walk_timer = 0
@@ -44,7 +47,7 @@ class Zombie(pg.sprite.Sprite):
         self.animate_interval = 150
         self.walk_animate_interval = 180
         self.attack_animate_interval = 100
-        self.lostHead_animate_interval = 180
+        self.losthead_animate_interval = 180
         self.die_animate_interval = 50
         self.boomDie_animate_interval = 100
         self.ice_slow_ratio = 1
@@ -88,8 +91,8 @@ class Zombie(pg.sprite.Sprite):
         if self.health <= 0:
             self.setDie()
             return True
-        elif self.health <= self.lostHeadHealth:
-            if not self.lostHead:
+        elif self.health <= self.losthead_health:
+            if not self.losthead:
                 self.changeFrames(framesKind)
                 self.setLostHead()
                 return True
@@ -105,7 +108,7 @@ class Zombie(pg.sprite.Sprite):
             return
 
         # 能游泳的僵尸
-        if self.canSwim:
+        if self.can_swim:
             # 在水池范围内
             # 在右侧岸左
             if self.rect.right <= c.MAP_POOL_FRONT_X:
@@ -119,25 +122,25 @@ class Zombie(pg.sprite.Sprite):
                         c.SOUND_ZOMBIE_ENTERING_WATER.play()
                         # 同样没有兼容双防具
                         if self.helmet:
-                            if self.helmetHealth <= 0:
+                            if self.helmet_health <= 0:
                                 self.helmet = False
                             else:
                                 self.changeFrames(self.helmet_swim_frames)
-                        if self.helmetType2:
-                            if self.helmetType2Health <= 0:
-                                self.helmetType2 = False
+                        if self.helmet_type2:
+                            if self.helmet_type2_health <= 0:
+                                self.helmet_type2 = False
                             else:
                                 self.changeFrames(self.helmet_swim_frames)
                     # 已经进入游泳状态
                     else:
                         if self.helmet:
-                            if self.helmetHealth <= 0:
+                            if self.helmet_health <= 0:
                                 self.changeFrames(self.swim_frames)
                                 self.helmet = False
-                        if self.helmetType2:
-                            if self.helmetType2Health <= 0:
+                        if self.helmet_type2:
+                            if self.helmet_type2_health <= 0:
                                 self.changeFrames(self.swim_frames)
-                                self.helmetType2 = False
+                                self.helmet_type2 = False
                 # 水生僵尸已经接近家门口并且上岸
                 else:
                     if self.swimming:
@@ -145,55 +148,55 @@ class Zombie(pg.sprite.Sprite):
                         self.swimming = False
                         # 同样没有兼容双防具
                         if self.helmet:
-                            if self.helmetHealth <= 0:
+                            if self.helmet_health <= 0:
                                 self.helmet = False
                             else:
                                 self.changeFrames(self.helmet_walk_frames)
-                        if self.helmetType2:
-                            if self.helmetType2Health <= 0:
-                                self.helmetType2 = False
+                        if self.helmet_type2:
+                            if self.helmet_type2_health <= 0:
+                                self.helmet_type2 = False
                             else:
                                 self.changeFrames(self.helmet_walk_frames)
                     if self.helmet:
-                        if self.helmetHealth <= 0:
+                        if self.helmet_health <= 0:
                             self.helmet = False
                             self.changeFrames(self.walk_frames)
-                    if self.helmetType2:
-                        if self.helmetType2Health <= 0:
-                            self.helmetType2 = False
+                    if self.helmet_type2:
+                        if self.helmet_type2_health <= 0:
+                            self.helmet_type2 = False
                             self.changeFrames(self.walk_frames)
             elif self.is_hypno and self.rect.right > c.MAP_POOL_FRONT_X + 55:   # 常数拟合暂时缺乏检验
                 if self.swimming:
                     self.changeFrames(self.walk_frames)
                 if self.helmet:
-                    if self.helmetHealth <= 0:
+                    if self.helmet_health <= 0:
                         self.changeFrames(self.walk_frames)
                         self.helmet = False
                     elif self.swimming: # 游泳状态需要改为步行
                         self.changeFrames(self.helmet_walk_frames)
-                if self.helmetType2:
-                    if self.helmetType2Health <= 0:
+                if self.helmet_type2:
+                    if self.helmet_type2_health <= 0:
                         self.changeFrames(self.walk_frames)
-                        self.helmetType2 = False
+                        self.helmet_type2 = False
                     elif self.swimming: # 游泳状态需要改为步行
                         self.changeFrames(self.helmet_walk_frames)
                 self.swimming = False
             # 尚未进入水池
             else:
-                if self.helmetHealth <= 0 and self.helmet:
+                if self.helmet_health <= 0 and self.helmet:
                     self.changeFrames(self.walk_frames)
                     self.helmet = False
-                if self.helmetType2Health <= 0 and self.helmetType2:
+                if self.helmet_type2_health <= 0 and self.helmet_type2:
                     self.changeFrames(self.walk_frames)
-                    self.helmetType2 = False
+                    self.helmet_type2 = False
         # 不能游泳的一般僵尸
         else:
-            if self.helmetHealth <= 0 and self.helmet:
+            if self.helmet_health <= 0 and self.helmet:
                 self.changeFrames(self.walk_frames)
                 self.helmet = False
-            if self.helmetType2Health <= 0 and self.helmetType2:
+            if self.helmet_type2_health <= 0 and self.helmet_type2:
                 self.changeFrames(self.walk_frames)
-                self.helmetType2 = False
+                self.helmet_type2 = False
 
         if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
             self.handleGarlicYChange()
@@ -204,48 +207,48 @@ class Zombie(pg.sprite.Sprite):
                 self.rect.x -= 1
 
     def handleGarlicYChange(self):
-        if self.targetYChange < 0:
-            if self.rect.bottom > self.originalY + self.targetYChange:  # 注意这里加的是负数
+        if self.target_y_change < 0:
+            if self.rect.bottom > self.original_y + self.target_y_change:  # 注意这里加的是负数
                 self.rect.bottom -= 3
                 # 过半时换行
-                if ((self.toChangeGroup) and
-                    (self.rect.bottom >= self.originalY + 0.5*self.targetYChange)):
-                    self.level.zombie_groups[self.mapY].remove(self)
-                    self.level.zombie_groups[self.targetMapY].add(self)
-                    self.toChangeGroup = False
+                if ((self.to_change_group) and
+                    (self.rect.bottom >= self.original_y + 0.5*self.target_y_change)):
+                    self.level.zombie_groups[self.map_y].remove(self)
+                    self.level.zombie_groups[self.target_map_y].add(self)
+                    self.to_change_group = False
             else:
-                self.rect.bottom = self.originalY + self.targetYChange
-                self.originalY = self.rect.bottom
-                self.targetYChange = 0
-        elif self.targetYChange > 0:
-            if self.rect.bottom < self.originalY + self.targetYChange:  # 注意这里加的是负数
+                self.rect.bottom = self.original_y + self.target_y_change
+                self.original_y = self.rect.bottom
+                self.target_y_change = 0
+        elif self.target_y_change > 0:
+            if self.rect.bottom < self.original_y + self.target_y_change:  # 注意这里加的是负数
                 self.rect.bottom += 3
                 # 过半时换行
-                if ((self.toChangeGroup) and
-                    (self.rect.bottom <= self.originalY + 0.5*self.targetYChange)):
-                    self.level.zombie_groups[self.mapY].remove(self)
-                    self.level.zombie_groups[self.targetMapY].add(self)
-                    self.toChangeGroup = False
+                if ((self.to_change_group) and
+                    (self.rect.bottom <= self.original_y + 0.5*self.target_y_change)):
+                    self.level.zombie_groups[self.map_y].remove(self)
+                    self.level.zombie_groups[self.target_map_y].add(self)
+                    self.to_change_group = False
             else:
-                self.rect.bottom = self.originalY + self.targetYChange
-                self.originalY = self.rect.bottom
-                self.targetYChange = 0
+                self.rect.bottom = self.original_y + self.target_y_change
+                self.original_y = self.rect.bottom
+                self.target_y_change = 0
 
     def attacking(self):
         if self.checkToDie(self.losthead_attack_frames):
             return
         
-        if self.helmetHealth <= 0 and self.helmet:
+        if self.helmet_health <= 0 and self.helmet:
             self.changeFrames(self.attack_frames)
             self.helmet = False
-        if self.helmetType2Health <= 0 and self.helmetType2:
+        if self.helmet_type2_health <= 0 and self.helmet_type2:
             self.changeFrames(self.attack_frames)
-            self.helmetType2 = False
+            self.helmet_type2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
                 self.speed = 2.65
                 self.walk_animate_interval = 300
         if (((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()))
-            and (not self.lostHead)):
+            and (not self.losthead)):
             if self.prey.health > 0:
                 if self.prey_is_plant:
                     self.prey.setDamage(self.damage, self)
@@ -281,8 +284,8 @@ class Zombie(pg.sprite.Sprite):
 
     def setLostHead(self):
         self.losthead_timer = self.current_time
-        self.lostHead = True
-        self.animate_interval = self.lostHead_animate_interval
+        self.losthead = True
+        self.animate_interval = self.losthead_animate_interval
         if self.head_group is not None:
             self.head_group.add(ZombieHead(self.rect.centerx, self.rect.bottom))
 
@@ -347,87 +350,87 @@ class Zombie(pg.sprite.Sprite):
         # 冰冻减速效果
         if effect == c.BULLET_EFFECT_ICE:
             if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
-                if not self.helmetType2:
+                if not self.helmet_type2:
                     self.setIceSlow()
             else:
                 self.setIceSlow()
         # 解冻
         elif effect == c.BULLET_EFFECT_UNICE:
             if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
-                if not self.helmetType2:
+                if not self.helmet_type2:
                     self.ice_slow_ratio = 1
             else:
                 self.ice_slow_ratio = 1
 
         if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 不穿透二类防具的攻击
             # 从第二类防具开始逐级传递
-            if self.helmetType2:
-                self.helmetType2Health -= damage
-                if self.helmetType2Health <= 0:
+            if self.helmet_type2:
+                self.helmet_type2_health -= damage
+                if self.helmet_type2_health <= 0:
                     if self.helmet:
-                        self.helmetHealth += self.helmetType2Health # 注意self.helmetType2Health已经带有正负
-                        self.helmetType2Health = 0  # 注意合并后清零
-                        if self.helmetHealth <= 0:
-                            self.health += self.helmetHealth
-                            self.helmetHealth = 0   # 注意合并后清零
+                        self.helmet_health += self.helmet_type2_health # 注意self.helmet_type2_health已经带有正负
+                        self.helmet_type2_health = 0  # 注意合并后清零
+                        if self.helmet_health <= 0:
+                            self.health += self.helmet_health
+                            self.helmet_health = 0   # 注意合并后清零
                     else:
-                        self.health += self.helmetType2Health
-                        self.helmetType2Health = 0
+                        self.health += self.helmet_type2_health
+                        self.helmet_type2_health = 0
             elif self.helmet:   # 不存在二类防具，但是存在一类防具
-                self.helmetHealth -= damage
-                if self.helmetHealth <= 0:
-                    self.health += self.helmetHealth
-                    self.helmetHealth = 0   # 注意合并后清零
+                self.helmet_health -= damage
+                if self.helmet_health <= 0:
+                    self.health += self.helmet_health
+                    self.helmet_health = 0   # 注意合并后清零
             else:   # 没有防具
                 self.health -= damage
         elif damageType == c.ZOMBIE_COMMON_DAMAGE:  # 无视二类防具，将攻击一类防具与本体视为整体的攻击
             if self.helmet:   # 存在一类防具
-                self.helmetHealth -= damage
-                if self.helmetHealth <= 0:
-                    self.health += self.helmetHealth
-                    self.helmetHealth = 0   # 注意合并后清零
+                self.helmet_health -= damage
+                if self.helmet_health <= 0:
+                    self.health += self.helmet_health
+                    self.helmet_health = 0   # 注意合并后清零
             else:   # 没有一类防具
                 self.health -= damage
         elif damageType == c.ZOMBIE_RANGE_DAMAGE:
             # 从第二类防具开始逐级传递
-            if self.helmetType2:
-                self.helmetType2Health -= damage
-                if self.helmetType2Health <= 0:
+            if self.helmet_type2:
+                self.helmet_type2_health -= damage
+                if self.helmet_type2_health <= 0:
                     if self.helmet:
-                        self.helmetHealth -= damage # 注意范围伤害中这里还有一个攻击
-                        self.helmetHealth += self.helmetType2Health # 注意self.helmetType2Health已经带有正负
-                        self.helmetType2Health = 0  # 注意合并后清零
-                        if self.helmetHealth <= 0:
-                            self.health += self.helmetHealth
-                            self.helmetHealth = 0   # 注意合并后清零
+                        self.helmet_health -= damage # 注意范围伤害中这里还有一个攻击
+                        self.helmet_health += self.helmet_type2_health # 注意self.helmet_type2_health已经带有正负
+                        self.helmet_type2_health = 0  # 注意合并后清零
+                        if self.helmet_health <= 0:
+                            self.health += self.helmet_health
+                            self.helmet_health = 0   # 注意合并后清零
                     else:
                         self.health -= damage   # 注意范围伤害中这里还有一个攻击
-                        self.health += self.helmetType2Health
-                        self.helmetType2Health = 0
+                        self.health += self.helmet_type2_health
+                        self.helmet_type2_health = 0
                 else:
                     if self.helmet:
-                        self.helmetHealth -= damage
-                        if self.helmetHealth <= 0:
-                            self.health += self.helmetHealth
-                            self.helmetHealth = 0   # 注意合并后清零
+                        self.helmet_health -= damage
+                        if self.helmet_health <= 0:
+                            self.health += self.helmet_health
+                            self.helmet_health = 0   # 注意合并后清零
                     else:
                         self.health -= damage
             elif self.helmet:   # 不存在二类防具，但是存在一类防具
-                self.helmetHealth -= damage
-                if self.helmetHealth <= 0:
-                    self.health += self.helmetHealth
-                    self.helmetHealth = 0   # 注意合并后清零
+                self.helmet_health -= damage
+                if self.helmet_health <= 0:
+                    self.health += self.helmet_health
+                    self.helmet_health = 0   # 注意合并后清零
             else:   # 没有防具
                 self.health -= damage
         elif damageType == c.ZOMBIE_ASH_DAMAGE:
             self.health -= damage   # 无视任何防具
         elif damageType == c.ZOMBIE_WALLNUT_BOWLING_DANMAGE:
             # 逻辑：对防具的多余伤害不传递
-            if self.helmetType2:
+            if self.helmet_type2:
                 # 对二类防具伤害较一般情况低，拟合铁门需要砸3次的设定
-                self.helmetType2Health -= int(damage * 0.8)
+                self.helmet_type2_health -= int(damage * 0.8)
             elif self.helmet:   # 不存在二类防具，但是存在一类防具
-                self.helmetHealth -= damage
+                self.helmet_health -= damage
             else:   # 没有防具
                 self.health -= damage
         else:
@@ -441,28 +444,28 @@ class Zombie(pg.sprite.Sprite):
         self.state = c.WALK
         self.animate_interval = self.walk_animate_interval
 
-        if self.helmet or self.helmetType2: # 这里暂时没有考虑同时有两种防具的僵尸
+        if self.helmet or self.helmet_type2: # 这里暂时没有考虑同时有两种防具的僵尸
             self.changeFrames(self.helmet_walk_frames)
-        elif self.lostHead:
+        elif self.losthead:
             self.changeFrames(self.losthead_walk_frames)
         else:
             self.changeFrames(self.walk_frames)
 
-        if self.canSwim:
+        if self.can_swim:
             if self.rect.right <= c.MAP_POOL_FRONT_X:
                 self.swimming = True
                 self.changeFrames(self.swim_frames)
                 # 同样没有兼容双防具
                 if self.helmet:
-                    if self.helmetHealth <= 0:
+                    if self.helmet_health <= 0:
                         self.changeFrames(self.swim_frames)
                         self.helmet = False
                     else:
                         self.changeFrames(self.helmet_swim_frames)
-                if self.helmetType2:
-                    if self.helmetType2Health <= 0:
+                if self.helmet_type2:
+                    if self.helmet_type2_health <= 0:
                         self.changeFrames(self.swim_frames)
-                        self.helmetType2 = False
+                        self.helmet_type2 = False
                     else:
                         self.changeFrames(self.helmet_swim_frames)
 
@@ -473,9 +476,9 @@ class Zombie(pg.sprite.Sprite):
         self.attack_timer = self.current_time
         self.animate_interval = self.attack_animate_interval
 
-        if self.helmet or self.helmetType2: # 这里暂时没有考虑同时有两种防具的僵尸
+        if self.helmet or self.helmet_type2: # 这里暂时没有考虑同时有两种防具的僵尸
             self.changeFrames(self.helmet_attack_frames)
-        elif self.lostHead:
+        elif self.losthead:
             self.changeFrames(self.losthead_attack_frames)
         else:
             self.changeFrames(self.attack_frames)
@@ -558,7 +561,7 @@ class NormalZombie(Zombie):
 # 路障僵尸
 class ConeHeadZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.CONEHEAD_ZOMBIE, head_group, helmetHealth=c.CONEHEAD_HEALTH)
+        Zombie.__init__(self, x, y, c.CONEHEAD_ZOMBIE, head_group, helmet_health=c.CONEHEAD_HEALTH)
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -594,7 +597,7 @@ class ConeHeadZombie(Zombie):
 
 class BucketHeadZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.BUCKETHEAD_ZOMBIE, head_group, helmetHealth=c.BUCKETHEAD_HEALTH)
+        Zombie.__init__(self, x, y, c.BUCKETHEAD_ZOMBIE, head_group, helmet_health=c.BUCKETHEAD_HEALTH)
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -661,8 +664,8 @@ class FlagZombie(Zombie):
 
 class NewspaperZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmetType2Health=c.NEWSPAPER_HEALTH)
-        self.speedUp = False
+        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmet_type2_health=c.NEWSPAPER_HEALTH)
+        self.speed_up = False
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -707,9 +710,9 @@ class NewspaperZombie(Zombie):
         if self.checkToDie(self.losthead_walk_frames):
             return
 
-        if self.helmetType2Health <= 0 and self.helmetType2:
+        if self.helmet_type2_health <= 0 and self.helmet_type2:
             self.changeFrames(self.lostnewspaper_frames)
-            self.helmetType2 = False
+            self.helmet_type2 = False
             # 触发报纸撕裂音效
             c.SOUND_NEWSPAPER_RIP.play()
         if ((self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio())):
@@ -733,9 +736,9 @@ class NewspaperZombie(Zombie):
                 if self.state == c.DIE:
                     self.kill()
                     return
-                elif self.frames == self.lostnewspaper_frames and (not self.speedUp):
+                elif self.frames == self.lostnewspaper_frames and (not self.speed_up):
                     self.changeFrames(self.walk_frames)
-                    self.speedUp = True
+                    self.speed_up = True
                     self.speed = 2.65
                     self.walk_animate_interval = 300
                     # 触发报纸僵尸暴走音效
@@ -755,12 +758,12 @@ class NewspaperZombie(Zombie):
 
 class FootballZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.FOOTBALL_ZOMBIE, head_group, helmetHealth=c.FOOTBALL_HELMET_HEALTH)
+        Zombie.__init__(self, x, y, c.FOOTBALL_ZOMBIE, head_group, helmet_health=c.FOOTBALL_HELMET_HEALTH)
         self.speed = 1.88
         self.animate_interval = 50
         self.walk_animate_interval = 50
         self.attack_animate_interval = 60
-        self.lostHead_animate_interval = 180
+        self.losthead_animate_interval = 180
         self.die_animate_interval = 150
 
     def loadImages(self):
@@ -796,7 +799,7 @@ class FootballZombie(Zombie):
 
 class DuckyTubeZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.DUCKY_TUBE_ZOMBIE, head_group, canSwim=True)
+        Zombie.__init__(self, x, y, c.DUCKY_TUBE_ZOMBIE, head_group, can_swim=True)
 
     def loadImages(self):
         self.walk_frames = []
@@ -827,7 +830,7 @@ class DuckyTubeZombie(Zombie):
 
 class ConeHeadDuckyTubeZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.CONEHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmetHealth=c.CONEHEAD_HEALTH ,canSwim=True)
+        Zombie.__init__(self, x, y, c.CONEHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmet_health=c.CONEHEAD_HEALTH ,can_swim=True)
         
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -865,7 +868,7 @@ class ConeHeadDuckyTubeZombie(Zombie):
 
 class BucketHeadDuckyTubeZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmetHealth=c.BUCKETHEAD_HEALTH ,canSwim=True)
+        Zombie.__init__(self, x, y, c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmet_health=c.BUCKETHEAD_HEALTH ,can_swim=True)
         
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -903,7 +906,7 @@ class BucketHeadDuckyTubeZombie(Zombie):
 
 class ScreenDoorZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.SCREEN_DOOR_ZOMBIE, head_group, helmetType2Health=c.SCREEN_DOOR_HEALTH)
+        Zombie.__init__(self, x, y, c.SCREEN_DOOR_ZOMBIE, head_group, helmet_type2_health=c.SCREEN_DOOR_HEALTH)
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -939,7 +942,7 @@ class ScreenDoorZombie(Zombie):
 
 class PoleVaultingZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.POLE_VAULTING_ZOMBIE, head_group=head_group, bodyHealth=c.POLE_VAULTING_HEALTH, lostHeadHealth=c.POLE_VAULTING_LOSTHEAD_HEALTH)
+        Zombie.__init__(self, x, y, c.POLE_VAULTING_ZOMBIE, head_group=head_group, body_health=c.POLE_VAULTING_HEALTH, losthead_health=c.POLE_VAULTING_LOSTHEAD_HEALTH)
         self.speed = 1.88
         self.jumped = False
         self.jumping = False
@@ -975,12 +978,12 @@ class PoleVaultingZombie(Zombie):
 
         self.frames = self.walk_before_jump_frames
 
-    def setJump(self, successfullyJumped, jumpX):
+    def setJump(self, successfullyJumped, jump_x):
         if not self.jumping:
             self.jumping = True
             self.changeFrames(self.jump_frames)
             self.successfullyJumped = successfullyJumped
-            self.jumpX = jumpX
+            self.jump_x = jump_x
             # 播放跳跃音效
             c.SOUND_POLEVAULT_JUMP.play()
 
@@ -1005,7 +1008,7 @@ class PoleVaultingZombie(Zombie):
                 if self.jumping and (not self.jumped):
                     self.changeFrames(self.walk_frames)
                     if self.successfullyJumped:
-                        self.rect.centerx = self.jumpX
+                        self.rect.centerx = self.jump_x
                     self.jumped = True
                     self.speed = 1.04
             self.animate_timer = self.current_time
@@ -1043,7 +1046,7 @@ class PoleVaultingZombie(Zombie):
 # 注意：冰车僵尸移动变速
 class Zomboni(Zombie):
     def __init__(self, x, y, plant_group, map, IceFrozenPlot):
-        Zombie.__init__(self, x, y, c.ZOMBONI, bodyHealth=c.ZOMBONI_HEALTH)
+        Zombie.__init__(self, x, y, c.ZOMBONI, body_health=c.ZOMBONI_HEALTH)
         self.plant_group = plant_group
         self.map = map
         self.IceFrozenPlot = IceFrozenPlot
@@ -1095,7 +1098,7 @@ class Zomboni(Zombie):
         elif self.health <= c.ZOMBONI_DAMAGED1_HEALTH:
             self.changeFrames(self.walk_damaged1_frames)
 
-        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()) and (not self.lostHead):
+        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()) and (not self.losthead):
             self.walk_timer = self.current_time
             if self.is_hypno:
                 self.rect.x += 1
@@ -1111,14 +1114,14 @@ class Zomboni(Zombie):
                     plant.health -= 8000
 
             # 造冰
-            mapX, mapY = self.map.getMapIndex(self.rect.right - 40, self.rect.bottom)
-            if 0 <= mapX < c.GRID_X_LEN:
-                if c.ICEFROZENPLOT not in self.map.map[mapY][mapX]:
-                    x, y = self.map.getMapGridPos(mapX, mapY)
+            map_x, map_y = self.map.getMapIndex(self.rect.right - 40, self.rect.bottom)
+            if 0 <= map_x < c.GRID_X_LEN:
+                if c.ICEFROZENPLOT not in self.map.map[map_y][map_x]:
+                    x, y = self.map.getMapGridPos(map_x, map_y)
                     self.plant_group.add(self.IceFrozenPlot(x, y))
-                    self.map.map[mapY][mapX][c.MAP_PLANT].add(c.ICEFROZENPLOT)
+                    self.map.map[map_y][map_x][c.MAP_PLANT].add(c.ICEFROZENPLOT)
 
-            self.speed = max(0.6, 1.5 - (c.GRID_X_LEN + 1 - mapX)*0.225)
+            self.speed = max(0.6, 1.5 - (c.GRID_X_LEN + 1 - map_x)*0.225)
 
     def setDie(self):
         self.state = c.DIE
@@ -1130,7 +1133,7 @@ class Zomboni(Zombie):
 
 class SnorkelZombie(Zombie):
     def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.SNORKELZOMBIE, canSwim=True)
+        Zombie.__init__(self, x, y, c.SNORKELZOMBIE, can_swim=True)
         self.speed = 1.175
         self.walk_animate_interval = 60
         self.canSetAttack = True
@@ -1250,7 +1253,7 @@ class SnorkelZombie(Zombie):
         self.prey_is_plant = is_plant
         self.animate_interval = self.attack_animate_interval
 
-        if self.lostHead:
+        if self.losthead:
             self.changeFrames(self.losthead_attack_frames)
         elif self.canSetAttack:
             self.changeFrames(self.float_frames)
