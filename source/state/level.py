@@ -102,7 +102,7 @@ class Level(tool.State):
     # 可以考虑将波刷新和一波中的僵尸生成分开
     # useableZombie是指可用的僵尸种类的元组
     # inevitableZombie指在本轮必然出现的僵尸，输入形式为字典: {波数1:(僵尸1, 僵尸2……), 波数2:(僵尸1, 僵尸2……)……}
-    def createWaves(self, useableZombies, numFlags, survivalRounds=0, inevitableZombieDict=None):
+    def createWaves(self, useableZombies, numFlags, survivalRounds=0, inevitable_zombie_dict=None):
 
         waves = []
 
@@ -130,10 +130,10 @@ class Level(tool.State):
             if (self.bar_type != c.CHOOSEBAR_STATIC):
                 volume += 2
 
-            if inevitableZombieDict and (wave in inevitableZombieDict):
-                for newZombie in inevitableZombieDict[str(wave)]:
-                    zombieList.append(newZombie)
-                    volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
+            if inevitable_zombie_dict and (wave in inevitable_zombie_dict):
+                for new_zombie in inevitable_zombie_dict[wave]:
+                    zombieList.append(new_zombie)
+                    volume -= c.CREATE_ZOMBIE_DICT[new_zombie][0]
                 if volume < 0:
                     logger.warning(f"第{wave}波中手动设置的僵尸级别总数超过上限！")
 
@@ -141,23 +141,23 @@ class Level(tool.State):
             minCost = c.CREATE_ZOMBIE_DICT[min(useableZombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
 
             while (volume >= minCost) and (len(zombieList) < 50):
-                newZombie = random.choices(useableZombies, weights)[0]
+                new_zombie = random.choices(useableZombies, weights)[0]
                 # 普通僵尸、路障僵尸、铁桶僵尸有概率生成水中变种
                 if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
                     # 有泳池第一轮的第四波设定上生成水生僵尸
                     if survivalRounds == 0 and wave == 4:
-                        if newZombie in c.CONVERT_ZOMBIE_IN_POOL:
-                            newZombie = c.CONVERT_ZOMBIE_IN_POOL[newZombie]
+                        if new_zombie in c.CONVERT_ZOMBIE_IN_POOL:
+                            new_zombie = c.CONVERT_ZOMBIE_IN_POOL[new_zombie]
                     elif survivalRounds > 0 or wave > 4:
                         if random.randint(1, 3) == 1:  # 1/3概率水上，暂时人为设定
-                            if newZombie in c.CONVERT_ZOMBIE_IN_POOL:
-                                newZombie = c.CONVERT_ZOMBIE_IN_POOL[newZombie]
+                            if new_zombie in c.CONVERT_ZOMBIE_IN_POOL:
+                                new_zombie = c.CONVERT_ZOMBIE_IN_POOL[new_zombie]
                     # 首先几轮不出水生僵尸
-                    elif newZombie in c.WATER_ZOMBIE:
+                    elif new_zombie in c.WATER_ZOMBIE:
                         continue
-                if c.CREATE_ZOMBIE_DICT[newZombie][0] <= volume:
-                    zombieList.append(newZombie)
-                    volume -= c.CREATE_ZOMBIE_DICT[newZombie][0]
+                if c.CREATE_ZOMBIE_DICT[new_zombie][0] <= volume:
+                    zombieList.append(new_zombie)
+                    volume -= c.CREATE_ZOMBIE_DICT[new_zombie][0]
             waves.append(zombieList)
             # print(wave, zombieList, len(zombieList))
 
@@ -424,7 +424,7 @@ class Level(tool.State):
                 self.createWaves(   useableZombies=self.map_data[c.INCLUDED_ZOMBIES],
                                     numFlags=self.map_data[c.NUM_FLAGS],
                                     survivalRounds=0,
-                                    inevitableZombieDict=self.map_data[c.INEVITABLE_ZOMBIE_DICT])
+                                    inevitable_zombie_dict=self.map_data[c.INEVITABLE_ZOMBIE_DICT])
             else:
                 self.createWaves(   useableZombies=self.map_data[c.INCLUDED_ZOMBIES],
                                     numFlags=self.map_data[c.NUM_FLAGS],

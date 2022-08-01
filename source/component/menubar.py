@@ -93,7 +93,7 @@ class Card():
             image.blit(frozen_image, (0,0), (0, 0, self.rect.w, frozen_height))
             image.blit(self.orig_image, (0,frozen_height),
                        (0, frozen_height, self.rect.w, self.rect.h - frozen_height))
-        elif self.sun_cost > sun_value: #disable status
+        if self.sun_cost > sun_value: #disable status
             image = self.orig_image.copy()
             image.set_alpha(192)
         elif self.clicked:
