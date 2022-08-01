@@ -322,7 +322,7 @@ class Plant(pg.sprite.Sprite):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         if (self.state != c.SLEEP and zombie.state != c.DIE and
-            self.rect.x <= zombie.rect.right and zombie.rect.x <= c.SCREEN_WIDTH):
+            self.rect.x <= zombie.rect.right and zombie.rect.x <= c.SCREEN_WIDTH - 24):
             return True
         return False
 

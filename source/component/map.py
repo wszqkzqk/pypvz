@@ -412,7 +412,7 @@ LITTLE_GAME_MAP_DATA = (
                     c.SPIKEWEED: 100,
                     c.SQUASH: 100,
                     c.JALAPENO: 50,
-                    c.THREEPEASHOOTER: 400,}
+                    c.THREEPEASHOOTER: 300,}
 },
 )
 
