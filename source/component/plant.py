@@ -22,7 +22,7 @@ class Car(pg.sprite.Sprite):
     def update(self, game_info):
         self.current_time = game_info[c.CURRENT_TIME]
         if self.state == c.WALK:
-            self.rect.x += 4
+            self.rect.x += 6
         if self.rect.x > c.SCREEN_WIDTH + 60:
             self.dead = True
 
