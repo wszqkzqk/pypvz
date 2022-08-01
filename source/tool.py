@@ -5,7 +5,7 @@ import pygame as pg
 from pygame.locals import *
 from . import constants as c
 
-# an abstract class, one state of automata
+# 状态机 抽象基类
 class State():
     def __init__(self):
         self.start_time = 0
@@ -17,7 +17,7 @@ class State():
     # 当从其他状态进入这个状态时，需要进行的初始化操作
     @abstractmethod
     def startup(self, current_time, persist):
-        # abstract method
+        # 前面加了@abstractmethod表示抽象基类中必须要重新定义的method（method是对象和函数的结合）
         pass
     # 当从这个状态退出时，需要进行的清除操作
     def cleanup(self):
@@ -26,7 +26,7 @@ class State():
     # 在这个状态运行时进行的更新操作
     @abstractmethod
     def update(self, surface, keys, current_time):
-        # abstract method
+        # 前面加了@abstractmethod表示抽象基类中必须要重新定义的method
         pass
 
     # 工具：范围判断函数，用于判断点击
@@ -47,7 +47,7 @@ class State():
             data_to_save = json.dumps(userdata, sort_keys=True, indent=4)
             f.write(data_to_save)
 
-# control this game. do event loops
+# 进行游戏控制 循环 事件响应
 class Control():
     def __init__(self):
         self.screen = pg.display.get_surface()
@@ -100,7 +100,7 @@ class Control():
         self.state.startup(self.current_time, self.game_info)
 
     def update(self):
-        # 返回自 pygame_init() 调用以来的毫秒数 * 游戏速度倍率
+        # 自 pygame_init() 调用以来的毫秒数 * 游戏速度倍率，即游戏时间
         self.current_time = pg.time.get_ticks() * self.game_info[c.GAME_RATE]
 
         if self.state.done:
@@ -116,7 +116,6 @@ class Control():
         if self.state.next == c.EXIT:
             pg.quit()
             os._exit(0)
-        # previous, self.state_name = self.state_name, self.state.next
         self.state_name = self.state.next
         persist = self.state.cleanup()
         self.state = self.state_dict[self.state_name]
@@ -162,7 +161,7 @@ def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
                                     int(rect.height*scale)))
         return image
 
-def get_image_menu(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
+def get_image_alpha(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
         # 保留alpha通道的图片导入
         image = pg.Surface([width, height], SRCALPHA)
         rect = image.get_rect()
@@ -198,7 +197,7 @@ def load_image_frames(directory, image_name, colorkey, accept):
     return frame_list
 
 # colorkeys 是设置图像中的某个颜色值为透明,这里用来消除白边
-def load_all_gfx(directory, colorkey=c.WHITE, accept=(".png", ".jpg", ".bmp", ".gif", "webp")):
+def load_all_gfx(directory, colorkey=c.WHITE, accept=(".png", ".jpg", ".bmp", ".gif", ".webp")):
     graphics = {}
     for name1 in os.listdir(directory):
         # subfolders under the folder resources\graphics

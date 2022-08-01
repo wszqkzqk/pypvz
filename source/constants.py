@@ -71,6 +71,7 @@ PARCHMENT_YELLOW = (207, 146, 83)
 
 # 退出游戏按钮
 EXIT = "exit"
+HELP = "help"
 # 游戏界面可选的菜单
 LITTLE_MENU = "littleMenu"
 BIG_MENU = "bigMenu"
@@ -110,6 +111,7 @@ GAME_LOSE = "game lose"
 GAME_VICTORY = "game victory"
 LEVEL = "level"
 AWARD_SCREEN = "award screen"
+HELP_SCREEN = "help screen"
 
 # 界面图片文件名
 MAIN_MENU_IMAGE = "MainMenu"
@@ -117,6 +119,7 @@ OPTION_ADVENTURE = "Adventure"
 GAME_LOSE_IMAGE = "GameLose"
 GAME_VICTORY_IMAGE = "GameVictory"
 AWARD_SCREEN_IMAGE = "AwardScreen"
+HELP_SCREEN_IMAGE = "HelpScreen"
 
 # 地图相关内容
 BACKGROUND_NAME = "Background"
@@ -166,8 +169,8 @@ GRAVES_GRADE_INFO = (0, 4, 7, 11)
 
 # 僵尸生成方式
 SPAWN_ZOMBIES = "spawn_zombies"
-SPAWN_ZOMBIES_AUTO = "auto"
-SPAWN_ZOMBIES_LIST = "list"
+SPAWN_ZOMBIES_AUTO = 1
+SPAWN_ZOMBIES_LIST = 0
 INCLUDED_ZOMBIES = "included_zombies"
 NUM_FLAGS = "num_flags"
 INEVITABLE_ZOMBIE_DICT = "inevitable_zombie_list"
@@ -302,7 +305,7 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 50000),
             (DOOMSHROOM := "DoomShroom",
                 CARD_DOOMSHROOM := "card_doomshroom",
-                75,
+                125,
                 50000),
             (LILYPAD := "LilyPad",
                 CARD_LILYPAD := "card_lilypad",
@@ -509,8 +512,7 @@ SNORKELZOMBIE = "SnorkelZombie"
 BOOMDIE = "BoomDie"
 
 # 对僵尸的攻击类型设置
-ZOMBIE_DEAFULT_DAMAGE = "helmet2First"
-ZOMBIE_HELMET_2_FIRST = "helmet2First"  # 优先攻击二类防具
+ZOMBIE_DEAFULT_DAMAGE = ZOMBIE_HELMET_2_FIRST = "helmet2First"  # 优先攻击二类防具
 ZOMBIE_COMMON_DAMAGE = "commonDamage"   # 优先攻击僵尸与一类防具的整体
 ZOMBIE_RANGE_DAMAGE = "rangeDamage" # 范围攻击，同时伤害二类防具与(僵尸与一类防具的整体)
 ZOMBIE_ASH_DAMAGE = "ashDamage" # 灰烬植物攻击，直接伤害本体
