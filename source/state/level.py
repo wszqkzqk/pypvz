@@ -312,7 +312,7 @@ class Level(tool.State):
         self.cars = []
         for i in range(self.map_y_len):
             y = self.map.getMapGridPos(0, i)[1]
-            self.cars.append(plant.Car(-40, y+20, i))
+            self.cars.append(plant.Car(-45, y+20, i))
 
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
@@ -1177,9 +1177,10 @@ class Level(tool.State):
         for i in range(len(self.cars)):
             if self.cars[i]:
                 for zombie in self.zombie_groups[i]:
-                    if zombie and zombie.state != c.DIE and (not zombie.losthead) and (zombie.rect.centerx <= 0):
+                    if (zombie and zombie.state != c.DIE and (not zombie.losthead)
+                    and (pg.sprite.collide_mask(zombie, self.cars[i]))):
                         self.cars[i].setWalk()
-                    if zombie.rect.centerx <= self.cars[i].rect.x:
+                    if pg.sprite.collide_mask(zombie, self.cars[i]):
                         zombie.health = 0
                 if self.cars[i].dead:
                     self.cars[i] = None
