@@ -1076,11 +1076,19 @@ class Level(tool.State):
                         # 在生效状态下忽略啃食碰撞但其他状况下不能忽略的情形
                         elif plant.name in c.SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING:
                             if not plant.start_boom:
-                                    attackable_common_plants.append(plant)
+                                attackable_common_plants.append(plant)
                 else:
                     if attackable_common_plants:
                         # 默认为最右侧的一个植物
                         target_plant = max(attackable_common_plants, key=lambda i: i.rect.x)
+                        map_x, map_y = self.map.getMapIndex(target_plant.rect.centerx, target_plant.rect.centery)
+                        if c.PUMPKINHEAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                            for actual_target_plant in self.plant_groups[i]:
+                                # 检测同一格的其他植物
+                                if self.map.getMapIndex(actual_target_plant.rect.centerx, actual_target_plant.rect.bottom) == (map_x, map_y):
+                                    if actual_target_plant.name == c.PUMPKINHEAD:
+                                        target_plant = actual_target_plant
+                                        break
                     elif attackable_backup_plants:
                         target_plant = max(attackable_backup_plants, key=lambda i: i.rect.x)
                         map_x, map_y = self.map.getMapIndex(target_plant.rect.centerx, target_plant.rect.centery)
