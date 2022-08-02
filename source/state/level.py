@@ -41,7 +41,7 @@ class Level(tool.State):
                 self.saveUserData()
                 self.map_data = map.LEVEL_MAP_DATA[self.game_info[c.LEVEL_NUM]]
                 pg.display.set_caption(f"pypvz: 冒险模式 {self.map_data[c.GAME_TITLE]}")
-                logger.warning("关卡数设定错误！进入默认的第一关！")
+                logger.warning("关卡数设定错误！进入默认的第一关！\n")
         # 小游戏模式
         elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
             if 0 <= self.game_info[c.LITTLEGAME_NUM] < map.TOTAL_LITTLE_GAME:
@@ -52,7 +52,7 @@ class Level(tool.State):
                 self.saveUserData()
                 self.map_data = map.LITTLE_GAME_MAP_DATA[self.game_info[c.LITTLEGAME_NUM]]
                 pg.display.set_caption(f"pypvz: 冒险模式 {self.map_data[c.GAME_TITLE]}")
-                logger.warning("关卡数设定错误！进入默认的第一关！")
+                logger.warning("关卡数设定错误！进入默认的第一关！\n")
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
         self.has_shovel = self.map_data[c.SHOVEL]
 
