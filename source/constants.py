@@ -126,6 +126,7 @@ BACKGROUND_NAME = "Background"
 BACKGROUND_TYPE = "background_type"
 INIT_SUN_NAME = "init_sun_value"
 ZOMBIE_LIST = "zombie_list"
+GAME_TITLE = "title"
 
 # 地图类型
 BACKGROUND_DAY = 0

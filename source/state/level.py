@@ -35,21 +35,23 @@ class Level(tool.State):
         if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
             if 0 <= self.game_info[c.LEVEL_NUM] < map.TOTAL_LEVEL:
                 self.map_data = map.LEVEL_MAP_DATA[self.game_info[c.LEVEL_NUM]]
-                pg.display.set_caption(f"pypvz: 冒险模式 第{self.game_info[c.LEVEL_NUM]}关")
+                pg.display.set_caption(f"pypvz: 冒险模式 {self.map_data[c.GAME_TITLE]}")
             else:
                 self.game_info[c.LEVEL_NUM] = 1
                 self.saveUserData()
                 self.map_data = map.LEVEL_MAP_DATA[self.game_info[c.LEVEL_NUM]]
+                pg.display.set_caption(f"pypvz: 冒险模式 {self.map_data[c.GAME_TITLE]}")
                 logger.warning("关卡数设定错误！进入默认的第一关！")
         # 小游戏模式
         elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
             if 0 <= self.game_info[c.LITTLEGAME_NUM] < map.TOTAL_LITTLE_GAME:
                 self.map_data = map.LITTLE_GAME_MAP_DATA[self.game_info[c.LITTLEGAME_NUM]]
-                pg.display.set_caption(f"pypvz: 玩玩小游戏 第{self.game_info[c.LITTLEGAME_NUM]}关")
+                pg.display.set_caption(f"pypvz: 玩玩小游戏 {self.map_data[c.GAME_TITLE]}")
             else:
                 self.game_info[c.LITTLEGAME_NUM] = 1
                 self.saveUserData()
                 self.map_data = map.LITTLE_GAME_MAP_DATA[self.game_info[c.LITTLEGAME_NUM]]
+                pg.display.set_caption(f"pypvz: 冒险模式 {self.map_data[c.GAME_TITLE]}")
                 logger.warning("关卡数设定错误！进入默认的第一关！")
         # 是否有铲子的信息：无铲子时为0，有铲子时为1，故直接赋值即可
         self.has_shovel = self.map_data[c.SHOVEL]
@@ -287,7 +289,7 @@ class Level(tool.State):
         zombie_nums = 0
         for i in range(self.map_y_len):
             zombie_nums += len(self.zombie_groups[i])
-        if (zombie_nums / self.zombie_num < random.uniform(0.15, 0.25)) and (current_time - self.wave_time > 4000):
+        if self.zombie_num and (zombie_nums / self.zombie_num < random.uniform(0.15, 0.25)) and (current_time - self.wave_time > 4000):
             # 当僵尸所剩无几并且时间过了4000 ms以上时，改变时间记录，使得2000 ms后刷新僵尸（所以需要判断剩余时间是否大于2000 ms）
             if self.bar_type == c.CHOOSEBAR_STATIC:
                 if current_time - 43000 < self.wave_time:    # 判断剩余时间是否有2000 ms
