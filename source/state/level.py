@@ -1082,13 +1082,14 @@ class Level(tool.State):
                         # 默认为最右侧的一个植物
                         target_plant = max(attackable_common_plants, key=lambda i: i.rect.x)
                         map_x, map_y = self.map.getMapIndex(target_plant.rect.centerx, target_plant.rect.centery)
-                        if c.PUMPKINHEAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
-                            for actual_target_plant in self.plant_groups[i]:
-                                # 检测同一格的其他植物
-                                if self.map.getMapIndex(actual_target_plant.rect.centerx, actual_target_plant.rect.bottom) == (map_x, map_y):
-                                    if actual_target_plant.name == c.PUMPKINHEAD:
-                                        target_plant = actual_target_plant
-                                        break
+                        if not (map_x >= self.map.width or map_y >= self.map.height):
+                            if c.PUMPKINHEAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
+                                for actual_target_plant in self.plant_groups[i]:
+                                    # 检测同一格的其他植物
+                                    if self.map.getMapIndex(actual_target_plant.rect.centerx, actual_target_plant.rect.bottom) == (map_x, map_y):
+                                        if actual_target_plant.name == c.PUMPKINHEAD:
+                                            target_plant = actual_target_plant
+                                            break
                     elif attackable_backup_plants:
                         target_plant = max(attackable_backup_plants, key=lambda i: i.rect.x)
                         map_x, map_y = self.map.getMapIndex(target_plant.rect.centerx, target_plant.rect.centery)
@@ -1113,6 +1114,7 @@ class Level(tool.State):
                     if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
                         if target_plant.name == c.GIANTWALLNUT:
                             zombie.health = 0
+                            c.SOUND_BOWLING_IMPACT.play()
                         elif not zombie.jumping:
                             zombie.jump_map_x, zombie.jump_map_y = min(c.GRID_X_LEN - 1, zombie.prey_map_x), min(self.map_y_len - 1, zombie.prey_map_y)
                             jump_x = target_plant.rect.x - c.GRID_X_SIZE * 0.6
@@ -1142,6 +1144,7 @@ class Level(tool.State):
                             target_plant.setAttack()
                     elif target_plant.name == c.GIANTWALLNUT:
                         zombie.health = 0
+                        c.SOUND_BOWLING_IMPACT.play()
                     elif zombie.target_y_change:
                         # 大蒜作用正在生效的僵尸不进行传递
                         continue

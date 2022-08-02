@@ -1818,6 +1818,7 @@ class PumpkinHead(Plant):
             self.changeFrames(self.cracked2_frames)
             self.cracked2 = True
 
+
 class GiantWallNut(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.GIANTWALLNUT, 1, None)
@@ -1826,7 +1827,7 @@ class GiantWallNut(Plant):
         self.animate_interval = 200
         self.move_timer = 0
         self.move_interval = 70
-        self.vel_x = random.randint(12, 15)
+        self.vel_x = random.randint(15, 18)
 
     def idling(self):
         if self.move_timer == 0:
