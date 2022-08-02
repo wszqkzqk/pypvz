@@ -102,28 +102,28 @@ class Level(tool.State):
     # 可以考虑将波刷新和一波中的僵尸生成分开
     # useableZombie是指可用的僵尸种类的元组
     # inevitableZombie指在本轮必然出现的僵尸，输入形式为字典: {波数1:(僵尸1, 僵尸2……), 波数2:(僵尸1, 僵尸2……)……}
-    def createWaves(self, useableZombies, numFlags, survivalRounds=0, inevitable_zombie_dict=None):
+    def createWaves(self, useable_zombies, num_flags, survival_rounds=0, inevitable_zombie_dict=None):
 
         waves = []
 
-        self.numFlags = numFlags
+        self.num_flags = num_flags
 
         # 权重值
         weights = []
-        for zombie in useableZombies:
+        for zombie in useable_zombies:
             weights.append(c.CREATE_ZOMBIE_DICT[zombie][1])
 
         # 按照原版pvz设计的僵尸容量函数，是从无尽解析的，但是普通关卡也可以遵循
-        for wave in range(1, 10 * numFlags + 1):
-            volume = int(int((wave + survivalRounds*20)*0.8)/2) + 1
-            zombieList = []
+        for wave in range(1, 10 * num_flags + 1):
+            volume = int(int((wave + survival_rounds*20)*0.8)/2) + 1
+            zombie_list = []
 
             # 大波僵尸情况
             if wave % 10 == 0:
                 # 容量增大至2.5倍
                 volume = int(volume*2.5)
                 # 先生成旗帜僵尸
-                zombieList.append(c.FLAG_ZOMBIE)
+                zombie_list.append(c.FLAG_ZOMBIE)
                 volume -= c.CREATE_ZOMBIE_DICT[c.FLAG_ZOMBIE][0]
 
             # 传送带模式应当增大僵尸容量
@@ -132,23 +132,23 @@ class Level(tool.State):
 
             if inevitable_zombie_dict and (wave in inevitable_zombie_dict):
                 for new_zombie in inevitable_zombie_dict[wave]:
-                    zombieList.append(new_zombie)
+                    zombie_list.append(new_zombie)
                     volume -= c.CREATE_ZOMBIE_DICT[new_zombie][0]
                 if volume < 0:
                     logger.warning(f"第{wave}波中手动设置的僵尸级别总数超过上限！")
 
             # 防止因为僵尸最小等级过大，使得总容量无法完全利用，造成死循环的检查机制
-            minCost = c.CREATE_ZOMBIE_DICT[min(useableZombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
+            min_cost = c.CREATE_ZOMBIE_DICT[min(useable_zombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
 
-            while (volume >= minCost) and (len(zombieList) < 50):
-                new_zombie = random.choices(useableZombies, weights)[0]
+            while (volume >= min_cost) and (len(zombie_list) < 50):
+                new_zombie = random.choices(useable_zombies, weights)[0]
                 # 普通僵尸、路障僵尸、铁桶僵尸有概率生成水中变种
                 if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
                     # 有泳池第一轮的第四波设定上生成水生僵尸
-                    if survivalRounds == 0 and wave == 4:
+                    if survival_rounds == 0 and wave == 4:
                         if new_zombie in c.CONVERT_ZOMBIE_IN_POOL:
                             new_zombie = c.CONVERT_ZOMBIE_IN_POOL[new_zombie]
-                    elif survivalRounds > 0 or wave > 4:
+                    elif survival_rounds > 0 or wave > 4:
                         if random.randint(1, 3) == 1:  # 1/3概率水上，暂时人为设定
                             if new_zombie in c.CONVERT_ZOMBIE_IN_POOL:
                                 new_zombie = c.CONVERT_ZOMBIE_IN_POOL[new_zombie]
@@ -156,22 +156,22 @@ class Level(tool.State):
                     elif new_zombie in c.WATER_ZOMBIE:
                         continue
                 if c.CREATE_ZOMBIE_DICT[new_zombie][0] <= volume:
-                    zombieList.append(new_zombie)
+                    zombie_list.append(new_zombie)
                     volume -= c.CREATE_ZOMBIE_DICT[new_zombie][0]
-            waves.append(zombieList)
-            # print(wave, zombieList, len(zombieList))
+            waves.append(zombie_list)
+            # print(wave, zombie_list, len(zombie_list))
 
         self.waves = waves
 
         # 针对有泳池的关卡
         # 表示尚未生成最后一波中从水里冒出来的僵尸
-        self.createdZombieFromPool = False
+        self.created_zombie_from_pool = False
 
 
     # 僵尸的刷新机制
-    def refreshWaves(self, current_time, survivalRounds=0):
+    def refreshWaves(self, current_time, survival_rounds=0):
         # 最后一波或者大于最后一波
-        # 如果在夜晚按需从墓碑生成僵尸
+        # 如果在夜晚按需从墓碑生成僵尸 有泳池时从水中生成僵尸
         # 否则直接return
         if self.wave_num >= self.map_data[c.NUM_FLAGS] * 10:
             if self.map_data[c.BACKGROUND_TYPE] == c.BACKGROUND_NIGHT:
@@ -227,7 +227,7 @@ class Level(tool.State):
                                 self.zombie_groups[item[1]].add(zombie.ConeHeadZombie(item_x, item_y, self.head_group))
                         self.grave_zombie_created = True
             elif self.map_data[c.BACKGROUND_TYPE] in c.POOL_EQUIPPED_BACKGROUNDS:
-                if not self.createdZombieFromPool:
+                if not self.created_zombie_from_pool:
                     if current_time - self.wave_time > 1500:
                         for i in range(3):
                             # 水中倒数四列内可以在此时产生僵尸。共产生3个
@@ -235,14 +235,14 @@ class Level(tool.State):
                             item_x, item_y = self.map.getMapGridPos(map_x, map_y)
                             # 用随机数指定产生的僵尸类型
                             # 暂时设定为生成概率相同
-                            zombieType = random.randint(1, 3)
-                            if zombieType == 1:
+                            zombie_type = random.randint(1, 3)
+                            if zombie_type == 1:
                                 self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(item_x, item_y, self.head_group))
-                            elif zombieType == 2:
+                            elif zombie_type == 2:
                                 self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(item_x, item_y, self.head_group))
                             else:
                                 self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(item_x, item_y, self.head_group))
-                        self.createdZombieFromPool = True
+                        self.created_zombie_from_pool = True
             return
 
         # 还未开始出现僵尸
@@ -250,7 +250,7 @@ class Level(tool.State):
             if (self.wave_time == 0):    # 表明刚刚开始游戏
                 self.wave_time = current_time
             else:
-                if (survivalRounds == 0) and (self.bar_type == c.CHOOSEBAR_STATIC): # 首次选卡等待时间较长
+                if (survival_rounds == 0) and (self.bar_type == c.CHOOSEBAR_STATIC): # 首次选卡等待时间较长
                     if current_time - self.wave_time >= 18000:
                         self.wave_num += 1
                         self.wave_time = current_time
@@ -404,6 +404,7 @@ class Level(tool.State):
 
         if self.background_type in c.DAYTIME_BACKGROUNDS and self.bar_type == c.CHOOSEBAR_STATIC:
             self.produce_sun = True
+            self.fallen_sun = 0 # 已掉落的阳光
         else:
             self.produce_sun = False
         self.sun_timer = self.current_time
@@ -419,16 +420,16 @@ class Level(tool.State):
             self.wave_zombies = []
             self.zombie_num = 0
 
-            # 暂时没有生存模式，所以 survivalRounds = 0
+            # 暂时没有生存模式，所以 survival_rounds = 0
             if c.INEVITABLE_ZOMBIE_DICT in self.map_data:
-                self.createWaves(   useableZombies=self.map_data[c.INCLUDED_ZOMBIES],
-                                    numFlags=self.map_data[c.NUM_FLAGS],
-                                    survivalRounds=0,
+                self.createWaves(   useable_zombies=self.map_data[c.INCLUDED_ZOMBIES],
+                                    num_flags=self.map_data[c.NUM_FLAGS],
+                                    survival_rounds=0,
                                     inevitable_zombie_dict=self.map_data[c.INEVITABLE_ZOMBIE_DICT])
             else:
-                self.createWaves(   useableZombies=self.map_data[c.INCLUDED_ZOMBIES],
-                                    numFlags=self.map_data[c.NUM_FLAGS],
-                                    survivalRounds=0)
+                self.createWaves(   useable_zombies=self.map_data[c.INCLUDED_ZOMBIES],
+                                    num_flags=self.map_data[c.NUM_FLAGS],
+                                    survival_rounds=0)
         self.setupCars()
 
         # 地图有铲子才添加铲子
@@ -458,9 +459,9 @@ class Level(tool.State):
             else:
                 grade_graves = 1
 
-            graveVolume = c.GRAVES_GRADE_INFO[grade_graves]
+            grave_volume = c.GRAVES_GRADE_INFO[grade_graves]
             self.grave_set = set()
-            while len(self.grave_set) < graveVolume:
+            while len(self.grave_set) < grave_volume:
                 map_x = random.randint(4, 8)    # 注意是从0开始编号
                 map_y = random.randint(0, 4)
                 self.grave_set.add((map_x, map_y))
@@ -654,10 +655,6 @@ class Level(tool.State):
                 return
 
     def play(self, mouse_pos, mouse_click):
-        # 原版阳光掉落机制需要
-        # 已掉落的阳光
-        self.fallen_sun = 0
-
         # 如果暂停
         if self.show_game_menu:
             self.pauseAndCheckMenuOptions(mouse_pos, mouse_click)
@@ -703,14 +700,13 @@ class Level(tool.State):
                 x, y = self.map.getMapGridPos(map_x, map_y)
                 self.sun_group.add(plant.Sun(x, 0, x, y))
                 self.fallen_sun += 1
-        
-        # wcb 添加
+
         # 检查有没有捡到阳光
         clicked_sun = False
         clicked_cards_or_map = False
         if not self.drag_plant and not self.drag_shovel and mouse_pos and mouse_click[0]:
             for sun in self.sun_group:
-                if sun.checkCollision(mouse_pos[0], mouse_pos[1]):
+                if sun.checkCollision(*mouse_pos):
                     self.menubar.increaseSunValue(sun.sun_value)
                     clicked_sun = True
                     # 播放收集阳光的音效
@@ -767,7 +763,7 @@ class Level(tool.State):
         self.menubar.update(self.current_time)
 
 
-        # 检查碰撞啥的
+        # 检查碰撞
         self.checkBulletCollisions()
         self.checkZombieCollisions()
         self.checkPlants()
@@ -925,6 +921,8 @@ class Level(tool.State):
             new_plant = plant.Garlic(x, y)
         elif self.plant_name == c.PUMPKINHEAD:
             new_plant = plant.PumpkinHead(x, y)
+        elif self.plant_name == c.GIANTWALLNUT:
+            new_plant = plant.GiantWallNut(x, y)
 
 
         if new_plant.can_sleep and self.background_type in c.DAYTIME_BACKGROUNDS:
@@ -1016,13 +1014,13 @@ class Level(tool.State):
                             continue
                         if collided_func(zombie, bullet):
                             if zombie.state != c.DIE:
-                                zombie.setDamage(bullet.damage, effect=bullet.effect, damageType=bullet.damageType)
+                                zombie.setDamage(bullet.damage, effect=bullet.effect, damage_type=bullet.damage_type)
                                 bullet.setExplode()
                                 # 火球有溅射伤害
                                 if bullet.name == c.BULLET_FIREBALL:
                                     for rangeZombie in self.zombie_groups[i]:
                                         if abs(rangeZombie.rect.x - bullet.rect.x) <= (c.GRID_X_SIZE // 2):
-                                            rangeZombie.setDamage(c.BULLET_DAMAGE_FIREBALL_RANGE, effect=None, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+                                            rangeZombie.setDamage(c.BULLET_DAMAGE_FIREBALL_RANGE, effect=None, damage_type=c.ZOMBIE_DEAFULT_DAMAGE)
                                 break
 
 
@@ -1105,7 +1103,9 @@ class Level(tool.State):
                     zombie.prey_map_x, zombie.prey_map_y = self.map.getMapIndex(target_plant.rect.centerx, target_plant.rect.centery)
                     # 撑杆跳的特殊情况
                     if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
-                        if not zombie.jumping:
+                        if target_plant.name == c.GIANTWALLNUT:
+                            zombie.health = 0
+                        elif not zombie.jumping:
                             zombie.jump_map_x, zombie.jump_map_y = min(c.GRID_X_LEN - 1, zombie.prey_map_x), min(self.map_y_len - 1, zombie.prey_map_y)
                             jump_x = target_plant.rect.x - c.GRID_X_SIZE * 0.6
                             if c.TALLNUT in self.map.map[zombie.jump_map_y][zombie.jump_map_x][c.MAP_PLANT]:
@@ -1123,15 +1123,17 @@ class Level(tool.State):
                         if target_plant.canHit(i):
                             # target_plant.vel_y不为0，有纵向速度，表明已经发生过碰撞，对铁门秒杀（这里实现为忽略二类防具攻击）
                             if target_plant.vel_y and zombie.name == c.SCREEN_DOOR_ZOMBIE:
-                                zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_COMMON_DAMAGE)
+                                zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damage_type=c.ZOMBIE_COMMON_DAMAGE)
                             else:
-                                zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damageType=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
+                                zombie.setDamage(c.WALLNUT_BOWLING_DAMAGE, damage_type=c.ZOMBIE_WALLNUT_BOWLING_DANMAGE)
                             target_plant.changeDirection(i)
                             # 播放撞击音效
                             c.SOUND_BOWLING_IMPACT.play()
                     elif target_plant.name == c.REDWALLNUTBOWLING:
                         if target_plant.state == c.IDLE:
                             target_plant.setAttack()
+                    elif target_plant.name == c.GIANTWALLNUT:
+                        zombie.health = 0
                     elif zombie.target_y_change:
                         # 大蒜作用正在生效的僵尸不进行传递
                         continue
@@ -1194,7 +1196,7 @@ class Level(tool.State):
                     ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.2, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
                     if effect == c.BULLET_EFFECT_UNICE:
                         zombie.ice_slow_ratio = 1
-                    zombie.setDamage(1800, damageType=c.ZOMBIE_ASH_DAMAGE)
+                    zombie.setDamage(1800, damage_type=c.ZOMBIE_ASH_DAMAGE)
                     if zombie.health <= 0:
                         zombie.setBoomDie()
 
@@ -1205,7 +1207,7 @@ class Level(tool.State):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
                 zombie.setFreeze(plant.trap_frames[0])
-                zombie.setDamage(20, damageType=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
+                zombie.setDamage(20, damage_type=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
 
     def killPlant(self, target_plant, shovel=False):
         x, y = target_plant.getPosition()
@@ -1284,7 +1286,7 @@ class Level(tool.State):
                     # 双判断：发生碰撞或在攻击范围内
                     if ((pg.sprite.collide_mask(zombie, target_plant)) or
                         (abs(zombie.rect.centerx - target_plant.rect.centerx) <= target_plant.explode_x_range)):
-                        zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
+                        zombie.setDamage(1800, damage_type=c.ZOMBIE_RANGE_DAMAGE)
                 target_plant.boomed = True
         elif target_plant.name == c.SQUASH:
             for zombie in self.zombie_groups[i]:
@@ -1494,8 +1496,8 @@ class Level(tool.State):
         pg.draw.rect(surface, c.YELLOWGREEN, filledBarRect)
         
         # 画旗帜
-        for i in range(self.numFlags):
-            self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x + int((150*i)/self.numFlags) + 5   # 常数是猜的
+        for i in range(self.num_flags):
+            self.level_progress_flag_rect.x = self.level_progress_bar_image_rect.x + int((150*i)/self.num_flags) + 5   # 常数是猜的
             # 当指示进度的僵尸头在旗帜左侧时升高旗帜
             if self.level_progress_flag_rect.x - 7 >= self.level_progress_zombie_head_image_rect.x:
                 self.level_progress_flag_rect.y = self.level_progress_bar_image_rect.y - 15  # 常数是猜的

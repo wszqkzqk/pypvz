@@ -344,9 +344,7 @@ LEVEL_MAP_DATA = (
 
 # 玩玩小游戏地图
 LITTLE_GAME_MAP_DATA = (
-# 第0关 测试 目前空缺
-{},
-# 第1关 坚果保龄球
+# 第0关 测试
 {
     c.BACKGROUND_TYPE: 6,
     c.CHOOSEBAR_TYPE: c.CHOOSEBAR_BOWLING,
@@ -354,8 +352,21 @@ LITTLE_GAME_MAP_DATA = (
     c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
     c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
                             c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
-                            c.NEWSPAPER_ZOMBIE),
+                            c.NEWSPAPER_ZOMBIE, c.SCREEN_DOOR_ZOMBIE),
     c.NUM_FLAGS:3,
+    c.CARD_POOL: {  c.WALLNUTBOWLING: 0,
+                    c.REDWALLNUTBOWLING: 0,
+                    c.GIANTWALLNUT:100,}
+},
+# 第1关 坚果保龄球
+{
+    c.BACKGROUND_TYPE: 6,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_BOWLING,
+    c.SHOVEL: 0,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE,),
+    c.NUM_FLAGS:2,
     c.CARD_POOL: {  c.WALLNUTBOWLING: 300,
                     c.REDWALLNUTBOWLING: 100,}
 },
@@ -413,6 +424,20 @@ LITTLE_GAME_MAP_DATA = (
                     c.SQUASH: 100,
                     c.JALAPENO: 50,
                     c.THREEPEASHOOTER: 300,}
+},
+# 第6关 坚果保龄球2
+{
+    c.BACKGROUND_TYPE: 6,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_BOWLING,
+    c.SHOVEL: 0,
+    c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                            c.NEWSPAPER_ZOMBIE, c.SCREEN_DOOR_ZOMBIE),
+    c.NUM_FLAGS:3,
+    c.CARD_POOL: {  c.WALLNUTBOWLING: 300,
+                    c.REDWALLNUTBOWLING: 100,
+                    c.GIANTWALLNUT:100,}
 },
 )
 

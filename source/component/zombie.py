@@ -346,23 +346,23 @@ class Zombie(pg.sprite.Sprite):
             if (self.current_time - self.ice_slow_timer) > c.ICE_SLOW_TIME:
                 self.ice_slow_ratio = 1
 
-    def setDamage(self, damage, effect=None, damageType=c.ZOMBIE_COMMON_DAMAGE):
+    def setDamage(self, damage, effect=None, damage_type=c.ZOMBIE_COMMON_DAMAGE):
         # 冰冻减速效果
         if effect == c.BULLET_EFFECT_ICE:
-            if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
+            if damage_type == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
                 if not self.helmet_type2:
                     self.setIceSlow()
             else:
                 self.setIceSlow()
         # 解冻
         elif effect == c.BULLET_EFFECT_UNICE:
-            if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
+            if damage_type == c.ZOMBIE_DEAFULT_DAMAGE:   # 寒冰射手不能穿透二类防具进行减速
                 if not self.helmet_type2:
                     self.ice_slow_ratio = 1
             else:
                 self.ice_slow_ratio = 1
 
-        if damageType == c.ZOMBIE_DEAFULT_DAMAGE:   # 不穿透二类防具的攻击
+        if damage_type == c.ZOMBIE_DEAFULT_DAMAGE:   # 不穿透二类防具的攻击
             # 从第二类防具开始逐级传递
             if self.helmet_type2:
                 self.helmet_type2_health -= damage
@@ -383,7 +383,7 @@ class Zombie(pg.sprite.Sprite):
                     self.helmet_health = 0   # 注意合并后清零
             else:   # 没有防具
                 self.health -= damage
-        elif damageType == c.ZOMBIE_COMMON_DAMAGE:  # 无视二类防具，将攻击一类防具与本体视为整体的攻击
+        elif damage_type == c.ZOMBIE_COMMON_DAMAGE:  # 无视二类防具，将攻击一类防具与本体视为整体的攻击
             if self.helmet:   # 存在一类防具
                 self.helmet_health -= damage
                 if self.helmet_health <= 0:
@@ -391,7 +391,7 @@ class Zombie(pg.sprite.Sprite):
                     self.helmet_health = 0   # 注意合并后清零
             else:   # 没有一类防具
                 self.health -= damage
-        elif damageType == c.ZOMBIE_RANGE_DAMAGE:
+        elif damage_type == c.ZOMBIE_RANGE_DAMAGE:
             # 从第二类防具开始逐级传递
             if self.helmet_type2:
                 self.helmet_type2_health -= damage
@@ -422,9 +422,9 @@ class Zombie(pg.sprite.Sprite):
                     self.helmet_health = 0   # 注意合并后清零
             else:   # 没有防具
                 self.health -= damage
-        elif damageType == c.ZOMBIE_ASH_DAMAGE:
+        elif damage_type == c.ZOMBIE_ASH_DAMAGE:
             self.health -= damage   # 无视任何防具
-        elif damageType == c.ZOMBIE_WALLNUT_BOWLING_DANMAGE:
+        elif damage_type == c.ZOMBIE_WALLNUT_BOWLING_DANMAGE:
             # 逻辑：对防具的多余伤害不传递
             if self.helmet_type2:
                 # 对二类防具伤害较一般情况低，拟合铁门需要砸3次的设定
@@ -435,7 +435,7 @@ class Zombie(pg.sprite.Sprite):
                 self.health -= damage
         else:
             print("警告：植物攻击类型错误，现在默认进行类豌豆射手型攻击")
-            self.setDamage(damage, effect=effect, damageType=c.ZOMBIE_DEAFULT_DAMAGE)
+            self.setDamage(damage, effect=effect, damage_type=c.ZOMBIE_DEAFULT_DAMAGE)
         
         # 记录攻击时间              
         self.hit_timer = self.current_time

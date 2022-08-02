@@ -359,13 +359,17 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_GARLIC := "card_garlic",
                 50,
                 7500),
-            # 应当保证这两个在一般模式下不可选的特殊植物恒在最后
+            # 应当保证这3个在一般模式下不可选的特殊植物恒在最后
             (WALLNUTBOWLING := "WallNutBowling",
                 CARD_WALLNUT := "card_wallnut",
                 0,
                 0),
             (REDWALLNUTBOWLING := "RedWallNutBowling",
                 CARD_REDWALLNUT := "card_redwallnut",
+                0,
+                0),
+            (GIANTWALLNUT := "GiantWallNut",
+                CARD_GIANTWALLNUT := "card_giantwallnut",
                 0,
                 0),
             )
@@ -376,7 +380,7 @@ for i, item in enumerate(PLANT_CARD_INFO):
     PLANT_CARD_INDEX[item[PLANT_NAME_INDEX]] = i
 
 # 指定了哪些卡可选（排除坚果保龄球特殊植物）
-CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 2)
+CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
 
 
 # 植物集体属性集合
@@ -408,6 +412,7 @@ PLANT_DIE_SOUND_EXCEPTIONS = {
                 ICEFROZENPLOT, HOLE,
                 GRAVE, JALAPENO,
                 REDWALLNUTBOWLING, CHERRYBOMB,
+                GIANTWALLNUT,
                 }
 
 # 直接水生植物
@@ -426,7 +431,7 @@ PLANT_NON_CHECK_ATTACK_STATE = (    # 这里运用了集合运算
                 SUNSHROOM, COFFEEBEAN,
                 GRAVEBUSTER, LILYPAD,
                 HYPNOSHROOM, GARLIC,
-                PUMPKINHEAD,
+                PUMPKINHEAD, GIANTWALLNUT,
                 } |
                 # 非植物类
                 NON_PLANT_OBJECTS
@@ -491,6 +496,11 @@ STAR_FORWARD_DOWN = "forwardDown"   #向前下方
 STAR_BACKWARD = "backward"  #向后
 STAR_UPWARD = "upward"  # 向上
 STAR_DOWNWARD = "downward"  # 向下
+
+# 有爆炸图片的子弹
+BULLET_INDEPENDENT_BOOM_IMG = { BULLET_PEA, BULLET_PEA_ICE,
+                                BULLET_MUSHROOM, BULLET_SEASHROOM,
+                                BULLET_STAR, }
 
 # 僵尸信息
 ZOMBIE_IMAGE_RECT = "zombie_image_rect"
