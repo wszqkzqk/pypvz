@@ -1182,7 +1182,8 @@ class Level(tool.State):
                     if (zombie and zombie.state != c.DIE and (not zombie.losthead)
                     and (pg.sprite.collide_mask(zombie, self.cars[i]))):
                         self.cars[i].setWalk()
-                    if pg.sprite.collide_mask(zombie, self.cars[i]):
+                    if (pg.sprite.collide_mask(zombie, self.cars[i]) or
+                    self.cars[i].rect.x <= zombie.rect.centerx <= self.cars[i].rect.right):
                         zombie.health = 0
                 if self.cars[i].dead:
                     self.cars[i] = None
