@@ -660,6 +660,7 @@ def _getSound(filename):
 # 所有音效的元组，用一波海象算子表达（>= python 3.8），免得要维护两个
 SOUNDS = (  # 程序交互等
             SOUND_TAPPING_CARD              := _getSound("tap.ogg"),
+            SOUND_HELP_SCREEN               := _getSound("helpScreen.ogg"),
             # 植物
             SOUND_FIREPEA_EXPLODE           := _getSound("firepea.ogg"),
             SOUND_BULLET_EXPLODE            := _getSound("bulletExplode.ogg"),
