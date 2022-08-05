@@ -96,7 +96,7 @@ class Level(tool.State):
         # 改用列表生成器直接生成内容，不再在这里使用for循环
         self.plant_groups = [pg.sprite.Group() for i in range(self.map_y_len)]
         self.zombie_groups = [pg.sprite.Group() for i in range(self.map_y_len)]
-        self.hypno_zombie_groups = [pg.sprite.Group() for i in range(self.map_y_len)] #zombies who are hypno after eating hypnoshroom
+        self.hypno_zombie_groups = [pg.sprite.Group() for i in range(self.map_y_len)] # 被魅惑的僵尸
         self.bullet_groups = [pg.sprite.Group() for i in range(self.map_y_len)]
 
 
@@ -159,7 +159,6 @@ class Level(tool.State):
                     zombie_list.append(new_zombie)
                     zombie_volume -= c.CREATE_ZOMBIE_DICT[new_zombie][0]
             waves.append(zombie_list)
-            # print(wave, zombie_list, len(zombie_list))
 
         self.waves = waves
 
@@ -183,13 +182,13 @@ class Level(tool.State):
                             unoccupied = []
                             occupied = []
                             # 毁灭菇坑与冰道应当特殊化
-                            exceptionObjects = {c.HOLE, c.ICEFROZENPLOT}
+                            exception_objects = {c.HOLE, c.ICEFROZENPLOT}
                             # 遍历能生成墓碑的区域
                             for map_y in range(0, 4):
                                 for map_x in range(4, 8):
                                     # 为空、为毁灭菇坑、为冰道时看作未被植物占据
                                     if ((not self.map.map[map_y][map_x][c.MAP_PLANT]) or
-                                        (all((i in exceptionObjects) for i in self.map.map[map_y][map_x][c.MAP_PLANT]))):
+                                        (all((i in exception_objects) for i in self.map.map[map_y][map_x][c.MAP_PLANT]))):
                                         unoccupied.append((map_x, map_y))
                                     # 已有墓碑的格子不应该放到任何列表中
                                     elif c.GRAVE not in self.map.map[map_y][map_x][c.MAP_PLANT]:
@@ -209,7 +208,7 @@ class Level(tool.State):
                                     checkMapX, _ = self.map.getMapIndex(i.rect.centerx, i.rect.bottom)
                                     if map_x == checkMapX:
                                         # 不杀死毁灭菇坑和冰道
-                                        if i.name not in exceptionObjects:
+                                        if i.name not in exception_objects:
                                             i.health = 0
                                 self.plant_groups[map_y].add(plant.Grave(posX, posY))
                                 self.map.map[map_y][map_x][c.MAP_PLANT].add(c.GRAVE)
@@ -1548,14 +1547,6 @@ class Level(tool.State):
                 self.showAllContentOfMenu(surface)
         # 以后可能需要插入一个预备的状态（预览显示僵尸、返回战场）
         elif self.state == c.PLAY:
-            if self.has_shovel:
-                # 画铲子
-                surface.blit(self.shovel_box, self.shovel_box_rect)
-                surface.blit(self.shovel, self.shovel_rect)
-            # 画小菜单
-            surface.blit(self.little_menu, self.little_menu_rect)
-
-            self.menubar.draw(surface)
             for i in range(self.map_y_len):
                 self.plant_groups[i].draw(surface)
                 self.zombie_groups[i].draw(surface)
@@ -1565,6 +1556,19 @@ class Level(tool.State):
                 if self.cars[i]:
                     self.cars[i].draw(surface)
             self.head_group.draw(surface)
+            
+            # 浓雾模式的雾
+            #if self.background_type == c.BACKGROUND_FOG:
+            #    pg.draw.rect(surface, c.LIGHTGRAY, (400, 0, 400, 600))
+            
+            if self.has_shovel:
+                # 画铲子
+                surface.blit(self.shovel_box, self.shovel_box_rect)
+                surface.blit(self.shovel, self.shovel_rect)
+            # 画小菜单
+            surface.blit(self.little_menu, self.little_menu_rect)
+
+            self.menubar.draw(surface)
             self.sun_group.draw(surface)
 
             if self.drag_plant:

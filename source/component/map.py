@@ -342,14 +342,14 @@ LEVEL_MAP_DATA = (
 },
 # 第13关 目前为浓雾第一关 尚未完善
 {
-    c.BACKGROUND_TYPE: 2,
+    c.BACKGROUND_TYPE: 3,
     c.GAME_TITLE: "浓雾 4-1",
     c.INIT_SUN_NAME: 50,
     c.SHOVEL: 1,
     c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
     c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.NEWSPAPER_ZOMBIE,
                             c.ZOMBONI, c.FOOTBALL_ZOMBIE,
-                            c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_HEALTH),
+                            c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
     c.NUM_FLAGS:4
 },
 )
