@@ -110,39 +110,37 @@ class Level(tool.State):
 
         self.num_flags = num_flags
 
-        # 权重值
-        weights = []
-        for zombie in useable_zombies:
-            weights.append(c.CREATE_ZOMBIE_DICT[zombie][1])
+        # 权重值，c.CREATE_ZOMBIE_DICT[zombie][1]即为对应的权重
+        weights = [c.CREATE_ZOMBIE_DICT[zombie][1] for zombie in useable_zombies]
 
         # 按照原版pvz设计的僵尸容量函数，是从无尽解析的，但是普通关卡也可以遵循
         for wave in range(1, 10 * num_flags + 1):
-            volume = int(int((wave + survival_rounds*20)*0.8)/2) + 1
+            zombie_volume = int(int((wave + survival_rounds*20)*0.8)/2) + 1
             zombie_list = []
 
             # 大波僵尸情况
             if wave % 10 == 0:
                 # 容量增大至2.5倍
-                volume = int(volume*2.5)
+                zombie_volume = int(zombie_volume*2.5)
                 # 先生成旗帜僵尸
                 zombie_list.append(c.FLAG_ZOMBIE)
-                volume -= c.CREATE_ZOMBIE_DICT[c.FLAG_ZOMBIE][0]
+                zombie_volume -= c.CREATE_ZOMBIE_DICT[c.FLAG_ZOMBIE][0]
 
             # 传送带模式应当增大僵尸容量
             if (self.bar_type != c.CHOOSEBAR_STATIC):
-                volume += 2
+                zombie_volume += 2
 
             if inevitable_zombie_dict and (wave in inevitable_zombie_dict):
                 for new_zombie in inevitable_zombie_dict[wave]:
                     zombie_list.append(new_zombie)
-                    volume -= c.CREATE_ZOMBIE_DICT[new_zombie][0]
-                if volume < 0:
+                    zombie_volume -= c.CREATE_ZOMBIE_DICT[new_zombie][0]
+                if zombie_volume < 0:
                     logger.warning(f"第{wave}波中手动设置的僵尸级别总数超过上限！")
 
             # 防止因为僵尸最小等级过大，使得总容量无法完全利用，造成死循环的检查机制
             min_cost = c.CREATE_ZOMBIE_DICT[min(useable_zombies, key=lambda x:c.CREATE_ZOMBIE_DICT[x][0])][0]
 
-            while (volume >= min_cost) and (len(zombie_list) < 50):
+            while (zombie_volume >= min_cost) and (len(zombie_list) < 50):
                 new_zombie = random.choices(useable_zombies, weights)[0]
                 # 普通僵尸、路障僵尸、铁桶僵尸有概率生成水中变种
                 if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
@@ -157,9 +155,9 @@ class Level(tool.State):
                     # 首先几轮不出水生僵尸
                     elif new_zombie in c.WATER_ZOMBIE:
                         continue
-                if c.CREATE_ZOMBIE_DICT[new_zombie][0] <= volume:
+                if c.CREATE_ZOMBIE_DICT[new_zombie][0] <= zombie_volume:
                     zombie_list.append(new_zombie)
-                    volume -= c.CREATE_ZOMBIE_DICT[new_zombie][0]
+                    zombie_volume -= c.CREATE_ZOMBIE_DICT[new_zombie][0]
             waves.append(zombie_list)
             # print(wave, zombie_list, len(zombie_list))
 
@@ -1504,9 +1502,9 @@ class Level(tool.State):
 
         # 填充的进度条信息
         # 常数为拟合值
-        filledBarRect = (self.level_progress_zombie_head_image_rect.x + 3, self.level_progress_bar_image_rect.y + 6, int((150 * self.wave_num) / (self.map_data[c.NUM_FLAGS] * 10)) + 5, 9)
+        filled_bar_rect = (self.level_progress_zombie_head_image_rect.x + 3, self.level_progress_bar_image_rect.y + 6, int((150 * self.wave_num) / (self.map_data[c.NUM_FLAGS] * 10)) + 5, 9)
         # 画填充的进度条
-        pg.draw.rect(surface, c.YELLOWGREEN, filledBarRect)
+        pg.draw.rect(surface, c.YELLOWGREEN, filled_bar_rect)
         
         # 画旗帜
         for i in range(self.num_flags):
