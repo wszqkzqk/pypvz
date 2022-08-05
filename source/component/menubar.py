@@ -86,6 +86,9 @@ class Card():
         time = current_time - self.frozen_timer
         if time < self.frozen_time: #cool down status
             image = pg.Surface([self.rect.w, self.rect.h])
+            # 在冷却时间不足且阳光也不足时，叠加两者效果显示，即同时改变透明度与图像覆盖
+            if self.sun_cost > sun_value:
+                image.set_alpha(192)
             frozen_image = self.orig_image.copy()
             frozen_image.set_alpha(128)
             frozen_height = (self.frozen_time - time)/self.frozen_time * self.rect.h

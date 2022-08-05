@@ -22,8 +22,8 @@ class Car(pg.sprite.Sprite):
     def update(self, game_info):
         self.current_time = game_info[c.CURRENT_TIME]
         if self.state == c.WALK:
-            self.rect.x += 4
-        if self.rect.x > c.SCREEN_WIDTH + 60:
+            self.rect.x += 5
+        if self.rect.x > c.SCREEN_WIDTH + 25:
             self.dead = True
 
     def setWalk(self):
@@ -39,7 +39,7 @@ class Car(pg.sprite.Sprite):
 class Bullet(pg.sprite.Sprite):
     def __init__(   self, x, start_y, dest_y, name, damage,
                     effect=None, passed_torchwood_x=None,
-                    damageType=c.ZOMBIE_DEAFULT_DAMAGE):
+                    damage_type=c.ZOMBIE_DEAFULT_DAMAGE):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name
@@ -56,7 +56,7 @@ class Bullet(pg.sprite.Sprite):
         self.y_vel = 15 if (dest_y > start_y) else -15
         self.x_vel = 10
         self.damage = damage
-        self.damageType = damageType
+        self.damage_type = damage_type
         self.effect = effect
         self.state = c.FLY
         self.current_time = 0
@@ -82,14 +82,8 @@ class Bullet(pg.sprite.Sprite):
         self.explode_frames = []
 
         fly_name = self.name
-        if self.name == c.BULLET_MUSHROOM:
-            explode_name = "BulletMushRoomExplode"
-        elif self.name == c.BULLET_PEA_ICE:
-            explode_name = "PeaIceExplode"
-        elif self.name == c.BULLET_SEASHROOM:
-            explode_name = "BulletSeaShroomExplode"
-        elif self.name == c.BULLET_STAR:
-            explode_name = "StarBulletExplode"
+        if self.name in c.BULLET_INDEPENDENT_BOOM_IMG:
+            explode_name = f"{self.name}Explode"
         else:
             explode_name = "PeaNormalExplode"
 
@@ -184,8 +178,8 @@ class Fume(pg.sprite.Sprite):
 
 # 杨桃的子弹
 class StarBullet(Bullet):
-    def __init__(self, x, start_y, damage, direction, level, damageType = c.ZOMBIE_DEAFULT_DAMAGE):    # direction指星星飞行方向
-        Bullet.__init__(self, x, start_y, start_y, c.BULLET_STAR, damage, damageType = damageType)
+    def __init__(self, x, start_y, damage, direction, level, damage_type = c.ZOMBIE_DEAFULT_DAMAGE):    # direction指星星飞行方向
+        Bullet.__init__(self, x, start_y, start_y, c.BULLET_STAR, damage, damage_type = damage_type)
 
         self.level = level
         self.map_y = self.level.map.getMapIndex(self.rect.x, self.rect.centery)[1]
@@ -647,11 +641,14 @@ class Chomper(Plant):
 
     def attacking(self):
         if self.frame_index == (self.frame_num - 3):
-            # 播放吞的音效
-            c.SOUND_BIGCHOMP.play()
+            # 对活着的僵尸才需要吞下去消化
             if self.attack_zombie.alive():
-                self.should_diggest = True
-                self.attack_zombie.kill()
+                if not self.should_diggest:
+                    # 播放吞的音效 由于一帧在这个循环中执行了若干次，可能被设置播放若干次导致声音重叠，所以用if保护
+                    # 在尚未检测到需要消化时播放音效
+                    c.SOUND_BIGCHOMP.play()
+                    self.should_diggest = True
+                    self.attack_zombie.kill()
         if (self.frame_index + 1) == self.frame_num:
             if self.should_diggest:
                 self.setDigest()
@@ -816,7 +813,7 @@ class Squash(Plant):
             if (self.frame_index + 1) == self.frame_num:
                 for zombie in self.zombie_group:
                     if self.canAttack(zombie):
-                        zombie.setDamage(1800, damageType=c.ZOMBIE_RANGE_DAMAGE)
+                        zombie.setDamage(1800, damage_type=c.ZOMBIE_RANGE_DAMAGE)
                 self.health = 0 # 避免僵尸在原位啃食
                 self.map_plant_set.remove(c.SQUASH)
                 self.kill()
@@ -875,7 +872,7 @@ class Spikeweed(Plant):
                         zombie.health = zombie.losthead_health
                         killSelf = True
                     else:
-                        zombie.setDamage(20, damageType=c.ZOMBIE_COMMON_DAMAGE)
+                        zombie.setDamage(20, damage_type=c.ZOMBIE_COMMON_DAMAGE)
             if killSelf:
                 self.health = 0
             # 播放攻击音效，同子弹打击
@@ -1158,7 +1155,7 @@ class WallNutBowling(Plant):
             self.handleMapYPosition()
             if self.shouldChangeDirection():
                 self.changeDirection(-1)
-            if self.init_rect.x > c.SCREEN_WIDTH + 60:
+            if self.init_rect.x > c.SCREEN_WIDTH + 25:
                 self.health = 0
             self.move_timer += self.move_interval
 
@@ -1200,12 +1197,6 @@ class WallNutBowling(Plant):
         self.disable_hit_y = map_y
 
     def animation(self):
-        if (self.current_time - self.animate_timer) > self.animate_interval:
-            self.frame_index += 1
-            if self.frame_index >= self.frame_num:
-                self.frame_index = 0
-            self.animate_timer = self.current_time
-
         image = self.frames[self.frame_index]
         self.image = pg.transform.rotate(image, self.rotate_degree)
         self.mask = pg.mask.from_surface(self.image)
@@ -1246,7 +1237,7 @@ class RedWallNutBowling(Plant):
         elif (self.current_time - self.move_timer) >= self.move_interval:
             self.rotate_degree = (self.rotate_degree - 30) % 360
             self.init_rect.x += self.vel_x
-            if self.init_rect.x > c.SCREEN_WIDTH + 60:
+            if self.init_rect.x > c.SCREEN_WIDTH + 25:
                 self.health = 0
             self.move_timer += self.move_interval
 
@@ -1333,7 +1324,7 @@ class StarFruit(Plant):
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
             # 向后打的杨桃子弹无视铁门与报纸防具
-            self.bullet_group.add(StarBullet(self.rect.left - 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level, damageType = c.ZOMBIE_COMMON_DAMAGE))
+            self.bullet_group.add(StarBullet(self.rect.left - 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level, damage_type = c.ZOMBIE_COMMON_DAMAGE))
             # 其他方向的杨桃子弹伤害效果与豌豆等同
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h - 15, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
             self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD, self.level))
@@ -1737,7 +1728,7 @@ class FumeShroom(Plant):
             # 烟雾只是个动画，实际伤害由本身完成
             for target_zombie in self.zombie_group:
                 if self.canAttack(target_zombie):
-                    target_zombie.setDamage(c.BULLET_DAMAGE_NORMAL, damageType=c.ZOMBIE_RANGE_DAMAGE)
+                    target_zombie.setDamage(c.BULLET_DAMAGE_NORMAL, damage_type=c.ZOMBIE_RANGE_DAMAGE)
             self.shoot_timer = self.current_time
             self.show_attack_frames = True
             # 播放发射音效
@@ -1826,3 +1817,31 @@ class PumpkinHead(Plant):
         elif not self.cracked2 and self.health <= c.WALLNUT_CRACKED2_HEALTH:
             self.changeFrames(self.cracked2_frames)
             self.cracked2 = True
+
+
+class GiantWallNut(Plant):
+    def __init__(self, x, y):
+        Plant.__init__(self, x, y, c.GIANTWALLNUT, 1, None)
+        self.init_rect = self.rect.copy()
+        self.rotate_degree = 0
+        self.animate_interval = 200
+        self.move_timer = 0
+        self.move_interval = 70
+        self.vel_x = random.randint(15, 18)
+
+    def idling(self):
+        if self.move_timer == 0:
+            self.move_timer = self.current_time
+        elif (self.current_time - self.move_timer) >= self.move_interval:
+            self.rotate_degree = (self.rotate_degree - 30) % 360
+            self.init_rect.x += self.vel_x
+            if self.init_rect.x > c.SCREEN_WIDTH:
+                self.health = 0
+            self.move_timer += self.move_interval
+
+    def animation(self):
+        image = self.frames[self.frame_index]
+        self.image = pg.transform.rotate(image, self.rotate_degree)
+        self.mask = pg.mask.from_surface(self.image)
+        # must keep the center postion of image when rotate
+        self.rect = self.image.get_rect(center=self.init_rect.center)
