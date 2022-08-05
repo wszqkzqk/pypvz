@@ -195,8 +195,7 @@ class StarBullet(Bullet):
                 self.rect.x += 7
                 self.rect.y += 7
             elif self.direction == c.STAR_UPWARD:
-                # 实际上不知道为什么向上飞的看起来要快一些，所以拟合的时候把速度调小了一点
-                self.rect.y -= 9
+                self.rect.y -= 10
             elif self.direction == c.STAR_DOWNWARD:
                 self.rect.y += 10
             else:

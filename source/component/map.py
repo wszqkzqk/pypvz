@@ -360,16 +360,21 @@ LEVEL_MAP_DATA = (
 LITTLE_GAME_MAP_DATA = (
 # 第0关 测试
 {
-    c.BACKGROUND_TYPE: 6,
+    c.BACKGROUND_TYPE: 3,
     c.GAME_TITLE: "隐藏测试关卡",
-    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_BOWLING,
-    c.SHOVEL: 0,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_MOVE,
+    c.SHOVEL: 1,
     c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
-    c.INCLUDED_ZOMBIES: (   c.POLE_VAULTING_ZOMBIE,),
-    c.NUM_FLAGS:1,
-    c.CARD_POOL: {  c.WALLNUTBOWLING: 0,
-                    c.REDWALLNUTBOWLING: 0,
-                    c.GIANTWALLNUT:100,}
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.NEWSPAPER_ZOMBIE,
+                            c.ZOMBONI, c.FOOTBALL_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    c.NUM_FLAGS:4,
+    c.CARD_POOL: {  c.LILYPAD: 300,
+                    c.STARFRUIT: 400,
+                    c.PUMPKINHEAD: 100,
+                    c.SEASHROOM: 100,
+                    c.SPIKEWEED: 100,
+                    }
 },
 # 第1关 坚果保龄球
 {
