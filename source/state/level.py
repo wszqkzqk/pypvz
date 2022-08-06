@@ -1547,6 +1547,14 @@ class Level(tool.State):
                 self.showAllContentOfMenu(surface)
         # 以后可能需要插入一个预备的状态（预览显示僵尸、返回战场）
         elif self.state == c.PLAY:
+            if self.has_shovel:
+                # 画铲子
+                surface.blit(self.shovel_box, self.shovel_box_rect)
+                surface.blit(self.shovel, self.shovel_rect)
+            # 画小菜单
+            surface.blit(self.little_menu, self.little_menu_rect)
+
+            self.menubar.draw(surface)
             for i in range(self.map_y_len):
                 self.plant_groups[i].draw(surface)
                 self.zombie_groups[i].draw(surface)
@@ -1556,19 +1564,6 @@ class Level(tool.State):
                 if self.cars[i]:
                     self.cars[i].draw(surface)
             self.head_group.draw(surface)
-            
-            # 浓雾模式的雾
-            #if self.background_type == c.BACKGROUND_FOG:
-            #    pg.draw.rect(surface, c.LIGHTGRAY, (400, 0, 400, 600))
-            
-            if self.has_shovel:
-                # 画铲子
-                surface.blit(self.shovel_box, self.shovel_box_rect)
-                surface.blit(self.shovel, self.shovel_rect)
-            # 画小菜单
-            surface.blit(self.little_menu, self.little_menu_rect)
-
-            self.menubar.draw(surface)
             self.sun_group.draw(surface)
 
             if self.drag_plant:
