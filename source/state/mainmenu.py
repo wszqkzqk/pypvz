@@ -124,6 +124,7 @@ class Menu(tool.State):
         self.adventure_timer = self.adventure_start = self.current_time
         self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
         # 播放进入音效
+        pg.mixer.music.stop()
         c.SOUND_EVILLAUGH.play()
         c.SOUND_LOSE.play()
 
