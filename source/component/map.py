@@ -55,7 +55,7 @@ class Map():
             else:
                 return False
         if plant_name == c.GRAVEBUSTER:
-            if (c.GRAVE in self.map[map_y][map_x][c.MAP_PLANT]):
+            if (c.GRAVE in self.map[map_y][map_x][c.MAP_PLANT] and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT])):
                 return True
             else:
                 return False
@@ -420,9 +420,9 @@ LITTLE_GAME_MAP_DATA = (
     c.NUM_FLAGS:3,
     c.CARD_POOL: {  c.PUFFSHROOM: 100,
                     c.SCAREDYSHROOM: 100,
-                    c.ICESHROOM: 100,
+                    c.ICESHROOM: 70,
                     c.HYPNOSHROOM: 100,
-                    c.DOOMSHROOM: 100,
+                    c.DOOMSHROOM: 50,
                     c.GRAVEBUSTER: 100,
                     c.FUMESHROOM: 200},
     c.GRADE_GRAVES:3
