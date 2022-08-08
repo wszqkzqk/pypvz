@@ -33,8 +33,8 @@ class State():
 
     # 工具：范围判断函数，用于判断点击
     def inArea(self, rect, x, y):
-        if (x >= rect.x and x <= rect.right and
-            y >= rect.y and y <= rect.bottom):
+        if (rect.x <= x <= rect.right and
+            rect.y <= y <= rect.bottom):
             return True
         else:
             return False
@@ -96,8 +96,6 @@ class Control():
     def setupUserData(self):
         if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
             os.makedirs(os.path.dirname(c.USERDATA_PATH))
-        else:
-            logger.warning("已有游戏数据目录但未找到游戏存档文件，请检查存档是否丢失！程序将新建初始存档！\n")
         with open(c.USERDATA_PATH, "w") as f:
             savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
             f.write(savedata)
