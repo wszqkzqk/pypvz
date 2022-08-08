@@ -112,7 +112,8 @@ class Map():
                             return False
                         else:
                             return True
-                    elif (plant_name == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 有花盆且没有南瓜头就能种南瓜头
+                    elif ((plant_name == c.PUMPKINHEAD)
+                    and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT])):    # 有花盆且没有南瓜头就能种南瓜头
                         return True
                     else:
                         return False
@@ -136,7 +137,8 @@ class Map():
                             return False
                         else:
                             return True
-                    elif (plant_name == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 在睡莲上且没有南瓜头就能种南瓜头
+                    elif ((plant_name == c.PUMPKINHEAD)
+                    and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT])):   # 在睡莲上且没有南瓜头就能种南瓜头
                         return True
                     else:
                         return False
