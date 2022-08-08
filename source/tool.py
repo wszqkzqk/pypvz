@@ -66,23 +66,14 @@ class Control():
         # 因此仍然采用try-except实现而非if-else实现
         try:
             # 存在存档即导入
+            # 自动修复读写权限
+            # Python权限规则和Unix不一样，420表示unix的644，Windows自动忽略不支持项
+            os.chmod(c.USERDATA_PATH, 420)
             with open(c.USERDATA_PATH) as f:
                 userdata = json.load(f)
                 self.applyUserData(userdata)    # 写入时也可能发生权限问题，因此放到try语句中
         except FileNotFoundError:
             self.setupUserData()
-        except PermissionError:
-            logger.warning("用户存档文件不可读！程序将自动设置存档文件为可读状态！\n")
-            # Python权限规则和Unix不一样，420表示unix的655，Windows自动忽略不支持项
-            os.chmod(c.USERDATA_PATH, 420)
-            try:
-                with open(c.USERDATA_PATH) as f:
-                    userdata = json.load(f)
-            except json.JSONDecodeError:
-                logger.warning("用户存档解码错误！程序将新建初始存档！\n")
-                self.setupUserData()
-            else:
-                self.applyUserData(userdata)
         except json.JSONDecodeError:
             logger.warning("用户存档解码错误！程序将新建初始存档！\n")
             self.setupUserData()
