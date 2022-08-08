@@ -83,7 +83,7 @@ class Card():
         # 有关是否满足冷却与阳光条件的图片形式
         time = current_time - self.frozen_timer
         if time < self.frozen_time: #cool down status
-            image = pg.Surface([self.rect.w, self.rect.h])
+            image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
             # 在冷却时间不足且阳光也不足时，叠加两者效果显示，即同时改变透明度与图像覆盖
             if self.sun_cost > sun_value:
                 image.set_alpha(192)
@@ -98,8 +98,11 @@ class Card():
             image = self.orig_image.copy()
             image.set_alpha(192)
         elif self.clicked:
-            image = self.orig_image.copy()
-            image.set_alpha(128)
+            image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            chosen_image = self.orig_image.copy()
+            chosen_image.set_alpha(128)
+            
+            image.blit(chosen_image, (0,0), (0, 0, self.rect.w, self.rect.h))
         else:
             image = self.orig_image
         return image
@@ -355,14 +358,21 @@ class MoveCard():
         # 新增卡片时显示图片
         if self.rect.w < self.orig_rect.w: #create a part card image
             image = pg.Surface([self.rect.w, self.rect.h])
+            if self.clicked:
+                self.orig_image.set_alpha(128)
+            else:
+                self.orig_image.set_alpha(255)
             image.blit(self.orig_image, (0, 0), (0, 0, self.rect.w, self.rect.h))
             self.rect.w += 1
         else:
-            image = self.orig_image
-        if self.clicked:
-            image.set_alpha(192)
-        else:
-            image.set_alpha(255)
+            if self.clicked:
+                image = pg.Surface([self.rect.w, self.rect.h])  # 黑底
+                self.orig_image.set_alpha(128)
+                
+                image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
+            else:
+                self.orig_image.set_alpha(255)
+                image = self.orig_image
         return image
 
     def update(self, left_x, current_time):
