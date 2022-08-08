@@ -68,6 +68,7 @@ class Control():
             # 存在存档即导入
             with open(c.USERDATA_PATH) as f:
                 userdata = json.load(f)
+                self.applyUserData(userdata)    # 写入时也可能发生权限问题，因此放到try语句中
         except FileNotFoundError:
             self.setupUserData()
         except PermissionError:
@@ -85,8 +86,6 @@ class Control():
         except json.JSONDecodeError:
             logger.warning("用户存档解码错误！程序将新建初始存档！\n")
             self.setupUserData()
-        else:   # 未引发异常时执行的操作
-            self.applyUserData(userdata)
         # 存档内不包含即时游戏时间信息，需要新建
         self.game_info[c.CURRENT_TIME] = 0
 
