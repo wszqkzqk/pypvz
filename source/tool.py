@@ -41,7 +41,7 @@ class State():
 
     # 工具：用户数据保存函数
     def saveUserData(self):
-        with open(c.USERDATA_PATH, "w") as f:
+        with open(c.USERDATA_PATH, "w", encoding="utf-8") as f:
             userdata = {}
             for i in self.game_info:
                 if i in c.INIT_USERDATA:
@@ -66,7 +66,7 @@ class Control():
             # 存在存档即导入
             # 先自动修复读写权限(Python权限规则和Unix不一样，420表示unix的644，Windows自动忽略不支持项)
             os.chmod(c.USERDATA_PATH, 420)
-            with open(c.USERDATA_PATH) as f:
+            with open(c.USERDATA_PATH, encoding="utf-8") as f:
                 userdata = json.load(f)
         except FileNotFoundError:
             self.setupUserData()
@@ -84,7 +84,7 @@ class Control():
                     self.game_info[key] = c.INIT_USERDATA[key]
                     need_to_rewrite = True
             if need_to_rewrite:
-                with open(c.USERDATA_PATH, "w") as f:
+                with open(c.USERDATA_PATH, "w", encoding="utf-8") as f:
                     savedata = json.dumps(self.game_info, sort_keys=True, indent=4)
                     f.write(savedata)
         # 存档内不包含即时游戏时间信息，需要新建
@@ -96,7 +96,7 @@ class Control():
     def setupUserData(self):
         if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
             os.makedirs(os.path.dirname(c.USERDATA_PATH))
-        with open(c.USERDATA_PATH, "w") as f:
+        with open(c.USERDATA_PATH, "w", encoding="utf-8") as f:
             savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
             f.write(savedata)
         self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
