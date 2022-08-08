@@ -62,21 +62,31 @@ class Control():
         self.state_dict = {}
         self.state_name = None
         self.state = None
-        # 这里需要考虑多种情况，如文件不存在、文件不可读、文件不符合JSON语法要求
-        # 因此仍然采用try-except实现而非if-else实现
         try:
             # 存在存档即导入
-            # 自动修复读写权限
-            # Python权限规则和Unix不一样，420表示unix的644，Windows自动忽略不支持项
+            # 先自动修复读写权限(Python权限规则和Unix不一样，420表示unix的644，Windows自动忽略不支持项)
             os.chmod(c.USERDATA_PATH, 420)
             with open(c.USERDATA_PATH) as f:
                 userdata = json.load(f)
-                self.applyUserData(userdata)    # 写入时也可能发生权限问题，因此放到try语句中
         except FileNotFoundError:
             self.setupUserData()
         except json.JSONDecodeError:
             logger.warning("用户存档解码错误！程序将新建初始存档！\n")
             self.setupUserData()
+        else:   # 没有引发异常才执行
+            self.game_info = {}
+            # 导入数据，保证了可运行性，但是放弃了数据向后兼容性，即假如某些变量在以后改名，在导入时可能会被重置
+            need_to_rewrite = False
+            for key in c.INIT_USERDATA:
+                if key in userdata:
+                    self.game_info[key] = userdata[key]
+                else:
+                    self.game_info[key] = c.INIT_USERDATA[key]
+                    need_to_rewrite = True
+            if need_to_rewrite:
+                with open(c.USERDATA_PATH, "w") as f:
+                    savedata = json.dumps(self.game_info, sort_keys=True, indent=4)
+                    f.write(savedata)
         # 存档内不包含即时游戏时间信息，需要新建
         self.game_info[c.CURRENT_TIME] = 0
 
@@ -90,21 +100,6 @@ class Control():
             savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
             f.write(savedata)
         self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
-
-    def applyUserData(self, userdata):
-        self.game_info = {}
-        # 导入数据，保证了可运行性，但是放弃了数据向后兼容性，即假如某些变量在以后改名，在导入时可能会被重置
-        need_to_rewrite = False
-        for key in c.INIT_USERDATA:
-            if key in userdata:
-                self.game_info[key] = userdata[key]
-            else:
-                self.game_info[key] = c.INIT_USERDATA[key]
-                need_to_rewrite = True
-        if need_to_rewrite:
-            with open(c.USERDATA_PATH, "w") as f:
-                savedata = json.dumps(self.game_info, sort_keys=True, indent=4)
-                f.write(savedata)
 
     def setup_states(self, state_dict, start_state):
         self.state_dict = state_dict
