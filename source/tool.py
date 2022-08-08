@@ -62,7 +62,7 @@ class Control():
         self.state_dict = {}
         self.state_name = None
         self.state = None
-        # 这里需要考虑多种情况，如文件不存在、文件不可读、文件不符合JSON语法要求，这些情况目前暂定统一进行新建文件操作
+        # 这里需要考虑多种情况，如文件不存在、文件不可读、文件不符合JSON语法要求
         # 因此仍然采用try-except实现而非if-else实现
         try:
             # 存在存档即导入
@@ -71,19 +71,19 @@ class Control():
         except FileNotFoundError:
             self.setupUserData()
         except PermissionError:
-            logger.warning("用户存档文件不可读！本程序将自动设置存档文件为可读状态！\n")
+            logger.warning("用户存档文件不可读！程序将自动设置存档文件为可读状态！\n")
             # Python权限规则和Unix不一样，420表示unix的655，Windows自动忽略不支持项
             os.chmod(c.USERDATA_PATH, 420)
             try:
                 with open(c.USERDATA_PATH) as f:
                     userdata = json.load(f)
             except json.JSONDecodeError:
-                logger.warning("用户存档解码错误！现在将使用新建的初始化存档！\n")
+                logger.warning("用户存档解码错误！程序将新建初始存档！\n")
                 self.setupUserData()
             else:
                 self.applyUserData(userdata)
         except json.JSONDecodeError:
-            logger.warning("用户存档解码错误！现在将使用新建的初始化存档！\n")
+            logger.warning("用户存档解码错误！程序将新建初始存档！\n")
             self.setupUserData()
         else:   # 未引发异常时执行的操作
             self.applyUserData(userdata)
@@ -95,7 +95,9 @@ class Control():
 
     def setupUserData(self):
         if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
-                os.makedirs(os.path.dirname(c.USERDATA_PATH))
+            os.makedirs(os.path.dirname(c.USERDATA_PATH))
+        else:
+            logger.warning("已有游戏数据目录但未找到游戏存档文件，请检查存档是否丢失！程序将新建初始存档！\n")
         with open(c.USERDATA_PATH, "w") as f:
             savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
             f.write(savedata)
