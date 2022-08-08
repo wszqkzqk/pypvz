@@ -22,9 +22,7 @@ def getSunValueImage(sun_value):
     return image
 
 def getCardPool(data):
-    card_pool = {}
-    for cardName in data:
-        card_pool[c.PLANT_CARD_INFO[c.PLANT_CARD_INDEX[cardName]]] = data[cardName]
+    card_pool = {c.PLANT_CARD_INFO[c.PLANT_CARD_INDEX[card_name]]: data[card_name] for card_name in data}
     return card_pool
 
 class Card():
