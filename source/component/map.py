@@ -10,27 +10,50 @@ class Map():
             self.width = c.GRID_POOL_X_LEN
             self.height = c.GRID_POOL_Y_LEN
             self.grid_height_size = c.GRID_POOL_Y_SIZE
-            self.map = [[(self.initMapGrid(c.MAP_GRASS), self.initMapGrid(c.MAP_WATER))[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_WATER) if 2 <= y <= 3
+                                else self.initMapGrid(c.MAP_GRASS)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
         elif self.background_type in c.ON_ROOF_BACKGROUNDS:
             self.width = c.GRID_ROOF_X_LEN
             self.height = c.GRID_ROOF_Y_LEN
             self.grid_height_size = c.GRID_ROOF_Y_SIZE
-            self.map = [[self.initMapGrid(c.MAP_TILE) for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_TILE)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
         elif self.background_type == c.BACKGROUND_SINGLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.grid_height_size = c.GRID_Y_SIZE
-            self.map = [[(self.initMapGrid(c.MAP_UNAVAILABLE), self.initMapGrid(c.MAP_GRASS))[y == 2] for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_GRASS) if y ==2
+                                else self.initMapGrid(c.MAP_UNAVAILABLE)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
         elif self.background_type == c.BACKGROUND_TRIPLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.grid_height_size = c.GRID_Y_SIZE
-            self.map = [[(self.initMapGrid(c.MAP_UNAVAILABLE), self.initMapGrid(c.MAP_GRASS))[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_GRASS) if 1 <= y <= 3
+                                else self.initMapGrid(c.MAP_UNAVAILABLE)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
         else:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.grid_height_size = c.GRID_Y_SIZE
-            self.map = [[self.initMapGrid(c.MAP_GRASS) for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_GRASS)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
 
     def isValid(self, map_x, map_y):
         if (map_x < 0 or map_x >= self.width or
@@ -50,12 +73,14 @@ class Map():
     def isAvailable(self, map_x, map_y, plant_name):
         # 咖啡豆和墓碑吞噬者的判别最为特殊
         if plant_name == c.COFFEEBEAN:
-            if self.map[map_y][map_x][c.MAP_SLEEP] and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT]):
+            if (self.map[map_y][map_x][c.MAP_SLEEP]
+            and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT])):
                 return True
             else:
                 return False
         if plant_name == c.GRAVEBUSTER:
-            if (c.GRAVE in self.map[map_y][map_x][c.MAP_PLANT] and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT])):
+            if (c.GRAVE in self.map[map_y][map_x][c.MAP_PLANT]
+            and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT])):
                 return True
             else:
                 return False
@@ -70,7 +95,8 @@ class Map():
                 elif (all((i in {"花盆（未实现）", c.PUMPKINHEAD}) for i in self.map[map_y][map_x][c.MAP_PLANT])
                 and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植
                     return True
-                elif (plant_name == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 没有南瓜头就能种南瓜头
+                elif ((plant_name == c.PUMPKINHEAD)
+                and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT])):   # 没有南瓜头就能种南瓜头
                     return True
                 else:
                     return False
