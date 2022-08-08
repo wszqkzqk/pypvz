@@ -11,7 +11,7 @@ from source import tool
 from source import constants as c
 from source.state import mainmenu, screen, level
 
-if __name__=="__main__":
+if __name__ == "__main__":
     # 日志设置
     if not os.path.exists(os.path.dirname(c.USERLOG_PATH)):
         os.makedirs(os.path.dirname(c.USERLOG_PATH))

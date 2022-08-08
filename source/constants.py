@@ -9,12 +9,14 @@ else:   # 非Windows系统存储路径
     USERDATA_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))
     USERLOG_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "run.log"))
 
-# 窗口图标
-ORIGINAL_LOGO = os.path.join(os.path.dirname(os.path.dirname(__file__)), "pypvz-exec-logo.png")
 # 游戏图片资源路径
 PATH_IMG_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "graphics")
 # 游戏音乐文件夹路径
 PATH_MUSIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources","music")
+# 窗口图标
+ORIGINAL_LOGO = os.path.join(os.path.dirname(os.path.dirname(__file__)), "pypvz-exec-logo.png")
+# 字体路径
+FONT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "DroidSansFallback.ttf")
 
 # 窗口标题
 ORIGINAL_CAPTION = "pypvz"
@@ -29,8 +31,6 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
-# 字体路径
-FONT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "DroidSansFallback.ttf")
 
 # 选卡数量
 # 最大数量
@@ -231,7 +231,7 @@ CARD_MOVE_TIME = 60
 CAR = "car"
 SUN = "Sun"
 
-# plant子类非植物对象
+# plant子类非植物对象（这里的是不包括阳光、子弹的拟植物对象）
 NON_PLANT_OBJECTS = {
                 HOLE := "Hole",
                 ICEFROZENPLOT := "IceFrozenPlot",
