@@ -276,7 +276,8 @@ LEVEL_MAP_DATA = (
     c.INIT_SUN_NAME: 50,
     c.SHOVEL: 1,
     c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
-    c.INCLUDED_ZOMBIES: (c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE, c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
     c.NUM_FLAGS:3
 },
 # 第6关 目前夜晚第一关
@@ -473,7 +474,7 @@ LITTLE_GAME_MAP_DATA = (
                     c.SPIKEWEED: 100,
                     c.SQUASH: 100,
                     c.JALAPENO: 50,
-                    c.THREEPEASHOOTER: 300,}
+                    c.THREEPEASHOOTER: 400,}
 },
 # 第5关 坚果保龄球2
 {
