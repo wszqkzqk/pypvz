@@ -195,8 +195,7 @@ class StarBullet(Bullet):
                 self.rect.x += 7
                 self.rect.y += 7
             elif self.direction == c.STAR_UPWARD:
-                # 实际上不知道为什么向上飞的看起来要快一些，所以拟合的时候把速度调小了一点
-                self.rect.y -= 9
+                self.rect.y -= 10
             elif self.direction == c.STAR_DOWNWARD:
                 self.rect.y += 10
             else:
@@ -1280,18 +1279,20 @@ class TorchWood(Plant):
 
     def idling(self):
         for i in self.bullet_group:
-            if i.name == c.BULLET_PEA:
-                if i.passed_torchwood_x != self.rect.centerx:
-                    if abs(i.rect.centerx - self.rect.centerx) <= 20:
-                        self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
-                                                c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, effect=c.BULLET_EFFECT_UNICE, passed_torchwood_x=self.rect.centerx))
-                        i.kill()
-            elif i.name == c.BULLET_PEA_ICE:
-                if i.passed_torchwood_x != self.rect.centerx:
-                    if abs(i.rect.centerx - self.rect.centerx) <= 20:
-                        self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
-                                                c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None, passed_torchwood_x=self.rect.centerx))
-                        i.kill()
+            if (i.name == c.BULLET_PEA
+            and i.passed_torchwood_x != self.rect.centerx
+            and abs(i.rect.centerx - self.rect.centerx) <= 20):
+                self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
+                                        c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY,
+                                        effect=c.BULLET_EFFECT_UNICE, passed_torchwood_x=self.rect.centerx))
+                i.kill()
+            elif (i.name == c.BULLET_PEA_ICE
+            and i.passed_torchwood_x != self.rect.centerx
+            and abs(i.rect.centerx - self.rect.centerx)):
+                self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
+                                        c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL,
+                                        effect=None, passed_torchwood_x=self.rect.centerx))
+                i.kill()
 
 class StarFruit(Plant):
     def __init__(self, x, y, bullet_group, level):
@@ -1475,7 +1476,7 @@ class TangleKlep(Plant):
     def canAttack(self, zombie):
         if zombie.state != c.DIE and (not zombie.losthead):
             # 这里碰撞应当比碰撞一般更容易，就设置成圆形或矩形模式，不宜采用mask
-            if pg.sprite.collide_circle_ratio(0.7)(zombie, self):
+            if pg.sprite.collide_rect_ratio(1)(zombie, self):
                 return True
         return False
     

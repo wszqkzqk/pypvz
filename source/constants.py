@@ -9,12 +9,14 @@ else:   # 非Windows系统存储路径
     USERDATA_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "userdata.json"))
     USERLOG_PATH = os.path.expanduser(os.path.join("~", ".config", "wszqkzqk.dev", "pypvz", "run.log"))
 
-# 窗口图标
-ORIGINAL_LOGO = os.path.join(os.path.dirname(os.path.dirname(__file__)), "pypvz-exec-logo.png")
 # 游戏图片资源路径
 PATH_IMG_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "graphics")
 # 游戏音乐文件夹路径
 PATH_MUSIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources","music")
+# 窗口图标
+ORIGINAL_LOGO = os.path.join(os.path.dirname(os.path.dirname(__file__)), "pypvz-exec-logo.png")
+# 字体路径
+FONT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "DroidSansFallback.ttf")
 
 # 窗口标题
 ORIGINAL_CAPTION = "pypvz"
@@ -29,8 +31,6 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
-# 字体路径
-FONT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources", "DroidSansFallback.ttf")
 
 # 选卡数量
 # 最大数量
@@ -231,7 +231,7 @@ CARD_MOVE_TIME = 60
 CAR = "car"
 SUN = "Sun"
 
-# plant子类非植物对象
+# plant子类非植物对象（这里的是不包括阳光、子弹的拟植物对象）
 NON_PLANT_OBJECTS = {
                 HOLE := "Hole",
                 ICEFROZENPLOT := "IceFrozenPlot",
@@ -376,9 +376,7 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             )
 
 # 卡片中的植物名称与索引序号的对应关系，指定名称以得到索引值
-PLANT_CARD_INDEX={}
-for i, item in enumerate(PLANT_CARD_INFO):
-    PLANT_CARD_INDEX[item[PLANT_NAME_INDEX]] = i
+PLANT_CARD_INDEX={item[PLANT_NAME_INDEX]: index for (index, item) in enumerate(PLANT_CARD_INFO)}
 
 # 指定了哪些卡可选（排除坚果保龄球特殊植物）
 CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
@@ -482,7 +480,7 @@ FUME = "Fume"
 # 子弹伤害
 BULLET_DAMAGE_NORMAL = 20
 BULLET_DAMAGE_FIREBALL_BODY = 27 # 这是火球本体的伤害，注意不是40，本体(27) + 溅射(13)才是40
-BULLET_DAMAGE_FIREBALL_RANGE = 13
+BULLET_DAMAGE_FIREBALL_RANGE = 13   # 原版溅射伤害会随着僵尸数量增多而减少，这里相当于做了一个增强
 # 子弹效果
 BULLET_EFFECT_ICE = "ice"
 BULLET_EFFECT_UNICE = "unice"

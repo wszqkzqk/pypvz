@@ -1,9 +1,11 @@
+import logging
 import os
 import json
 from abc import abstractmethod
 import pygame as pg
 from pygame.locals import *
 from . import constants as c
+logger = logging.getLogger("main")
 
 # 状态机 抽象基类
 class State():
@@ -31,15 +33,15 @@ class State():
 
     # 工具：范围判断函数，用于判断点击
     def inArea(self, rect, x, y):
-        if (x >= rect.x and x <= rect.right and
-            y >= rect.y and y <= rect.bottom):
+        if (rect.x <= x <= rect.right and
+            rect.y <= y <= rect.bottom):
             return True
         else:
             return False
 
     # 工具：用户数据保存函数
     def saveUserData(self):
-        with open(c.USERDATA_PATH, "w") as f:
+        with open(c.USERDATA_PATH, "w", encoding="utf-8") as f:
             userdata = {}
             for i in self.game_info:
                 if i in c.INIT_USERDATA:
@@ -60,12 +62,18 @@ class Control():
         self.state_dict = {}
         self.state_name = None
         self.state = None
-        # 这里需要考虑多种情况，如文件不存在、文件不可读、文件不符合JSON语法要求，这些情况目前暂定统一进行新建文件操作
-        # 因此仍然采用try-except实现而非if-else实现
         try:
             # 存在存档即导入
-            with open(c.USERDATA_PATH) as f:
+            # 先自动修复读写权限(Python权限规则和Unix不一样，420表示unix的644，Windows自动忽略不支持项)
+            os.chmod(c.USERDATA_PATH, 420)
+            with open(c.USERDATA_PATH, encoding="utf-8") as f:
                 userdata = json.load(f)
+        except FileNotFoundError:
+            self.setupUserData()
+        except json.JSONDecodeError:
+            logger.warning("用户存档解码错误！程序将新建初始存档！\n")
+            self.setupUserData()
+        else:   # 没有引发异常才执行
             self.game_info = {}
             # 导入数据，保证了可运行性，但是放弃了数据向后兼容性，即假如某些变量在以后改名，在导入时可能会被重置
             need_to_rewrite = False
@@ -76,23 +84,23 @@ class Control():
                     self.game_info[key] = c.INIT_USERDATA[key]
                     need_to_rewrite = True
             if need_to_rewrite:
-                with open(c.USERDATA_PATH, "w") as f:
+                with open(c.USERDATA_PATH, "w", encoding="utf-8") as f:
                     savedata = json.dumps(self.game_info, sort_keys=True, indent=4)
                     f.write(savedata)
-        except:
-            if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
-                os.makedirs(os.path.dirname(c.USERDATA_PATH))
-            with open(c.USERDATA_PATH, "w") as f:
-                savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
-                f.write(savedata)
-            self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
         # 存档内不包含即时游戏时间信息，需要新建
         self.game_info[c.CURRENT_TIME] = 0
 
         # 50为目前的基础帧率，乘以倍率即是游戏帧率
         self.fps = 50 * self.game_info[c.GAME_RATE]
 
- 
+    def setupUserData(self):
+        if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
+            os.makedirs(os.path.dirname(c.USERDATA_PATH))
+        with open(c.USERDATA_PATH, "w", encoding="utf-8") as f:
+            savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
+            f.write(savedata)
+        self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
+
     def setup_states(self, state_dict, start_state):
         self.state_dict = state_dict
         self.state_name = start_state
@@ -137,8 +145,7 @@ class Control():
                 self.mouse_pos = pg.mouse.get_pos()
                 self.mouse_click[0], _, self.mouse_click[1] = pg.mouse.get_pressed()
                 # self.mouse_click[0]表示左键，self.mouse_click[1]表示右键
-                print(  f"点击位置: ({self.mouse_pos[0]:3}, {self.mouse_pos[1]:3})",
-                        f"左右键点击情况: {self.mouse_click}")
+                print(f"点击位置: ({self.mouse_pos[0]:3}, {self.mouse_pos[1]:3}) 左右键点击情况: {self.mouse_click}")
 
 
     def run(self):

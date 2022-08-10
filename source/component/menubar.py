@@ -22,9 +22,7 @@ def getSunValueImage(sun_value):
     return image
 
 def getCardPool(data):
-    card_pool = {}
-    for cardName in data:
-        card_pool[c.PLANT_CARD_INFO[c.PLANT_CARD_INDEX[cardName]]] = data[cardName]
+    card_pool = {c.PLANT_CARD_INFO[c.PLANT_CARD_INDEX[card_name]]: data[card_name] for card_name in data}
     return card_pool
 
 class Card():
@@ -58,8 +56,8 @@ class Card():
 
     def checkMouseClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.rect.x and x <= self.rect.right and
-           y >= self.rect.y and y <= self.rect.bottom):
+        if (self.rect.x <= x <= self.rect.right and
+        self.rect.y <= y <= self.rect.bottom):
             return True
         return False
 
@@ -85,25 +83,28 @@ class Card():
         # 有关是否满足冷却与阳光条件的图片形式
         time = current_time - self.frozen_timer
         if time < self.frozen_time: #cool down status
-            image = pg.Surface([self.rect.w, self.rect.h])
-            # 在冷却时间不足且阳光也不足时，叠加两者效果显示，即同时改变透明度与图像覆盖
-            if self.sun_cost > sun_value:
-                image.set_alpha(192)
-            frozen_image = self.orig_image.copy()
+            image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            frozen_image = self.orig_image
             frozen_image.set_alpha(128)
             frozen_height = (self.frozen_time - time)/self.frozen_time * self.rect.h
             
             image.blit(frozen_image, (0,0), (0, 0, self.rect.w, frozen_height))
+            self.orig_image.set_alpha(192)
             image.blit(self.orig_image, (0,frozen_height),
                        (0, frozen_height, self.rect.w, self.rect.h - frozen_height))
         elif self.sun_cost > sun_value: #disable status
-            image = self.orig_image.copy()
-            image.set_alpha(192)
+            image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            self.orig_image.set_alpha(192)
+            image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
         elif self.clicked:
-            image = self.orig_image.copy()
-            image.set_alpha(128)
+            image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            chosen_image = self.orig_image
+            chosen_image.set_alpha(128)
+            
+            image.blit(chosen_image, (0,0), (0, 0, self.rect.w, self.rect.h))
         else:
             image = self.orig_image
+            image.set_alpha(255)
         return image
 
     def update(self, sun_value, current_time):
@@ -357,14 +358,21 @@ class MoveCard():
         # 新增卡片时显示图片
         if self.rect.w < self.orig_rect.w: #create a part card image
             image = pg.Surface([self.rect.w, self.rect.h])
+            if self.clicked:
+                self.orig_image.set_alpha(128)
+            else:
+                self.orig_image.set_alpha(255)
             image.blit(self.orig_image, (0, 0), (0, 0, self.rect.w, self.rect.h))
             self.rect.w += 1
         else:
-            image = self.orig_image
-        if self.clicked:
-            image.set_alpha(192)
-        else:
-            image.set_alpha(255)
+            if self.clicked:
+                image = pg.Surface([self.rect.w, self.rect.h])  # 黑底
+                self.orig_image.set_alpha(128)
+                
+                image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
+            else:
+                self.orig_image.set_alpha(255)
+                image = self.orig_image
         return image
 
     def update(self, left_x, current_time):

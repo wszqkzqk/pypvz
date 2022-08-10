@@ -10,27 +10,50 @@ class Map():
             self.width = c.GRID_POOL_X_LEN
             self.height = c.GRID_POOL_Y_LEN
             self.grid_height_size = c.GRID_POOL_Y_SIZE
-            self.map = [[(self.initMapGrid(c.MAP_GRASS), self.initMapGrid(c.MAP_WATER))[y in {2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_WATER) if 2 <= y <= 3
+                                else self.initMapGrid(c.MAP_GRASS)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
         elif self.background_type in c.ON_ROOF_BACKGROUNDS:
             self.width = c.GRID_ROOF_X_LEN
             self.height = c.GRID_ROOF_Y_LEN
             self.grid_height_size = c.GRID_ROOF_Y_SIZE
-            self.map = [[self.initMapGrid(c.MAP_TILE) for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_TILE)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
         elif self.background_type == c.BACKGROUND_SINGLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.grid_height_size = c.GRID_Y_SIZE
-            self.map = [[(self.initMapGrid(c.MAP_UNAVAILABLE), self.initMapGrid(c.MAP_GRASS))[y == 2] for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_GRASS) if y ==2
+                                else self.initMapGrid(c.MAP_UNAVAILABLE)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
         elif self.background_type == c.BACKGROUND_TRIPLE:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.grid_height_size = c.GRID_Y_SIZE
-            self.map = [[(self.initMapGrid(c.MAP_UNAVAILABLE), self.initMapGrid(c.MAP_GRASS))[y in {1, 2, 3}] for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_GRASS) if 1 <= y <= 3
+                                else self.initMapGrid(c.MAP_UNAVAILABLE)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
         else:
             self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.grid_height_size = c.GRID_Y_SIZE
-            self.map = [[self.initMapGrid(c.MAP_GRASS) for x in range(self.width)] for y in range(self.height)]
+            self.map =  [   [self.initMapGrid(c.MAP_GRASS)
+                            for x in range(self.width)
+                            ]
+                        for y in range(self.height)
+                        ]
 
     def isValid(self, map_x, map_y):
         if (map_x < 0 or map_x >= self.width or
@@ -50,12 +73,14 @@ class Map():
     def isAvailable(self, map_x, map_y, plant_name):
         # 咖啡豆和墓碑吞噬者的判别最为特殊
         if plant_name == c.COFFEEBEAN:
-            if self.map[map_y][map_x][c.MAP_SLEEP] and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT]):
+            if (self.map[map_y][map_x][c.MAP_SLEEP]
+            and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT])):
                 return True
             else:
                 return False
         if plant_name == c.GRAVEBUSTER:
-            if (c.GRAVE in self.map[map_y][map_x][c.MAP_PLANT]):
+            if (c.GRAVE in self.map[map_y][map_x][c.MAP_PLANT]
+            and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT])):
                 return True
             else:
                 return False
@@ -70,7 +95,8 @@ class Map():
                 elif (all((i in {"花盆（未实现）", c.PUMPKINHEAD}) for i in self.map[map_y][map_x][c.MAP_PLANT])
                 and (plant_name not in self.map[map_y][map_x][c.MAP_PLANT])): # 例外植物：集合中填花盆和南瓜头，只要这里没有这种植物就能种植
                     return True
-                elif (plant_name == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 没有南瓜头就能种南瓜头
+                elif ((plant_name == c.PUMPKINHEAD)
+                and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT])):   # 没有南瓜头就能种南瓜头
                     return True
                 else:
                     return False
@@ -86,7 +112,8 @@ class Map():
                             return False
                         else:
                             return True
-                    elif (plant_name == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 有花盆且没有南瓜头就能种南瓜头
+                    elif ((plant_name == c.PUMPKINHEAD)
+                    and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT])):    # 有花盆且没有南瓜头就能种南瓜头
                         return True
                     else:
                         return False
@@ -110,7 +137,8 @@ class Map():
                             return False
                         else:
                             return True
-                    elif (plant_name == c.PUMPKINHEAD) and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT]):   # 在睡莲上且没有南瓜头就能种南瓜头
+                    elif ((plant_name == c.PUMPKINHEAD)
+                    and (c.PUMPKINHEAD not in self.map[map_y][map_x][c.MAP_PLANT])):   # 在睡莲上且没有南瓜头就能种南瓜头
                         return True
                     else:
                         return False
@@ -248,7 +276,8 @@ LEVEL_MAP_DATA = (
     c.INIT_SUN_NAME: 50,
     c.SHOVEL: 1,
     c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
-    c.INCLUDED_ZOMBIES: (c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE, c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
     c.NUM_FLAGS:3
 },
 # 第6关 目前夜晚第一关
@@ -360,16 +389,21 @@ LEVEL_MAP_DATA = (
 LITTLE_GAME_MAP_DATA = (
 # 第0关 测试
 {
-    c.BACKGROUND_TYPE: 6,
+    c.BACKGROUND_TYPE: 3,
     c.GAME_TITLE: "隐藏测试关卡",
-    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_BOWLING,
-    c.SHOVEL: 0,
+    c.CHOOSEBAR_TYPE: c.CHOOSEBAR_MOVE,
+    c.SHOVEL: 1,
     c.SPAWN_ZOMBIES:c.SPAWN_ZOMBIES_AUTO,
-    c.INCLUDED_ZOMBIES: (   c.POLE_VAULTING_ZOMBIE,),
-    c.NUM_FLAGS:1,
-    c.CARD_POOL: {  c.WALLNUTBOWLING: 0,
-                    c.REDWALLNUTBOWLING: 0,
-                    c.GIANTWALLNUT:100,}
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.NEWSPAPER_ZOMBIE,
+                            c.ZOMBONI, c.FOOTBALL_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    c.NUM_FLAGS:4,
+    c.CARD_POOL: {  c.LILYPAD: 300,
+                    c.STARFRUIT: 400,
+                    c.PUMPKINHEAD: 100,
+                    c.SEASHROOM: 100,
+                    c.SPIKEWEED: 100,
+                    }
 },
 # 第1关 坚果保龄球
 {
@@ -415,9 +449,9 @@ LITTLE_GAME_MAP_DATA = (
     c.NUM_FLAGS:3,
     c.CARD_POOL: {  c.PUFFSHROOM: 100,
                     c.SCAREDYSHROOM: 100,
-                    c.ICESHROOM: 100,
+                    c.ICESHROOM: 70,
                     c.HYPNOSHROOM: 100,
-                    c.DOOMSHROOM: 100,
+                    c.DOOMSHROOM: 50,
                     c.GRAVEBUSTER: 100,
                     c.FUMESHROOM: 200},
     c.GRADE_GRAVES:3
@@ -440,7 +474,7 @@ LITTLE_GAME_MAP_DATA = (
                     c.SPIKEWEED: 100,
                     c.SQUASH: 100,
                     c.JALAPENO: 50,
-                    c.THREEPEASHOOTER: 300,}
+                    c.THREEPEASHOOTER: 400,}
 },
 # 第5关 坚果保龄球2
 {
