@@ -17,7 +17,7 @@ if __name__ == "__main__":
         os.makedirs(os.path.dirname(c.USERLOG_PATH))
     logger = logging.getLogger("main")
     formatter = logging.Formatter("%(asctime)s - %(levelname)s: %(message)s")
-    fileHandler = RotatingFileHandler(c.USERLOG_PATH, "a", 1024*1024, 0, "utf-8")
+    fileHandler = RotatingFileHandler(c.USERLOG_PATH, "a", 1_000_000, 0, "utf-8")
     os.chmod(c.USERLOG_PATH, 420)   # 设置日志文件权限，Unix为644，Windows为可读、可写
     fileHandler.setFormatter(formatter)
     streamHandler = logging.StreamHandler()

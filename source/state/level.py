@@ -126,7 +126,7 @@ class Level(tool.State):
                 zombie_list.append(c.FLAG_ZOMBIE)
                 zombie_volume -= c.CREATE_ZOMBIE_DICT[c.FLAG_ZOMBIE][0]
 
-            # 保龄球模式应当增大僵尸容量
+            # 传送带模式应当增大僵尸容量
             if (self.bar_type != c.CHOOSEBAR_STATIC):
                 zombie_volume += 2
 
