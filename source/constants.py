@@ -480,7 +480,7 @@ FUME = "Fume"
 # 子弹伤害
 BULLET_DAMAGE_NORMAL = 20
 BULLET_DAMAGE_FIREBALL_BODY = 27 # 这是火球本体的伤害，注意不是40，本体(27) + 溅射(13)才是40
-BULLET_DAMAGE_FIREBALL_RANGE = 13
+BULLET_DAMAGE_FIREBALL_RANGE = 13   # 原版溅射伤害会随着僵尸数量增多而减少，这里相当于做了一个增强
 # 子弹效果
 BULLET_EFFECT_ICE = "ice"
 BULLET_EFFECT_UNICE = "unice"

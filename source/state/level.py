@@ -101,7 +101,7 @@ class Level(tool.State):
 
 
     # 按照规则生成每一波僵尸
-    # 可以考虑将波刷新和一波中的僵尸生成分开
+    # 将波刷新和一波中的僵尸生成分开
     # useableZombie是指可用的僵尸种类的元组
     # inevitableZombie指在本轮必然出现的僵尸，输入形式为字典: {波数1:(僵尸1, 僵尸2……), 波数2:(僵尸1, 僵尸2……)……}
     def createWaves(self, useable_zombies, num_flags, survival_rounds=0, inevitable_zombie_dict=None):
@@ -126,7 +126,7 @@ class Level(tool.State):
                 zombie_list.append(c.FLAG_ZOMBIE)
                 zombie_volume -= c.CREATE_ZOMBIE_DICT[c.FLAG_ZOMBIE][0]
 
-            # 保龄球模式应当增大僵尸容量
+            # 传送带模式应当增大僵尸容量
             if (self.bar_type != c.CHOOSEBAR_STATIC):
                 zombie_volume += 2
 
