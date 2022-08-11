@@ -22,7 +22,8 @@ def getSunValueImage(sun_value):
     return image
 
 def getCardPool(data):
-    card_pool = {c.PLANT_CARD_INFO[c.PLANT_CARD_INDEX[card_name]]: data[card_name] for card_name in data}
+    card_pool = {c.PLANT_CARD_INFO[c.PLANT_CARD_INDEX[card_name]]: data[card_name]
+                    for card_name in data}
     return card_pool
 
 class Card():
@@ -36,7 +37,8 @@ class Card():
         self.sun_cost_img = font.render(str(c.PLANT_CARD_INFO[index][c.SUN_INDEX]), True, c.BLACK)
         self.sun_cost_img_rect = self.sun_cost_img.get_rect()
         sun_cost_img_x = 32 - self.sun_cost_img_rect.w
-        self.orig_image.blit(self.sun_cost_img, (sun_cost_img_x, 52, self.sun_cost_img_rect.w, self.sun_cost_img_rect.h))
+        self.orig_image.blit(self.sun_cost_img,
+                            (sun_cost_img_x, 52, self.sun_cost_img_rect.w, self.sun_cost_img_rect.h))
         
         self.index = index
         self.sun_cost = c.PLANT_CARD_INFO[index][c.SUN_INDEX]
@@ -86,7 +88,7 @@ class Card():
             image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
             frozen_image = self.orig_image
             frozen_image.set_alpha(128)
-            frozen_height = (self.frozen_time - time)/self.frozen_time * self.rect.h
+            frozen_height = ((self.frozen_time - time)/self.frozen_time) * self.rect.h
             
             image.blit(frozen_image, (0,0), (0, 0, self.rect.w, frozen_height))
             self.orig_image.set_alpha(192)
@@ -177,8 +179,8 @@ class MenuBar():
     
     def checkMenuBarClick(self, mouse_pos):
         x, y = mouse_pos
-        if (x >= self.rect.x and x <= self.rect.right and
-            y >= self.rect.y and y <= self.rect.bottom):
+        if (self.rect.x <= x <= self.rect.right and
+            self.rect.y <= y <= self.rect.bottom):
             return True
         return False
 
@@ -299,8 +301,8 @@ class Panel():
             return False
 
         x, y = mouse_pos
-        if (x >= self.button_rect.x and x <= self.button_rect.right and
-            y >= self.button_rect.y and y <= self.button_rect.bottom):
+        if (self.button_rect.x <= x <= self.button_rect.right and
+            self.button_rect.y <= y <= self.button_rect.bottom):
            return True
         return False
 
@@ -349,8 +351,8 @@ class MoveCard():
 
     def checkMouseClick(self, mouse_pos):
         x, y = mouse_pos
-        if (x >= self.rect.x and x <= self.rect.right and
-            y >= self.rect.y and y <= self.rect.bottom):
+        if (self.rect.x <= x <= self.rect.right and
+            self.rect.y <= y <= self.rect.bottom):
             return True
         return False
 
@@ -426,7 +428,7 @@ class MoveBar():
             card.update(left_x, self.current_time)
             left_x = card.rect.right + 1
 
-        if(self.current_time - self.create_timer) > c.MOVEBAR_CARD_FRESH_TIME:
+        if (self.current_time - self.create_timer) > c.MOVEBAR_CARD_FRESH_TIME:
             if self.createCard():
                 self.create_timer = self.current_time
 
@@ -440,8 +442,8 @@ class MoveBar():
     
     def checkMenuBarClick(self, mouse_pos):
         x, y = mouse_pos
-        if (x >= self.rect.x and x <= self.rect.right and
-            y >= self.rect.y and y <= self.rect.bottom):
+        if (self.rect.x <= x <= self.rect.right and
+            self.rect.y <= y <= self.rect.bottom):
             return True
         return False
 
