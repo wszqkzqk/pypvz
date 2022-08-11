@@ -26,6 +26,7 @@ class Level(tool.State):
         # 导入地图参数
         self.loadMap()
         self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
+        self.map_x_len = self.map.width
         self.map_y_len = self.map.height
         self.setupBackground()
         self.initState()
@@ -1115,7 +1116,8 @@ class Level(tool.State):
                             zombie.health = 0
                             c.SOUND_BOWLING_IMPACT.play()
                         elif not zombie.jumping:
-                            zombie.jump_map_x, zombie.jump_map_y = min(c.GRID_X_LEN - 1, zombie.prey_map_x), min(self.map_y_len - 1, zombie.prey_map_y)
+                            zombie.jump_map_x = min(self.map_x_len - 1, zombie.prey_map_x)
+                            zombie.jump_map_y = min(self.map_y_len - 1, zombie.prey_map_y)
                             jump_x = target_plant.rect.x - c.GRID_X_SIZE * 0.6
                             if c.TALLNUT in self.map.map[zombie.jump_map_y][zombie.jump_map_x][c.MAP_PLANT]:
                                 zombie.setJump(False, jump_x)
