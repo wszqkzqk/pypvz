@@ -178,9 +178,12 @@ class Fume(pg.sprite.Sprite):
 
 # 杨桃的子弹
 class StarBullet(Bullet):
-    def __init__(self, x, start_y, damage, direction, level, damage_type = c.ZOMBIE_DEAFULT_DAMAGE):    # direction指星星飞行方向
-        Bullet.__init__(self, x, start_y, start_y, c.BULLET_STAR, damage, damage_type = damage_type)
-
+    def __init__(   self, x, start_y,
+                    damage, direction,
+                    level, damage_type = c.ZOMBIE_DEAFULT_DAMAGE):    # direction指星星飞行方向
+        Bullet.__init__(    self, x, start_y,
+                            start_y, c.BULLET_STAR,
+                            damage, damage_type = damage_type)
         self.level = level
         self.map_y = self.level.map.getMapIndex(self.rect.x, self.rect.centery)[1]
         self.direction = direction
@@ -394,7 +397,8 @@ class SunFlower(Plant):
             self.sun_timer = self.current_time - (c.FLOWER_SUN_INTERVAL - 6000)
         elif (self.current_time - self.sun_timer) > c.FLOWER_SUN_INTERVAL:
             self.sun_group.add(
-                Sun(self.rect.centerx, self.rect.bottom, self.rect.right, self.rect.bottom + self.rect.h // 2))
+                Sun(    self.rect.centerx, self.rect.bottom,
+                        self.rect.right, self.rect.bottom + self.rect.h // 2))
             self.sun_timer = self.current_time
 
 
@@ -697,8 +701,9 @@ class PuffShroom(Plant):
     def canAttack(self, zombie):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
-        if (self.rect.x <= zombie.rect.right and
-            (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+        if (self.rect.x <= zombie.rect.right
+        and (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x)
+        and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -796,7 +801,8 @@ class Squash(Plant):
             return True
         # 攻击状态
         elif (self.state == c.ATTACK):
-            if pg.sprite.collide_rect_ratio(0.5)(zombie, self) or pg.sprite.collide_mask(zombie, self):
+            if (pg.sprite.collide_rect_ratio(0.5)(zombie, self)
+            or pg.sprite.collide_mask(zombie, self)):
                 return True
         return False
 
@@ -844,9 +850,12 @@ class Spikeweed(Plant):
         self.state = c.IDLE
 
     def canAttack(self, zombie):
-        # 地刺能不能扎的判据：僵尸中心与地刺中心的距离或僵尸包括了地刺中心和右端（平衡得到合理的攻击范围,"僵尸包括了地刺中心和右端"是为以后巨人做准备）
+        # 地刺能不能扎的判据：
+        # 僵尸中心与地刺中心的距离或僵尸包括了地刺中心和右端（平衡得到合理的攻击范围,"僵尸包括了地刺中心和右端"是为以后巨人做准备）
         # 暂时不能用碰撞判断，平衡性不好
-        if ((-40 <= zombie.rect.centerx - self.rect.centerx <= 40) or (zombie.rect.left <= self.rect.x <= zombie.rect.right and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
+        if ((-40 <= zombie.rect.centerx - self.rect.centerx <= 40)
+        or (zombie.rect.left <= self.rect.x <= zombie.rect.right 
+            and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
             return True
         return False
 
@@ -1050,8 +1059,10 @@ class IceShroom(Plant):
         sleep_name = name + "Sleep"
         trap_name = name + "Trap"
 
-        frame_list = [self.idle_frames, self.snow_frames, self.sleep_frames, self.trap_frames]
-        name_list = [idle_name, snow_name, sleep_name, trap_name]
+        frame_list = [  self.idle_frames, self.snow_frames,
+                        self.sleep_frames, self.trap_frames]
+        name_list = [   idle_name, snow_name,
+                        sleep_name, trap_name]
         scale_list = [1, 1.5, 1, 1]
 
         for i, name in enumerate(name_list):
@@ -1308,13 +1319,17 @@ class StarFruit(Plant):
             zombie_map_y = self.level.map.getMapIndex(zombie.rect.centerx, zombie.rect.bottom)[1]
             if (self.rect.x >= zombie.rect.x) and (self.map_y == zombie_map_y):  # 对于同行且在杨桃后的僵尸
                 return True
-            # 斜向上，理想直线方程为：f(zombie.rect.x) = -0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10
+            # 斜向上，理想直线方程为：
+            # f(zombie.rect.x) = -0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10
             # 注意实际上为射线
-            elif -100 <= (zombie.rect.y - (-0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10)) <= 70 and (zombie.rect.left <= c.SCREEN_WIDTH) and (zombie.rect.x >= self.rect.x):
+            elif (-100 <= (zombie.rect.y - (-0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10)) <= 70
+            and (zombie.rect.left <= c.SCREEN_WIDTH) and (zombie.rect.x >= self.rect.x)):
                 return True
             # 斜向下，理想直线方程为：f(zombie.rect.x) = zombie.rect.x + self.rect.y - self.rect.right - 15
             # 注意实际上为射线
-            elif abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 70 and (zombie.rect.left <= c.SCREEN_WIDTH) and (zombie.rect.x >= self.rect.x):
+            elif (abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 70
+            and (zombie.rect.left <= c.SCREEN_WIDTH)
+            and (zombie.rect.x >= self.rect.x)):
                 return True
             elif zombie.rect.left <= self.rect.x <= zombie.rect.right:
                 return True
@@ -1324,13 +1339,23 @@ class StarFruit(Plant):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
-            # 向后打的杨桃子弹无视铁门与报纸防具
-            self.bullet_group.add(StarBullet(self.rect.left - 10, self.rect.y + 15, c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD, self.level, damage_type = c.ZOMBIE_COMMON_DAMAGE))
+            # pypvz特有设定：向后打的杨桃子弹无视铁门与报纸防具
+            self.bullet_group.add(StarBullet(   self.rect.left - 10, self.rect.y + 15,
+                                                c.BULLET_DAMAGE_NORMAL, c.STAR_BACKWARD,
+                                                self.level, damage_type = c.ZOMBIE_COMMON_DAMAGE))
             # 其他方向的杨桃子弹伤害效果与豌豆等同
-            self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - self.rect.h - 15, c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD, self.level))
-            self.bullet_group.add(StarBullet(self.rect.centerx - 20, self.rect.bottom - 5, c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD, self.level))
-            self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.bottom - 20, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN, self.level))
-            self.bullet_group.add(StarBullet(self.rect.right - 5, self.rect.y - 10, c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_UP, self.level))
+            self.bullet_group.add(StarBullet(   self.rect.centerx - 20, self.rect.bottom - self.rect.h - 15,
+                                                c.BULLET_DAMAGE_NORMAL, c.STAR_UPWARD,
+                                                self.level))
+            self.bullet_group.add(StarBullet(   self.rect.centerx - 20, self.rect.bottom - 5,
+                                                c.BULLET_DAMAGE_NORMAL, c.STAR_DOWNWARD,
+                                                self.level))
+            self.bullet_group.add(StarBullet(   self.rect.right - 5, self.rect.bottom - 20,
+                                                c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_DOWN,
+                                                self.level))
+            self.bullet_group.add(StarBullet(   self.rect.right - 5, self.rect.y - 10,
+                                                c.BULLET_DAMAGE_NORMAL, c.STAR_FORWARD_UP,
+                                                self.level))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
@@ -1358,8 +1383,8 @@ class CoffeeBean(Plant):
                 for plant in self.plant_group:
                     if plant.can_sleep:
                         if plant.state == c.SLEEP:
-                            plantMapX, _ = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
-                            if plantMapX == self.map_x:
+                            plant_map_x, _ = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
+                            if plant_map_x == self.map_x:
                                 plant.state = c.IDLE
                                 plant.setIdle()
                                 plant.changeFrames(plant.idle_frames)
@@ -1415,8 +1440,9 @@ class SeaShroom(Plant):
     def canAttack(self, zombie):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
-        if (self.rect.x <= zombie.rect.right and
-            (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+        if (self.rect.x <= zombie.rect.right
+        and (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x)
+        and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -1706,8 +1732,9 @@ class FumeShroom(Plant):
     def canAttack(self, zombie):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
-        if (self.rect.x <= zombie.rect.right and
-            (self.rect.x + c.GRID_X_SIZE * 5 >= zombie.rect.x) and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+        if (self.rect.x <= zombie.rect.right
+        and (self.rect.x + c.GRID_X_SIZE * 5 >= zombie.rect.x)
+        and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
             return True
         return False
 

@@ -56,10 +56,10 @@ class Map():
                         ]
 
     def isValid(self, map_x, map_y):
-        if (map_x < 0 or map_x >= self.width or
-            map_y < 0 or map_y >= self.height):
-            return False
-        return True
+        if ((0 <= map_x < self.width)
+        and (0 <= map_y < self.height)):
+            return True
+        return False
 
     # 地图单元格状态
     # 注意是可变对象，不能直接引用
