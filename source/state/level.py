@@ -333,8 +333,8 @@ class Level(tool.State):
         return self.before_pause_time
 
     def initBowlingMap(self):
-        for x in range(3, self.map.width):
-            for y in range(self.map.height):
+        for x in range(3, self.map_x_len):
+            for y in range(self.map_y_len):
                 self.map.setMapGridType(x, y, c.MAP_UNAVAILABLE) # 将坚果保龄球红线右侧设置为不可种植任何植物
 
     def initState(self):
@@ -632,8 +632,8 @@ class Level(tool.State):
     def shovelRemovePlant(self, mouse_pos):
         x, y = mouse_pos
         map_x, map_y = self.map.getMapIndex(x, y)
-        if ((map_y < 0) or (map_y >= self.map.height)
-        or (map_x < 0) or (map_x >= self.map.width)):
+        if ((map_y < 0) or (map_y >= self.map_y_len)
+        or (map_x < 0) or (map_x >= self.map_x_len)):
             return
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
@@ -1085,7 +1085,7 @@ class Level(tool.State):
                         # 默认为最右侧的一个植物
                         target_plant = max(attackable_common_plants, key=lambda i: i.rect.x)
                         map_x, map_y = self.map.getMapIndex(target_plant.rect.centerx, target_plant.rect.centery)
-                        if not (map_x >= self.map.width or map_y >= self.map.height):
+                        if (0 <= map_x < self.map_x_len and 0 <= map_y < self.map_y_len):
                             if c.PUMPKINHEAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
                                 for actual_target_plant in self.plant_groups[i]:
                                     # 检测同一格的其他植物
@@ -1472,8 +1472,8 @@ class Level(tool.State):
         # 铲子接近植物时会高亮提示
         map_x, map_y = self.map.getMapIndex(x, y)
         surface.blit(self.shovel, self.shovel_rect)
-        if ((map_y < 0) or (map_y >= self.map.height)
-        or (map_x < 0) or (map_x >= self.map.width)):
+        if ((map_y < 0) or (map_y >= self.map_y_len)
+        or (map_x < 0) or (map_x >= self.map_x_len)):
             return
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
