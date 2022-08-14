@@ -632,6 +632,9 @@ class Level(tool.State):
     def shovelRemovePlant(self, mouse_pos):
         x, y = mouse_pos
         map_x, map_y = self.map.getMapIndex(x, y)
+        if ((map_y < 0) or (map_y >= self.map.height)
+        or (map_x < 0) or (map_x >= self.map.width)):
+            return
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
@@ -1469,6 +1472,9 @@ class Level(tool.State):
         # 铲子接近植物时会高亮提示
         map_x, map_y = self.map.getMapIndex(x, y)
         surface.blit(self.shovel, self.shovel_rect)
+        if ((map_y < 0) or (map_y >= self.map.height)
+        or (map_x < 0) or (map_x >= self.map.width)):
+            return
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
