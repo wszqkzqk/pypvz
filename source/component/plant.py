@@ -1606,9 +1606,9 @@ class DoomShroom(Plant):
 
 # 用于描述毁灭菇的坑
 class Hole(Plant):
-    def __init__(self, x, y, plotType):
+    def __init__(self, x, y, plot_type):
         # 指定区域类型这一句必须放在前面，否则加载图片判断将会失败
-        self.plotType = plotType
+        self.plot_type = plot_type
         Plant.__init__(self, x, y, c.HOLE, c.INF, None)
         self.timer = 0
         self.shallow = False
@@ -1638,9 +1638,9 @@ class Hole(Plant):
         for i, name in enumerate(name_list):
             self.loadFrames(frame_list[i], name)
         
-        if self.plotType == c.MAP_TILE:
+        if self.plot_type == c.MAP_TILE:
             self.frames = self.roof_frames
-        elif self.plotType == c.MAP_WATER:
+        elif self.plot_type == c.MAP_WATER:
             self.frames = self.water_frames
         else:
             self.frames = self.idle_frames
@@ -1649,9 +1649,9 @@ class Hole(Plant):
         if self.timer == 0:
             self.timer = self.current_time
         elif (not self.shallow) and (self.current_time - self.timer >= 90000):
-            if self.plotType == c.MAP_TILE:
+            if self.plot_type == c.MAP_TILE:
                 self.frames = self.roof2_frames
-            elif self.plotType == c.MAP_WATER:
+            elif self.plot_type == c.MAP_WATER:
                 self.frames = self.water2_frames
             else:
                 self.frames = self.idle2_frames
