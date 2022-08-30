@@ -180,7 +180,7 @@ SURVIVAL_ROUNDS = "survival_rounds"
 # 地图单元格属性
 MAP_PLANT = "plantnames"
 MAP_SLEEP = "sleep" # 有没有休眠的蘑菇，作是否能种植咖啡豆的判断
-MAP_PLOT_TYPE = "plotType"
+MAP_PLOT_TYPE = "plot_type"
 # 地图单元格区域类型
 MAP_GRASS = "grass"
 MAP_WATER = "water"
