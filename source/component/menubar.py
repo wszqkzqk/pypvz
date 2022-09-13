@@ -74,9 +74,12 @@ class Card():
     def setSelect(self, can_select):
         self.select = can_select
         if can_select:
+            self.image = self.orig_image
             self.image.set_alpha(255)
         else:
-            self.image.set_alpha(128)
+            self.orig_image.set_alpha(64)
+            self.image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            self.image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
 
     def setFrozenTime(self, current_time):
         self.frozen_timer = current_time
@@ -286,7 +289,7 @@ class Panel():
                     c.SOUND_TAPPING_CARD.play()
                 break
 
-    def addCard(self, card):
+    def addCard(self, card:Card):
         card.setSelect(False)
         y = 8
         x = 77 + self.selected_num * c.BAR_CARD_X_INTERNAL
