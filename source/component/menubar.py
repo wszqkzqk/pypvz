@@ -277,15 +277,15 @@ class Panel():
                 y += c.PANEL_Y_INTERNAL
             x += c.PANEL_X_INTERNAL
             plant_name = c.PLANT_CARD_INFO[index][c.PLANT_NAME_INDEX]
-            if (plant_name in c.CAN_SLEEP_PLANTS
-            and self.background_type in c.DAYTIME_BACKGROUNDS):
-                not_recommend = c.REASON_WILL_SLEEP
+            if (plant_name in c.WATER_PLANTS
+            and self.background_type not in c.POOL_EQUIPPED_BACKGROUNDS):
+                not_recommend = c.REASON_OTHER
             elif (plant_name == c.GRAVEBUSTER
             and self.background_type != c.BACKGROUND_NIGHT):
                 not_recommend = c.REASON_OTHER
-            elif (plant_name in c.WATER_PLANTS
-            and self.background_type not in c.POOL_EQUIPPED_BACKGROUNDS):
-                not_recommend = c.REASON_OTHER
+            elif (plant_name in c.CAN_SLEEP_PLANTS
+            and self.background_type in c.DAYTIME_BACKGROUNDS):
+                not_recommend = c.REASON_WILL_SLEEP
             # 还有屋顶场景，以及其他植物没有实现的植物没有写进来
             else:
                 not_recommend = 0
