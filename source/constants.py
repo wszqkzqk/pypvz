@@ -383,6 +383,7 @@ CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
 
 
 # 植物集体属性集合
+# 也许以后有必要的可以重新加入到对象的属性中
 # 在生效时不用与僵尸进行碰撞检测的对象（即生效时不可发生被僵尸啃食的事件）
 SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING = {
                 # 注意爆炸坚果的触发也是啃食类碰撞，因此只能算作爆炸后不检测
