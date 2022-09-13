@@ -83,7 +83,7 @@ class Card():
     def setSelect(self, can_select):
         self.select = can_select
         if can_select:
-            if self.not_recommend:
+            if self.not_recommend % 2:
                 self.orig_image.set_alpha(128)
                 self.image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
                 self.image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
@@ -307,8 +307,8 @@ class Panel():
             c.SOUND_TAPPING_CARD.play()
             if delete_card.info[c.PLANT_NAME_INDEX] == c.COFFEEBEAN:
                 for i in self.card_list:
-                    if i.info[c.PLANT_NAME_INDEX] in c.CAN_SLEEP_PLANTS:
-                        i.not_recommend = 1
+                    if i.not_recommend == c.REASON_SLEEP_BUT_COFFEE_BEAN:
+                        i.not_recommend = c.REASON_WILL_SLEEP
                         i.orig_image.set_alpha(128)
                         i.image = pg.Surface((i.rect.w, i.rect.h))  # 黑底
                         i.image.blit(i.orig_image, (0,0), (0, 0, i.rect.w, i.rect.h))
@@ -325,7 +325,7 @@ class Panel():
                     if card.info[c.PLANT_NAME_INDEX] == c.COFFEEBEAN:
                         for i in self.card_list:
                             if i.not_recommend == c.REASON_WILL_SLEEP:
-                                i.not_recommend = 0
+                                i.not_recommend = c.REASON_SLEEP_BUT_COFFEE_BEAN
                                 i.image = i.orig_image
                                 i.image.set_alpha(255)
                 break
