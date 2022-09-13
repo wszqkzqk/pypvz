@@ -241,7 +241,6 @@ class Plant(pg.sprite.Sprite):
         self.health = health
         self.state = c.IDLE
         self.bullet_group = bullet_group
-        self.can_sleep = False
         self.animate_timer = 0
         self.animate_interval = 70  # 帧播放间隔
         self.hit_timer = 0
@@ -670,7 +669,6 @@ class Chomper(Plant):
 class PuffShroom(Plant):
     def __init__(self, x, y, bullet_group):
         Plant.__init__(self, x, y, c.PUFFSHROOM, c.PLANT_HEALTH, bullet_group)
-        self.can_sleep = True
         self.shoot_timer = 0
 
     def loadImages(self, name, scale):
@@ -945,7 +943,6 @@ class Jalapeno(Plant):
 class ScaredyShroom(Plant):
     def __init__(self, x, y, bullet_group):
         Plant.__init__(self, x, y, c.SCAREDYSHROOM, c.PLANT_HEALTH, bullet_group)
-        self.can_sleep = True
         self.shoot_timer = 0
         self.cry_x_range = c.GRID_X_SIZE * 1.5
 
@@ -999,7 +996,6 @@ class ScaredyShroom(Plant):
 class SunShroom(Plant):
     def __init__(self, x, y, sun_group):
         Plant.__init__(self, x, y, c.SUNSHROOM, c.PLANT_HEALTH, None)
-        self.can_sleep = True
         self.animate_interval = 140
         self.sun_timer = 0
         self.sun_group = sun_group
@@ -1043,7 +1039,6 @@ class SunShroom(Plant):
 class IceShroom(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.ICESHROOM, c.PLANT_HEALTH, None)
-        self.can_sleep = True
         self.orig_pos = (x, y)
         self.start_boom = False
         self.boomed = False
@@ -1114,7 +1109,6 @@ class IceShroom(Plant):
 class HypnoShroom(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.HYPNOSHROOM, c.PLANT_HEALTH, None)
-        self.can_sleep = True
         self.animate_interval = 80
         self.zombie_to_hypno = None
 
@@ -1381,7 +1375,7 @@ class CoffeeBean(Plant):
             if self.frame_index >= self.frame_num:
                 self.map_content[c.MAP_SLEEP] = False
                 for plant in self.plant_group:
-                    if plant.can_sleep:
+                    if plant.name in c.CAN_SLEEP_PLANTS:
                         if plant.state == c.SLEEP:
                             plant_map_x, _ = self.map.getMapIndex(plant.rect.centerx, plant.rect.bottom)
                             if plant_map_x == self.map_x:
@@ -1409,7 +1403,6 @@ class CoffeeBean(Plant):
 class SeaShroom(Plant):
     def __init__(self, x, y, bullet_group):
         Plant.__init__(self, x, y, c.SEASHROOM, c.PLANT_HEALTH, bullet_group)
-        self.can_sleep = True
         self.shoot_timer = 0
 
     def loadImages(self, name, scale):
@@ -1532,7 +1525,6 @@ class TangleKlep(Plant):
 class DoomShroom(Plant):
     def __init__(self, x, y, map_plant_set, explode_y_range):
         Plant.__init__(self, x, y, c.DOOMSHROOM, c.PLANT_HEALTH, None)
-        self.can_sleep = True
         self.map_plant_set = map_plant_set
         self.bomb_timer = 0
         self.explode_y_range = explode_y_range
@@ -1707,7 +1699,6 @@ class GraveBuster(Plant):
 class FumeShroom(Plant):
     def __init__(self, x, y, bullet_group, zombie_group):
         Plant.__init__(self, x, y, c.FUMESHROOM, c.PLANT_HEALTH, bullet_group)
-        self.can_sleep = True
         self.shoot_timer = 0
         self.show_attack_frames = True
         self.zombie_group = zombie_group

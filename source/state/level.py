@@ -927,7 +927,8 @@ class Level(tool.State):
             new_plant = plant.GiantWallNut(x, y)
 
 
-        if new_plant.can_sleep and self.background_type in c.DAYTIME_BACKGROUNDS:
+        if ((new_plant.name in c.CAN_SLEEP_PLANTS)
+        and (self.background_type in c.DAYTIME_BACKGROUNDS)):
             new_plant.setSleep()
             mushroom_sleep = True
         else:
