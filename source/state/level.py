@@ -355,7 +355,7 @@ class Level(tool.State):
 
     def initChoose(self):
         self.state = c.CHOOSE
-        self.panel = menubar.Panel(c.CARDS_TO_CHOOSE, self.map_data[c.INIT_SUN_NAME])
+        self.panel = menubar.Panel(c.CARDS_TO_CHOOSE, self.map_data[c.INIT_SUN_NAME], self.background_type)
 
         # 播放选卡音乐
         pg.mixer.music.stop()

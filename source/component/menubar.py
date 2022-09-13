@@ -27,26 +27,35 @@ def getCardPool(data):
     return card_pool
 
 class Card():
-    def __init__(self, x, y, index, scale=0.5):
-        self.loadFrame(c.PLANT_CARD_INFO[index][c.CARD_INDEX], scale)
+    def __init__(self, x:int, y:int, index:int, scale:float=0.5, not_recommend=0):
+        self.info = c.PLANT_CARD_INFO[index]
+        self.loadFrame(self.info[c.CARD_INDEX], scale)
         self.rect = self.orig_image.get_rect()
         self.rect.x = x
         self.rect.y = y
         # 绘制植物阳光消耗大小
         font = pg.font.Font(c.FONT_PATH, 12)
-        self.sun_cost_img = font.render(str(c.PLANT_CARD_INFO[index][c.SUN_INDEX]), True, c.BLACK)
+        self.sun_cost_img = font.render(str(self.info[c.SUN_INDEX]), True, c.BLACK)
         self.sun_cost_img_rect = self.sun_cost_img.get_rect()
         sun_cost_img_x = 32 - self.sun_cost_img_rect.w
         self.orig_image.blit(self.sun_cost_img,
                             (sun_cost_img_x, 52, self.sun_cost_img_rect.w, self.sun_cost_img_rect.h))
         
         self.index = index
-        self.sun_cost = c.PLANT_CARD_INFO[index][c.SUN_INDEX]
-        self.frozen_time = c.PLANT_CARD_INFO[index][c.FROZEN_TIME_INDEX]
+        self.sun_cost = self.info[c.SUN_INDEX]
+        self.frozen_time = self.info[c.FROZEN_TIME_INDEX]
         self.frozen_timer = -self.frozen_time
         self.refresh_timer = 0
         self.select = True
         self.clicked = False
+        self.not_recommend = not_recommend
+        if self.not_recommend:
+            self.orig_image.set_alpha(128)
+            self.image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            self.image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
+        else:
+            self.image = self.orig_image
+            self.image.set_alpha(255)
 
     def loadFrame(self, name, scale):
         frame = tool.GFX[name]
@@ -74,8 +83,13 @@ class Card():
     def setSelect(self, can_select):
         self.select = can_select
         if can_select:
-            self.image = self.orig_image
-            self.image.set_alpha(255)
+            if self.not_recommend:
+                self.orig_image.set_alpha(128)
+                self.image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+                self.image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
+            else:
+                self.image = self.orig_image
+                self.image.set_alpha(255)
         else:
             self.orig_image.set_alpha(64)
             self.image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
@@ -217,10 +231,11 @@ class MenuBar():
 
 # 关卡模式选植物的界面
 class Panel():
-    def __init__(self, card_list, sun_value):
+    def __init__(self, card_list, sun_value, background_type=c.BACKGROUND_DAY):
         self.loadImages(sun_value)
         self.selected_cards = []
         self.selected_num = 0
+        self.background_type = background_type
         self.setupCards(card_list)
 
     def loadFrame(self, name):
@@ -261,7 +276,20 @@ class Panel():
                 x = c.PANEL_X_START - c.PANEL_X_INTERNAL
                 y += c.PANEL_Y_INTERNAL
             x += c.PANEL_X_INTERNAL
-            self.card_list.append(Card(x, y, index, 0.5))
+            plant_name = c.PLANT_CARD_INFO[index][c.PLANT_NAME_INDEX]
+            if (plant_name in c.CAN_SLEEP_PLANTS
+            and self.background_type in c.DAYTIME_BACKGROUNDS):
+                not_recommend = c.REASON_WILL_SLEEP
+            elif (plant_name == c.GRAVEBUSTER
+            and self.background_type != c.BACKGROUND_NIGHT):
+                not_recommend = c.REASON_OTHER
+            elif (plant_name in c.WATER_PLANTS
+            and self.background_type not in c.POOL_EQUIPPED_BACKGROUNDS):
+                not_recommend = c.REASON_OTHER
+            # 还有屋顶场景，以及其他植物没有实现的植物没有写进来
+            else:
+                not_recommend = 0
+            self.card_list.append(Card(x, y, index, 0.5, not_recommend))
 
     def checkCardClick(self, mouse_pos):
         delete_card = None
@@ -277,6 +305,13 @@ class Panel():
             self.selected_num -= 1
             # 播放点击音效
             c.SOUND_TAPPING_CARD.play()
+            if delete_card.info[c.PLANT_NAME_INDEX] == c.COFFEEBEAN:
+                for i in self.card_list:
+                    if i.info[c.PLANT_NAME_INDEX] in c.CAN_SLEEP_PLANTS:
+                        i.not_recommend = 1
+                        i.orig_image.set_alpha(128)
+                        i.image = pg.Surface((i.rect.w, i.rect.h))  # 黑底
+                        i.image.blit(i.orig_image, (0,0), (0, 0, i.rect.w, i.rect.h))
 
         if self.selected_num >= c.CARD_MAX_NUM:
             return
@@ -287,6 +322,12 @@ class Panel():
                     self.addCard(card)
                     # 播放点击音效
                     c.SOUND_TAPPING_CARD.play()
+                    if card.info[c.PLANT_NAME_INDEX] == c.COFFEEBEAN:
+                        for i in self.card_list:
+                            if i.not_recommend == c.REASON_WILL_SLEEP:
+                                i.not_recommend = 0
+                                i.image = i.orig_image
+                                i.image.set_alpha(255)
                 break
 
     def addCard(self, card:Card):
