@@ -1,5 +1,6 @@
 import os
 import pygame as pg
+from abc import abstractmethod
 from .. import tool
 from .. import constants as c
 
@@ -7,6 +8,7 @@ class Screen(tool.State):
     def __init__(self):
         tool.State.__init__(self)
 
+    @abstractmethod
     def startup(self, current_time, persist):
         pass
 

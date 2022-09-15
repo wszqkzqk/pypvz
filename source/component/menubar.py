@@ -22,31 +22,40 @@ def getSunValueImage(sun_value):
     return image
 
 def getCardPool(data):
-    card_pool = {}
-    for cardName in data:
-        card_pool[c.PLANT_CARD_INFO[c.PLANT_CARD_INDEX[cardName]]] = data[cardName]
+    card_pool = {c.PLANT_CARD_INFO[c.PLANT_CARD_INDEX[card_name]]: data[card_name]
+                    for card_name in data}
     return card_pool
 
 class Card():
-    def __init__(self, x, y, index, scale=0.5):
-        self.loadFrame(c.PLANT_CARD_INFO[index][c.CARD_INDEX], scale)
+    def __init__(self, x:int, y:int, index:int, scale:float=0.5, not_recommend=0):
+        self.info = c.PLANT_CARD_INFO[index]
+        self.loadFrame(self.info[c.CARD_INDEX], scale)
         self.rect = self.orig_image.get_rect()
         self.rect.x = x
         self.rect.y = y
         # 绘制植物阳光消耗大小
         font = pg.font.Font(c.FONT_PATH, 12)
-        self.sun_cost_img = font.render(str(c.PLANT_CARD_INFO[index][c.SUN_INDEX]), True, c.BLACK)
+        self.sun_cost_img = font.render(str(self.info[c.SUN_INDEX]), True, c.BLACK)
         self.sun_cost_img_rect = self.sun_cost_img.get_rect()
         sun_cost_img_x = 32 - self.sun_cost_img_rect.w
-        self.orig_image.blit(self.sun_cost_img, (sun_cost_img_x, 52, self.sun_cost_img_rect.w, self.sun_cost_img_rect.h))
+        self.orig_image.blit(self.sun_cost_img,
+                            (sun_cost_img_x, 52, self.sun_cost_img_rect.w, self.sun_cost_img_rect.h))
         
         self.index = index
-        self.sun_cost = c.PLANT_CARD_INFO[index][c.SUN_INDEX]
-        self.frozen_time = c.PLANT_CARD_INFO[index][c.FROZEN_TIME_INDEX]
+        self.sun_cost = self.info[c.SUN_INDEX]
+        self.frozen_time = self.info[c.FROZEN_TIME_INDEX]
         self.frozen_timer = -self.frozen_time
         self.refresh_timer = 0
         self.select = True
         self.clicked = False
+        self.not_recommend = not_recommend
+        if self.not_recommend:
+            self.orig_image.set_alpha(128)
+            self.image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            self.image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
+        else:
+            self.image = self.orig_image
+            self.image.set_alpha(255)
 
     def loadFrame(self, name, scale):
         frame = tool.GFX[name]
@@ -58,8 +67,8 @@ class Card():
 
     def checkMouseClick(self, mouse_pos):
         x, y = mouse_pos
-        if(x >= self.rect.x and x <= self.rect.right and
-           y >= self.rect.y and y <= self.rect.bottom):
+        if (self.rect.x <= x <= self.rect.right and
+        self.rect.y <= y <= self.rect.bottom):
             return True
         return False
 
@@ -74,9 +83,17 @@ class Card():
     def setSelect(self, can_select):
         self.select = can_select
         if can_select:
-            self.image.set_alpha(255)
+            if self.not_recommend % 2:
+                self.orig_image.set_alpha(128)
+                self.image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+                self.image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
+            else:
+                self.image = self.orig_image
+                self.image.set_alpha(255)
         else:
-            self.image.set_alpha(128)
+            self.orig_image.set_alpha(64)
+            self.image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            self.image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
 
     def setFrozenTime(self, current_time):
         self.frozen_timer = current_time
@@ -85,25 +102,28 @@ class Card():
         # 有关是否满足冷却与阳光条件的图片形式
         time = current_time - self.frozen_timer
         if time < self.frozen_time: #cool down status
-            image = pg.Surface([self.rect.w, self.rect.h])
-            # 在冷却时间不足且阳光也不足时，叠加两者效果显示，即同时改变透明度与图像覆盖
-            if self.sun_cost > sun_value:
-                image.set_alpha(192)
-            frozen_image = self.orig_image.copy()
+            image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            frozen_image = self.orig_image
             frozen_image.set_alpha(128)
-            frozen_height = (self.frozen_time - time)/self.frozen_time * self.rect.h
+            frozen_height = ((self.frozen_time - time)/self.frozen_time) * self.rect.h
             
             image.blit(frozen_image, (0,0), (0, 0, self.rect.w, frozen_height))
+            self.orig_image.set_alpha(192)
             image.blit(self.orig_image, (0,frozen_height),
                        (0, frozen_height, self.rect.w, self.rect.h - frozen_height))
         elif self.sun_cost > sun_value: #disable status
-            image = self.orig_image.copy()
-            image.set_alpha(192)
+            image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            self.orig_image.set_alpha(192)
+            image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
         elif self.clicked:
-            image = self.orig_image.copy()
-            image.set_alpha(128)
+            image = pg.Surface((self.rect.w, self.rect.h))  # 黑底
+            chosen_image = self.orig_image
+            chosen_image.set_alpha(128)
+            
+            image.blit(chosen_image, (0,0), (0, 0, self.rect.w, self.rect.h))
         else:
             image = self.orig_image
+            image.set_alpha(255)
         return image
 
     def update(self, sun_value, current_time):
@@ -176,8 +196,8 @@ class MenuBar():
     
     def checkMenuBarClick(self, mouse_pos):
         x, y = mouse_pos
-        if (x >= self.rect.x and x <= self.rect.right and
-            y >= self.rect.y and y <= self.rect.bottom):
+        if (self.rect.x <= x <= self.rect.right and
+            self.rect.y <= y <= self.rect.bottom):
             return True
         return False
 
@@ -211,10 +231,11 @@ class MenuBar():
 
 # 关卡模式选植物的界面
 class Panel():
-    def __init__(self, card_list, sun_value):
+    def __init__(self, card_list, sun_value, background_type=c.BACKGROUND_DAY):
         self.loadImages(sun_value)
         self.selected_cards = []
         self.selected_num = 0
+        self.background_type = background_type
         self.setupCards(card_list)
 
     def loadFrame(self, name):
@@ -255,7 +276,20 @@ class Panel():
                 x = c.PANEL_X_START - c.PANEL_X_INTERNAL
                 y += c.PANEL_Y_INTERNAL
             x += c.PANEL_X_INTERNAL
-            self.card_list.append(Card(x, y, index, 0.5))
+            plant_name = c.PLANT_CARD_INFO[index][c.PLANT_NAME_INDEX]
+            if (plant_name in c.WATER_PLANTS
+            and self.background_type not in c.POOL_EQUIPPED_BACKGROUNDS):
+                not_recommend = c.REASON_OTHER
+            elif (plant_name == c.GRAVEBUSTER
+            and self.background_type != c.BACKGROUND_NIGHT):
+                not_recommend = c.REASON_OTHER
+            elif (plant_name in c.CAN_SLEEP_PLANTS
+            and self.background_type in c.DAYTIME_BACKGROUNDS):
+                not_recommend = c.REASON_WILL_SLEEP
+            # 还有屋顶场景，以及其他植物没有实现的植物没有写进来
+            else:
+                not_recommend = 0
+            self.card_list.append(Card(x, y, index, 0.5, not_recommend))
 
     def checkCardClick(self, mouse_pos):
         delete_card = None
@@ -271,6 +305,13 @@ class Panel():
             self.selected_num -= 1
             # 播放点击音效
             c.SOUND_TAPPING_CARD.play()
+            if delete_card.info[c.PLANT_NAME_INDEX] == c.COFFEEBEAN:
+                for i in self.card_list:
+                    if i.not_recommend == c.REASON_SLEEP_BUT_COFFEE_BEAN:
+                        i.not_recommend = c.REASON_WILL_SLEEP
+                        i.orig_image.set_alpha(128)
+                        i.image = pg.Surface((i.rect.w, i.rect.h))  # 黑底
+                        i.image.blit(i.orig_image, (0,0), (0, 0, i.rect.w, i.rect.h))
 
         if self.selected_num >= c.CARD_MAX_NUM:
             return
@@ -281,9 +322,15 @@ class Panel():
                     self.addCard(card)
                     # 播放点击音效
                     c.SOUND_TAPPING_CARD.play()
+                    if card.info[c.PLANT_NAME_INDEX] == c.COFFEEBEAN:
+                        for i in self.card_list:
+                            if i.not_recommend == c.REASON_WILL_SLEEP:
+                                i.not_recommend = c.REASON_SLEEP_BUT_COFFEE_BEAN
+                                i.image = i.orig_image
+                                i.image.set_alpha(255)
                 break
 
-    def addCard(self, card):
+    def addCard(self, card:Card):
         card.setSelect(False)
         y = 8
         x = 77 + self.selected_num * c.BAR_CARD_X_INTERNAL
@@ -298,8 +345,8 @@ class Panel():
             return False
 
         x, y = mouse_pos
-        if (x >= self.button_rect.x and x <= self.button_rect.right and
-            y >= self.button_rect.y and y <= self.button_rect.bottom):
+        if (self.button_rect.x <= x <= self.button_rect.right and
+            self.button_rect.y <= y <= self.button_rect.bottom):
            return True
         return False
 
@@ -348,8 +395,8 @@ class MoveCard():
 
     def checkMouseClick(self, mouse_pos):
         x, y = mouse_pos
-        if (x >= self.rect.x and x <= self.rect.right and
-            y >= self.rect.y and y <= self.rect.bottom):
+        if (self.rect.x <= x <= self.rect.right and
+            self.rect.y <= y <= self.rect.bottom):
             return True
         return False
 
@@ -357,14 +404,21 @@ class MoveCard():
         # 新增卡片时显示图片
         if self.rect.w < self.orig_rect.w: #create a part card image
             image = pg.Surface([self.rect.w, self.rect.h])
+            if self.clicked:
+                self.orig_image.set_alpha(128)
+            else:
+                self.orig_image.set_alpha(255)
             image.blit(self.orig_image, (0, 0), (0, 0, self.rect.w, self.rect.h))
             self.rect.w += 1
         else:
-            image = self.orig_image
-        if self.clicked:
-            image.set_alpha(192)
-        else:
-            image.set_alpha(255)
+            if self.clicked:
+                image = pg.Surface([self.rect.w, self.rect.h])  # 黑底
+                self.orig_image.set_alpha(128)
+                
+                image.blit(self.orig_image, (0,0), (0, 0, self.rect.w, self.rect.h))
+            else:
+                self.orig_image.set_alpha(255)
+                image = self.orig_image
         return image
 
     def update(self, left_x, current_time):
@@ -418,7 +472,7 @@ class MoveBar():
             card.update(left_x, self.current_time)
             left_x = card.rect.right + 1
 
-        if(self.current_time - self.create_timer) > c.MOVEBAR_CARD_FRESH_TIME:
+        if (self.current_time - self.create_timer) > c.MOVEBAR_CARD_FRESH_TIME:
             if self.createCard():
                 self.create_timer = self.current_time
 
@@ -432,8 +486,8 @@ class MoveBar():
     
     def checkMenuBarClick(self, mouse_pos):
         x, y = mouse_pos
-        if (x >= self.rect.x and x <= self.rect.right and
-            y >= self.rect.y and y <= self.rect.bottom):
+        if (self.rect.x <= x <= self.rect.right and
+            self.rect.y <= y <= self.rect.bottom):
             return True
         return False
 

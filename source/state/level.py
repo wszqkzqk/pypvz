@@ -26,6 +26,7 @@ class Level(tool.State):
         # 导入地图参数
         self.loadMap()
         self.map = map.Map(self.map_data[c.BACKGROUND_TYPE])
+        self.map_x_len = self.map.width
         self.map_y_len = self.map.height
         self.setupBackground()
         self.initState()
@@ -101,7 +102,7 @@ class Level(tool.State):
 
 
     # 按照规则生成每一波僵尸
-    # 可以考虑将波刷新和一波中的僵尸生成分开
+    # 将波刷新和一波中的僵尸生成分开
     # useableZombie是指可用的僵尸种类的元组
     # inevitableZombie指在本轮必然出现的僵尸，输入形式为字典: {波数1:(僵尸1, 僵尸2……), 波数2:(僵尸1, 僵尸2……)……}
     def createWaves(self, useable_zombies, num_flags, survival_rounds=0, inevitable_zombie_dict=None):
@@ -265,7 +266,7 @@ class Level(tool.State):
                         c.SOUND_ZOMBIE_COMING.play()
             return
         if (self.wave_num % 10 != 9):
-            if ((current_time - self.wave_time >= 25000 + random.randint(0, 6000)) or (self.bar_type != c.CHOOSEBAR_STATIC and current_time - self.wave_time >= 12500 + random.randint(0, 3000))):
+            if ((current_time - self.wave_time >= 25000 + random.randint(0, 6000)) or (self.bar_type == c.CHOOSEBAR_BOWLING and current_time - self.wave_time >= 12500 + random.randint(0, 3000))):
                 self.wave_num += 1
                 self.wave_time = current_time
                 self.wave_zombies = self.waves[self.wave_num - 1]
@@ -332,8 +333,8 @@ class Level(tool.State):
         return self.before_pause_time
 
     def initBowlingMap(self):
-        for x in range(3, self.map.width):
-            for y in range(self.map.height):
+        for x in range(3, self.map_x_len):
+            for y in range(self.map_y_len):
                 self.map.setMapGridType(x, y, c.MAP_UNAVAILABLE) # 将坚果保龄球红线右侧设置为不可种植任何植物
 
     def initState(self):
@@ -354,7 +355,7 @@ class Level(tool.State):
 
     def initChoose(self):
         self.state = c.CHOOSE
-        self.panel = menubar.Panel(c.CARDS_TO_CHOOSE, self.map_data[c.INIT_SUN_NAME])
+        self.panel = menubar.Panel(c.CARDS_TO_CHOOSE, self.map_data[c.INIT_SUN_NAME], self.background_type)
 
         # 播放选卡音乐
         pg.mixer.music.stop()
@@ -631,6 +632,8 @@ class Level(tool.State):
     def shovelRemovePlant(self, mouse_pos):
         x, y = mouse_pos
         map_x, map_y = self.map.getMapIndex(x, y)
+        if not self.map.isValid(map_x, map_y):
+            return
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):
@@ -924,7 +927,8 @@ class Level(tool.State):
             new_plant = plant.GiantWallNut(x, y)
 
 
-        if new_plant.can_sleep and self.background_type in c.DAYTIME_BACKGROUNDS:
+        if ((new_plant.name in c.CAN_SLEEP_PLANTS)
+        and (self.background_type in c.DAYTIME_BACKGROUNDS)):
             new_plant.setSleep()
             mushroom_sleep = True
         else:
@@ -1081,7 +1085,7 @@ class Level(tool.State):
                         # 默认为最右侧的一个植物
                         target_plant = max(attackable_common_plants, key=lambda i: i.rect.x)
                         map_x, map_y = self.map.getMapIndex(target_plant.rect.centerx, target_plant.rect.centery)
-                        if not (map_x >= self.map.width or map_y >= self.map.height):
+                        if self.map.isValid(map_x, map_y):
                             if c.PUMPKINHEAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
                                 for actual_target_plant in self.plant_groups[i]:
                                     # 检测同一格的其他植物
@@ -1115,7 +1119,8 @@ class Level(tool.State):
                             zombie.health = 0
                             c.SOUND_BOWLING_IMPACT.play()
                         elif not zombie.jumping:
-                            zombie.jump_map_x, zombie.jump_map_y = min(c.GRID_X_LEN - 1, zombie.prey_map_x), min(self.map_y_len - 1, zombie.prey_map_y)
+                            zombie.jump_map_x = min(self.map_x_len - 1, zombie.prey_map_x)
+                            zombie.jump_map_y = min(self.map_y_len - 1, zombie.prey_map_y)
                             jump_x = target_plant.rect.x - c.GRID_X_SIZE * 0.6
                             if c.TALLNUT in self.map.map[zombie.jump_map_y][zombie.jump_map_x][c.MAP_PLANT]:
                                 zombie.setJump(False, jump_x)
@@ -1467,6 +1472,8 @@ class Level(tool.State):
         # 铲子接近植物时会高亮提示
         map_x, map_y = self.map.getMapIndex(x, y)
         surface.blit(self.shovel, self.shovel_rect)
+        if not self.map.isValid(map_x, map_y):
+            return
         for i in self.plant_groups[map_y]:
             if (x >= i.rect.x and x <= i.rect.right and
                 y >= i.rect.y and y <= i.rect.bottom):

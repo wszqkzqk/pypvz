@@ -11,13 +11,14 @@ from source import tool
 from source import constants as c
 from source.state import mainmenu, screen, level
 
-if __name__=="__main__":
+if __name__ == "__main__":
     # 日志设置
     if not os.path.exists(os.path.dirname(c.USERLOG_PATH)):
         os.makedirs(os.path.dirname(c.USERLOG_PATH))
     logger = logging.getLogger("main")
     formatter = logging.Formatter("%(asctime)s - %(levelname)s: %(message)s")
-    fileHandler = RotatingFileHandler(c.USERLOG_PATH, "a", 1024*1024, 0, "utf-8")
+    fileHandler = RotatingFileHandler(c.USERLOG_PATH, "a", 1_000_000, 0, "utf-8")
+    os.chmod(c.USERLOG_PATH, 420)   # 设置日志文件权限，Unix为644，Windows为可读、可写
     fileHandler.setFormatter(formatter)
     streamHandler = logging.StreamHandler()
     streamHandler.setFormatter(formatter)
