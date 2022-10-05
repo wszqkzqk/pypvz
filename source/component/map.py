@@ -155,12 +155,12 @@ class Map():
         elif self.background_type in c.ON_ROOF_BACKGROUNDS:
             x -= c.MAP_ROOF_OFFSET_X
             y -= c.MAP_ROOF_OFFSET_X
-            gridX = x // c.GRID_ROOF_X_SIZE
-            if gridX >= 5:
-                gridY = y // c.GRID_ROOF_Y_SIZE
+            grid_x = x // c.GRID_ROOF_X_SIZE
+            if grid_x >= 5:
+                grid_y = y // c.GRID_ROOF_Y_SIZE
             else:
-                gridY = (y - 20*(6 - gridX)) // 85
-            return (gridX, gridY)
+                grid_y = (y - 20*(6 - grid_x)) // 85
+            return (grid_x, grid_y)
         else:
             x -= c.MAP_OFFSET_X
             y -= c.MAP_OFFSET_Y

@@ -376,7 +376,7 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             )
 
 # 卡片中的植物名称与索引序号的对应关系，指定名称以得到索引值
-PLANT_CARD_INDEX={item[PLANT_NAME_INDEX]: index for (index, item) in enumerate(PLANT_CARD_INFO)}
+PLANT_CARD_INDEX = {item[PLANT_NAME_INDEX]: index for (index, item) in enumerate(PLANT_CARD_INFO)}
 
 # 指定了哪些卡可选（排除坚果保龄球特殊植物）
 CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
