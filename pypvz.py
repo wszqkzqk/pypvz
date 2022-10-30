@@ -18,7 +18,8 @@ if __name__ == "__main__":
     logger = logging.getLogger("main")
     formatter = logging.Formatter("%(asctime)s - %(levelname)s: %(message)s")
     fileHandler = RotatingFileHandler(c.USERLOG_PATH, "a", 1_000_000, 0, "utf-8")
-    os.chmod(c.USERLOG_PATH, 420)   # 设置日志文件权限，Unix为644，Windows为可读、可写
+    # 设置日志文件权限，Unix为644，Windows为可读写；Python的os.chmod与Unix chmod相同，但要显式说明8进制
+    os.chmod(c.USERLOG_PATH, 0o644)
     fileHandler.setFormatter(formatter)
     streamHandler = logging.StreamHandler()
     streamHandler.setFormatter(formatter)
