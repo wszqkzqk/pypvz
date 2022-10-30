@@ -17,6 +17,7 @@ jobs:
       matrix:
         python_version:
             - "3.11"
+            - "3.10"
     name: Windows Python ${{ matrix.python_version }}
     steps:
       - uses: actions/checkout@v2
