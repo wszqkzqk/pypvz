@@ -1268,7 +1268,7 @@ class Level(tool.State):
     def checkPlant(self, target_plant, i):
         zombie_len = len(self.zombie_groups[i])
         # 不用检查攻击状况的情况
-        if target_plant.name in c.PLANT_NON_CHECK_ATTACK_STATE:
+        if not target_plant.attack_check:
             pass
         elif target_plant.name == c.THREEPEASHOOTER:
             if target_plant.state == c.IDLE:

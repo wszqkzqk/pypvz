@@ -421,21 +421,9 @@ WATER_PLANTS = {
                 TANGLEKLEP,
                 }
 
-# 不用使用通用方法检验攻击状态的植物
-PLANT_NON_CHECK_ATTACK_STATE = (    # 这里运用了集合运算
-                {# 单独指定攻击状态的植物
-                WALLNUTBOWLING,
-                # 没有攻击状态的植物
-                WALLNUT, TALLNUT,
-                TORCHWOOD, SUNFLOWER,
-                SUNSHROOM, COFFEEBEAN,
-                GRAVEBUSTER, LILYPAD,
-                HYPNOSHROOM, GARLIC,
-                PUMPKINHEAD, GIANTWALLNUT,
-                } |
-                # 非植物类
-                NON_PLANT_OBJECTS
-                )
+# 攻击状态检查类型
+CHECK_ATTACK_NEVER = 0
+CHECK_ATTACK_ALWAYS = 1
 
 # 范围爆炸植物，即灰烬植物与寒冰菇
 ASH_PLANTS_AND_ICESHROOM = {

@@ -247,6 +247,8 @@ class Plant(pg.sprite.Sprite):
         # 被铲子指向时间
         self.highlight_time = 0
 
+        self.attack_check = c.CHECK_ATTACK_ALWAYS
+
     def loadFrames(self, frames, name, scale=1, color=c.BLACK):
         frame_list = tool.GFX[name]
         if name in c.PLANT_RECT:
@@ -390,6 +392,7 @@ class SunFlower(Plant):
         Plant.__init__(self, x, y, c.SUNFLOWER, c.PLANT_HEALTH, None)
         self.sun_timer = 0
         self.sun_group = sun_group
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def idling(self):
         if self.sun_timer == 0:
@@ -515,6 +518,7 @@ class WallNut(Plant):
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def load_images(self):
         self.cracked1_frames = []
@@ -1111,6 +1115,7 @@ class HypnoShroom(Plant):
         Plant.__init__(self, x, y, c.HYPNOSHROOM, c.PLANT_HEALTH, None)
         self.animate_interval = 80
         self.zombie_to_hypno = None
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -1145,6 +1150,7 @@ class WallNutBowling(Plant):
         self.vel_x = random.randint(12, 15)
         self.vel_y = 0
         self.disable_hit_y = -1
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def loadImages(self, name, scale):
         self.loadFrames(self.frames, name, 1)
@@ -1277,10 +1283,12 @@ class RedWallNutBowling(Plant):
 class LilyPad(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.LILYPAD, c.PLANT_HEALTH, None)
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
 class TorchWood(Plant):
     def __init__(self, x, y, bullet_group):
         Plant.__init__(self, x, y, c.TORCHWOOD, c.PLANT_HEALTH, bullet_group)
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def idling(self):
         for i in self.bullet_group:
@@ -1367,6 +1375,7 @@ class CoffeeBean(Plant):
         self.map_content = map_content
         self.map = map
         self.map_x = map_x
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def animation(self):
         if (self.current_time - self.animate_timer) > self.animate_interval:
@@ -1451,6 +1460,7 @@ class TallNut(Plant):
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def load_images(self):
         self.cracked1_frames = []
@@ -1604,6 +1614,7 @@ class Hole(Plant):
         Plant.__init__(self, x, y, c.HOLE, c.INF, None)
         self.timer = 0
         self.shallow = False
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def loadImages(self, name, scale):
         self.idle_frames = []
@@ -1658,6 +1669,7 @@ class Grave(Plant):
         self.frame_index = random.randint(0, self.frame_num - 1)
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def animation(self):
         pass
@@ -1670,6 +1682,7 @@ class GraveBuster(Plant):
         self.map_x = map_x
         self.plant_group = plant_group
         self.animate_interval = 100
+        self.attack_check = c.CHECK_ATTACK_NEVER
         # 播放吞噬音效
         c.SOUND_GRAVEBUSTER_CHOMP.play()
 
@@ -1778,6 +1791,7 @@ class IceFrozenPlot(Plant):
     def __init__(self, x, y):
         Plant.__init__(self, x, y, c.ICEFROZENPLOT, c.INF, None)
         self.timer = 0
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def idling(self):
         if self.timer == 0:
@@ -1818,6 +1832,7 @@ class PumpkinHead(Plant):
         self.cracked1 = False
         self.cracked2 = False
         self.animate_interval = 160
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def load_images(self):
         self.cracked1_frames = []
@@ -1847,6 +1862,7 @@ class GiantWallNut(Plant):
         self.move_timer = 0
         self.move_interval = 70
         self.vel_x = random.randint(15, 18)
+        self.attack_check = c.CHECK_ATTACK_NEVER
 
     def idling(self):
         if self.move_timer == 0:
