@@ -6,6 +6,9 @@ concurrency:
 
 on:
   pull_request:
+  push:
+    branches:
+      - dev
 
 jobs:
   windows:
@@ -50,7 +53,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          tag: Current.Version.Built.with.Pyinstaller
+          tag: Dev.Version.Built.with.Pyinstaller
           artifacts: ./out/*pyinstaller*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -78,12 +81,13 @@ jobs:
                   -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-windows-x64.exe `
                   pypvz.py
 
-      # artifact压缩包处上传包含exe和运行环境的文件夹
-      - name: "Upload binaries"
-        uses: actions/upload-artifact@v2
+      - name: Release the version built by nuitka
+        uses: ncipollo/release-action@v1
         with:
-          name: artifact-windows-python-${{ matrix.python_version }}
-          path: ./out/*.dist
+          allowUpdates: true
+          tag: Dev
+          artifacts: ./out/*nuitka*.exe
+          token: ${{ secrets.GITHUB_TOKEN }}
 
 
   #linux:
