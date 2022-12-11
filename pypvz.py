@@ -5,6 +5,7 @@ import os
 import pygame as pg
 from logging.handlers import RotatingFileHandler
 # 由于在后续本地模块中存在对pygame的调用，在此处必须完成pygame的初始化
+os.environ["SDL_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR"]="0" # 设置临时环境变量以避免Linux下禁用x11合成器
 pg.init()
 
 from source import tool
