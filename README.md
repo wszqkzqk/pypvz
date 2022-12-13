@@ -74,6 +74,10 @@ python pypvz.py
 - 均仅支持64位操作系统
 - 不依赖python、pygame等外部环境，开箱即用
 
+### 使用Linux可执行文件
+
+由于Linux几乎都标配了Python环境，因此本程序不太重视Linux下可执行的单文件的维护，因此没有手动构建版，只能下载自动构建的软件包。可以在仓库的[`Releases`](https://github.com/wszqkzqk/pypvz/releases)页面中[下载最新版（点击跳转）](https://github.com/wszqkzqk/pypvz/releases/latest)。
+
 ## 方法
 
 * 使用鼠标收集阳光,种植植物
