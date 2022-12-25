@@ -145,23 +145,23 @@ DAYTIME_BACKGROUNDS = {
                 BACKGROUND_DAY, BACKGROUND_POOL,
                 BACKGROUND_ROOF, BACKGROUND_WALLNUTBOWLING,
                 BACKGROUND_SINGLE, BACKGROUND_TRIPLE,
-                }
+}
 
 # 带有泳池的场地
 POOL_EQUIPPED_BACKGROUNDS = {
                 BACKGROUND_POOL, BACKGROUND_FOG,
-                }
+}
 
 # 屋顶上的场地
 ON_ROOF_BACKGROUNDS = {
                 BACKGROUND_ROOF, BACKGROUND_ROOFNIGHT,
-                }
+}
 
 # BACKGROUND_DAY场地的变体
 BACKGROUND_DAY_LIKE_BACKGROUNDS = {
                 BACKGROUND_DAY, BACKGROUND_SINGLE,
                 BACKGROUND_TRIPLE,
-                }
+}
 
 # 夜晚地图的墓碑数量等级
 GRADE_GRAVES = "grade_graves"
@@ -236,7 +236,7 @@ NON_PLANT_OBJECTS = {
                 HOLE := "Hole",
                 ICEFROZENPLOT := "IceFrozenPlot",
                 GRAVE := "Grave",
-                }
+}
 
 # 植物相关信息
 PLANT_IMAGE_RECT = "plant_image_rect"
@@ -373,7 +373,7 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_GIANTWALLNUT := "card_giantwallnut",
                 0,
                 0),
-            )
+)
 
 # 卡片中的植物名称与索引序号的对应关系，指定名称以得到索引值
 PLANT_CARD_INDEX = {item[PLANT_NAME_INDEX]: index for (index, item) in enumerate(PLANT_CARD_INFO)}
@@ -391,7 +391,7 @@ SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING = {
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 JALAPENO, DOOMSHROOM,
                 POTATOMINE,
-                }
+}
 
 # 所有可能不用与僵尸进行碰撞检测的对象
 CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 这里运用了集合运算
@@ -404,7 +404,7 @@ CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 这里运用了集合运算
                 NON_PLANT_OBJECTS |
                 # 地刺类
                 {SPIKEWEED, }
-                )
+)
 
 # 死亡时不触发音效的对象
 PLANT_DIE_SOUND_EXCEPTIONS = {
@@ -413,13 +413,13 @@ PLANT_DIE_SOUND_EXCEPTIONS = {
                 GRAVE, JALAPENO,
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 GIANTWALLNUT,
-                }
+}
 
 # 直接水生植物
 WATER_PLANTS = {
                 LILYPAD, SEASHROOM,
                 TANGLEKLEP,
-                }
+}
 
 # 攻击状态检查类型
 CHECK_ATTACK_NEVER = 0
@@ -430,7 +430,7 @@ ASH_PLANTS_AND_ICESHROOM = {
                 REDWALLNUTBOWLING, CHERRYBOMB,
                 JALAPENO, DOOMSHROOM,
                 ICESHROOM,
-                }
+}
 
 # 白天要睡觉的植物
 CAN_SLEEP_PLANTS = {
@@ -500,7 +500,8 @@ STAR_DOWNWARD = "downward"  # 向下
 # 有爆炸图片的子弹
 BULLET_INDEPENDENT_BOOM_IMG = { BULLET_PEA, BULLET_PEA_ICE,
                                 BULLET_MUSHROOM, BULLET_SEASHROOM,
-                                BULLET_STAR, }
+                                BULLET_STAR, 
+}
 
 # 僵尸信息
 ZOMBIE_IMAGE_RECT = "zombie_image_rect"
@@ -572,20 +573,20 @@ CREATE_ZOMBIE_DICT = {  # 生成僵尸:(级别, 权重)
                 POLE_VAULTING_ZOMBIE:           (2, 2000),
                 ZOMBONI:                        (7, 2000),
                 SNORKELZOMBIE:                  (3, 2000),
-                }
+}
 
 # 记录陆生僵尸的水生变种
 CONVERT_ZOMBIE_IN_POOL = {
                 NORMAL_ZOMBIE:      DUCKY_TUBE_ZOMBIE,
                 CONEHEAD_ZOMBIE:    CONEHEAD_DUCKY_TUBE_ZOMBIE,
                 BUCKETHEAD_ZOMBIE:  BUCKETHEAD_DUCKY_TUBE_ZOMBIE,
-                }
+}
 
 # 水上僵尸集合
 WATER_ZOMBIE = {
                 DUCKY_TUBE_ZOMBIE, CONEHEAD_DUCKY_TUBE_ZOMBIE,
                 BUCKETHEAD_DUCKY_TUBE_ZOMBIE, SNORKELZOMBIE,
-                }
+}
 
 
 # 状态类型
@@ -656,7 +657,7 @@ for _part1 in (DUCKY_TUBE_ZOMBIE, CONEHEAD_DUCKY_TUBE_ZOMBIE, BUCKETHEAD_DUCKY_T
 # 音效
 def _getSound(filename):
     return pg.mixer.Sound(os.path.join(os.path.dirname(os.path.dirname(__file__)) ,"resources", "sound", filename))
-# 所有音效的元组，用一波海象算子表达（>= python 3.8），免得要维护两个
+# 所有音效的元组，用一波海象算子表达，免得要维护两个
 SOUNDS = (  # 程序交互等
             SOUND_TAPPING_CARD              := _getSound("tap.ogg"),
             SOUND_HELP_SCREEN               := _getSound("helpScreen.ogg"),
@@ -705,7 +706,7 @@ SOUNDS = (  # 程序交互等
             SOUND_SCREAM                    := _getSound("scream.ogg"),
             SOUND_CANNOT_CHOOSE_WARNING     := _getSound("cannotChooseWarning.ogg"),
             SOUND_FINAL_FANFARE             := _getSound("finalfanfare.ogg"),
-            )
+)
 
 # 记录本地存储文件初始值
 INIT_USERDATA = {   
@@ -715,7 +716,7 @@ INIT_USERDATA = {
                 LITTLEGAME_COMPLETIONS: 0,
                 GAME_RATE:              1,
                 SOUND_VOLUME:           1,
-                }
+}
 
 # 无穷大常量
 INF = float("inf")  # python传递字符串性能较低，故在这里对inf声明一次，以后仅需调用即可，虽然真正的用处是可以自动补全（
