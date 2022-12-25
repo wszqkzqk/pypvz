@@ -200,6 +200,39 @@ class Map():
         return pos
 
 
+class MapData():
+    def __init__(   self,
+                    bg_type:int,
+                    included_zombies:tuple[str],
+                    game_title:str,
+                    flags:int,
+                    init_sun:int = 50,
+                    has_shovel:bool = True,
+                    ) -> None:
+        self.is_classic = False
+        self.bg_type = bg_type
+        self.included_zombies = included_zombies
+        self.game_title = game_title
+        self.flags = flags
+        self.init_sun = init_sun
+        self.has_shovel = has_shovel
+
+    @classmethod
+    def classic(    self,
+                    bg_type:int,
+                    zombie_list:tuple[dict],
+                    game_title:str,
+                    flags:int,
+                    init_sun:int = 50,
+                    has_shovel:bool = True,
+                    ) -> None:
+        self.is_classic = True
+        self.bg_type = bg_type
+        self.zombie_list = zombie_list
+        self.game_title = game_title
+        self.flags = flags
+        self.init_sun = init_sun
+        self.has_shovel = has_shovel
 
 # 保存具体关卡地图信息常数
 # 冒险模式地图
@@ -211,7 +244,7 @@ LEVEL_MAP_DATA = (
     c.INIT_SUN_NAME:    5000,
     c.SHOVEL:           1,
     c.SPAWN_ZOMBIES:    c.SPAWN_ZOMBIES_LIST,
-    c.ZOMBIE_LIST:[
+    c.ZOMBIE_LIST:(
         {"time":0, "map_y":5, "name":"Zomboni"},
         {"time":1000, "map_y":4, "name":"ScreenDoorZombie"},
         {"time":2000, "map_y":4, "name":"ScreenDoorZombie"},
@@ -227,7 +260,7 @@ LEVEL_MAP_DATA = (
         {"time":0, "map_y":3, "name":"ConeheadDuckyTubeZombie"},
         {"time":0, "map_y":2, "name":"SnorkelZombie"},
         {"time":90000, "map_y":2, "name":"ConeheadDuckyTubeZombie"}
-    ]
+    )
 },
 # 第1关：单行草皮
 {
