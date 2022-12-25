@@ -22,14 +22,14 @@
 * 夜晚模式支持墓碑以及从墓碑生成僵尸
 * 含有泳池的模式支持在最后一波时从泳池中自动冒出僵尸
 * 支持保存进度
-  * Windows下默认进度文件的保存路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`
-  * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/userdata.json`
+  * Windows下默认进度文件的保存路径为`~\AppData\Roaming\pypvz\userdata.json`
+  * 其他操作系统为`~/.config/pypvz/userdata.json`
   * 存档为JSON文件，如果出现因存档损坏而造成程序无法启动，可以手动编辑修复或者删除该文件重试
     * 0.8.12.0版本后理论上不可能因为存档损坏而无法启动，如果有，请在[issues](https://github.com/wszqkzqk/pypvz/issues)中报告bug
       * 仍然有可能因为升级后变量名不同而丢失存档的进度信息，这种情况手动编辑恢复即可
 * 支持错误日志记录
-  * Windows下默认日志文件的保存路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\run.log`
-  * 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/run.log`
+  * Windows下默认日志文件的保存路径为`~\AppData\Roaming\pypvz\run.log`
+  * 其他操作系统为`~/.config/pypvz/run.log`
 * 支持自定义游戏速度倍率
   * 保存在游戏存档文件中，可以通过修改`game rate`值更改速度倍率
 * 游戏完成成就显示
@@ -81,7 +81,7 @@ python pypvz.py
 ## 方法
 
 * 使用鼠标收集阳光,种植植物
-* 对于已经存在存档的用户，可以在`~\AppData\Roaming\wszqkzqk.dev\pypvz\userdata.json`（Windows）或`~/.config/wszqkzqk.dev/pypvz/userdata.json`（其他操作系统）中修改当前关卡：
+* 对于已经存在存档的用户，可以在`~\AppData\Roaming\pypvz\userdata.json`（Windows）或`~/.config/pypvz/userdata.json`（其他操作系统）中修改当前关卡：
   * 冒险模式：
     * 白昼模式——单行草皮：1
     * 白昼模式——三行草皮：2
@@ -324,5 +324,5 @@ pyinstaller -F pypvz.py `
 对于闪退情况，Linux用户与Windows下的python源代码运行用户可以直接在终端中复制出崩溃日志进行反馈。
 
 Windows单文件封装版本无法通过终端显示日志，需要在日志文件中寻找崩溃原因
-* Windows默认日志文件路径为`~\AppData\Roaming\wszqkzqk.dev\pypvz\run.log`
-* 其他操作系统为`~/.config/wszqkzqk.dev/pypvz/run.log`，但一般可以在终端中显示时用终端中的输出即可
+* Windows默认日志文件路径为`~\AppData\Roaming\pypvz\run.log`
+* 其他操作系统为`~/.config/pypvz/run.log`，但一般可以在终端中显示时用终端中的输出即可
