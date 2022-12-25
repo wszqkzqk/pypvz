@@ -199,8 +199,6 @@ class Map():
             pos = self.getMapGridPos(map_x, map_y)
         return pos
 
-
-
 # 保存具体关卡地图信息常数
 # 冒险模式地图
 LEVEL_MAP_DATA = (
@@ -211,7 +209,7 @@ LEVEL_MAP_DATA = (
     c.INIT_SUN_NAME:    5000,
     c.SHOVEL:           1,
     c.SPAWN_ZOMBIES:    c.SPAWN_ZOMBIES_LIST,
-    c.ZOMBIE_LIST:[
+    c.ZOMBIE_LIST:(
         {"time":0, "map_y":5, "name":"Zomboni"},
         {"time":1000, "map_y":4, "name":"ScreenDoorZombie"},
         {"time":2000, "map_y":4, "name":"ScreenDoorZombie"},
@@ -227,7 +225,7 @@ LEVEL_MAP_DATA = (
         {"time":0, "map_y":3, "name":"ConeheadDuckyTubeZombie"},
         {"time":0, "map_y":2, "name":"SnorkelZombie"},
         {"time":90000, "map_y":2, "name":"ConeheadDuckyTubeZombie"}
-    ]
+    )
 },
 # 第1关：单行草皮
 {
