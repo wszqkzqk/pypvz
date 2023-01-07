@@ -8,7 +8,7 @@ class Menu(tool.State):
     def __init__(self):
         tool.State.__init__(self)
     
-    def startup(self, current_time, persist):
+    def startup(self, current_time:int, persist):
         self.next = c.LEVEL
         self.persist = persist
         self.game_info = persist
@@ -88,7 +88,7 @@ class Menu(tool.State):
         self.adventure_clicked = False
         self.option_button_clicked = False
 
-    def checkHilight(self, x, y):
+    def checkHilight(self, x:int, y:int):
         # 高亮冒险模式按钮
         if self.inArea(self.adventure_rect, x, y):
             self.adventure_highlight_time = self.current_time
@@ -112,7 +112,7 @@ class Menu(tool.State):
         self.littleGame_image = self.chooseHilightImage(self.littleGame_highlight_time, self.littleGame_frames)
         self.help_image = self.chooseHilightImage(self.help_hilight_time, self.help_frames)
 
-    def chooseHilightImage(self, hilightTime, frames):
+    def chooseHilightImage(self, hilightTime:int, frames):
         if (self.current_time - hilightTime) < 80:
             index= 1
         else:
@@ -206,7 +206,7 @@ class Menu(tool.State):
             self.sunflower_trophy_rect.y = 280
             self.sunflower_trophy_show_info_time = 0
 
-    def checkSunflowerTrophyInfo(self, surface, x, y):
+    def checkSunflowerTrophyInfo(self, surface:pg.Surface, x:int, y:int):
         if self.inArea(self.sunflower_trophy_rect, x, y):
             self.sunflower_trophy_show_info_time = self.current_time
         if (self.current_time - self.sunflower_trophy_show_info_time) < 80:
@@ -228,7 +228,7 @@ class Menu(tool.State):
         # 播放点击音效
         c.SOUND_BUTTON_CLICK.play()
 
-    def showCurrentVolumeImage(self, surface):
+    def showCurrentVolumeImage(self, surface:pg.Surface):
         # 由于音量可变，因此这一内容不能在一开始就结束加载，而应当不断刷新不断显示
         font = pg.font.Font(c.FONT_PATH, 30)
         volume_tips = font.render(f"音量：{round(self.game_info[c.SOUND_VOLUME]*100):3}%", True, c.LIGHTGRAY)
@@ -237,7 +237,7 @@ class Menu(tool.State):
         volume_tips_rect.y = 247
         surface.blit(volume_tips, volume_tips_rect)
 
-    def update(self, surface, current_time, mouse_pos, mouse_click):
+    def update(self, surface:pg.Surface, current_time:int, mouse_pos:list, mouse_click):
         self.current_time = self.game_info[c.CURRENT_TIME] = current_time
         
         surface.blit(self.bg_image, self.bg_rect)

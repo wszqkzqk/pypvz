@@ -3,7 +3,7 @@ from .. import constants as c
 
 # 记录植物种植情况的地图管理工具
 class Map():
-    def __init__(self, background_type):
+    def __init__(self, background_type:int):
         self.background_type = background_type
         # 注意：从0开始编号
         if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
@@ -55,7 +55,7 @@ class Map():
                         for y in range(self.height)
                         ]
 
-    def isValid(self, map_x, map_y):
+    def isValid(self, map_x:int, map_y:int) -> bool:
         if ((0 <= map_x < self.width)
         and (0 <= map_y < self.height)):
             return True
@@ -64,13 +64,13 @@ class Map():
     # 地图单元格状态
     # 注意是可变对象，不能直接引用
     # 由于同一格显然不可能种两个相同的植物，所以用集合
-    def initMapGrid(self, plot_type):
+    def initMapGrid(self, plot_type:str) -> set:
         return {c.MAP_PLANT:set(), c.MAP_SLEEP:False, c.MAP_PLOT_TYPE:plot_type}
 
     # 判断位置是否可用
     # 暂时没有写紫卡植物的判断方法
     # 由于紫卡植物需要移除以前的植物，所以可用另外定义一个函数
-    def isAvailable(self, map_x, map_y, plant_name):
+    def isAvailable(self, map_x:int, map_y:int, plant_name:str) -> bool:
         # 咖啡豆和墓碑吞噬者的判别最为特殊
         if plant_name == c.COFFEEBEAN:
             if (self.map[map_y][map_x][c.MAP_SLEEP]
@@ -147,7 +147,7 @@ class Map():
         else:   # 不可种植区域
             return False
     
-    def getMapIndex(self, x, y):
+    def getMapIndex(self, x:int, y:int) -> tuple[int, int]:
         if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
             x -= c.MAP_POOL_OFFSET_X
             y -= c.MAP_POOL_OFFSET_Y
@@ -166,7 +166,7 @@ class Map():
             y -= c.MAP_OFFSET_Y
             return (x // c.GRID_X_SIZE, y // c.GRID_Y_SIZE)
     
-    def getMapGridPos(self, map_x, map_y):
+    def getMapGridPos(self, map_x:int, map_y:int) -> tuple[int, int]:
         if self.background_type in c.POOL_EQUIPPED_BACKGROUNDS:
             return (map_x * c.GRID_POOL_X_SIZE + c.GRID_POOL_X_SIZE//2 + c.MAP_POOL_OFFSET_X,
                     map_y * c.GRID_POOL_Y_SIZE + c.GRID_POOL_Y_SIZE//5 * 3 + c.MAP_POOL_OFFSET_Y)
@@ -177,22 +177,22 @@ class Map():
             return (map_x * c.GRID_X_SIZE + c.GRID_X_SIZE//2 + c.MAP_OFFSET_X,
                     map_y * c.GRID_Y_SIZE + c.GRID_Y_SIZE//5 * 3 + c.MAP_OFFSET_Y)
     
-    def setMapGridType(self, map_x, map_y, plot_type):
+    def setMapGridType(self, map_x:int, map_y:int, plot_type:str):
         self.map[map_y][map_x][c.MAP_PLOT_TYPE] = plot_type
 
-    def addMapPlant(self, map_x, map_y, plant_name, sleep=False):
+    def addMapPlant(self, map_x:int, map_y:int, plant_name:int, sleep:bool=False):
         self.map[map_y][map_x][c.MAP_PLANT].add(plant_name)
         self.map[map_y][map_x][c.MAP_SLEEP] = sleep
     
-    def removeMapPlant(self, map_x, map_y, plant_name):
+    def removeMapPlant(self, map_x:int, map_y:int, plant_name:str):
         self.map[map_y][map_x][c.MAP_PLANT].discard(plant_name)
 
-    def getRandomMapIndex(self):
+    def getRandomMapIndex(self) -> tuple[int, int]:
         map_x = random.randint(0, self.width-1)
         map_y = random.randint(0, self.height-1)
         return (map_x, map_y)
 
-    def checkPlantToSeed(self, x, y, plant_name):
+    def checkPlantToSeed(self, x:int, y:int, plant_name:str) -> tuple[int, int]:
         pos = None
         map_x, map_y = self.getMapIndex(x, y)
         if self.isValid(map_x, map_y) and self.isAvailable(map_x, map_y, plant_name):

@@ -5,7 +5,7 @@ from .. import constants as c
 
 
 class Car(pg.sprite.Sprite):
-    def __init__(self, x, y, map_y):
+    def __init__(self, x:int, y:int, map_y:int):
         pg.sprite.Sprite.__init__(self)
 
         rect = tool.GFX[c.CAR].get_rect()
@@ -19,7 +19,7 @@ class Car(pg.sprite.Sprite):
         self.state = c.IDLE
         self.dead = False
 
-    def update(self, game_info):
+    def update(self, game_info:dict):
         self.current_time = game_info[c.CURRENT_TIME]
         if self.state == c.WALK:
             self.rect.x += 5
@@ -37,9 +37,9 @@ class Car(pg.sprite.Sprite):
 
 # 豌豆及孢子类普通子弹
 class Bullet(pg.sprite.Sprite):
-    def __init__(   self, x, start_y, dest_y, name, damage,
-                    effect=None, passed_torchwood_x=None,
-                    damage_type=c.ZOMBIE_DEAFULT_DAMAGE):
+    def __init__(   self, x:int, start_y:int, dest_y:int, name:str, damage:int,
+                    effect:str=None, passed_torchwood_x:int=None,
+                    damage_type:str=c.ZOMBIE_DEAFULT_DAMAGE):
         pg.sprite.Sprite.__init__(self)
 
         self.name = name

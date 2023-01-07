@@ -18,7 +18,7 @@ class State():
 
     # 当从其他状态进入这个状态时，需要进行的初始化操作
     @abstractmethod
-    def startup(self, current_time, persist):
+    def startup(self, current_time:int, persist:dict):
         # 前面加了@abstractmethod表示抽象基类中必须要重新定义的method（method是对象和函数的结合）
         pass
     # 当从这个状态退出时，需要进行的清除操作
@@ -27,12 +27,12 @@ class State():
         return self.persist
     # 在这个状态运行时进行的更新操作
     @abstractmethod
-    def update(self, surface, keys, current_time):
+    def update(self, surface:pg.Surface, keys, current_time:int):
         # 前面加了@abstractmethod表示抽象基类中必须要重新定义的method
         pass
 
     # 工具：范围判断函数，用于判断点击
-    def inArea(self, rect, x, y):
+    def inArea(self, rect:pg.Rect, x:int, y:int):
         if (rect.x <= x <= rect.right and
             rect.y <= y <= rect.bottom):
             return True
@@ -101,7 +101,7 @@ class Control():
             f.write(savedata)
         self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
 
-    def setup_states(self, state_dict, start_state):
+    def setup_states(self, state_dict:dict, start_state):
         self.state_dict = state_dict
         self.state_name = start_state
         self.state = self.state_dict[self.state_name]
@@ -155,7 +155,8 @@ class Control():
             pg.display.update()
             self.clock.tick(self.fps)
 
-def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
+def get_image(  sheet:pg.Surface, x:int, y:int, width:int, height:int,
+                colorkey:tuple[int]=c.BLACK, scale:int=1) -> pg.Surface:
         # 不保留alpha通道的图片导入
         image = pg.Surface([width, height])
         rect = image.get_rect()
@@ -168,19 +169,21 @@ def get_image(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
                                     int(rect.height*scale)))
         return image
 
-def get_image_alpha(sheet, x, y, width, height, colorkey=c.BLACK, scale=1):
-        # 保留alpha通道的图片导入
-        image = pg.Surface([width, height], SRCALPHA)
-        rect = image.get_rect()
+def get_image_alpha(sheet:pg.Surface, x:int, y:int, width:int, height:int,
+                    colorkey:tuple[int]=c.BLACK, scale:int=1) -> pg.Surface:
+    # 保留alpha通道的图片导入
+    image = pg.Surface([width, height], SRCALPHA)
+    rect = image.get_rect()
 
-        image.blit(sheet, (0, 0), (x, y, width, height))
-        image.set_colorkey(colorkey)
-        image = pg.transform.scale(image,
-                                   (int(rect.width*scale),
-                                    int(rect.height*scale)))
-        return image  
+    image.blit(sheet, (0, 0), (x, y, width, height))
+    image.set_colorkey(colorkey)
+    image = pg.transform.scale(image,
+                                (int(rect.width*scale),
+                                int(rect.height*scale)))
+    return image  
         
-def load_image_frames(directory, image_name, colorkey, accept):
+def load_image_frames(  directory:str, image_name:str,
+                        colorkey:tuple[int], accept:tuple[str]) -> list[pg.Surface]:
     frame_list = []
     tmp = {}
     # image_name is "Peashooter", pic name is "Peashooter_1", get the index 1
@@ -204,7 +207,8 @@ def load_image_frames(directory, image_name, colorkey, accept):
     return frame_list
 
 # colorkeys 是设置图像中的某个颜色值为透明,这里用来消除白边
-def load_all_gfx(directory, colorkey=c.WHITE, accept=(".png", ".jpg", ".bmp", ".gif", ".webp")):
+def load_all_gfx(   directory:str, colorkey:tuple[int]=c.WHITE,
+                    accept:tuple[str]=(".png", ".jpg", ".bmp", ".gif", ".webp")) -> dict[str:pg.Surface]:
     graphics = {}
     for name1 in os.listdir(directory):
         # subfolders under the folder resources\graphics
