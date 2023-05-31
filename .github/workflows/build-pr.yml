@@ -15,7 +15,6 @@ jobs:
       matrix:
         python_version:
             - "3.11"
-            - "3.10"
     name: Windows Python ${{ matrix.python_version }}
     steps:
       - uses: actions/checkout@v2
@@ -75,7 +74,7 @@ jobs:
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll `
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll `
                   --windows-disable-console `
-                  -o ./out/pypvz-with-python${{ matrix.python_version }}-nuitka-windows-x64.exe `
+                  -o pypvz-with-python${{ matrix.python_version }}-nuitka-windows-x64.exe `
                   pypvz.py
 
       - name: Release the version built by nuitka
@@ -83,7 +82,7 @@ jobs:
         with:
           allowUpdates: true
           tag: Dev
-          artifacts: ./out/*nuitka*.exe
+          artifacts: ./*nuitka*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
 
 
@@ -93,7 +92,6 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-            - "3.10"
             - "3.11"
     name: Ubuntu Python ${{ matrix.python_version }}
     steps:
