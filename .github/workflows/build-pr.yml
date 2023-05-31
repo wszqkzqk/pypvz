@@ -70,8 +70,6 @@ jobs:
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libogg-0.dll=libogg-0.dll `
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopus-0.dll=libopus-0.dll `
                   --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll `
-                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll `
-                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll `
                   --include-data-dir=resources=resources `
                   --windows-disable-console `
                   -o pypvz-with-python${{ matrix.python_version }}-nuitka-windows-x64.exe `
