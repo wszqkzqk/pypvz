@@ -67,6 +67,10 @@ jobs:
                   --show-memory `
                   --output-dir=out `
                   --windows-icon-from-ico=pypvz.ico `
+                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libogg-0.dll=libogg-0.dll `
+                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopus-0.dll=libopus-0.dll `
+                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll `
+                  --include-data-file=c:\hostedtoolcache\windows\python\${{ matrix.python_version }}*\x64\lib\site-packages\pygame\libjpeg-9.dll=libjpeg-9.dll `
                   --include-data-dir=resources=resources `
                   --windows-disable-console `
                   -o pypvz-with-python${{ matrix.python_version }}-nuitka-windows-x64.exe `
