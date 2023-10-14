@@ -1134,8 +1134,8 @@ class Zomboni(Zombie):
 class SnorkelZombie(Zombie):
     def __init__(self, x, y, head_group):
         Zombie.__init__(self, x, y, c.SNORKELZOMBIE, can_swim=True)
-        self.speed = 1.175
-        self.walk_animate_interval = 60
+        self.speed = 1.6
+        self.walk_animate_interval = 50
         self.canSetAttack = True
 
     def loadImages(self):
@@ -1190,16 +1190,19 @@ class SnorkelZombie(Zombie):
                 if not self.swimming:
                     self.swimming = True
                     self.changeFrames(self.jump_frames)
+                    self.speed = 1.175
                     # 播放入水音效
                     c.SOUND_ZOMBIE_ENTERING_WATER.play()
             # 已经接近家门口并且上岸
             else:
                 if self.swimming:
                     self.changeFrames(self.walk_frames)
+                    self.speed = 1.6
                     self.swimming = False
         # 被魅惑时走到岸上需要起立
         elif self.is_hypno and (self.rect.right > c.MAP_POOL_FRONT_X + 55):   # 常数拟合暂时缺乏检验
             if self.swimming:
+                self.speed = 1.6
                 self.changeFrames(self.walk_frames)
             self.swimming = False
         if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
@@ -1224,9 +1227,9 @@ class SnorkelZombie(Zombie):
                 if self.state == c.DIE:
                     self.kill()
                     return
-                elif (self.frames == self.jump_frames):
+                elif self.frames == self.jump_frames:
                     self.changeFrames(self.swim_frames)
-                elif (self.frames == self.sink_frames):
+                elif self.frames == self.sink_frames:
                     self.changeFrames(self.swim_frames)
                     # 还需要改回原来的可进入攻击状态的设定
                     self.canSetAttack = True
