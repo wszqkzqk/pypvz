@@ -286,6 +286,9 @@ class Panel():
             elif (plant_name in c.CAN_SLEEP_PLANTS
             and self.background_type in c.DAYTIME_BACKGROUNDS):
                 not_recommend = c.REASON_WILL_SLEEP
+            elif (plant_name == c.COFFEEBEAN
+            and self.background_type not in c.DAYTIME_BACKGROUNDS):
+                not_recommend = c.REASON_OTHER
             # 还有屋顶场景，以及其他植物没有实现的植物没有写进来
             else:
                 not_recommend = 0
