@@ -199,6 +199,205 @@ class Map():
             pos = self.getMapGridPos(map_x, map_y)
         return pos
 
+
+class MapData():
+    def __init__(   self,
+                    bg_type:int,
+                    included_zombies:tuple[str],
+                    game_title:str,
+                    flags:int,
+                    init_sun:int = 50,
+                    has_shovel:bool = True,
+                    grave_grade:int = 1,
+                    inevitable_zombie_dict:dict={}, # 第几波:僵尸类型元组 表示第几波必然出的僵尸
+                    ) -> None:
+        self.is_classic = False
+        self.bg_type = bg_type
+        self.included_zombies = included_zombies
+        self.game_title = game_title
+        self.flags = flags
+        self.init_sun = init_sun
+        self.has_shovel = has_shovel
+        self.grave_grade = grave_grade
+        self.inevitable_zombie_dict = inevitable_zombie_dict
+
+    @classmethod
+    def classic(    self,
+                    bg_type:int,
+                    zombie_list:tuple[dict],
+                    game_title:str,
+                    init_sun:int = 50,
+                    has_shovel:bool = True,
+                    ) -> None:
+        self.is_classic = True
+        self.bg_type = bg_type
+        self.zombie_list = zombie_list
+        self.game_title = game_title
+        self.init_sun = init_sun
+        self.has_shovel = has_shovel
+
+    @classmethod
+    def littleGame( self,
+                    bg_type:int,
+                    included_zombies:tuple[str],
+                    game_title:str,
+                    flags:int,
+                    init_sun:int = 50,
+                    has_shovel:bool = True,
+                    grave_grade:int = 1,
+                    inevitable_zombie_dict:dict={}, # 第几波:僵尸类型元组 表示第几波必然出的僵尸
+                    ):
+        self.is_classic = False
+        self.bg_type = bg_type
+        self.included_zombies = included_zombies
+        self.game_title = game_title
+        self.flags = flags
+        self.init_sun = init_sun
+        self.has_shovel = has_shovel
+        self.grave_grade = grave_grade
+        self.inevitable_zombie_dict = inevitable_zombie_dict
+
+# 保存具体关卡地图信息常数
+# 冒险模式地图
+LEVEL_MAP_DATA = (
+# 第0关：测试模式地图
+LEVEL0 := MapData.classic (
+    bg_type=2,
+    zombie_list=(
+        {"time":0, "map_y":5, "name":"Zomboni"},
+        {"time":1000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":2000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":3100, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":4500, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":5000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":6000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":7000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":8000, "map_y":4, "name":"ScreenDoorZombie"},
+        {"time":0, "map_y":1, "name":"NewspaperZombie"},
+        {"time":0, "map_y":0, "name":"PoleVaultingZombie"},
+        {"time":6000, "map_y":0, "name":"FootballZombie"},
+        {"time":0, "map_y":3, "name":"ConeheadDuckyTubeZombie"},
+        {"time":0, "map_y":2, "name":"SnorkelZombie"},
+        {"time":90000, "map_y":2, "name":"ConeheadDuckyTubeZombie"}
+    ),
+    game_title="隐藏测试关卡"
+),
+# 第1关：单行草皮
+LEVEL1 := MapData(
+    bg_type=7,
+    included_zombies=(c.NORMAL_ZOMBIE,),
+    game_title="白天 1-1",
+    flags=1,
+    init_sun=150
+),
+# 第2关：三行草皮
+LEVEL2 := MapData(
+    bg_type=8,
+    included_zombies=(c.NORMAL_ZOMBIE,),
+    game_title="白天 1-2",
+    flags=1
+),
+# 第3关
+LEVEL3 := MapData(
+    bg_type=0,
+    included_zombies=(c.NORMAL_ZOMBIE,),
+    game_title="白天 1-3",
+    flags=2
+),
+# 第4关
+LEVEL4 := MapData(
+    bg_type=0,
+    included_zombies=(c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE, c.POLE_VAULTING_ZOMBIE),
+    game_title="白天 1-4",
+    flags=2
+),
+# 第5关 目前白天最后一关
+LEVEL5 := MapData(
+    bg_type=0,
+    included_zombies=(  c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                        c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    game_title="白天 1-5",
+    flags=3
+),
+# 第6关 目前夜晚第一关
+LEVEL6 := MapData(
+    bg_type=1,
+    included_zombies=(  c.NORMAL_ZOMBIE,
+                        c.NEWSPAPER_ZOMBIE),
+    game_title="黑夜 2-1",
+    flags=2
+),
+# 第7关
+LEVEL7 := MapData(
+    bg_type=1,
+    included_zombies=(  c.NORMAL_ZOMBIE,
+                        c.SCREEN_DOOR_ZOMBIE,),
+    game_title="黑夜 2-2",
+    flags=2,
+    grave_grade=2
+),
+# 第8关 目前为夜晚最后一关
+LEVEL8 := MapData(
+    bg_type=1,
+    included_zombies=(  c.NORMAL_ZOMBIE, c.NEWSPAPER_ZOMBIE,
+                        c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                        c.SCREEN_DOOR_ZOMBIE, c.FOOTBALL_ZOMBIE),
+    game_title="黑夜 2-3",
+    flags=3,
+    grave_grade=3,
+    inevitable_zombie_dict={# 这里改用python实现了以后，键不再用字符串，改用数字
+                            # 仍然要注意字典值是元组
+                            10: (c.NEWSPAPER_ZOMBIE,),
+                            20: (c.SCREEN_DOOR_ZOMBIE,),
+                            30: (c.FOOTBALL_ZOMBIE,),
+                            },
+),
+# 第9关 目前为泳池模式第一关
+LEVEL9 := MapData(
+    bg_type=2,
+    included_zombies=(  c.NORMAL_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                        c.CONEHEAD_ZOMBIE,),
+    game_title="泳池 3-1",
+    flags=2,
+),
+# 第10关
+LEVEL10 := MapData(
+    bg_type=2,
+    included_zombies=(  c.NORMAL_ZOMBIE, c.BUCKETHEAD_ZOMBIE,
+                        c.CONEHEAD_ZOMBIE, c.SNORKELZOMBIE),
+    game_title="泳池 3-2",
+    inevitable_zombie_dict={30: (c.SNORKELZOMBIE,)},
+    flags=3,
+),
+# 第11关
+LEVEL11 := MapData(
+    bg_type=2,
+    included_zombies=(c.NORMAL_ZOMBIE, c.ZOMBONI),
+    game_title="泳池 3-3",
+    inevitable_zombie_dict={30: (c.ZOMBONI,)},
+    flags=3,
+),
+# 第12关 目前为泳池最后一关
+LEVEL12 := MapData(
+    bg_type=2,
+    included_zombies=(  c.NORMAL_ZOMBIE, c.ZOMBONI,
+                        c.BUCKETHEAD_ZOMBIE,
+                        c.CONEHEAD_ZOMBIE, c.SNORKELZOMBIE),
+    game_title="泳池 3-4",
+    inevitable_zombie_dict={40: (c.ZOMBONI,)},
+    flags=4,
+),
+# 第13关 目前为浓雾第一关 尚未完善
+LEVEL12 := MapData(
+    bg_type=3,
+    included_zombies=(      c.NORMAL_ZOMBIE, c.NEWSPAPER_ZOMBIE,
+                            c.ZOMBONI, c.FOOTBALL_ZOMBIE,
+                            c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    game_title="浓雾 4-1",
+    flags=4,
+),
+)
+
 # 保存具体关卡地图信息常数
 # 冒险模式地图
 LEVEL_MAP_DATA = (
