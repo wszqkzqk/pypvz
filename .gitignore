@@ -4,6 +4,7 @@ test-build/
 release/
 # 忽略调试内容
 .vscode/
+.idea/
 __pycache__/
 */__pycache__/
 # 忽略测试文件
