@@ -4,8 +4,11 @@ test-build/
 release/
 # 忽略调试内容
 .vscode/
+# 忽略 Pycharm 项目文件
 .idea/
 __pycache__/
 */__pycache__/
 # 忽略测试文件
 test*.py
+# uv 管理的虚拟环境
+.venv

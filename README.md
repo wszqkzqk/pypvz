@@ -38,7 +38,17 @@
   * 光标移动到向日葵奖杯上是显示当前各个模式通关次数
 * 含有游戏帮助界面 QwQ
 
-## 环境要求
+## 环境安装
+
+建议使用 [uv](https://docs.astral.sh/uv/) 安装依赖：
+
+```bash
+git clone https://github.com/wszqkzqk/pypvz.git
+cd pypvz
+uv sync
+```
+
+或者参考：
 
 * `Python3` （建议 >= 3.10，最好使用最新版）
 * `Python-Pygame` （建议 >= 2.0，最好使用最新版）
