@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-            - "3.11"
+            - "3.12"
     name: Windows Python ${{ matrix.python_version }}
     steps:
       - uses: actions/checkout@v2
@@ -46,6 +46,7 @@ jobs:
                   -i ./pypvz.ico
 
       - name: Release the version built by pyinstaller
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -77,6 +78,7 @@ jobs:
                   pypvz.py
 
       - name: Release the version built by nuitka
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -91,7 +93,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-            - "3.11"
+            - "3.12"
     name: Ubuntu Python ${{ matrix.python_version }}
     steps:
       - name: 🛎️ Checkout
@@ -131,6 +133,7 @@ jobs:
                 pypvz.py
 
       - name: Release the version built by nuitka
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
