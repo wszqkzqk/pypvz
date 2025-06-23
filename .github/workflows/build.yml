@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-            - "3.11"
+            - "3.12"
     name: Windows Python ${{ matrix.python_version }}
     steps:
       - uses: actions/checkout@v2
@@ -93,7 +93,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-            - "3.11"
+            - "3.12"
     name: Ubuntu Python ${{ matrix.python_version }}
     steps:
       - name: 🛎️ Checkout
