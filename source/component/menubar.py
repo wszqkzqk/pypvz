@@ -365,6 +365,8 @@ class Panel:
                 for i in self.card_list:
                     if i.not_recommend == c.REASON_SLEEP_BUT_COFFEE_BEAN:
                         i.not_recommend = c.REASON_WILL_SLEEP
+                        if not i.canSelect():   # already picked, keep it dimmed
+                            continue
                         i.orig_image.set_alpha(128)
                         i.image = pg.Surface((i.rect.w, i.rect.h))  # 黑底
                         i.image.blit(
@@ -386,6 +388,8 @@ class Panel:
                                 i.not_recommend = (
                                     c.REASON_SLEEP_BUT_COFFEE_BEAN
                                 )
+                                if not i.canSelect():   # already picked
+                                    continue
                                 i.image = i.orig_image
                                 i.image.set_alpha(255)
                 break

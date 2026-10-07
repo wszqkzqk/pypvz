@@ -1,5 +1,8 @@
 name: Build
 
+permissions:
+  contents: write
+
 concurrency: 
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -138,4 +141,59 @@ jobs:
           allowUpdates: true
           tag: Latest
           artifacts: ./pypvz*-x86_64.*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  macos-intel:
+    runs-on: macos-15-intel
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+            - "3.12"
+    name: macOS Intel Python ${{ matrix.python_version }}
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐍 Use Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: 🧳 Install dependencies
+        run: |
+          brew install ccache
+          python -m pip install --no-python-version-warning --disable-pip-version-check zstandard appdirs ordered-set tqdm Jinja2 imageio
+          python -m pip install --no-python-version-warning --disable-pip-version-check nuitka
+          python -m pip install --no-python-version-warning --disable-pip-version-check pygame
+
+      # 使用Nuitka构建
+      - name: Show nuitka version
+        run: |
+          env
+          uname -m
+          python -m nuitka --version
+
+      - name: Build pypvz with Nuitka
+        run: |
+          yes | python -m nuitka \
+                --onefile \
+                --standalone \
+                --include-data-dir=resources=resources \
+                --macos-app-icon=pypvz.png \
+                --remove-output \
+                -o pypvz-with-python${{ matrix.python_version }}-macos-x86_64.bin \
+                pypvz.py
+          # zip 保留可执行权限，避免浏览器下载后无法直接运行
+          zip -j pypvz-with-python${{ matrix.python_version }}-macos-x86_64.zip \
+                pypvz-with-python${{ matrix.python_version }}-macos-x86_64.bin
+
+      - name: Release the version built by nuitka
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          tag: Latest
+          artifacts: ./pypvz*-macos-x86_64.zip
           token: ${{ secrets.GITHUB_TOKEN }}

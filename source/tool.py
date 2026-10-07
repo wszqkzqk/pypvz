@@ -156,12 +156,15 @@ class Control:
             elif event.type == pg.KEYUP:
                 self.keys = pg.key.get_pressed()
             elif event.type == pg.MOUSEBUTTONDOWN:
-                self.mouse_pos = pg.mouse.get_pos()
-                (
-                    self.mouse_click[0],
-                    _,
-                    self.mouse_click[1],
-                ) = pg.mouse.get_pressed()
+                # Use the event's own data instead of pg.mouse.get_pressed():
+                # a fast click (or trackpad tap) delivers DOWN and UP in the
+                # same frame, so the button is already released when polled
+                # and the click would be lost.
+                self.mouse_pos = event.pos
+                if event.button == 1:   # left button
+                    self.mouse_click[0] = True
+                elif event.button == 3:   # right button
+                    self.mouse_click[1] = True
                 # self.mouse_click[0]表示左键，self.mouse_click[1]表示右键
                 print(
                     f'点击位置: ({self.mouse_pos[0]:3}, {self.mouse_pos[1]:3}) 左右键点击情况: {self.mouse_click}'
